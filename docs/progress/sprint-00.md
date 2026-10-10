@@ -10,14 +10,14 @@
 | [S00-T11](../../implementation/sprint-00-bootstrap/S00-T11-check-editor-collaboration-dependency-compatibility.md) | DONE | Not measured | [Compatibility spike](../adr/compatibility-spike.md), [acceptance review](../test-reports/s00-t11.md); Project Co-owner accepted candidate and blocker 2026-10-10 |
 | [S00-T02](../../implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md) | DONE | Not measured | [Rule acceptance review](../test-reports/s00-t02.md); Project Co-owner accepted 2026-10-10 |
 | [S00-T03](../../implementation/sprint-00-bootstrap/S00-T03-create-typed-pnpm-monorepo.md) | DONE | Not measured | [Workspace acceptance report](../test-reports/s00-t03.md); Project Co-owner accepted scoped review 2026-10-10 |
-| [S00-T04](../../implementation/sprint-00-bootstrap/S00-T04-create-browser-shell-and-route-providers.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S00-T05](../../implementation/sprint-00-bootstrap/S00-T05-create-api-health-and-error-boundary.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S00-T06](../../implementation/sprint-00-bootstrap/S00-T06-configure-code-quality-and-ci.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S00-T07](../../implementation/sprint-00-bootstrap/S00-T07-create-local-services-and-validated-configuration.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S00-T12](../../implementation/sprint-00-bootstrap/S00-T12-deliver-browser-to-api-walking-skeleton.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S00-T08](../../implementation/sprint-00-bootstrap/S00-T08-record-initial-architecture-decisions.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S00-T09](../../implementation/sprint-00-bootstrap/S00-T09-initialize-feature-and-evidence-inventory.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S00-T10](../../implementation/sprint-00-bootstrap/S00-T10-document-clean-development-startup.md) | NOT_STARTED | Not recorded | No implementation evidence |
+| [S00-T04](../../implementation/sprint-00-bootstrap/S00-T04-create-browser-shell-and-route-providers.md) | IN_PROGRESS | Not measured | [Verification](../test-reports/s00-t04.md); implemented, independent maintainer review pending |
+| [S00-T05](../../implementation/sprint-00-bootstrap/S00-T05-create-api-health-and-error-boundary.md) | IN_PROGRESS | Not measured | [Verification](../test-reports/s00-t05.md); implemented, independent maintainer review pending |
+| [S00-T06](../../implementation/sprint-00-bootstrap/S00-T06-configure-code-quality-and-ci.md) | IN_PROGRESS | Not measured | [Verification](../test-reports/s00-t06.md); implemented, independent maintainer review pending |
+| [S00-T07](../../implementation/sprint-00-bootstrap/S00-T07-create-local-services-and-validated-configuration.md) | IN_PROGRESS | Not measured | [Verification](../test-reports/s00-t07.md); implemented, independent maintainer review pending |
+| [S00-T12](../../implementation/sprint-00-bootstrap/S00-T12-deliver-browser-to-api-walking-skeleton.md) | IN_PROGRESS | Not measured | [Verification](../test-reports/s00-t12.md); implemented, independent maintainer review pending |
+| [S00-T08](../../implementation/sprint-00-bootstrap/S00-T08-record-initial-architecture-decisions.md) | IN_PROGRESS | Not measured | [Verification](../test-reports/s00-t08.md); implemented, independent maintainer review pending |
+| [S00-T09](../../implementation/sprint-00-bootstrap/S00-T09-initialize-feature-and-evidence-inventory.md) | IN_PROGRESS | Not measured | [Verification](../test-reports/s00-t09.md); implemented, independent maintainer review pending |
+| [S00-T10](../../implementation/sprint-00-bootstrap/S00-T10-document-clean-development-startup.md) | IN_PROGRESS | Not measured | [Verification](../test-reports/s00-t10.md); implemented, independent maintainer review pending |
 
 ## Decisions and Migrations
 
@@ -33,4 +33,8 @@ Track actual findings in Open Gaps and Technical Debt, referencing the task.
 
 ## Next Task
 
-S00-T04 is next in the index, subject to its readiness check.
+Complete independent co-maintainer review of the eight delivered slices, then close S00. Do not start S01 until S00 acceptance is recorded.
+
+## S00 continuation — 2026-10-10
+
+All eight remaining implementation/documentation slices are delivered on feature/sprint-00 (base 721c30c). Node 24.21.0 local quality, real services and three-browser verification are recorded in [shared verification](../test-reports/s00-verification.md). No human review or later product feature is implied by implementation delivery.

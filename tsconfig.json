@@ -1,16 +1,15 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "module": "Preserve",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "noEmit": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "types": ["node", "vitest/globals"]
-  },
-  "include": ["apps/**/*.ts", "apps/**/*.tsx", "packages/**/*.ts", "packages/**/*.tsx", "scripts/**/*.ts", "tests/**/*.ts"]
+  "extends": "./tsconfig.base.json",
+  "include": [
+    "apps/**/*.ts",
+    "apps/**/*.tsx",
+    "packages/**/*.ts",
+    "packages/**/*.tsx",
+    "scripts/**/*.ts",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "*.config.ts",
+    "infra/**/*.ts"
+  ],
+  "exclude": ["**/dist/**", "node_modules"]
 }

@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S00-T12]
 requirements: [PL-03]
 source_task: S00-T08
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: implementation-verified-awaiting-review
 ---
 # S00-T08 — Record initial architecture decisions
 
@@ -66,9 +66,9 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Each ADR records alternatives and consequences; unresolved version/runtime checks remain explicit
-- [ ] PL-03: Stable feature/task IDs, honest evidence, ADRs, progress and plan consistency. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Each ADR records alternatives and consequences; unresolved version/runtime checks remain explicit
+- [x] PL-03: Stable feature/task IDs, honest evidence, ADRs, progress and plan consistency. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -90,9 +90,13 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
 - [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+
+## Continuation evidence
+
+Implementation and local checks: [task report](../../docs/test-reports/s00-t08.md), [shared verification](../../docs/test-reports/s00-verification.md). Technical work was authorized for the complete S00 scope; formal status remains in_progress pending independent co-maintainer review.

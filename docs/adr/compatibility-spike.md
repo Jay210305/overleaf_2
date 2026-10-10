@@ -28,3 +28,7 @@ The rejected invalid combination is the [current `y-codemirror.next` main branch
 - Fetch the exact Hocuspocus provider v4 manifest and `y-protocols@1.0.6` metadata/license from the package registry when network access permits. `npm view` in this workspace did not return before it was interrupted; official web manifests above supported the partial review.
 - In S00-T03, pin the chosen set in manifests, generate and inspect the lockfile, and run a frozen install. In S07, test authenticated provider/server sync, reconnection and duplicate-package behavior. None was run in this research task.
 - The Project Co-owner accepted the scoped S00-T01 and S00-T11 reviews on 2026-10-10. The exact provider metadata and runtime checks remain visible follow-ups in their owning tasks.
+
+## S00 continuation follow-up — 2026-10-10
+
+Registry metadata now resolves @hocuspocus/provider 4.4.0 (MIT, peers yjs ^13.6.8 and y-protocols ^1.0.6) and y-protocols 1.0.6 (MIT, Node >=16, peer yjs ^13.0.0). Commands: pnpm view with exact versions and version/engines/peerDependencies/license fields. This closes the metadata/license blocker, not runtime interoperability. Editor dependencies are intentionally installed with S04 and collaboration with S07; the earlier S00-T03 installation handoff is superseded by this scoped ownership clarification.

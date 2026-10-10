@@ -8,3 +8,7 @@ dist/
 .env
 .env.*
 !.env.example
+coverage/
+playwright-report/
+test-results/
+graphify-out/

@@ -85,15 +85,15 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | NFR-05 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-06 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-07 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| NFR-08 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| NFR-08 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md); remaining mapped tasks and maintainer review still apply |
 | NFR-09 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| NFR-10 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| NFR-10 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md); remaining mapped tasks and maintainer review still apply |
 | NFR-11 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-12 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PL-01 | G1 | Must | IN_PROGRESS | [S00-T01 discovery](test-reports/s00-t01.md#acceptance-review); [S00-T03 workspace evidence](test-reports/s00-t03.md#acceptance-evidence); [remaining tasks](planning/traceability.md) |
-| PL-02 | G1 | Must | IN_PROGRESS | [S00-T02 rule review](test-reports/s00-t02.md#acceptance-review); [remaining tasks](planning/traceability.md) |
-| PL-03 | G1 | Must | IN_PROGRESS | [S00-T01 discovery](test-reports/s00-t01.md#acceptance-review); [remaining tasks](planning/traceability.md) |
-| PL-04 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PL-05 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| PL-01 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md); remaining mapped tasks and maintainer review still apply |
+| PL-02 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md); remaining mapped tasks and maintainer review still apply |
+| PL-03 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md); remaining mapped tasks and maintainer review still apply |
+| PL-04 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md); remaining mapped tasks and maintainer review still apply |
+| PL-05 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md); remaining mapped tasks and maintainer review still apply |
 | PL-06 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PL-07 | G1 | Must | IN_PROGRESS | [S00-T02 rule review](test-reports/s00-t02.md#acceptance-review); [remaining tasks](planning/traceability.md) |
+| PL-07 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md); remaining mapped tasks and maintainer review still apply |

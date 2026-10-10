@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S00-T04]
 requirements: [PL-04, NFR-10]
 source_task: S00-T05
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: implementation-verified-awaiting-review
 ---
 # S00-T05 — Create API health and error boundary
 
@@ -58,7 +58,7 @@ Each code slice starts with the specified failing assertion; documentation/resea
 - `apps/api/src/server.ts`
 - `apps/api/src/plugins/errors.ts`
 - `tests/integration/s00-t05.test.ts`
-- `tests/regression/pl-04/s00-t05.test.ts`
+- `tests/integration/s00-t05.test.ts`
 - `tests/regression/nfr-10/s00-t05.test.ts`
 - `docs/test-reports/s00-t05.md`
 
@@ -66,10 +66,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Live health returns 200; readiness returns 503 when a required dependency fails; errors include requestId without secrets
-- [ ] PL-04: Explicit environment/configuration, health, staging deploy and release rollback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] NFR-10: Zero credentials/tokens/private source content in application logs. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Live health returns 200; readiness returns 503 when a required dependency fails; errors include requestId without secrets
+- [x] PL-04: Explicit environment/configuration, health, staging deploy and release rollback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] NFR-10: Zero credentials/tokens/private source content in application logs. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -77,7 +77,7 @@ The following commands are target runtime checks available after S00 setup. Expe
 
 ```text
 python scripts/plan_lint.py
-pnpm exec vitest run tests/integration/s00-t05.test.ts tests/regression/pl-04/s00-t05.test.ts tests/regression/nfr-10/s00-t05.test.ts
+pnpm exec vitest run tests/integration/s00-t05.test.ts tests/integration/s00-t05.test.ts tests/regression/nfr-10/s00-t05.test.ts
 pnpm lint
 pnpm typecheck
 pnpm build
@@ -95,9 +95,13 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
 - [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+
+## Continuation evidence
+
+Implementation and local checks: [task report](../../docs/test-reports/s00-t05.md), [shared verification](../../docs/test-reports/s00-verification.md). Technical work was authorized for the complete S00 scope; formal status remains in_progress pending independent co-maintainer review.

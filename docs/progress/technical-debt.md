@@ -1,8 +1,10 @@
 # Technical Debt Backlog
 
-No implementation debt is asserted because product work has not begun. Research prerequisites are in Open Gaps. Allocate DT-01 when an actual compromise/finding exists; never reuse IDs.
+Observed S00 follow-ups; no later feature is silently declared complete.
 
 | ID | Status | Owner | Location | Effort (h) | Verification | Closure / next cycle |
 |---|---|---|---|---|---|---|
+| DT-01 | OPEN | Both (proposed) | infra/minio/README.md | Not estimated | Review supported S3-compatible development/hosted storage before a hosted release | Archived MinIO source is a local fixture, not a production dependency approval |
+| DT-02 | OPEN | Julio (proposed) | apps/web/vite.config.ts | Not estimated | Measure UI bundle as product features arrive | Lazy health panel added; main bundle remains near 500 kB |
 
-Each entry states impact/source task, concrete verification, estimated/actual effort and closure evidence. At release, close, drop with reason or migrate all open items; do not hide deferred optional features as completed debt.
+Effort is not fabricated. Assign bounded tasks when these become execution scope.

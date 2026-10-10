@@ -17,8 +17,12 @@ function readManifest(root: string, path: string): Manifest {
 
 export function assertBrowserPackageBoundary(root: string): void {
   const browser = readManifest(root, "apps/web");
+  const declared = new Set(Object.keys(browser.dependencies ?? {}));
   for (const dependency of Object.keys(browser.dependencies ?? {})) {
-    if (dependency.startsWith("@latex-collab/") && !expectedPackages.includes(dependency as (typeof expectedPackages)[number])) {
+    if (
+      dependency.startsWith("@latex-collab/") &&
+      !expectedPackages.includes(dependency as (typeof expectedPackages)[number])
+    ) {
       throw new Error(`Browser workspace cannot depend on private package ${dependency}`);
     }
   }
@@ -33,24 +37,64 @@ export function assertBrowserPackageBoundary(root: string): void {
       if (entry.isDirectory()) {
         visitDirectory(file);
       } else if (entry.isFile() && /\.[cm]?[jt]sx?$/.test(entry.name)) {
-        const source = ts.createSourceFile(file, readFileSync(file, "utf8"), ts.ScriptTarget.Latest, true);
+        const source = ts.createSourceFile(
+          file,
+          readFileSync(file, "utf8"),
+          ts.ScriptTarget.Latest,
+          true,
+        );
         function visit(node: ts.Node): void {
+          if (
+            ts.isCallExpression(node) &&
+            (node.expression.kind === ts.SyntaxKind.ImportKeyword ||
+              (ts.isIdentifier(node.expression) && node.expression.text === "require")) &&
+            (node.arguments.length !== 1 || !ts.isStringLiteral(node.arguments[0]!))
+          ) {
+            throw new Error(
+              `Browser source cannot use unresolved dynamic imports in ${relative(root, file)}`,
+            );
+          }
           let specifier: string | undefined;
-          if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
+          if (
+            (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
+            node.moduleSpecifier &&
+            ts.isStringLiteral(node.moduleSpecifier)
+          ) {
             specifier = node.moduleSpecifier.text;
-          } else if (ts.isCallExpression(node) && node.arguments.length === 1 && ts.isStringLiteral(node.arguments[0]!)) {
-            if (node.expression.kind === ts.SyntaxKind.ImportKeyword || (ts.isIdentifier(node.expression) && node.expression.text === "require")) {
+          } else if (
+            ts.isCallExpression(node) &&
+            node.arguments.length === 1 &&
+            ts.isStringLiteral(node.arguments[0]!)
+          ) {
+            if (
+              node.expression.kind === ts.SyntaxKind.ImportKeyword ||
+              (ts.isIdentifier(node.expression) && node.expression.text === "require")
+            ) {
               specifier = node.arguments[0]!.text;
             }
           }
           if (specifier) {
-            const privatePackage = specifier.startsWith("@latex-collab/") && !expectedPackages.includes(specifier as (typeof expectedPackages)[number]);
-            const outsideApp = specifier.startsWith(".") && (() => {
-              const path = relative(webRoot, resolve(dirname(file), specifier));
-              return path === ".." || path.startsWith(`..${sep}`) || isAbsolute(path);
-            })();
-            if (privatePackage || outsideApp) {
-              throw new Error(`Browser source cannot import private module in ${relative(root, file)}`);
+            const privatePackage =
+              specifier.startsWith("@latex-collab/") &&
+              !expectedPackages.includes(specifier as (typeof expectedPackages)[number]);
+            const outsideApp =
+              specifier.startsWith(".") &&
+              (() => {
+                const path = relative(webRoot, resolve(dirname(file), specifier));
+                return path === ".." || path.startsWith(`..${sep}`) || isAbsolute(path);
+              })();
+            const packageRoot = specifier.startsWith("@")
+              ? specifier.split("/").slice(0, 2).join("/")
+              : specifier.split("/")[0]!;
+            const forbidden =
+              specifier.startsWith("node:") ||
+              isAbsolute(specifier) ||
+              specifier === "@latex-collab/config/server" ||
+              (!specifier.startsWith(".") && !declared.has(packageRoot));
+            if (privatePackage || outsideApp || forbidden) {
+              throw new Error(
+                `Browser source cannot import private module in ${relative(root, file)}`,
+              );
             }
           }
           ts.forEachChild(node, visit);

@@ -5,6 +5,15 @@
   "type": "module",
   "dependencies": {
     "@latex-collab/contracts": "workspace:*",
-    "@latex-collab/config": "workspace:*"
+    "@latex-collab/config": "workspace:*",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router-dom": "7.18.4",
+    "@tanstack/react-query": "5.104.1"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1"
   }
 }

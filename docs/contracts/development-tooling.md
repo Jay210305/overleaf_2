@@ -2,7 +2,7 @@
 
 ## Commands
 
-These commands are target interfaces created during S00 and extended with feature tasks. S00-T03 implemented the frozen install and bootstrap `lint`, `typecheck`, `build` and task-test scripts. The build compiles the workspace validator; no browser/API bundle or application startup command is available yet. See its [acceptance report](../test-reports/s00-t03.md).
+S00 now supplies frozen installation, formatting/lint/types/coverage, app/package builds, generated local env, real Compose services/private bucket, browser/API dev startup and smoke checks. See [S00 verification](../test-reports/s00-verification.md). Migration, seed, collaboration and compiler commands remain later task interfaces; no implementation is claimed for them.
 
 | Command | Input / output | Exit / behavior |
 |---|---|---|

@@ -2,7 +2,7 @@
 
 ## Uniform Quality Gates
 
-These are **target scripts to implement across S00**. S00-T03 provides bootstrap `lint`, `typecheck`, `build` and task-test commands, with scope recorded in its [report](../test-reports/s00-t03.md); full quality gates and GitHub Actions remain for S00-T06 and later tasks. Local checks and GitHub Actions will invoke the same completed scripts. Task files reference this table rather than redefine thresholds.
+S00 implements the local/CI scripts below for its delivered scope. GitHub Actions uses the same scripts; remote execution status is in [S00 verification](../test-reports/s00-verification.md). No later product tests are implied by bootstrap checks.
 
 | Gate | Local and CI command | Pass condition |
 |---|---|---|

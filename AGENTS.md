@@ -5,6 +5,7 @@ Documentation is in English. Follow the user's language when conversing.
 
 ## Start Here
 
+0. Read [the complete master plan](PLAN_IMPLEMENTACION_EDITOR_LATEX_COLABORATIVO.md) before starting project work in a new session; follow its product, security and delivery requirements together with the English task package and documented adaptations. This is the user's renewed instruction of 2026-10-10.
 1. Read [Workspace Context](CONTEXT.md) and [Agent Workflow](docs/agent-workflow.md).
 2. Inspect actual files and contributor changes before choosing work.
 3. Open the relevant route below, then one task and its required contracts.
@@ -40,6 +41,10 @@ Check the actual skill inventory: an external recommendation is not an installed
 - Enforce server-side authorization for every REST, WSS and object action. Keep canonical per-file Yjs text, commit-before-saved acknowledgements and immutable revision inputs; follow [Contracts](docs/contracts/README.md) before changing these boundaries.
 - Keep credentials and private source out of Git, browser bundles, logs, prompts and screenshots. Use only licensed or otherwise authorized code and assets; verify external dependencies before adding them.
 - Compile genuine TeX output through the separate trusted executor. Keep anonymous signup and untrusted compilation disabled until G5 isolation evidence and the required release approval; never pass API, database, Redis or general object-store secrets into TeX execution.
+
+## Sprint Branches
+
+For each new sprint, create and publish a dedicated GitHub branch before implementation, using `codex/sprint-XX-<topic>` (for example `codex/sprint-01-data-contracts`) and set its upstream on `origin`. Derive both the number and topic from the selected sprint directory in `implementation/`, using its existing lowercase hyphenated name (for example `codex/sprint-02-identity-permissions`); never reuse another sprint's name. Inspect current remote branches and prerequisite evidence first; reuse the existing `feature/sprint-00` for S00. Start from the latest verified prerequisite state, preserve contributor changes, and never force-push or merge automatically. Record the actual branch and base in sprint evidence; unavailable GitHub access is a blocker, not a published branch.
 
 ## graphify
 

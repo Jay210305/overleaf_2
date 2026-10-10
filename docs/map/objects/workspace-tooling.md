@@ -18,24 +18,24 @@ The live pnpm workspace links the initial browser/API manifests to shared contra
 
 ## Why this shape
 
-Pinned versions, local-only workspace links and a frozen lockfile make the bootstrap reproducible. A small typed guard catches missing or private package dependencies and direct private browser source imports before full lint arrives.
+Pinned versions, local-only workspace links and a frozen lockfile make the bootstrap reproducible. ESLint and the typed guard catch missing/private package dependencies, direct server imports and unresolved dynamic browser imports.
 
 ## Shape
 
-`pnpm-workspace.yaml` discovers `apps/*` and `packages/*`. The lockfile currently has five importers including root. `pnpm build` compiles `scripts/check-workspace.ts`; it does not build app bundles. Turbo parses the future package task graph, but its package-level build commands are not defined yet.
+`pnpm-workspace.yaml` discovers `apps/*` and `packages/*`. The lockfile currently has five importers including root. `pnpm build` compiles shared packages, the Fastify API, browser assets and the workspace validator. The root scripts run formatting, ESLint/boundaries, strict types, coverage, real services and browser tests. CI uses the same scripts.
 
 ## Connected to
 
-Consumes Development Tooling and S00-T03; future browser/API/config tasks add source/build/startup. S00-T06 owns full lint/CI rules and S00-T07 owns validated service configuration.
+Consumes Development Tooling and S00-T03; implemented browser/API/config tasks supply source/build/startup. S00-T06 owns full lint/CI rules and S00-T07 owns validated service configuration.
 
 ## If you change this
 
 - **Hits:** Lockfile, workspace links, TypeScript/test resolution, package task graph, S00-T03 evidence and later S00 tooling tasks.
-- **Does not hit:** Browser/API runtime behavior, Docker service readiness, authorization or compiler isolation.
+- **Does not hit:** Later project authorization, CRDT durability or compiler isolation proof.
 
 ## Surfaces
 
-Maintainers run frozen install, task tests, bootstrap lint, typecheck and tooling build. Package manifests have no runtime entry points yet.
+Maintainers run frozen install, task tests, ESLint/boundary checks, typecheck and app/package builds. Package manifests expose browser-safe contracts/config and a server-only config subpath. `pnpm dev` starts browser/API after compiling shared packages.
 
 ## See
 
