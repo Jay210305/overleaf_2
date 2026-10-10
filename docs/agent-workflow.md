@@ -36,7 +36,7 @@ These are requirements to implement and verify, not claims about existing softwa
 
 For documentation changes, use the commands in [Scripts Context](../scripts/CONTEXT.md). Product commands are specified in [Development Tooling](contracts/development-tooling.md); confirm that scripts exist before invoking them. Product implementation has not started at map creation, so there is no established application build/test command yet.
 
-Never mark a task done just because its files or a skill exist. Completion requires scoped acceptance evidence and the review defined by the task. This agent/map setup prepares S00-T02 documentation; its dependencies and remaining acceptance work still apply.
+Never mark a task done just because its files or a skill exist. Completion requires scoped acceptance evidence and the review defined by the task. The S00-T03 workspace scripts now exist; their evidence is scoped to the tooling bootstrap and does not establish browser/API runtime behavior.
 
 ## Mapping and External Skills
 

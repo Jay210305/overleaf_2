@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "abddd342448aa50e403cf8e9568b7bb81a2e9523",
+  "git_baseline": "d3105dd8f6902c19e827bbb453f59f242b1ce1ad",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -12,7 +12,10 @@
     ".agents",
     ".codex",
     ".git",
+    ".pnpm-cache",
+    ".pnpm-store",
     ".pytest_cache",
+    ".tmp",
     ".turbo",
     ".venv",
     "__pycache__",
@@ -24,24 +27,49 @@
   "external_consumers": "unknown; no existing path moved by initial mapping",
   "files": [
     {
+      "path": ".gitignore",
+      "role": "factory",
+      "sha256": "9dbdec2c60ecbdd506fdd04c74dc86a68eb85d09f63d93a8a7a3299484a27902"
+    },
+    {
       "path": "AGENTS.md",
       "role": "catalog",
-      "sha256": "10318f82ffe8b9c0378145fc3160f772ca34e2dbe8452c33ea5c91b7835c0b3f"
+      "sha256": "227a5abab8e23a4ed7e344493adf3b20b3fac33573001a4b2cecab001ed03b36"
+    },
+    {
+      "path": "apps/api/package.json",
+      "role": "factory",
+      "sha256": "9819ff408914b513c7acf5840cfadc2bea3dcf6971eb4558e5a8d775cf6c36b4"
+    },
+    {
+      "path": "apps/web/package.json",
+      "role": "factory",
+      "sha256": "f6e0d58cfb2673cf72ace34bf8e83caae1b9689c4ff6afb1ac46241c8542b15f"
     },
     {
       "path": "CONTEXT.md",
       "role": "contract",
-      "sha256": "37d617ce6c87a2c70111ad61fec2ca45dca3fabdffc6ef022b45140783dcb58a"
+      "sha256": "13c72b92f3ab2f5cb6ee02fabc421fb3c77458757e5fc47177ee7d5309c90e98"
+    },
+    {
+      "path": "docs/adr/compatibility-spike.md",
+      "role": "factory",
+      "sha256": "dc33a85376aa3e23d95a3d4cf6c8bf65cba8a11a01ddfee765583e150c833127"
+    },
+    {
+      "path": "docs/adr/CONTEXT.md",
+      "role": "contract",
+      "sha256": "22f86e886d228ed35cf195dc1811a2b81e3ef5245376cc5c471504eaf42dc7b7"
     },
     {
       "path": "docs/agent-workflow.md",
       "role": "factory",
-      "sha256": "0f402e2d2e10b44186709a80954234bfa0b1ae97b6736cf7337b2bc2cd1f4401"
+      "sha256": "a264f4dbff8776439864dc6bda963391de656fb81786f2f8ce1aa01e1b8390fd"
     },
     {
       "path": "docs/CONTEXT.md",
       "role": "contract",
-      "sha256": "cbb3a2980042b7a1f63abd08213759d0c1bb17d0916b13e1b06c5736e24d38a9"
+      "sha256": "ead020e68280b5b71440829149741e7ce882a14cd5731b247206f6254f524746"
     },
     {
       "path": "docs/contracts/collaboration.md",
@@ -66,7 +94,7 @@
     {
       "path": "docs/contracts/development-tooling.md",
       "role": "contract",
-      "sha256": "b0dd1fdefa1c35d52cee8ffd966df9b3454a21900afddf33117036cae939ce21"
+      "sha256": "f6bb4716a1ecac141abdddb0a3630246f27325217c13adbea3aa0a3bbd495214"
     },
     {
       "path": "docs/contracts/editing-and-review.md",
@@ -106,7 +134,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "87fe946ea825c31d56d6afa81062f0f436e5e840689b7d1e8adb2c275f08b1a2"
+      "sha256": "5be29074ea7d63b656535b395b98c80bef7b82273c88c4e1b333c55132df0037"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -141,7 +169,7 @@
     {
       "path": "docs/map/CLAUDE.md",
       "role": "catalog",
-      "sha256": "2f3eaab658ed1fee9ccf01499fab8fd0591a1ae8e3accda3e39b51932afb7e1f"
+      "sha256": "b9c0bd7c85a98fc398e366f985d46f392475cd3fe16e6493418032af505b7674"
     },
     {
       "path": "docs/map/CONTEXT.md",
@@ -156,17 +184,17 @@
     {
       "path": "docs/map/objects/agent-guidance.md",
       "role": "factory",
-      "sha256": "7ca1c4eee28a8561677e7f5f465191992c7347f230ccec6761d560b2364a3815"
+      "sha256": "a2c4ad8c6e80ce4bb66e211de9fb41d525b8116e43fac38afe4bff224258e118"
     },
     {
       "path": "docs/map/objects/api-and-durable-data.md",
       "role": "factory",
-      "sha256": "e34cebe282dabcc707825a281b7e27e859493fe72f115c0c36a471fb4610f1a8"
+      "sha256": "7d95c4af77621f05e0e408d2ede6bcef4e3474cdfba3b374bad1ae1a2ecd2e60"
     },
     {
       "path": "docs/map/objects/browser-and-editing.md",
       "role": "factory",
-      "sha256": "a7d675dbed5101cfb132d31db9a28265d15ae9a40c0d1a3113a4b8a54a698912"
+      "sha256": "547d011e8bd90ad46af025ff336a3e321f81b53324c0562ed884c95953381bd6"
     },
     {
       "path": "docs/map/objects/compilation-and-artifacts.md",
@@ -181,12 +209,12 @@
     {
       "path": "docs/map/objects/documentation-tooling.md",
       "role": "factory",
-      "sha256": "758395cf92451dd4cd411ea6d460c61910e364789c3fcac934b0398754c62d73"
+      "sha256": "c67bfdfb1f6882bd6357cfb241710d1d0d865082df8755f8689b2bba04a73049"
     },
     {
       "path": "docs/map/objects/interface-contracts.md",
       "role": "factory",
-      "sha256": "ceece417854bcc88db0cb1213a8e278431b93da07a8dbbe38eb05a94a7ac9d11"
+      "sha256": "13dbe9667f3d4cf3753dcfc0e312da2552c0298bbbc641223ec46ad4cf95c04f"
     },
     {
       "path": "docs/map/objects/planning-baseline.md",
@@ -196,7 +224,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "183db50fc0b2827c5cb664720526b559dc48efb782e2e9ff88a3e463d8c0b272"
+      "sha256": "50b9d6a3a38817bbbd5447fa10ac79c73afcc46a2163aadfb76bbed46278adf1"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -207,6 +235,11 @@
       "path": "docs/map/objects/task-library.md",
       "role": "factory",
       "sha256": "f2d766978bcf3cdf236b579bb3d3239a79c3e5c431f73b708715855804527b5b"
+    },
+    {
+      "path": "docs/map/objects/workspace-tooling.md",
+      "role": "factory",
+      "sha256": "cfe4feeec65610345fbab2d230f19a9a75fb9dc10d4d8fa94bf403f3264bb7d1"
     },
     {
       "path": "docs/map/processes/CONTEXT.md",
@@ -246,7 +279,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "49725a91c7df89eb890098a175d36b95b978ec9bd7a1e1751b014495a2d58af4"
+      "sha256": "1905ce0d1511a26f54706172c658af5022f0fbcd4dab03515d92c9dadda6c8cb"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -256,7 +289,7 @@
     {
       "path": "docs/planning/06-ci-cd-and-environments.md",
       "role": "factory",
-      "sha256": "43dd29bb1a438149cea9e0c1adfe30bd32c3367d5b9d6081176adb0e8f248668"
+      "sha256": "1ad08a1cf4b69c62d6e8e0318607d9e0844add9258117c538a3b6bc59c0b8c21"
     },
     {
       "path": "docs/planning/07-risks.md",
@@ -331,17 +364,22 @@
     {
       "path": "docs/progress/open-gaps.md",
       "role": "product",
-      "sha256": "a21791728228eadca435c520c4646a9f0627479d4f555f1402023d4e022f4ee3"
+      "sha256": "57d09024a3133a2dd499831be7b3d68292077aa06857486e9303326975c5eb7f"
     },
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "4af644dd7974b88fbce1d69427e11a9c9c91b7860f85501512dc2158f7b3a323"
+      "sha256": "6caa8b43afb7b15669d7f99aa2a1fce04b0dd629d60b7643da2df82272598c91"
+    },
+    {
+      "path": "docs/progress/repository-audit.md",
+      "role": "product",
+      "sha256": "f7e6de672cefe02f5545b242e1119a0d31611666e34c9eb5c6525ccf04d2223c"
     },
     {
       "path": "docs/progress/sprint-00.md",
       "role": "product",
-      "sha256": "2b860cc469fa64736a63ecd3c5a9226615fa2d9e9ef815068ef172b7533e1179"
+      "sha256": "d0ddfd1321ef081440c93a9ca460080462d62fa8336c88caafdf2b14bff11ac1"
     },
     {
       "path": "docs/progress/sprint-01.md",
@@ -434,6 +472,26 @@
       "sha256": "19abc40e725b269617bbfaa3470944b94592d621d726f24bd83ac4ed9c44d40c"
     },
     {
+      "path": "docs/test-reports/s00-t01.md",
+      "role": "factory",
+      "sha256": "0dabf6e25d5164d9daba7e0451cd3000ceab895d359c43c66eb0e56cafd9e12e"
+    },
+    {
+      "path": "docs/test-reports/s00-t02.md",
+      "role": "factory",
+      "sha256": "8890518caa7d031019168530fcc7927dd2aa5840c57f6b9d3d847b2baff2f725"
+    },
+    {
+      "path": "docs/test-reports/s00-t03.md",
+      "role": "factory",
+      "sha256": "ce0e8b7f82383117375137b657b1168edd3de2bf822d45a655002c55b169eae6"
+    },
+    {
+      "path": "docs/test-reports/s00-t11.md",
+      "role": "factory",
+      "sha256": "e4ea57410a5f704a9e8a7188c73daa2d7291681cd4aad7dde8aa992166da5169"
+    },
+    {
       "path": "implementation/CONTEXT.md",
       "role": "contract",
       "sha256": "4d72f93d7909454065c4ad19cf8e0de8f4be604a73516e6365c85b108457d3ef"
@@ -441,7 +499,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "74f50a49fe1b431e32fc70bd209275ff1731a0d73b24e2a9398d3bbc37cacba2"
+      "sha256": "5a51d6b115cca68f56c12a67c5a6e8f1217e2f4c0d317fa91d9584de83d9a549"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -451,17 +509,17 @@
     {
       "path": "implementation/sprint-00-bootstrap/S00-T01-inspect-repository-and-preserve-contributor-changes.md",
       "role": "contract",
-      "sha256": "e5423095d6c6e573c5e308ced35e4f1c1ece1c41bd5eddd25c1cd4e702586283"
+      "sha256": "db1ede7ffe4d5137285cfa6043d47a8d9ebd6c89dcf1ddf54a4c8800a401e85e"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md",
       "role": "contract",
-      "sha256": "33c2a8d5a0cd67f7958fe4521a1b9d51f9aa4a0f0446843b64f245493ce888b5"
+      "sha256": "c170d08d1b2c518ca884f9186e103531356d71a5a34a549d8c2b09f6e271d99a"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T03-create-typed-pnpm-monorepo.md",
       "role": "contract",
-      "sha256": "9fa18628be818e33645df963438944736245676097998df49c3610c4d30d9499"
+      "sha256": "309dd9edab1fd1cf4669b4b7634e16d08ba532a6f334bcba57611dcc271d5305"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T04-create-browser-shell-and-route-providers.md",
@@ -501,7 +559,7 @@
     {
       "path": "implementation/sprint-00-bootstrap/S00-T11-check-editor-collaboration-dependency-compatibility.md",
       "role": "contract",
-      "sha256": "8c20fbbd1c967a742bb1e557168783c754fb96228871f8651a610ff5492786b8"
+      "sha256": "902423faf81b69ca7c4415831779fe460133d6d74e20130290124e95c41e7357"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T12-deliver-browser-to-api-walking-skeleton.md",
@@ -1439,6 +1497,21 @@
       "sha256": "afb1c56b9426349551555726a3f94d5dd9517424efe5c8bed415c1993e01b5ea"
     },
     {
+      "path": "package.json",
+      "role": "factory",
+      "sha256": "0f962997607daa66a353719c0151e49592d1175a6eab9a494d56aa14e0a648a0"
+    },
+    {
+      "path": "packages/config/package.json",
+      "role": "factory",
+      "sha256": "076db70b831a835060002f98e36e6b367952596e5cfe39fb0e08a840e5e07780"
+    },
+    {
+      "path": "packages/contracts/package.json",
+      "role": "factory",
+      "sha256": "0306aed90244f1a80d757d75fb19b5b646d915efff94d6d045e0b2f5ecaab18d"
+    },
+    {
       "path": "PLAN_IMPLEMENTACION_EDITOR_LATEX_COLABORATIVO.md",
       "role": "factory",
       "sha256": "338d8bf32297c3de6fc2e3d9be62e5ae2b3f56abd1d547ca2c71fe83a50ada05"
@@ -1449,14 +1522,29 @@
       "sha256": "6bdf434c96ca66a99bd797f3b98ce92342c1dd202fbe58c3c5d891b27f4e1cc0"
     },
     {
+      "path": "pnpm-lock.yaml",
+      "role": "factory",
+      "sha256": "1708254c42a42741ffac03a91fd609e3ac5b4386764699cd871db7da3e584e5e"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "role": "factory",
+      "sha256": "08d75840c97ab0e72d1d9b5b84a17e47a2e06cb159a5fbec5ee0a6a56682dad7"
+    },
+    {
       "path": "README.md",
       "role": "catalog",
-      "sha256": "782652fc817fae070599a0834ba4a71d5d07cbdd3f9c3bb067b308c7260809c1"
+      "sha256": "42e33d6340f36db0ad5ee6bb0776e07fe8ebe5863eabf1fb5a754f612ee39cfd"
     },
     {
       "path": "scripts/build_icm_map.py",
       "role": "factory",
-      "sha256": "2a6156e262c1643b41c9432e92027c6d6b8f97b5269816eb607eeea7ed16a644"
+      "sha256": "95e3183b008af2ec895fb12edb202f05bde43aba879e26bcf63956abc28675ba"
+    },
+    {
+      "path": "scripts/check-workspace.ts",
+      "role": "factory",
+      "sha256": "5c49a6c1a87e5cb39c3a84af622fb4b829327b9d099728ba3918e217eee01838"
     },
     {
       "path": "scripts/CONTEXT.md",
@@ -1467,6 +1555,31 @@
       "path": "scripts/plan_lint.py",
       "role": "factory",
       "sha256": "36b4c2a9fd671260e37c6865be79f79dcf1e45b2ad34028caf887b09ee8016f8"
+    },
+    {
+      "path": "tests/integration/s00-t03.test.ts",
+      "role": "factory",
+      "sha256": "5d0194965b1e7fef81baf4d10db3accefd3c9f71c49485ccec50510bb2e9b647"
+    },
+    {
+      "path": "tests/regression/pl-01/s00-t03.test.ts",
+      "role": "factory",
+      "sha256": "c41a75cae1b9e032e587ddda4cc242faa33281444b1b49acc897a8a71067fbae"
+    },
+    {
+      "path": "tsconfig.build.json",
+      "role": "factory",
+      "sha256": "1d6c3c891242de4ecb864c06d655ca98d5254f916beb3f108f313c296176cea5"
+    },
+    {
+      "path": "tsconfig.json",
+      "role": "factory",
+      "sha256": "8af73542d4b911a15b7f7f13af9e524947b60c987a1105b3170888ba8ecbcc36"
+    },
+    {
+      "path": "turbo.json",
+      "role": "factory",
+      "sha256": "d572012fb5ac9d1fd957fa6901f310e52dbfff96fa65c89b3c1a53c20a9d51b6"
     }
   ]
 }

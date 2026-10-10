@@ -20,7 +20,7 @@ Code and visual surfaces must share canonical source and preserve unsupported La
 
 ## Shape
 
-Proposed paths: `apps/web`, `packages/editor`, `packages/latex`. React, CodeMirror, Yjs and PDF.js choices are design references, not inspected installed modules.
+`apps/web/package.json` is now an inspected workspace manifest. Browser source and the proposed `packages/editor` and `packages/latex` remain absent. React, CodeMirror, Yjs and PDF.js choices are design references, not installed modules.
 
 ## Connected to
 
@@ -33,7 +33,7 @@ Consumes HTTP, collaboration and artifact contracts. Visual editing depends on c
 
 ## Surfaces
 
-Currently maintainers/agents read design files. Future browser code paths have no runtime surface yet.
+The browser manifest resolves local shared package manifests; there is no browser runtime surface yet.
 
 ## See
 

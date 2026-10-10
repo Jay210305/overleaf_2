@@ -20,7 +20,7 @@ Saved acknowledgements require durable writes, and permission checks must cover 
 
 ## Shape
 
-Proposed paths: `apps/api`, `apps/collab`, `packages/db`, `packages/auth`, `packages/contracts`. Fastify, Drizzle/PostgreSQL and Hocuspocus are planned.
+`apps/api/package.json` and `packages/contracts/package.json` are now inspected workspace manifests. API source and proposed `apps/collab`, `packages/db` and `packages/auth` remain absent. Fastify, Drizzle/PostgreSQL and Hocuspocus are planned.
 
 ## Connected to
 
@@ -33,7 +33,7 @@ Produces browser API/ticket contracts and durable updates; revisions are inputs 
 
 ## Surfaces
 
-Currently design documents only; future API/collaboration/data code remains proposed.
+The API manifest resolves local shared package manifests; API/collaboration/data runtime code remains proposed.
 
 ## See
 

@@ -16,7 +16,7 @@ Use [AGENTS.md](AGENTS.md) to route. Inspect actual files, select a Ready task, 
 
 ## Outputs and State
 
-The current repository contains documentation, task specifications and a planning validator. Application paths in the architecture are proposed; task presence is not evidence of implementation. Status lives in task frontmatter and progress/evidence records. See the [ICM Map](docs/map/AGENTS.md) for actual owning files and proposed runtime areas.
+The repository contains documentation, task specifications, a planning validator and the S00-T03 typed pnpm workspace bootstrap. Browser/API package manifests exist, but their source and runtime behavior remain proposed. Task presence is not evidence of implementation. Status lives in task frontmatter and progress/evidence records. See the [ICM Map](docs/map/AGENTS.md) for actual owning files and proposed runtime areas.
 
 ## Human Check
 

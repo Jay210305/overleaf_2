@@ -25,7 +25,7 @@ Strict TypeScript; server-side authorization for every REST/WSS/object action; g
 
 ## Sprint S00: Bootstrap and walking skeleton (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 66 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Julio (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 66 h (ASSUMPTION A-03) | **Status:** 🟡 IN_PROGRESS | **Owner:** Julio (proposed A-02)
 **Goal:** Bootstrap and walking skeleton for G1, using independently verified slices.
 
 ### Deliverables
@@ -59,10 +59,10 @@ Strict TypeScript; server-side authorization for every REST/WSS/object action; g
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S00-T01](../../implementation/sprint-00-bootstrap/S00-T01-inspect-repository-and-preserve-contributor-changes.md) | Inspect repository and preserve contributor changes | 4 | Julio | ⬜ todo | Record tracked/untracked files, toolchain, hardware prerequisites and safe bootstrap actions; preserve both source documents byte-for-byte |
-| [S00-T11](../../implementation/sprint-00-bootstrap/S00-T11-check-editor-collaboration-dependency-compatibility.md) | Check editor collaboration dependency compatibility | 4 | Julio | ⬜ todo | Within 4h verify licensed Yjs 13/Hocuspocus/CodeMirror peer compatibility and pin a candidate or record blocker |
-| [S00-T02](../../implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md) | Write permanent agent execution rules | 4 | Julio | ⬜ todo | Rules enforce real functionality, trust boundary, per-task evidence and preservation of user work; retain the existing graphify trigger instruction |
-| [S00-T03](../../implementation/sprint-00-bootstrap/S00-T03-create-typed-pnpm-monorepo.md) | Create typed pnpm monorepo | 6 | Julio | ⬜ todo | All apps/packages resolve under pinned pnpm and strict TypeScript with a frozen lockfile install |
+| [S00-T01](../../implementation/sprint-00-bootstrap/S00-T01-inspect-repository-and-preserve-contributor-changes.md) | Inspect repository and preserve contributor changes | 4 | Julio | ✅ done | Record tracked/untracked files, toolchain, hardware prerequisites and safe bootstrap actions; preserve both source documents byte-for-byte |
+| [S00-T11](../../implementation/sprint-00-bootstrap/S00-T11-check-editor-collaboration-dependency-compatibility.md) | Check editor collaboration dependency compatibility | 4 | Julio | ✅ done | Within 4h verify licensed Yjs 13/Hocuspocus/CodeMirror peer compatibility and pin a candidate or record blocker |
+| [S00-T02](../../implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md) | Write permanent agent execution rules | 4 | Julio | ✅ done | Rules enforce real functionality, trust boundary, per-task evidence and preservation of user work; retain the existing graphify trigger instruction |
+| [S00-T03](../../implementation/sprint-00-bootstrap/S00-T03-create-typed-pnpm-monorepo.md) | Create typed pnpm monorepo | 6 | Julio | ✅ done | All apps/packages resolve under pinned pnpm and strict TypeScript with a frozen lockfile install |
 | [S00-T04](../../implementation/sprint-00-bootstrap/S00-T04-create-browser-shell-and-route-providers.md) | Create browser shell and route providers | 6 | Julio | ⬜ todo | Browser shell loads routing/theme/providers and marks unavailable product views explicitly unavailable |
 | [S00-T05](../../implementation/sprint-00-bootstrap/S00-T05-create-api-health-and-error-boundary.md) | Create API health and error boundary | 6 | Julio | ⬜ todo | Live health returns 200; readiness returns 503 when a required dependency fails; errors include requestId without secrets |
 | [S00-T06](../../implementation/sprint-00-bootstrap/S00-T06-configure-code-quality-and-ci.md) | Configure code quality and CI | 8 | Julio | ⬜ todo | Format/lint/strict types/test/build run identically locally and CI; forbidden browser-to-server import fails lint |

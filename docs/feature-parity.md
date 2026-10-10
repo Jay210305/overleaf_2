@@ -53,7 +53,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | CMP-10 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | CMP-11 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | CMP-12 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| COL-01 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| COL-01 | G2 | Must | IN_PROGRESS | [S00-T11 compatibility research](test-reports/s00-t11.md#acceptance-review); [remaining tasks](planning/traceability.md) |
 | COL-02 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-03 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-04 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -90,10 +90,10 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | NFR-10 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-11 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-12 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PL-01 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PL-02 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PL-03 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| PL-01 | G1 | Must | IN_PROGRESS | [S00-T01 discovery](test-reports/s00-t01.md#acceptance-review); [S00-T03 workspace evidence](test-reports/s00-t03.md#acceptance-evidence); [remaining tasks](planning/traceability.md) |
+| PL-02 | G1 | Must | IN_PROGRESS | [S00-T02 rule review](test-reports/s00-t02.md#acceptance-review); [remaining tasks](planning/traceability.md) |
+| PL-03 | G1 | Must | IN_PROGRESS | [S00-T01 discovery](test-reports/s00-t01.md#acceptance-review); [remaining tasks](planning/traceability.md) |
 | PL-04 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PL-05 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PL-06 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PL-07 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| PL-07 | G1 | Must | IN_PROGRESS | [S00-T02 rule review](test-reports/s00-t02.md#acceptance-review); [remaining tasks](planning/traceability.md) |

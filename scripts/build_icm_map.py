@@ -23,6 +23,7 @@ GENERATED = {
 IGNORED = {
     ".git", "node_modules", "__pycache__", ".venv", ".pytest_cache",
     ".turbo", "dist", "build", "coverage", ".codex", ".agents",
+    ".tmp", ".pnpm-store", ".pnpm-cache",
 }
 
 

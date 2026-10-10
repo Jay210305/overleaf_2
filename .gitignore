@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.turbo/
+.tmp/
+.pnpm-store/
+.pnpm-cache/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example

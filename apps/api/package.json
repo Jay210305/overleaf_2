@@ -1,0 +1,10 @@
+{
+  "name": "@latex-collab/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@latex-collab/contracts": "workspace:*",
+    "@latex-collab/config": "workspace:*"
+  }
+}

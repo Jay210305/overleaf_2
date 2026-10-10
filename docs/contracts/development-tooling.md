@@ -2,7 +2,7 @@
 
 ## Commands
 
-These commands are target interfaces created during S00 and extended with feature tasks. No application command is claimed available in this planning-only checkout.
+These commands are target interfaces created during S00 and extended with feature tasks. S00-T03 implemented the frozen install and bootstrap `lint`, `typecheck`, `build` and task-test scripts. The build compiles the workspace validator; no browser/API bundle or application startup command is available yet. See its [acceptance report](../test-reports/s00-t03.md).
 
 | Command | Input / output | Exit / behavior |
 |---|---|---|
