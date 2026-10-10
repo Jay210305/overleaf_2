@@ -12,6 +12,8 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 
 | 2026-10-10 | S00 continuation: browser/API, configuration, real services, quality/browser tests and docs on feature/sprint-00 | Not measured | [Verification](../test-reports/s00-verification.md); original source documents preserved | Clean-copy and final code CI passed; Project Co-owner accepted S00 continuation |
 | 2026-10-10 | S00 sprint closure: accepted by Project Co-owner; transition to S01 on `codex/sprint-01-data-contracts` | Not measured | S00 closed, all 12 tasks marked DONE; GAP-10 closed | Next S01-T01 on `codex/sprint-01-data-contracts` |
+| 2026-10-10 | S01 branch initialization and evidence synchronization on `codex/sprint-01-data-contracts` | Not measured | Dedicated branch published with upstream tracking; base `644c6f0` recorded in [S01 progress](sprint-01.md); [feature evidence](../feature-parity.md) updated | Next S01-T01 |
+
 
 ## Session Record
 

@@ -17,6 +17,12 @@
 | [S01-T08](../../implementation/sprint-01-data-contracts/S01-T08-create-private-s3-adapter.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S01-T10](../../implementation/sprint-01-data-contracts/S01-T10-deliver-persisted-development-sample-vertical-slice.md) | NOT_STARTED | Not recorded | No implementation evidence |
 
+## Sprint Execution Evidence
+
+- **Branch:** `codex/sprint-01-data-contracts` (tracking `origin/codex/sprint-01-data-contracts`)
+- **Base commit:** `644c6f0284b1f840909657b7563736dc1823d25e` (`feature/sprint-00` closure)
+- **Publication status:** Published to origin with upstream tracking before implementation per `AGENTS.md`.
+
 ## Decisions and Migrations
 
 No implementation decision/migration performed yet. Planning baseline is in the numbered specification and contracts. Record actual changes here when work occurs.
@@ -32,3 +38,4 @@ Track actual findings in Open Gaps and Technical Debt, referencing the task.
 ## Next Task
 
 S01-T01, once its YAML prerequisites and contract/environment gates are met.
+

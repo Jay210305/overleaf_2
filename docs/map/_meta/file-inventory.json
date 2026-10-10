@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "704074dbf78e84d983bb7c3917d275ffb6f0dfb6",
+  "git_baseline": "644c6f0284b1f840909657b7563736dc1823d25e",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -283,7 +283,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "2e30e9e43f26eda0f88fc21b91cd469a2381c9c303fe80be10e918201fc6cc4b"
+      "sha256": "3bd01b67d3aa682468d76c9b6f78d21655609548b4d1e6da26750c3a8fe93905"
     },
     {
       "path": "docs/map/CLAUDE.md",
@@ -518,7 +518,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "7335d5900353949b706e030e284bb253b6f63fdd0d76cf26018f3f5557484003"
+      "sha256": "cf65612a227f5e05af346ad2a2ae6bc3c76d109972f06eb3f1384046d6fe481d"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -533,7 +533,7 @@
     {
       "path": "docs/progress/sprint-01.md",
       "role": "product",
-      "sha256": "c2e50cace29108739385ae37c5a3dbf687838ed937069b58479d511c71f5be3e"
+      "sha256": "4f0351fcb0a7e5c441a6c552104056ee272535c33d8d5c242b02f1bbc9a53a1c"
     },
     {
       "path": "docs/progress/sprint-02.md",
