@@ -3,7 +3,7 @@
 **Date:** 2026-10-10. **Branch:** feature/sprint-00. **Base:** 721c30c.
 **Environment:** CachyOS Linux amd64, Node 24.21.0, pnpm 11.25.0, Docker 29.8.2.
 **Actual effort:** not measured. Estimates are not substituted for time worked.
-**Review status:** independent co-maintainer review pending; do not interpret this report as human acceptance.
+**Review status:** the Project Co-owner explicitly chose to review before closure on 2026-10-10; independent acceptance is pending. Do not mark the eight new tasks done.
 
 ## Delivered scope
 
@@ -28,7 +28,7 @@ No S01 schema/auth/editor/TeX or provider feature was implemented.
 | Real services | PASS: PostgreSQL SELECT, Redis PING, authenticated HeadBucket, Mailpit live endpoint; unavailable Redis makes readiness false. Anonymous bucket read returns 403. |
 | Browser scope | PASS: 9 E2E assertions across Chromium 156, Firefox 157 and user-local Microsoft Edge 155.0.4283.45. Includes keyboard, persisted theme, direct-route reload, axe serious/critical=0, network retry, actual Redis stop/restart, live=200 while ready=503. |
 | Clean start | PASS: a fresh source-only copy with no node_modules/dist/.env completed frozen install, env:init, infra:up with a new Compose project and empty volumes, 3 real-service tests, app builds/artifacts and all 9 three-browser E2E cases. No private env was copied. |
-| GitHub CI | PASS on code commit 388404c: [run 38077896320](https://github.com/Jay210305/overleaf_2/actions/runs/38077896320), every step succeeded, including integration and 9 browser cases. Direct-process launcher follow-up is being verified separately before its next run. |
+| GitHub CI | PASS on final code commit b302e75: [run 38078320246](https://github.com/Jay210305/overleaf_2/actions/runs/38078320246), every step succeeded, including real integration and all 9 browser cases. Initial run 38077896320 also passed on 388404c. |
 | Documentation/map | PASS: plan_lint and ICM build/check validate synchronized references, task status, source hashes and actual runtime cards. |
 | Co-maintainer review | PENDING: AGENTS.md and each task require independent human acceptance before done. |
 
@@ -63,3 +63,7 @@ scope; no public signup or untrusted compilation is enabled.
 Implementation is pushed to feature/sprint-00. The GitHub connector returned 403 Resource not accessible by integration when creating a draft PR; git credential API fallback was unavailable. No PR was created or merged. The published branch and this report are the review surface.
 
 S00 technical checks are complete; formal task closure still requires the independent co-maintainer review specified by AGENTS.md.
+
+## Final local launcher verification
+
+Direct Node child processes passed the full 9-case browser suite after the launcher change. Live browser process environment was inspected for service/session keys: none inherited. Local browser/API smoke passed; home and dark project view had zero serious/critical axe findings. The preview remains running for review. Only documentation changes follow b302e75; source-plan hashes and map checks are validated locally.

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "388404c7f43748fe00834e01f7a1aedea012c3be",
+  "git_baseline": "b302e758d551dd78e97d3007a023556e6dabf2f4",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -513,12 +513,12 @@
     {
       "path": "docs/progress/open-gaps.md",
       "role": "product",
-      "sha256": "3f920e0db143c23d5d597826c510237e422dbf8b52135fc02d4ccc3dfa84ddc1"
+      "sha256": "4d65e56fceede537501fdffb537eefa10c92ffa370c038912690447361d0ae72"
     },
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "f3961bc3e15ef3411457895468b1e8d7b536948e8e2ae6c9356f65be9370f213"
+      "sha256": "d56970a165bdd5dac8bba70794e95dd7b1a50e535c13eaa305cc9e9a794e2b93"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -528,7 +528,7 @@
     {
       "path": "docs/progress/sprint-00.md",
       "role": "product",
-      "sha256": "9f46d5272343658a20651c4c160197faedfb5b48d8fde332f155b5b45fc3e64e"
+      "sha256": "09af1cdc2fe711a3320051cfe35bee9e1c83d9357e7373aa33e71d8acda3b0b6"
     },
     {
       "path": "docs/progress/sprint-01.md",
@@ -683,7 +683,7 @@
     {
       "path": "docs/test-reports/s00-verification.md",
       "role": "factory",
-      "sha256": "50386910c33543fb4c88569ae00a479658232da45ebc4fb30d07a739a367c95c"
+      "sha256": "77808b4f82ffdc9936558d112bb1512f0d4a64aaa13a8171caf11f81629a41ad"
     },
     {
       "path": "eslint.config.js",
