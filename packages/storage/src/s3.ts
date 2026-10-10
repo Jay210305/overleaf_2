@@ -31,38 +31,37 @@ export function validateKey(key: string): void {
     throw new StorageSecurityError("Key must be a non-empty string");
   }
 
-  // Check for raw traversal or illegal control characters
-  if (
-    key.includes("..") ||
-    key.startsWith("/") ||
-    key.includes("\\") ||
-    key.includes("\0") ||
-    key.includes("//")
-  ) {
-    throw new StorageSecurityError("Path traversal or illegal characters detected in object key");
-  }
+  // Iteratively decode to catch nested and double-encoded traversal sequences (%252e%252e, %255c, etc.)
+  let current = key;
+  for (let depth = 0; depth < 5; depth++) {
+    if (
+      current.includes("..") ||
+      current.startsWith("/") ||
+      current.includes("\\") ||
+      current.includes("\0") ||
+      current.includes("//") ||
+      /(^|\/)\.\.?(\/|$)/.test(current)
+    ) {
+      throw new StorageSecurityError("Path traversal or illegal characters detected in object key");
+    }
 
-  // Normalize / decode URI sequences to prevent percent-encoded traversal attacks (%2e%2e, %5c, %00)
-  let decoded = key;
-  try {
-    decoded = decodeURIComponent(key);
-  } catch {
-    throw new StorageSecurityError("Malformed URI encoding in object key");
-  }
-
-  if (
-    decoded.includes("..") ||
-    decoded.startsWith("/") ||
-    decoded.includes("\\") ||
-    decoded.includes("\0") ||
-    decoded.includes("//")
-  ) {
-    throw new StorageSecurityError("Path traversal or illegal characters detected in object key");
-  }
-
-  // Reject relative dot segments: "/./" or ending with "/."
-  if (/(^|\/)\.\.?(\/|$)/.test(decoded)) {
-    throw new StorageSecurityError("Relative path segments detected in object key");
+    try {
+      const next = decodeURIComponent(current);
+      if (next === current) {
+        break;
+      }
+      if (depth === 4) {
+        throw new StorageSecurityError("Excessive URI encoding layers detected in object key");
+      }
+      current = next;
+    } catch {
+      // If the first layer of percent-encoding is malformed, reject it.
+      // If subsequent layers fail (e.g. valid literal '%' after decoding), stop iterating.
+      if (depth === 0) {
+        throw new StorageSecurityError("Malformed URI encoding in object key");
+      }
+      break;
+    }
   }
 
   const allowedPrefixes = ["projects/", "artifacts/", "revisions/", "templates/"];
@@ -72,6 +71,13 @@ export function validateKey(key: string): void {
 }
 
 export function assertProjectKeyScope(key: string, authorizedProjectId: string): void {
+  if (
+    !authorizedProjectId ||
+    typeof authorizedProjectId !== "string" ||
+    authorizedProjectId.trim() === ""
+  ) {
+    throw new StorageSecurityError("Authorized project ID must be a non-empty string");
+  }
   validateKey(key);
   const expectedPrefix = `projects/${authorizedProjectId}/`;
   if (!key.startsWith(expectedPrefix)) {

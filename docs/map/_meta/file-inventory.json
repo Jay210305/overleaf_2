@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "a95fdb18a8830ec8a9d14efe9a7f49922c66e978",
+  "git_baseline": "f6b7279972176b1b67b9b0df6662932689089e34",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -293,7 +293,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "80d386b637b67cae233de67fb0fc0f1a840ace1a7afecc52f507ff5e22656968"
+      "sha256": "8527f1cc11f51e7966af5d8ccc854069a739b941ac5bbadf0240cf4c9d284da2"
     },
     {
       "path": "docs/map/CLAUDE.md",
@@ -528,7 +528,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "8884260ce3469d6bb9fd83047cc8a8b01f2f5e86d53381fd2bcc4fca29bb6bd3"
+      "sha256": "383b719587f9fda107f52ffb8632a78a8f20629a037d90b29b2efc5d4d8ea6bc"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -733,7 +733,7 @@
     {
       "path": "docs/test-reports/s01-t08.md",
       "role": "factory",
-      "sha256": "dc3f270deb0334a526e8c2b49c566c538a6c37dcdac0fc05a828cd60c40fba0f"
+      "sha256": "624047d36a3f0e3031f0060169eb72b46bf6f63f067d4befc16634fcda4a9f1b"
     },
     {
       "path": "docs/test-reports/s01-t09.md",
@@ -1888,7 +1888,7 @@
     {
       "path": "packages/storage/src/s3.ts",
       "role": "factory",
-      "sha256": "61d9b95b3dff7a32a7a6d7f6650d20998fb0b2a937387f3450167097eef4981b"
+      "sha256": "ac1080d8ce8ae90fe806798692603e561b109bf653d6e01f42ae4a90ea62a7ef"
     },
     {
       "path": "packages/storage/tsconfig.json",
@@ -2063,7 +2063,7 @@
     {
       "path": "tests/integration/s01-t08.test.ts",
       "role": "factory",
-      "sha256": "59b65d6f994071044629a2c2a4f3ad113c7d848e8c9fd86dff8f6a764c7f0088"
+      "sha256": "d0c826b9931be4343aadbf5c769a94717867faae69a6d3d5d5c36ac9e9accb6b"
     },
     {
       "path": "tests/integration/s01-t09.test.ts",
@@ -2143,7 +2143,7 @@
     {
       "path": "tests/regression/pl-07/s01-t08.test.ts",
       "role": "factory",
-      "sha256": "fe1333de9355c05b8049b2fe4e5b9e9ead6b3b57545ce8f84ade95db0c19061e"
+      "sha256": "54fc0b4612014adaaffaec9f5bcfcd54cc75932db5c7e15c3259cd8631409a11"
     },
     {
       "path": "tests/regression/pro-01/s01-t03.test.ts",

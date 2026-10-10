@@ -110,9 +110,23 @@ describe("S01-T08 Private S3 Adapter Integration", () => {
     // Relative dot segment
     expect(() => validateKey(`projects/${proj}/./secret.tex`)).toThrow(StorageSecurityError);
 
-    // Attempt to bypass assertProjectKeyScope using percent-encoded traversal must fail
+    // Double-encoded traversal and control characters
+    expect(() => validateKey(`projects/${proj}/%252e%252e/another/secret.tex`)).toThrow(
+      StorageSecurityError,
+    );
+    expect(() => validateKey(`projects/${proj}/%255csecret.tex`)).toThrow(StorageSecurityError);
+    expect(() => validateKey(`projects/${proj}/%2500secret.tex`)).toThrow(StorageSecurityError);
+    expect(() => validateKey(`projects/${proj}/%252f%252fsecret.tex`)).toThrow(
+      StorageSecurityError,
+    );
+    expect(() => validateKey(`projects/${proj}/%252e/secret.tex`)).toThrow(StorageSecurityError);
+
+    // Attempt to bypass assertProjectKeyScope using percent-encoded or double-encoded traversal must fail
     expect(() =>
       assertProjectKeyScope(`projects/${proj}/%2e%2e/another-project/secret.tex`, proj),
+    ).toThrow(StorageSecurityError);
+    expect(() =>
+      assertProjectKeyScope(`projects/${proj}/%252e%252e/another-project/secret.tex`, proj),
     ).toThrow(StorageSecurityError);
   });
 

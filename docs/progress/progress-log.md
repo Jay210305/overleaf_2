@@ -36,7 +36,7 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
   - Updated task frontmatters (`readiness: completed`, `status: done`), task index (`implementation/README.md`), roadmap (`docs/planning/04-implementation-roadmap.md`), feature parity matrix (`docs/feature-parity.md`), and sprint progress (`docs/progress/sprint-01.md`).
 - **Actual Hours:** Not measured.
 - **Commands & Results:**
-  - `pnpm test`: PASS (37 test files, 115 tests, 100% statement/branch/line coverage across covered modules).
+  - `pnpm test`: PASS (37 test files, 117 tests, 100% statement/branch/line coverage across covered modules).
   - `pnpm test:integration`: PASS (PostgreSQL, Redis, MinIO, Mailpit integration assertions verified).
   - `pnpm lint`: PASS (ESLint clean, 0 errors, 0 warnings).
   - `pnpm typecheck`: PASS (TypeScript type-check passes across all workspace packages and apps).
