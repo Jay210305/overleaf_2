@@ -1,0 +1,1472 @@
+{
+  "schema_version": 1,
+  "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
+  "git_baseline": "abddd342448aa50e403cf8e9568b7bb81a2e9523",
+  "generated_outputs_excluded": [
+    "docs/map/AGENTS.md",
+    "docs/map/_meta/file-inventory.json",
+    "docs/map/objects/_index.md",
+    "docs/map/routing.md"
+  ],
+  "excluded_directory_names": [
+    ".agents",
+    ".codex",
+    ".git",
+    ".pytest_cache",
+    ".turbo",
+    ".venv",
+    "__pycache__",
+    "build",
+    "coverage",
+    "dist",
+    "node_modules"
+  ],
+  "external_consumers": "unknown; no existing path moved by initial mapping",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "role": "catalog",
+      "sha256": "10318f82ffe8b9c0378145fc3160f772ca34e2dbe8452c33ea5c91b7835c0b3f"
+    },
+    {
+      "path": "CONTEXT.md",
+      "role": "contract",
+      "sha256": "37d617ce6c87a2c70111ad61fec2ca45dca3fabdffc6ef022b45140783dcb58a"
+    },
+    {
+      "path": "docs/agent-workflow.md",
+      "role": "factory",
+      "sha256": "0f402e2d2e10b44186709a80954234bfa0b1ae97b6736cf7337b2bc2cd1f4401"
+    },
+    {
+      "path": "docs/CONTEXT.md",
+      "role": "contract",
+      "sha256": "cbb3a2980042b7a1f63abd08213759d0c1bb17d0916b13e1b06c5736e24d38a9"
+    },
+    {
+      "path": "docs/contracts/collaboration.md",
+      "role": "contract",
+      "sha256": "672324eea0596990e94369bd3474554368bd088ac23f8e0a1dddd247a7c35a43"
+    },
+    {
+      "path": "docs/contracts/compilation.md",
+      "role": "contract",
+      "sha256": "3e6ef476abb86f91b28fa10bc201ed4877f91ec154b4e8a7f7aae9377b596b67"
+    },
+    {
+      "path": "docs/contracts/CONTEXT.md",
+      "role": "contract",
+      "sha256": "a0d11ec9ae4661a3a575d6fa4ede6225999fd342e3d88502ae082c7610f2faf0"
+    },
+    {
+      "path": "docs/contracts/data-model.md",
+      "role": "contract",
+      "sha256": "f33bd0a4b1101f82eac32985d6be4a39fa71dd945e23ebe7c55fb7e2c1293bd8"
+    },
+    {
+      "path": "docs/contracts/development-tooling.md",
+      "role": "contract",
+      "sha256": "b0dd1fdefa1c35d52cee8ffd966df9b3454a21900afddf33117036cae939ce21"
+    },
+    {
+      "path": "docs/contracts/editing-and-review.md",
+      "role": "contract",
+      "sha256": "f6752bb98111fcedd68d2b99063fcd4c44d2b92ebb0590562276b24268639467"
+    },
+    {
+      "path": "docs/contracts/http-api.md",
+      "role": "contract",
+      "sha256": "26644a52ddd9ee4ba3f8fe625833af412b3e1bf8cef021f7b68b6229e0725562"
+    },
+    {
+      "path": "docs/contracts/http-operations.md",
+      "role": "contract",
+      "sha256": "74025328745bee3af7e7226358f6b5244a9bc3127649c8356e7e2a1bf9a9e139"
+    },
+    {
+      "path": "docs/contracts/integrations.md",
+      "role": "contract",
+      "sha256": "e16fd4ac7b770351f34bb765ce92990808daeff9660c1fa90f3f014ad83563ca"
+    },
+    {
+      "path": "docs/contracts/openapi.json",
+      "role": "contract",
+      "sha256": "1dc8293ec104d41a0cba81480389feb36aed18519a98f313de99f2c6c15f4a77"
+    },
+    {
+      "path": "docs/contracts/README.md",
+      "role": "catalog",
+      "sha256": "a345646f64dcd5635a6ae56a693735f3fb88400a95f5d5bb1e78832d4c3c2ab5"
+    },
+    {
+      "path": "docs/contracts/storage-and-revisions.md",
+      "role": "contract",
+      "sha256": "c9aa598225bcef46d2a763e2c0b0e2eb05e872b39bd6cc7bcacec2633f2bc2cf"
+    },
+    {
+      "path": "docs/feature-parity.md",
+      "role": "product",
+      "sha256": "87fe946ea825c31d56d6afa81062f0f436e5e840689b7d1e8adb2c275f08b1a2"
+    },
+    {
+      "path": "docs/map/_meta/CONTEXT.md",
+      "role": "contract",
+      "sha256": "1a1ba8a3d7b79b286d0da6112805a23fc44a109e2ed2b3423334abd9a7803ed7"
+    },
+    {
+      "path": "docs/map/_meta/schema.md",
+      "role": "factory",
+      "sha256": "3e43460680244b1e7b0b65e1addaf345365d07129a70a8adceeabdac7bbc1e99"
+    },
+    {
+      "path": "docs/map/_meta/walk-report.md",
+      "role": "factory",
+      "sha256": "fb1d609483bb46890109f5c549ba19fdc36255e7efd87d12eb14a72ca0c30d43"
+    },
+    {
+      "path": "docs/map/_templates/CONTEXT.md",
+      "role": "contract",
+      "sha256": "64b0995f6ca6d93cd86ea9024b5c071475d2c08e35a83f302b90578c79aecae4"
+    },
+    {
+      "path": "docs/map/_templates/object.md",
+      "role": "factory",
+      "sha256": "b47b4051e9026cae4eedd5fbc1784dc8b1d7d0d1772533645b60ee81f8f5869c"
+    },
+    {
+      "path": "docs/map/_templates/process.md",
+      "role": "factory",
+      "sha256": "f90c49eb2d7b45641590e703b04a8b351e8479a62d75349989b2483e65de3ea2"
+    },
+    {
+      "path": "docs/map/CLAUDE.md",
+      "role": "catalog",
+      "sha256": "2f3eaab658ed1fee9ccf01499fab8fd0591a1ae8e3accda3e39b51932afb7e1f"
+    },
+    {
+      "path": "docs/map/CONTEXT.md",
+      "role": "contract",
+      "sha256": "94c8f42abe7653a11aa451c9108f315b468e8f94597fe7a64d72784a2f925695"
+    },
+    {
+      "path": "docs/map/effects/CONTEXT.md",
+      "role": "contract",
+      "sha256": "b69dd94aaa44be648f9f83c7906842b9e96cfd3d629f9df6e49ec76761b7c0df"
+    },
+    {
+      "path": "docs/map/objects/agent-guidance.md",
+      "role": "factory",
+      "sha256": "7ca1c4eee28a8561677e7f5f465191992c7347f230ccec6761d560b2364a3815"
+    },
+    {
+      "path": "docs/map/objects/api-and-durable-data.md",
+      "role": "factory",
+      "sha256": "e34cebe282dabcc707825a281b7e27e859493fe72f115c0c36a471fb4610f1a8"
+    },
+    {
+      "path": "docs/map/objects/browser-and-editing.md",
+      "role": "factory",
+      "sha256": "a7d675dbed5101cfb132d31db9a28265d15ae9a40c0d1a3113a4b8a54a698912"
+    },
+    {
+      "path": "docs/map/objects/compilation-and-artifacts.md",
+      "role": "factory",
+      "sha256": "5186d66a2ec847f590edbcc6429b73e60c69e7c0467bd41ebd0d18be41fb7374"
+    },
+    {
+      "path": "docs/map/objects/CONTEXT.md",
+      "role": "contract",
+      "sha256": "e7af4e9e7ad20b305ba23f3e55ee0c6d6635941e99aecb51360bf23c90112a44"
+    },
+    {
+      "path": "docs/map/objects/documentation-tooling.md",
+      "role": "factory",
+      "sha256": "758395cf92451dd4cd411ea6d460c61910e364789c3fcac934b0398754c62d73"
+    },
+    {
+      "path": "docs/map/objects/interface-contracts.md",
+      "role": "factory",
+      "sha256": "ceece417854bcc88db0cb1213a8e278431b93da07a8dbbe38eb05a94a7ac9d11"
+    },
+    {
+      "path": "docs/map/objects/planning-baseline.md",
+      "role": "factory",
+      "sha256": "0d39ebba7ce778ac4090cc5ce47ab7e0e2a938282df8c761fbb11a7ec8e1c5d7"
+    },
+    {
+      "path": "docs/map/objects/progress-records.md",
+      "role": "factory",
+      "sha256": "183db50fc0b2827c5cb664720526b559dc48efb782e2e9ff88a3e463d8c0b272"
+    },
+    {
+      "path": "docs/map/objects/provider-and-git-adapters.md",
+      "role": "factory",
+      "sha256": "8f222ca0f6d8761181bcf4e6d37505e50f8e1563e8eaca7167b2c5217937c50b"
+    },
+    {
+      "path": "docs/map/objects/task-library.md",
+      "role": "factory",
+      "sha256": "f2d766978bcf3cdf236b579bb3d3239a79c3e5c431f73b708715855804527b5b"
+    },
+    {
+      "path": "docs/map/processes/CONTEXT.md",
+      "role": "contract",
+      "sha256": "19832a506a283d2b133053b4647f239fe4947157c48e848f8ee99834850c3de0"
+    },
+    {
+      "path": "docs/map/processes/map-refresh.md",
+      "role": "factory",
+      "sha256": "42dd31dd4af18f2085b1610b2f59af36fa49e1b464c21836ef2bd35f17767778"
+    },
+    {
+      "path": "docs/map/processes/planning-maintenance.md",
+      "role": "factory",
+      "sha256": "bb5cf221049fdf91f439d51ec5af5ffa08b10632f07b884eda3f269e2a789ff8"
+    },
+    {
+      "path": "docs/planning/00-discovery.md",
+      "role": "factory",
+      "sha256": "8d686de889c53ab85ca040665fbc305806d461bb87fccac210199dc2e1b99f7c"
+    },
+    {
+      "path": "docs/planning/01-overview.md",
+      "role": "factory",
+      "sha256": "5d63524091414599295b3c5892c34bd55c248ff89b32830077e01171c501a4cb"
+    },
+    {
+      "path": "docs/planning/02-architecture.md",
+      "role": "factory",
+      "sha256": "8b8899f62b5fb83b302335d1c496938f7c397951c2bdf2ab2fa55af9460e495e"
+    },
+    {
+      "path": "docs/planning/03-technical-spec.md",
+      "role": "factory",
+      "sha256": "f654fa3ce1a36aa2841ce4ac55660d76d4acce709e7b1706f20a7c0630a37968"
+    },
+    {
+      "path": "docs/planning/04-implementation-roadmap.md",
+      "role": "factory",
+      "sha256": "49725a91c7df89eb890098a175d36b95b978ec9bd7a1e1751b014495a2d58af4"
+    },
+    {
+      "path": "docs/planning/05-testing.md",
+      "role": "factory",
+      "sha256": "8ae1686e7e715cd0edef89a2bec3a9426b564f60c43816e87bf72f142e9c8995"
+    },
+    {
+      "path": "docs/planning/06-ci-cd-and-environments.md",
+      "role": "factory",
+      "sha256": "43dd29bb1a438149cea9e0c1adfe30bd32c3367d5b9d6081176adb0e8f248668"
+    },
+    {
+      "path": "docs/planning/07-risks.md",
+      "role": "factory",
+      "sha256": "95d6af35617fe4d18d0905d3c82ef3431fcba4f7ca0fcef2b40a87e5415f4fe9"
+    },
+    {
+      "path": "docs/planning/08-metrics-and-nfrs.md",
+      "role": "factory",
+      "sha256": "da6d62e41c6994fb124524afc22369ac31ace7c4e6254e221f698027d4a7bdf6"
+    },
+    {
+      "path": "docs/planning/09-decisions.md",
+      "role": "factory",
+      "sha256": "154dcf20bea8a76c44f0c5c96de98204f730ffab3561c4badbe65a8faeacd5d4"
+    },
+    {
+      "path": "docs/planning/10-glossary-and-references.md",
+      "role": "factory",
+      "sha256": "21af5eb76ffac8ffcec11d07d74dec55974c4b6448574285e236b1271527bf66"
+    },
+    {
+      "path": "docs/planning/CONTEXT.md",
+      "role": "contract",
+      "sha256": "9d9d2023a06af9df4d2e693eca4181a7f2ce701ad2ab16a4a46cf2dabf20ea72"
+    },
+    {
+      "path": "docs/planning/execution-guide.md",
+      "role": "factory",
+      "sha256": "a1918723b7a5dfffeb6f982d55bf796253c038a856df93b0d3755b0dda822d5f"
+    },
+    {
+      "path": "docs/planning/migration-report.md",
+      "role": "factory",
+      "sha256": "7efe12490013d7cdbf280f2c29869b3925bd5176fe450a6873daf2eb7df59bb6"
+    },
+    {
+      "path": "docs/planning/README.md",
+      "role": "catalog",
+      "sha256": "b1b6d703c7e15b0a06f0d0f61f39224eb6664a00eba04f7ee0f632d50b288bfe"
+    },
+    {
+      "path": "docs/planning/release-and-postmortem.md",
+      "role": "factory",
+      "sha256": "32aa52eb82c70b8de0dc43e6f5ec5cfb935235383225de560bdb346042ecb6c0"
+    },
+    {
+      "path": "docs/planning/requirements.md",
+      "role": "factory",
+      "sha256": "3144e71cdc494ec9c02fafa28ba3343439669d44c5df20ba531079906cf58ca7"
+    },
+    {
+      "path": "docs/planning/source-manifest.json",
+      "role": "factory",
+      "sha256": "a5d19df931b1fb065e6cb549a8458ab83cbc9aa751ec7fdf01231fc96c50d0c4"
+    },
+    {
+      "path": "docs/planning/test-scenarios.md",
+      "role": "factory",
+      "sha256": "7c5e0a192b0b27c9b5597702bd27e3870ed1ba1a28a60280eb6f47ce1c8ba0c1"
+    },
+    {
+      "path": "docs/planning/traceability.md",
+      "role": "factory",
+      "sha256": "5615758c7a856f7379e60ed6064d22150db789bd52db87e660242869959de974"
+    },
+    {
+      "path": "docs/progress/CONTEXT.md",
+      "role": "contract",
+      "sha256": "488ced4d850067d9b49d297a8c0c77e323d19e790ce7531190820d2b68af82b6"
+    },
+    {
+      "path": "docs/progress/open-gaps.md",
+      "role": "product",
+      "sha256": "a21791728228eadca435c520c4646a9f0627479d4f555f1402023d4e022f4ee3"
+    },
+    {
+      "path": "docs/progress/progress-log.md",
+      "role": "product",
+      "sha256": "4af644dd7974b88fbce1d69427e11a9c9c91b7860f85501512dc2158f7b3a323"
+    },
+    {
+      "path": "docs/progress/sprint-00.md",
+      "role": "product",
+      "sha256": "2b860cc469fa64736a63ecd3c5a9226615fa2d9e9ef815068ef172b7533e1179"
+    },
+    {
+      "path": "docs/progress/sprint-01.md",
+      "role": "product",
+      "sha256": "c2e50cace29108739385ae37c5a3dbf687838ed937069b58479d511c71f5be3e"
+    },
+    {
+      "path": "docs/progress/sprint-02.md",
+      "role": "product",
+      "sha256": "1d71e1f3d4b4ecb275c248f20e73cf2530ad531aa86b794835e5d70169ebdc29"
+    },
+    {
+      "path": "docs/progress/sprint-03.md",
+      "role": "product",
+      "sha256": "35278973d204fc8a4ecbb11c58924406590a47fe5afa03ee266b0b4b36aed8cc"
+    },
+    {
+      "path": "docs/progress/sprint-04.md",
+      "role": "product",
+      "sha256": "3176fd7f13e52f80f5a55d410342ae79903f67622c10dbc9ee9dbaea03af3d5f"
+    },
+    {
+      "path": "docs/progress/sprint-05.md",
+      "role": "product",
+      "sha256": "cd1295b9828e63566e46a42f0f02912f2626c1eb151a725899365c452646ca99"
+    },
+    {
+      "path": "docs/progress/sprint-06.md",
+      "role": "product",
+      "sha256": "32fc5bf8687e244bd6c538355c6ac9d9bcace3acf010b021c8650764b98325c2"
+    },
+    {
+      "path": "docs/progress/sprint-07.md",
+      "role": "product",
+      "sha256": "d1806f7073890768f012f85b19fbcad80d2027fe9451111471017d11ef1b8a79"
+    },
+    {
+      "path": "docs/progress/sprint-08.md",
+      "role": "product",
+      "sha256": "67d898ce9860f3f3550e8aadbb963eec680b74a000c5e26669ff6663e7243f79"
+    },
+    {
+      "path": "docs/progress/sprint-09.md",
+      "role": "product",
+      "sha256": "33029e21627af1f187b5fe11f0282a265a3a884c3e7884f8c778de4b804ddbf7"
+    },
+    {
+      "path": "docs/progress/sprint-10.md",
+      "role": "product",
+      "sha256": "589cfcb8a6d4d764b6a3e5a09425ad66d274d6c79b1a21a582762397a93181e4"
+    },
+    {
+      "path": "docs/progress/sprint-11.md",
+      "role": "product",
+      "sha256": "9304b55f3ac1be94b1fb7ef1315a5e8bf7ecee88c38558aad93203f7683d4726"
+    },
+    {
+      "path": "docs/progress/sprint-12.md",
+      "role": "product",
+      "sha256": "aac95df88a003967e2c940ed8b4a5ef50e8dc1fcd7990b10b9fd6597ea7bf1b9"
+    },
+    {
+      "path": "docs/progress/sprint-13.md",
+      "role": "product",
+      "sha256": "f76c6fef8e1f20e6e05fa0c993e8ed2290afb200bae0f8d1fd3c074c65e98706"
+    },
+    {
+      "path": "docs/progress/sprint-14.md",
+      "role": "product",
+      "sha256": "a1d2ee78c5acbd165912d395a7819d6e370f04299ffdee253603626d8108d7c7"
+    },
+    {
+      "path": "docs/progress/sprint-15.md",
+      "role": "product",
+      "sha256": "f113c26255951da16755609c93bdfff38bfcde5bc5c738a474b106e7671ba6c9"
+    },
+    {
+      "path": "docs/progress/technical-debt.md",
+      "role": "product",
+      "sha256": "b5a779243a5dafeb282991c9b3711918222ae55c050fd271e23932116d92961b"
+    },
+    {
+      "path": "docs/skills/CONTEXT.md",
+      "role": "contract",
+      "sha256": "f1d25f3ff9b4db0a0a874f97ba6c1e183c8440411dbdb847c9bdb323e2096e0d"
+    },
+    {
+      "path": "docs/skills/README.md",
+      "role": "catalog",
+      "sha256": "19abc40e725b269617bbfaa3470944b94592d621d726f24bd83ac4ed9c44d40c"
+    },
+    {
+      "path": "implementation/CONTEXT.md",
+      "role": "contract",
+      "sha256": "4d72f93d7909454065c4ad19cf8e0de8f4be604a73516e6365c85b108457d3ef"
+    },
+    {
+      "path": "implementation/README.md",
+      "role": "catalog",
+      "sha256": "74f50a49fe1b431e32fc70bd209275ff1731a0d73b24e2a9398d3bbc37cacba2"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
+      "role": "contract",
+      "sha256": "3d3220b8ad0bd94689c8ec48f4bd334e7908e32fd8c17346ca1f2f991624827d"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T01-inspect-repository-and-preserve-contributor-changes.md",
+      "role": "contract",
+      "sha256": "e5423095d6c6e573c5e308ced35e4f1c1ece1c41bd5eddd25c1cd4e702586283"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md",
+      "role": "contract",
+      "sha256": "33c2a8d5a0cd67f7958fe4521a1b9d51f9aa4a0f0446843b64f245493ce888b5"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T03-create-typed-pnpm-monorepo.md",
+      "role": "contract",
+      "sha256": "9fa18628be818e33645df963438944736245676097998df49c3610c4d30d9499"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T04-create-browser-shell-and-route-providers.md",
+      "role": "contract",
+      "sha256": "e5af95b3a830ab09eff701d2201ecf9bc08dee59c7ff236c7ab9afba33fed4e9"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T05-create-api-health-and-error-boundary.md",
+      "role": "contract",
+      "sha256": "31fd462c29c01d1c2d01b337c720b773645b73da60735159cd395271c76eba66"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T06-configure-code-quality-and-ci.md",
+      "role": "contract",
+      "sha256": "1c1b661e5c90a60d62884461745a54464298b76586d5a1251e8182940b23d460"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T07-create-local-services-and-validated-configuration.md",
+      "role": "contract",
+      "sha256": "4f6ef92bcf77273ba2686f71e967b51e588cfab8babd6d87bbc28c04dc0423f2"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T08-record-initial-architecture-decisions.md",
+      "role": "contract",
+      "sha256": "bf05d8f8c83a1f542715d72c3c912f1b81d48d86d7ff9999688683be8f120df7"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T09-initialize-feature-and-evidence-inventory.md",
+      "role": "contract",
+      "sha256": "fa74d6510fe90a68452dd46497b3a9591b553e94a48544d66de12453458411e4"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T10-document-clean-development-startup.md",
+      "role": "contract",
+      "sha256": "eba75d509ff2468e7f49781261ab1be06fc22f618533b55fdbbbcb1465919aef"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T11-check-editor-collaboration-dependency-compatibility.md",
+      "role": "contract",
+      "sha256": "8c20fbbd1c967a742bb1e557168783c754fb96228871f8651a610ff5492786b8"
+    },
+    {
+      "path": "implementation/sprint-00-bootstrap/S00-T12-deliver-browser-to-api-walking-skeleton.md",
+      "role": "contract",
+      "sha256": "b1164acda4b744a66d36618dda283575aa57a9c82d78028a89628c34c9c5d904"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/CONTEXT.md",
+      "role": "contract",
+      "sha256": "3a090d5b9180c90a33ac4224313295b43cb74e48bb3d6aae831cf24d3d98f9a9"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/S01-T01-define-core-drizzle-entities.md",
+      "role": "contract",
+      "sha256": "c1cb5ac1be7805f8d383855454936479e294b3328fe256c4ec3010eb7ecb3523"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/S01-T02-create-sql-migrations-and-constraints.md",
+      "role": "contract",
+      "sha256": "18a3b29a5e23867f8b5e17c63b70d681590fc47e7c26dd9beb020a355a37cba0"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/S01-T03-create-transaction-and-repository-primitives.md",
+      "role": "contract",
+      "sha256": "11df1f10aa2155a94ad9abc2c5a36a287928c9c0c7e597e54e415ff5374da9cb"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/S01-T04-define-future-collaboration-and-integration-tables.md",
+      "role": "contract",
+      "sha256": "9c3a892583a03df895b4e303a3b1be974866ecf291faceed1adb57804e526f00"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/S01-T05-implement-zod-dtos-and-openapi-generation.md",
+      "role": "contract",
+      "sha256": "7ec88c0e95ff87ece2320113c875eb5fb19d052273aa7469c00aae6061a714d6"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/S01-T06-create-isolated-seeds-and-fixtures.md",
+      "role": "contract",
+      "sha256": "213f41d635cc42582e7b843b9e643cd4bac8d1dc494b0e7beeee60a60279bdf3"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/S01-T07-test-constraints-rollback-and-naming-races.md",
+      "role": "contract",
+      "sha256": "acdcf20cbea0706e9b9ad1b1443b3b2d4ad45c6cc5cec899cd9f22aaa6cc7636"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/S01-T08-create-private-s3-adapter.md",
+      "role": "contract",
+      "sha256": "98d2acd34dd5743c75dc947b3959afbfee42222be730302ab708d97b4270248a"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/S01-T09-complete-support-entity-migration-slices.md",
+      "role": "contract",
+      "sha256": "ea6d68b372b50fe5e46fab60be30b15b18345bd9dbb2972edd6bab6bd3f2e827"
+    },
+    {
+      "path": "implementation/sprint-01-data-contracts/S01-T10-deliver-persisted-development-sample-vertical-slice.md",
+      "role": "contract",
+      "sha256": "5f3799dc51bb1a54eec2fb6f5f237ec33ab03ecd33a0e928e4b5156fbb2a13b7"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/CONTEXT.md",
+      "role": "contract",
+      "sha256": "5c4ad70aa893d7357b211cb51790a55b4fe7efe626851118e9feac0c6fda0e4a"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T01-implement-registration-and-verification.md",
+      "role": "contract",
+      "sha256": "f5072b8a68e3976ea58af5a6db3cf53ad1e802aee9432dc5265673fd417b1e10"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T02-implement-cookie-sessions-and-logout.md",
+      "role": "contract",
+      "sha256": "c480b4ec46cb0c33c1b7459b3e50960b28ec8425d8e0a26faa9a7b1203314756"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T03-implement-password-recovery.md",
+      "role": "contract",
+      "sha256": "9ef9a39da905a7adfe327adcad971baeb79804ac71b27a126f373bdf57cabf02"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T04-implement-session-and-project-policy-guards.md",
+      "role": "contract",
+      "sha256": "4cb59c9f70da29370e7d118518e3b2dd9a98fe28f6962fde591370f6ddc4804e"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md",
+      "role": "contract",
+      "sha256": "e8a5c719e1f4db9df5df1eff09572c036b3844fdcdce671c15d62763a9717d34"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md",
+      "role": "contract",
+      "sha256": "e471e8c6a561ccbfe4a1c376b3f503c86ded31c726b706a0dac8d7ab7f2e509b"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md",
+      "role": "contract",
+      "sha256": "fbb898747703bcde156ae409b17ecfa423243cacade57669d07d9cc1f50c312e"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md",
+      "role": "contract",
+      "sha256": "50e92642fd55a62af28af048f75bb28b5cff17260ed8b7bbdbd68a7dadeaec17"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md",
+      "role": "contract",
+      "sha256": "1bf65ffc7e422d921c73f7f4086b27c34e45a5c7050481ae83a7fb85228ca20f"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md",
+      "role": "contract",
+      "sha256": "4220da405cd9bbc3bcaf0433b789bebf290901d8dd6e6cdc05d0f30f958edb97"
+    },
+    {
+      "path": "implementation/sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md",
+      "role": "contract",
+      "sha256": "76ec0a2bdcb4aa076418cc658af9937e0d8869baf97c9cea6de4e61fb9ed8869"
+    },
+    {
+      "path": "implementation/sprint-03-projects-files/CONTEXT.md",
+      "role": "contract",
+      "sha256": "6f9e93694aaf0a9837f7042b30972eb0eb80335fb64ea72ef4a905200fa292cf"
+    },
+    {
+      "path": "implementation/sprint-03-projects-files/S03-T01-implement-project-crud-and-pagination.md",
+      "role": "contract",
+      "sha256": "802fd440328171488c7437b5c94b032ae88f87871c58ef0b7eca187fc6b3e114"
+    },
+    {
+      "path": "implementation/sprint-03-projects-files/S03-T02-create-duplicate-and-rename-project-sources.md",
+      "role": "contract",
+      "sha256": "65ef3279dcf2156dc3d90a8712e6ef285868932ffa3f255ac2f8ec9b79f0fd24"
+    },
+    {
+      "path": "implementation/sprint-03-projects-files/S03-T03-create-api-backed-dashboard.md",
+      "role": "contract",
+      "sha256": "69eddf3a1661c58a65bda0739e0db9d7259fe2ebc71eb9ec7f9054d7e41a2774"
+    },
+    {
+      "path": "implementation/sprint-03-projects-files/S03-T04-implement-id-based-file-tree-mutations.md",
+      "role": "contract",
+      "sha256": "3b71ff554c331b6f92dc41ba5bcab55a307133f56f8493bda30f472a2b6b0246"
+    },
+    {
+      "path": "implementation/sprint-03-projects-files/S03-T05-create-file-tree-interactions.md",
+      "role": "contract",
+      "sha256": "0a4ed6197117ee4c68870c8f77176a31ffa97a2e33635178e36c7563c772c02f"
+    },
+    {
+      "path": "implementation/sprint-03-projects-files/S03-T06-implement-project-root-and-compiler-settings.md",
+      "role": "contract",
+      "sha256": "57a56a73e044ea5b7a00d5df723c174d6936ffbb6e1d34db44f60c1c702a0abd"
+    },
+    {
+      "path": "implementation/sprint-03-projects-files/S03-T07-create-structural-revision-manifests.md",
+      "role": "contract",
+      "sha256": "046f6948dfb44a99da239858c270c1fda52713d7f426d4c2c56843a9638e72d5"
+    },
+    {
+      "path": "implementation/sprint-03-projects-files/S03-T08-verify-project-and-tree-journey.md",
+      "role": "contract",
+      "sha256": "842bd6891c007d11057c228368016b25742755b67523d397d31e2427cb973923"
+    },
+    {
+      "path": "implementation/sprint-03-projects-files/S03-T09-verify-transaction-safe-move-rename-and-delete.md",
+      "role": "contract",
+      "sha256": "a7cd24dec54c4b81ced3ec52404996ca5ab4c3e1f6f47df218d4cc4755255457"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/CONTEXT.md",
+      "role": "contract",
+      "sha256": "1f00b644ae2a5b157627c06d0f04c6b3699221474a0c86fe74970e27e34b24a9"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/S04-T01-create-latex-codemirror-extensions.md",
+      "role": "contract",
+      "sha256": "febdaab3d29e85148728bc249c498876f2d506cbfa78289388a67e22c1b479cf"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/S04-T02-create-canonical-text-document-service.md",
+      "role": "contract",
+      "sha256": "b4e164ab7589d70513c847353557037ff6b62ac7b03a03f8871672a8d78bcd0a"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/S04-T03-connect-actual-save-status-and-retries.md",
+      "role": "contract",
+      "sha256": "79ddecfacd8c9de5c61c4a8630cb21f710ece14a51e20b0da2f5ec32e5f49249"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/S04-T04-implement-file-tabs-and-navigation.md",
+      "role": "contract",
+      "sha256": "38a4f5f2d4573b9138fba62f5ee780a95bc38c526312fe311b70699d43143ac6"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/S04-T05-implement-local-undo-search-and-shortcuts.md",
+      "role": "contract",
+      "sha256": "677d11c21e2c3d8d034c7319f9b1d87d4a0f33ef937fff70bfdb3858118a5999"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/S04-T06-enforce-read-only-and-metadata-concurrency.md",
+      "role": "contract",
+      "sha256": "b057da3cdc6fa567619820e2ab1b59f166011b446a52716bfbdc7cf935ef0611"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/S04-T07-create-text-and-binary-checkpoints.md",
+      "role": "contract",
+      "sha256": "9ddd336ffdd4d3a750dcb101f57bead595ad4d0857006bd591271d060f94b127"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/S04-T08-verify-persistent-unicode-editing.md",
+      "role": "contract",
+      "sha256": "10ea9152ba7fcde0943f716f941bbb1614aa034803822c40ad334f1999e1bd8c"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/S04-T09-persist-and-replay-canonical-text-updates.md",
+      "role": "contract",
+      "sha256": "3f560fe4dbcc1a659f78c304c2209987257c61f64b7826e6461a393bac8ee21d"
+    },
+    {
+      "path": "implementation/sprint-04-code-editor/S04-T10-implement-rest-text-state-version-contract.md",
+      "role": "contract",
+      "sha256": "7bb40ac320ab7821856ba98566915d35e14d1380704d10bc63f6ebac75866f8a"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/CONTEXT.md",
+      "role": "contract",
+      "sha256": "268f44e04c9025e777300842492a24faa276a1d9d216ac0cfb8de2a04d5ebadf"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T01-implement-verified-presigned-uploads.md",
+      "role": "contract",
+      "sha256": "038f2c02b8661c33a1ad7c7bef0adfd0a7893cce0f04119039a1d753964022f2"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T02-create-multi-file-upload-interactions.md",
+      "role": "contract",
+      "sha256": "566f849a5a05151c68f42b33e248f338192077ada42cd2ca054d9792452ded06"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md",
+      "role": "contract",
+      "sha256": "62c0c521d3fc575ce01f8f5336409119a4f0afc50bf087506abe07f81d19f518"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md",
+      "role": "contract",
+      "sha256": "5aa617af24ef830379e802dad810aec288ae99fbe8fb913fa78d1b3730b76406"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md",
+      "role": "contract",
+      "sha256": "b8ab656137dddf2a02d29a6ac32bb0b6868c8f1098e223f574066a777b27d73e"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T06-create-minimal-versioned-internal-templates.md",
+      "role": "contract",
+      "sha256": "2348f2b85e38bb253a4410e39e4f085035bc332c4b909b1c8ee0263919974acd"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T07-verify-imported-paths-and-custom-styles.md",
+      "role": "contract",
+      "sha256": "e08e7b2991a7690e76a8132291d08f356fe6d7b531bb6dd55491b59caa05282d"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T08-verify-hostile-zip-and-round-trip-journeys.md",
+      "role": "contract",
+      "sha256": "de5f0e44e184e375b3ab5dc1068e448fb52252da6cb3dd8388ee9f968ba1dc0c"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md",
+      "role": "contract",
+      "sha256": "42da213d57a40f89e7feed06935047a184a2278e67d869cff090bdd3d3084ac7"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md",
+      "role": "contract",
+      "sha256": "e9b2303a9012ce0b41cd00f07267bd04f4d31a0444764671785ea049a918f5bf"
+    },
+    {
+      "path": "implementation/sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md",
+      "role": "contract",
+      "sha256": "23c000d217da8985c59d2ff633ace7abb1b9ac0a5c047fc3ff6adc988f34bc16"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/CONTEXT.md",
+      "role": "contract",
+      "sha256": "209e2c3fa2914389100e13be80edfe09438a9bcafefff76f0371cc8c4a6c4ed5"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T01-create-durable-compile-queue-jobs.md",
+      "role": "contract",
+      "sha256": "4ddbca9108cee0ef44ae1d34de31127fe7bd2196f38fd0f274f429d15ead3a33"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T02-freeze-compilation-source-revision.md",
+      "role": "contract",
+      "sha256": "a10f2f76a4c81cda9ea61a3456c3a1096c01e1f37dbe5c8fb43269cbe2e91325"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T03-build-pinned-tex-live-image.md",
+      "role": "contract",
+      "sha256": "108812c2a4b05ee7b12200c3985fc1bb15c203db0b4595180c4078f186e8fd02"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T04-define-compiler-executor-boundary.md",
+      "role": "contract",
+      "sha256": "a27303f4a57d30dba01f4f1f8f91a536dcf11892746ae3a52a4ef64315ab3691"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T05-enforce-trusted-compiler-execution-limits.md",
+      "role": "contract",
+      "sha256": "713c91a3e74f6191c26b2ea6aecbc406eadb11c48d0bf3a8cacea4843a3acb53"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T06-persist-verified-artifacts-and-job-result.md",
+      "role": "contract",
+      "sha256": "ee1c76a53250b79227d8b669c4d7846386cb374e752c6452421af83111f8279a"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T07-parse-diagnostics-and-compile-failures.md",
+      "role": "contract",
+      "sha256": "f465a83cc3eea2cac3519694958a83547e6ede86301bd4c98ac895100e3bab53"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T08-create-real-pdf-viewer.md",
+      "role": "contract",
+      "sha256": "f9c19c5f128939ac62af19ec35bd9316c70f952169dc6eb777257f6547f1527d"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T09-connect-compile-controls-and-status-fallback.md",
+      "role": "contract",
+      "sha256": "35e84002faa909d16b71b2cbd6ceaf3c9c28b9ce413bae52842a7a17b1bc4f7c"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T10-verify-genuine-compiler-fixtures.md",
+      "role": "contract",
+      "sha256": "76850b89836ab2c81afcc672848f71646067ebd2a0d8c1ef2c3c10f74a33f0aa"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T11-document-trusted-execution-and-closed-public-mode.md",
+      "role": "contract",
+      "sha256": "dc57a2e4b13f1e39903cebec0f90156529fbaeb9a5a835a96a5baa4d2c6c5688"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T12-research-trusted-tex-runtime-and-image-limits.md",
+      "role": "contract",
+      "sha256": "130d4db291a335129f6a2def33a1d32e9c723932c1b6cccb2a4d3a6557cad0ae"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T13-implement-trusted-worker-executor-adapter.md",
+      "role": "contract",
+      "sha256": "40c11e56aa954d1dbd3534242fbfdfb581063fe9606eee5013211f976d358cd1"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T14-implement-timeout-cancellation-and-job-recovery.md",
+      "role": "contract",
+      "sha256": "0e3ff722e2f32693565fa89d42c3f446f1b6607b7d239a2348112d4c7af28a2b"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T15-deploy-trusted-staging-slice-and-smoke.md",
+      "role": "contract",
+      "sha256": "7976ed99ef0afd4ea0ffa61c6f6d360de8fb45d46918e093bd0082e8c371f495"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T16-verify-trusted-release-backup-and-rollback.md",
+      "role": "contract",
+      "sha256": "f07c789b2e5ceac897daac817876957a1b5ab65182c9a99b2a7356f172d517fa"
+    },
+    {
+      "path": "implementation/sprint-06-trusted-compilation/S06-T17-stabilize-and-review-g1-release.md",
+      "role": "contract",
+      "sha256": "c41391cd73e641ca3d5070d99d953858fc52347df8e357a27f8426ad61c39f0b"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/CONTEXT.md",
+      "role": "contract",
+      "sha256": "5fb00e5113fb8b1e30bfd1f06b2b07f54452b6229873db5dbbc2d9c14206226c"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T01-create-authenticated-hocuspocus-file-rooms.md",
+      "role": "contract",
+      "sha256": "9b0f076e4e8bef29be9d45327fba3f0bf8c90c5497481b4eeb0de6fa757e028b"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T02-implement-single-use-wss-tickets.md",
+      "role": "contract",
+      "sha256": "d32c235bd02d165a68841194587c925495ddd507ac2f759b02d61f08ba0781dc"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T03-connect-collaborative-editor-presence-and-undo.md",
+      "role": "contract",
+      "sha256": "10a66c4891034fd9d0cd721b3a30b7e7530d2c0d5cfbcc1acadb9b3afe98882c"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T04-append-durable-crdt-updates.md",
+      "role": "contract",
+      "sha256": "96b096c7d0646c1ec8105bc4ed32915cc722710f2e9d2cca2dfc440542981890"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T05-implement-offline-persistence-and-reconnect.md",
+      "role": "contract",
+      "sha256": "1b2c8b82ebdb4704ae0fe79dc65bbcfd8fbb5866e19119ba7ba45fc93b62fd65"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T06-synchronize-tree-changes-with-open-rooms.md",
+      "role": "contract",
+      "sha256": "10af2c75ab96bb623d500f4091e4c480b852e4029927249393829304dfbc56b6"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T07-coordinate-two-collaboration-replicas.md",
+      "role": "contract",
+      "sha256": "bbc66184b2dbc4d0c740d1e28cabd9787ecaffd2b8aa6b705f7a53666a12a93d"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T08-apply-live-role-and-session-revocation.md",
+      "role": "contract",
+      "sha256": "faf2c56a1a277a20db8f66d25ae608857e6891f8f92610936acd6e1ddcb0e5af"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T09-instrument-collaborative-durability-metrics.md",
+      "role": "contract",
+      "sha256": "f2032fe46d870138ac9c7581f2a82841786ddd712b687dba0795b59d603e5cbb"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T10-verify-convergence-failures-and-recovery.md",
+      "role": "contract",
+      "sha256": "1f5a1a25e24702e62678a579348e4894e09aa494fbe03f1cbd0235b44c2dad6c"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T11-implement-commit-covered-durable-acknowledgements.md",
+      "role": "contract",
+      "sha256": "a15e642e5fd9ac6bd0689dbeb9db6110a9b757b8c91184356d25df057492c559"
+    },
+    {
+      "path": "implementation/sprint-07-durable-collaboration/S07-T12-compact-verified-crdt-snapshots-safely.md",
+      "role": "contract",
+      "sha256": "e41b73c4defbe642371320a88f11ef07c05ab6710e516278a1e31b4dc8bdd54d"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/CONTEXT.md",
+      "role": "contract",
+      "sha256": "97b9b2377fd53314b502353b6f5c90859786607cc2b86fba86089ff40c12ddcd"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md",
+      "role": "contract",
+      "sha256": "94df60f1a6bf7deb1465ed92ef3655da14342fcfb1188537477986ca0007d0d5"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md",
+      "role": "contract",
+      "sha256": "3b1d27e291de13224a67c8ce3d28ac188ed4b74b1a69ffada5065c290b81ddc1"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md",
+      "role": "contract",
+      "sha256": "befac3105515620aa07c28afabd559703b6d54d0e504265230080a4870a384d0"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/S08-T04-implement-anchored-comments-and-replies.md",
+      "role": "contract",
+      "sha256": "a54663a4ee5be8a4cc00547bf8df6528485afa736a125df691e0c7554c2e75fe"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/S08-T05-create-authorized-durable-project-chat.md",
+      "role": "contract",
+      "sha256": "f2dcd232f652376f27298ee9d9a597f07741a56c56084b844f18d4763ff63f44"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md",
+      "role": "contract",
+      "sha256": "4b25a8339c8964a9f1f73c7e3e59ea75bb364d53183a931f0f04939aaf1d16b2"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/S08-T07-enforce-comment-chat-safety-and-limits.md",
+      "role": "contract",
+      "sha256": "df6e6e080dd4407b208efc7c331e219f69071b3734c5b75edf8c588f4afc06dc"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/S08-T08-verify-sharing-revocation-and-detached-anchors.md",
+      "role": "contract",
+      "sha256": "ad3aad3e5677c883d2f6fd0e67410c5a44442ed99b73957afff274913dff81c8"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/S08-T09-render-comment-anchor-and-reply-interactions.md",
+      "role": "contract",
+      "sha256": "2909210741fee401955d45d1ae24669a4ee07ba1bb166301e4e791e50554fa61"
+    },
+    {
+      "path": "implementation/sprint-08-sharing-comments-chat/S08-T10-stabilize-and-review-g2-collaboration.md",
+      "role": "contract",
+      "sha256": "c1d2eb049f8284cc3b11243ea664b14c37622398bed04a044b939e91df0d8580"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/CONTEXT.md",
+      "role": "contract",
+      "sha256": "a0d181b0dbe53929d8ddde05eff0c0e2f383c7c07dd9e083178fc64833f2988c"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T01-create-immutable-labeled-history-queries.md",
+      "role": "contract",
+      "sha256": "5172e4559877466059523b35b8b5ddc43050090b4ded97f69c007514e303f975"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T02-compare-text-tree-and-binary-revisions.md",
+      "role": "contract",
+      "sha256": "0d41b2520c9ad30f92eec9cbc938518d3cd2cbd9d53c359c8e507e50a856f9be"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T03-restore-file-or-project-with-version-guard.md",
+      "role": "contract",
+      "sha256": "156290817825af6e5f53e98ac071dca17dc5cbe2c489a02d79e36fa4618fe663"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T04-model-reviewer-suggestions-separately.md",
+      "role": "contract",
+      "sha256": "f6d6d3a49202ab60212c9ee7ee576ddbc49db80937d75d1a8c31bcc549d48827"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T05-resolve-proposals-with-explicit-conflicts.md",
+      "role": "contract",
+      "sha256": "c837318323d2b5683e31d01d0a49bded379a71ca01fce2d4b369ce1443572dfa"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T06-preserve-current-acl-and-historical-anchors-on-restore.md",
+      "role": "contract",
+      "sha256": "e646faaffea12c439349423378a4f464bab3c6ef62afc9992b3273a0c98c6ef9"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T07-verify-concurrent-review-and-file-changes.md",
+      "role": "contract",
+      "sha256": "463976d0cd37e02b16c052b89ca6adf2e6dff56b6e2271ff9700b22f00cbb338"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T08-create-explicit-restore-confirmation-ui.md",
+      "role": "contract",
+      "sha256": "bf220d9096c53b1813df481d789df41ddf1f14735801bd83ce38f12045f6ac6c"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T09-implement-archive-trash-and-permanent-deletion.md",
+      "role": "contract",
+      "sha256": "64c0ad71eee0bed3cb794034a227050501992fe43c5720ebd83d51c473ea5d9b"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T10-implement-owned-project-tags.md",
+      "role": "contract",
+      "sha256": "0b3cfbc70823bfed726c986405966dff9b1f9ea8e65a9c094e73c59e2cce4a06"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T11-implement-permission-aware-bulk-project-actions.md",
+      "role": "contract",
+      "sha256": "249d01e89e5f4cd09da8fa4d66223a139c1bdfb27af7c76734e38e068a866eec"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T12-implement-explicit-ownership-transfer.md",
+      "role": "contract",
+      "sha256": "97e527099be6c7477881dae99be696b2bf6984a5a882c06fc601db7af74be4b5"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T13-export-authorized-user-data.md",
+      "role": "contract",
+      "sha256": "5e3b03e1b7fd127165d3e4089542d3a5a02562c7ca51b93f17a4f0927cfcc811"
+    },
+    {
+      "path": "implementation/sprint-09-history-review/S09-T14-delete-account-under-shared-ownership-rules.md",
+      "role": "contract",
+      "sha256": "daa0a3bd106860380d87f4ea1b33387f317bf8b4baeb9333b37dd18cd86a7bbc"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/CONTEXT.md",
+      "role": "contract",
+      "sha256": "295508ddaf6e3e54efbe7923abc44d0071aa771aab8b853b9da90e17410c4056"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T01-add-tested-alternative-tex-profiles.md",
+      "role": "contract",
+      "sha256": "e738b0f8c764f01fd7fa48854078666c9e82ca2b61f7b9cc4ee0d1528ff0c012"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T02-compile-bibliography-and-complete-citations.md",
+      "role": "contract",
+      "sha256": "4a7b2007fb29202c7a3cd0f024b9abd5532dca4b0c052a39d3ff1b394293b87a"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T03-index-bibtex-and-search-local-references.md",
+      "role": "contract",
+      "sha256": "90d38a1f686c89aa27efd70f9279e524d09f7d6a172cff256c87856d68f2068c"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T04-implement-forward-inverse-synctex.md",
+      "role": "contract",
+      "sha256": "6e807c23331bf64473d72749e9e8e69a1c4b670b2762b9617e1e6840538b526e"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T05-create-valid-academic-insertion-snippets.md",
+      "role": "contract",
+      "sha256": "5722c3c6fadaf1c1615b6a36495ace2b55ab516e1c06c2ebcd7003a4503995d5"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T06-complete-environments-labels-and-file-paths.md",
+      "role": "contract",
+      "sha256": "c872f3024060a0adae396d4c85ca1ec55a8c377d72383b0cc9b48ff4e708b580"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T07-report-documented-project-statistics.md",
+      "role": "contract",
+      "sha256": "19b65e264e62295d7e4ade23afd2e0aed84d755ef3d945d6ffb2bf4fab386e07"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T08-implement-project-search-and-previewed-replacement.md",
+      "role": "contract",
+      "sha256": "b81bbae2be80fdda2e6ecc5fed93f10868e99383dcb9fbad43729dd771ba9ba1"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T09-persist-editor-preferences-symbols-and-layout.md",
+      "role": "contract",
+      "sha256": "b35a5ec7659f1434ce5ae318f1475af2bfe32ba89c9f5495ce469eda55fc008c"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T10-verify-bibliography-pdf-synctex-and-keymaps.md",
+      "role": "contract",
+      "sha256": "43a9e8e556a10c1fc3a611e2a583d3dc5a874ce7e9faa9095e2fd697ba55f28b"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T11-add-local-spell-checking-and-static-error-help.md",
+      "role": "contract",
+      "sha256": "41f61779c18152fa951d0ea5f9eaaf0f5eda078483b6fe56f3f0086f1ff2035b"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T12-add-debounced-automatic-compilation.md",
+      "role": "contract",
+      "sha256": "79c9f8ab95cc059698af3cb995c5da57a1c4000b63ddb93347480acdcae96cf1"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T13-implement-authorized-content-aware-compiler-cache.md",
+      "role": "contract",
+      "sha256": "31862e4a213dc3065cb62c7f8b95d3f1040570517f266ed814e8d848156f898d"
+    },
+    {
+      "path": "implementation/sprint-10-academic-editing/S10-T14-implement-clean-rebuild-and-retention-cleanup.md",
+      "role": "contract",
+      "sha256": "df20044400d799cfc32df898465df41b6aed0c4bdcc5604dda9de5999ae66529"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/CONTEXT.md",
+      "role": "contract",
+      "sha256": "a623eb8af5abd453ecbbaf9d66882cefa84df926f0d5a238e31c1bb78f7a6d6e"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T01-research-conservative-visual-parser.md",
+      "role": "contract",
+      "sha256": "1bf2032a33cdc8f438a6dfda9b0931c21e5d2560a69601ac6f5d85bd840a4ac4"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T02-create-source-ast-projection-and-range-map.md",
+      "role": "contract",
+      "sha256": "791475ce5cf24f50cdbd14c1437d648ab61a3af3f125241e6c739c6b254229da"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T03-render-basic-supported-visual-nodes.md",
+      "role": "contract",
+      "sha256": "3aa01ac259c94eed68e88f92e1d4d20936d4495e01ecff8ffeb32cb898525112"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T04-apply-minimal-version-checked-source-patches.md",
+      "role": "contract",
+      "sha256": "4e26eab2d7fd34f33066284f826f4c53f9292570aedb21795120927441898d3a"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T05-render-supported-math-figures-tables-and-cites.md",
+      "role": "contract",
+      "sha256": "bef2c7dabca46cf22160275a01627770c84928469099d9699fc00dce6f9cf057"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T06-create-literal-fallback-for-unsupported-tex.md",
+      "role": "contract",
+      "sha256": "e360b026b20d5cb16ae7a2e84bf922a95763118d73dcaae75f51d0cd9b54770f"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T07-make-code-visual-switching-read-only.md",
+      "role": "contract",
+      "sha256": "35c6631b0a91b818bb922d1a59fa777c3fff9b965d3283a37570748b9c23a438"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T08-verify-100-non-destructive-round-trip-fixtures.md",
+      "role": "contract",
+      "sha256": "5804cf6375c92efc2780afb9b961f0174204ae2ef239c82f3c21dff15272ca23"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T09-verify-mixed-code-visual-coediting.md",
+      "role": "contract",
+      "sha256": "353675f625a78b20e2eef17b1030c8cbdc22b3f8a89bfaaf02c7b60c2b6456a8"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T10-complete-simple-table-and-formula-editing-slices.md",
+      "role": "contract",
+      "sha256": "a8728560cd8067657f2d45b3a316827864a83ef2cf9fb29250855fcc7c33e767"
+    },
+    {
+      "path": "implementation/sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md",
+      "role": "contract",
+      "sha256": "2cef3e268fc408f3bdae65c1b15df063fb14156a92b173cdd169be05b7243b1e"
+    },
+    {
+      "path": "implementation/sprint-12-github-sync/CONTEXT.md",
+      "role": "contract",
+      "sha256": "05b18e45f82774ae09c6b39e8f97c5e7428a1b2e09644063562cff5d4aa3d2bf"
+    },
+    {
+      "path": "implementation/sprint-12-github-sync/S12-T01-implement-github-oauth-credential-handling.md",
+      "role": "contract",
+      "sha256": "d050c05946b9d909d0e60ab21b0a2c671b18f5656b87573a2acda0f80576c961"
+    },
+    {
+      "path": "implementation/sprint-12-github-sync/S12-T02-link-authorized-repository-and-branch.md",
+      "role": "contract",
+      "sha256": "9a7203afe062612abd5a7a18050e6eb8745b8eb24b12ad32d805ef40885c435c"
+    },
+    {
+      "path": "implementation/sprint-12-github-sync/S12-T03-pull-using-checkpoint-and-base-sha.md",
+      "role": "contract",
+      "sha256": "d6e3bf79a8697a997fe7d0bbba59d3d339f0bf0538cd15eb9bb7543fb7240351"
+    },
+    {
+      "path": "implementation/sprint-12-github-sync/S12-T04-push-frozen-revision-with-remote-guard.md",
+      "role": "contract",
+      "sha256": "6402cf7901af5c39b13385e94dcb9de64a5451bb84c66d70ac284334a9c8e76f"
+    },
+    {
+      "path": "implementation/sprint-12-github-sync/S12-T05-create-sync-status-diff-and-resolution-ui.md",
+      "role": "contract",
+      "sha256": "8d3b080485c203cfe51556c21bb6ea6be586a5d224173a6616e5841ddbf5ffca"
+    },
+    {
+      "path": "implementation/sprint-12-github-sync/S12-T06-export-authorized-revision-artifacts-and-links.md",
+      "role": "contract",
+      "sha256": "b85aa25906243cae25a4972db7267f94b8bb32198d727f06fd142ee150034f07"
+    },
+    {
+      "path": "implementation/sprint-12-github-sync/S12-T07-verify-github-failure-concurrency-cases.md",
+      "role": "contract",
+      "sha256": "a4cd96f0a39f749935cb267a25f93e15c22863c02dac0b2ef7f20c54d93cb0e0"
+    },
+    {
+      "path": "implementation/sprint-12-github-sync/S12-T08-apply-remote-changes-through-live-canonical-service.md",
+      "role": "contract",
+      "sha256": "cc9d94aed4d08ca722d45cf8c8e4c6d39f95312edacedc68848cf7fb01b9d951"
+    },
+    {
+      "path": "implementation/sprint-13-reference-providers/CONTEXT.md",
+      "role": "contract",
+      "sha256": "d950c70311396e31c0f6f1955b933dd3e92f0c94e92b5155c03cc5968a5f0ae0"
+    },
+    {
+      "path": "implementation/sprint-13-reference-providers/S13-T01-define-provider-adapter-and-connection-lifecycle.md",
+      "role": "contract",
+      "sha256": "1bed55e6c07415702998beab270f6514d6179535234ffaf1c319d15657df9fa6"
+    },
+    {
+      "path": "implementation/sprint-13-reference-providers/S13-T02-import-and-refresh-authorized-zotero-library.md",
+      "role": "contract",
+      "sha256": "fc0a144aae49299731a90437fbd1459512c947d4a6ed81620c4286bda65407fb"
+    },
+    {
+      "path": "implementation/sprint-13-reference-providers/S13-T03-research-mendeley-papers-access-and-terms.md",
+      "role": "contract",
+      "sha256": "ac702f29f2c434142fa1fe19550f7a4523a245af05c540dd2d3afe3c86f2c304"
+    },
+    {
+      "path": "implementation/sprint-13-reference-providers/S13-T04-implement-authorized-manual-dropbox-export.md",
+      "role": "contract",
+      "sha256": "a09c4033b1b227beff3c2977d6f916162abdc199694aabac7d312b19ddb7c103"
+    },
+    {
+      "path": "implementation/sprint-13-reference-providers/S13-T05-import-editable-individual-references.md",
+      "role": "contract",
+      "sha256": "3acdf897fa2aeed5b9b579fff887aca957e22569d37a9cae49e18a2072618c43"
+    },
+    {
+      "path": "implementation/sprint-13-reference-providers/S13-T06-verify-provider-contract-and-real-connectivity.md",
+      "role": "contract",
+      "sha256": "dd8cfff4de5242f6640cdf790c013f822de32afa63730c5b773c1a60b842921f"
+    },
+    {
+      "path": "implementation/sprint-13-reference-providers/S13-T07-implement-one-permitted-optional-bibliography-provider.md",
+      "role": "contract",
+      "sha256": "bdc845961edbbacc4b02bad97714dbdb1c9b9eae22473aee8b4b97f85225c13a"
+    },
+    {
+      "path": "implementation/sprint-13-reference-providers/S13-T08-add-optional-bidirectional-dropbox-synchronization.md",
+      "role": "contract",
+      "sha256": "0a0e195aaddc44d74ec87f66fa91856fce8cc79f9d9e3c036066535dd211c936"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/CONTEXT.md",
+      "role": "contract",
+      "sha256": "7128f11148953d9237489bfdc87ee78958d9d0c0bb06b03ee7c01eb2e8925d21"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T01-research-git-http-implementation-and-mapping.md",
+      "role": "contract",
+      "sha256": "dfcc8a78e5f08ce5a3750cb4b5cc41426657b6560dd903960b41934110b5c2ce"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T02-create-authenticated-git-bridge-service.md",
+      "role": "contract",
+      "sha256": "7f5ce6660e7f842302cbbdba626974f326cdcd992a225378270fde4fb45173c2"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T03-implement-actual-clone-fetch-and-push.md",
+      "role": "contract",
+      "sha256": "3a87304b987aa17637af7deb088a20c24a6fd74bb65cc65f31d71d8327a279c6"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T04-apply-git-imports-through-canonical-mutation-service.md",
+      "role": "contract",
+      "sha256": "576b17c09ff266492e92b98be34793c88710848f3f5aeb0be18c356d663ad35a"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T05-deliver-preference-controlled-email-notifications.md",
+      "role": "contract",
+      "sha256": "45f26b1070d8629abe1b7f5e27abe90ff6a9dcf2ec793fed467384928dfc4faf"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T06-add-optional-private-writing-assistance.md",
+      "role": "contract",
+      "sha256": "7322a7a5f1ac82913d03a4c4d8fe2b4bc29db8b0e339e730b1574ba1d557cc01"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T07-implement-safe-social-oauth-account-linking.md",
+      "role": "contract",
+      "sha256": "1147fbc796ec6901d3364a8516fba4f917ac4623b309f8673b83ba99132f96ef"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T08-verify-real-git-protocol-and-token-revocation.md",
+      "role": "contract",
+      "sha256": "5ec1c189510ac9058fc4111737b06a1c3a81d4c923c8297e2d4707006ba5be32"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T09-profile-additional-compiler-packages-and-fonts.md",
+      "role": "contract",
+      "sha256": "725019bc2c477f6e006ec30267bb1f23036db4cb130ab810e22eb55f64d6e6df"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T10-implement-ssrf-safe-permitted-remote-resource-import.md",
+      "role": "contract",
+      "sha256": "c40ef9ed789b8a17d762b0604a76fc77173bb27138d681c934909e2b1ac935d4"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T11-implement-optional-totp-challenge-and-recovery-slice.md",
+      "role": "contract",
+      "sha256": "a938fff59bdcbb04657b36b22674df68d7064e3b76f87c9bfcc9ab4b94c791a1"
+    },
+    {
+      "path": "implementation/sprint-14-git-and-optional-features/S14-T12-stabilize-and-review-supported-g4-integrations.md",
+      "role": "contract",
+      "sha256": "8524cd3ebe770898c7804df72faf40f8f677df0e24bc5ff4546f27b9c0056d2e"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/CONTEXT.md",
+      "role": "contract",
+      "sha256": "7cdd8045a5f6e5473d81eaa5d2d8397c122c4be1aca7d5733673ea77616ccc2f"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T01-research-verified-public-isolation-primitives.md",
+      "role": "contract",
+      "sha256": "d086422e5e870a2eee5971d87d56b9f643997924c19a4664af966b956e43543c"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T02-audit-tex-escape-and-resource-attacks.md",
+      "role": "contract",
+      "sha256": "227d1d5c4c4f61837af864e80ff619b503226eea61dbd6b738ce625fece4c96f"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T03-route-public-mode-through-verified-executor.md",
+      "role": "contract",
+      "sha256": "1d0ffac2bc3ea5e8d46fd3c165cf08f46c9296893841037cba156c8165c74607"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T04-verify-multi-replica-api-and-collab-deployment.md",
+      "role": "contract",
+      "sha256": "7861e0320213443782a106b927aacec606801f35cb0c77c432003295bfb581ae"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T05-measure-rest-ws-and-compile-load.md",
+      "role": "contract",
+      "sha256": "fa954d2acd250fb87a8217065efdf69e0bf4387a95afb78632ac27193601d227"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T06-automate-complete-backup-and-restore.md",
+      "role": "contract",
+      "sha256": "0102d09339bd4344ac4b2cbe81f76c799858b5dd507cbfff0661bd6fb2d967ee"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T07-create-privacy-preserving-telemetry-and-alerts.md",
+      "role": "contract",
+      "sha256": "72e22be9d9f844b6a67eaffb74474dc8cc4f9141786457db002b7f42b14b510a"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T08-audit-delivered-api-wss-files-and-integrations.md",
+      "role": "contract",
+      "sha256": "eecbde7cb0059a340f46752969f755b3fb228746c947759cfb339f168bc08bd6"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T09-enforce-abuse-quotas-flags-and-admin-permissions.md",
+      "role": "contract",
+      "sha256": "919c03d7af74774b8290ec0ee3aacf7826e94ce9b5e6d3e530431d8e347eb97c"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T10-review-accessibility-browsers-and-operating-docs.md",
+      "role": "contract",
+      "sha256": "55a9cb56d12b765ec284ca8c7f8e7e68c58820127513177b9bb4b8094128bfae"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T11-audit-every-feature-id-and-claim.md",
+      "role": "contract",
+      "sha256": "c4eec1568a12768dd058a03c7494fdcba16344db2d70ffbd137f62b25ef0a725"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T12-approve-and-enable-optional-public-signup.md",
+      "role": "contract",
+      "sha256": "1089ee5a6f6f3130812356504deae59c53ae2b742ee5098ad3b0b31950d4c8e9"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T13-provision-verified-isolated-executor-adapter.md",
+      "role": "contract",
+      "sha256": "d8471cf66fbd9e3a70ae707effd9efae690e41317db5fbc581285591bc918ebb"
+    },
+    {
+      "path": "implementation/sprint-15-public-hardening/S15-T14-stabilize-public-candidate-and-review-release-evidence.md",
+      "role": "contract",
+      "sha256": "afb1c56b9426349551555726a3f94d5dd9517424efe5c8bed415c1993e01b5ea"
+    },
+    {
+      "path": "PLAN_IMPLEMENTACION_EDITOR_LATEX_COLABORATIVO.md",
+      "role": "factory",
+      "sha256": "338d8bf32297c3de6fc2e3d9be62e5ae2b3f56abd1d547ca2c71fe83a50ada05"
+    },
+    {
+      "path": "PLANNING_METHODOLOGY.md",
+      "role": "factory",
+      "sha256": "6bdf434c96ca66a99bd797f3b98ce92342c1dd202fbe58c3c5d891b27f4e1cc0"
+    },
+    {
+      "path": "README.md",
+      "role": "catalog",
+      "sha256": "782652fc817fae070599a0834ba4a71d5d07cbdd3f9c3bb067b308c7260809c1"
+    },
+    {
+      "path": "scripts/build_icm_map.py",
+      "role": "factory",
+      "sha256": "2a6156e262c1643b41c9432e92027c6d6b8f97b5269816eb607eeea7ed16a644"
+    },
+    {
+      "path": "scripts/CONTEXT.md",
+      "role": "contract",
+      "sha256": "baf320fe747a52a87b27996732c884addadb878c9348d2afd572d9508287f4f8"
+    },
+    {
+      "path": "scripts/plan_lint.py",
+      "role": "factory",
+      "sha256": "36b4c2a9fd671260e37c6865be79f79dcf1e45b2ad34028caf887b09ee8016f8"
+    }
+  ]
+}

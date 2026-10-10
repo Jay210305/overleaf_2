@@ -6,6 +6,11 @@ The English package is the operative baseline under the user's scope delegation.
 
 ## Agent Rules for S00
 
+Permanent routing now starts at [AGENTS.md](../../AGENTS.md). Read the
+[Agent Workflow](../agent-workflow.md), [Skill Catalog](../skills/README.md)
+and relevant [ICM impact route](../map/effects/CONTEXT.md) for the selected task.
+This documentation setup does not complete S00 prerequisites or product acceptance.
+
 1. Inspect actual files and git status/diff; preserve contributor work.
 2. Select a Ready task; explain contracts, security and migrations.
 3. Implement genuine UI/API/storage behavior; no dummy PDF or local-only persistence claim.

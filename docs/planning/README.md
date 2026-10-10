@@ -22,6 +22,9 @@ English subdivision using specification → roadmap → task files. Discovery re
 
 ## Supporting Documents
 
+- [Agent entry](../../AGENTS.md) / [Agent workflow](../agent-workflow.md)
+- [Project skills](../skills/README.md) / [ICM map](../map/AGENTS.md)
+
 - [Requirements and MoSCoW](requirements.md)
 - [Requirement → Task → Test](traceability.md)
 - [Stable E2E scenarios](test-scenarios.md)

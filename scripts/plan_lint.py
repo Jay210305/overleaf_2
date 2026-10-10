@@ -124,7 +124,7 @@ def main() -> int:
     required_headers = ["Purpose", "Preconditions", "Interface Contract", "Essential Sub-tasks",
                         "Deliverables", "Acceptance Criteria", "Verification", "Edge Cases & Pitfalls",
                         "Risks / Scope Cuts", "Definition of Done"]
-    for file in sorted((ROOT / "implementation").glob("sprint-*/*.md")):
+    for file in sorted((ROOT / "implementation").glob("sprint-*/S[0-9][0-9]-T*.md")):
         body = file.read_text(encoding="utf-8")
         try:
             metadata = front_matter(body)
@@ -238,7 +238,7 @@ def main() -> int:
     scenarios = read("docs/planning/test-scenarios.md")
     check(set(manifest["original_journey_ids"]) == set(re.findall(r"^\| (E2E-\d{3}) \|", scenarios, re.M)), "Lost E2E IDs")
 
-    doc_files = [ROOT / "README.md", *(ROOT / "docs").rglob("*.md"), *(ROOT / "implementation").rglob("*.md")]
+    doc_files = [ROOT / "README.md", ROOT / "AGENTS.md", ROOT / "CONTEXT.md", *(ROOT / "docs").rglob("*.md"), *(ROOT / "implementation").rglob("*.md"), *(ROOT / "scripts").glob("*.md")]
     for file in doc_files:
         body = re.sub(r"```.*?```", "", file.read_text(encoding="utf-8"), flags=re.S)
         for target in re.findall(r"\[[^\]]*\]\(([^)]+)\)", body):

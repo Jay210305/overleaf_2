@@ -17,3 +17,13 @@ Validate the plan:
 ```text
 python scripts/plan_lint.py
 ```
+
+Agent setup: [AGENTS.md](AGENTS.md), [Agent Workflow](docs/agent-workflow.md),
+[Skill Research and Routing](docs/skills/README.md), and [ICM Project Map](docs/map/AGENTS.md).
+
+Refresh and check the map:
+
+```text
+python scripts/build_icm_map.py
+python scripts/build_icm_map.py --check
+```
