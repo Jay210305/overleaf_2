@@ -3,10 +3,16 @@ import Fastify, { type FastifyServerOptions } from "fastify";
 import cors from "@fastify/cors";
 import { healthSchema } from "@latex-collab/contracts";
 import { registerErrors, problem } from "./plugins/errors.js";
+import { registerDevelopmentSampleRoute } from "./modules/development/sample.js";
+import type { DatabaseClient } from "@latex-collab/db";
+import type { StorageAdapter } from "@latex-collab/storage";
+
 export interface ServerOptions {
   checkReadiness: () => Promise<boolean>;
   logger?: FastifyServerOptions["logger"];
   origin?: string;
+  db?: DatabaseClient | undefined;
+  storage?: StorageAdapter | undefined;
 }
 export function safeLoggerOptions(level = "info") {
   return {
@@ -52,5 +58,6 @@ export function createServer(options: ServerOptions) {
         .send(problem(503, "SERVICE_UNAVAILABLE", request.id));
     return healthSchema.parse({ status: "ready", requestId: request.id });
   });
+  registerDevelopmentSampleRoute(app, { db: options.db, storage: options.storage });
   return app;
 }

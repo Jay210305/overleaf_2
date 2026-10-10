@@ -6,6 +6,8 @@
   "dependencies": {
     "@latex-collab/contracts": "workspace:*",
     "@latex-collab/config": "workspace:*",
+    "@latex-collab/db": "workspace:*",
+    "@latex-collab/storage": "workspace:*",
     "fastify": "5.12.5",
     "@fastify/cors": "11.3.1",
     "pg": "8.23.1",

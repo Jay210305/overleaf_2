@@ -12,12 +12,12 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | ACC-06 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-07 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-08 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PRO-01 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| PRO-01 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t03.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PRO-02 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-03 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PRO-04 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PRO-05 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PRO-06 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| PRO-04 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t07.md) (accepted 2026-10-10); remaining mapped tasks still apply |
+| PRO-05 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); remaining mapped tasks still apply |
+| PRO-06 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PRO-07 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-09 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -55,7 +55,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | CMP-12 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-01 | G2 | Must | IN_PROGRESS | [S00-T11 compatibility research](test-reports/s00-t11.md#acceptance-review); [remaining tasks](planning/traceability.md) |
 | COL-02 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| COL-03 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| COL-03 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t06.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | COL-04 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-05 | G2 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-06 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -95,5 +95,5 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | PL-03 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PL-04 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PL-05 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); remaining mapped tasks still apply |
-| PL-06 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| PL-06 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t01.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PL-07 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); remaining mapped tasks still apply |

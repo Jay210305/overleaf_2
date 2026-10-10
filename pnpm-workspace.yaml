@@ -17,6 +17,7 @@ minimumReleaseAgeExclude:
   - '@aws-sdk/credential-provider-web-identity@3.972.79'
   - '@aws-sdk/middleware-sdk-s3@3.972.78'
   - '@aws-sdk/nested-clients@3.997.47'
+  - '@aws-sdk/s3-request-presigner@3.1149.0'
   - '@aws-sdk/signature-v4-multi-region@3.996.48'
   - '@aws-sdk/token-providers@3.1149.0'
   - prettier@3.9.10

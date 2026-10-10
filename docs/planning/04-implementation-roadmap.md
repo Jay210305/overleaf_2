@@ -86,7 +86,7 @@ Strict TypeScript; server-side authorization for every REST/WSS/object action; g
 
 ## Sprint S01: Data and typed interfaces (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 72 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Project Co-owner (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 72 h (ASSUMPTION A-03) | **Status:** ✅ DONE | **Owner:** Project Co-owner (proposed A-02)
 **Goal:** Data and typed interfaces for G1, using independently verified slices.
 
 ### Deliverables
@@ -109,24 +109,24 @@ Strict TypeScript; server-side authorization for every REST/WSS/object action; g
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S01-T01](../../implementation/sprint-01-data-contracts/S01-T01-define-core-drizzle-entities.md) | Define core Drizzle entities | 8 | Project Co-owner | ⬜ todo | Users/sessions/projects/members/nodes/revisions/jobs/artifacts expose typed fields and constraints specified by the data contract |
-| [S01-T02](../../implementation/sprint-01-data-contracts/S01-T02-create-sql-migrations-and-constraints.md) | Create SQL migrations and constraints | 8 | Project Co-owner | ⬜ todo | Fresh migration applies; cross-project parent and duplicate active name fail; roots with null parent cannot bypass uniqueness |
-| [S01-T03](../../implementation/sprint-01-data-contracts/S01-T03-create-transaction-and-repository-primitives.md) | Create transaction and repository primitives | 6 | Project Co-owner | ⬜ todo | Transactions commit/rollback explicitly; cursor ordering is stable and cursors reject tampering |
-| [S01-T04](../../implementation/sprint-01-data-contracts/S01-T04-define-future-collaboration-and-integration-tables.md) | Define future collaboration and integration tables | 8 | Project Co-owner | ⬜ todo | CRDT/invite/comment/suggestion/provider/audit fields satisfy the contract without claiming their behaviors implemented |
-| [S01-T09](../../implementation/sprint-01-data-contracts/S01-T09-complete-support-entity-migration-slices.md) | Complete support entity migration slices | 8 | Project Co-owner | ⬜ todo | Review/provider/template/notification/quota/flag tables migrate with indexes and constraints independently of their future behavior |
-| [S01-T05](../../implementation/sprint-01-data-contracts/S01-T05-implement-zod-dtos-and-openapi-generation.md) | Implement Zod DTOs and OpenAPI generation | 8 | Project Co-owner | ⬜ todo | Input/output validators and generated API agree with planned OpenAPI; database-only fields never reach browser DTOs |
-| [S01-T06](../../implementation/sprint-01-data-contracts/S01-T06-create-isolated-seeds-and-fixtures.md) | Create isolated seeds and fixtures | 6 | Project Co-owner | ⬜ todo | Four roles, three projects and two templates exist only in development/test; production seed refuses fixed credentials |
-| [S01-T07](../../implementation/sprint-01-data-contracts/S01-T07-test-constraints-rollback-and-naming-races.md) | Test constraints rollback and naming races | 6 | Project Co-owner | ⬜ todo | Concurrent same-name creation yields one active node; rollback and same-project FKs preserve invariants |
-| [S01-T08](../../implementation/sprint-01-data-contracts/S01-T08-create-private-s3-adapter.md) | Create private S3 adapter | 8 | Project Co-owner | ⬜ todo | put/get/head/delete/presign obey scoped keys; unauthorized cross-project URL is denied and expected SHA-256 matches |
-| [S01-T10](../../implementation/sprint-01-data-contracts/S01-T10-deliver-persisted-development-sample-vertical-slice.md) | Deliver persisted development sample vertical slice | 6 | Project Co-owner | ⬜ todo | Development-only sample read traverses API to PG/object storage and survives restart; route absent in production |
+| [S01-T01](../../implementation/sprint-01-data-contracts/S01-T01-define-core-drizzle-entities.md) | Define core Drizzle entities | 8 | Project Co-owner | ✅ done | Users/sessions/projects/members/nodes/revisions/jobs/artifacts expose typed fields and constraints specified by the data contract |
+| [S01-T02](../../implementation/sprint-01-data-contracts/S01-T02-create-sql-migrations-and-constraints.md) | Create SQL migrations and constraints | 8 | Project Co-owner | ✅ done | Fresh migration applies; cross-project parent and duplicate active name fail; roots with null parent cannot bypass uniqueness |
+| [S01-T03](../../implementation/sprint-01-data-contracts/S01-T03-create-transaction-and-repository-primitives.md) | Create transaction and repository primitives | 6 | Project Co-owner | ✅ done | Transactions commit/rollback explicitly; cursor ordering is stable and cursors reject tampering |
+| [S01-T04](../../implementation/sprint-01-data-contracts/S01-T04-define-future-collaboration-and-integration-tables.md) | Define future collaboration and integration tables | 8 | Project Co-owner | ✅ done | CRDT/invite/comment/suggestion/provider/audit fields satisfy the contract without claiming their behaviors implemented |
+| [S01-T09](../../implementation/sprint-01-data-contracts/S01-T09-complete-support-entity-migration-slices.md) | Complete support entity migration slices | 8 | Project Co-owner | ✅ done | Review/provider/template/notification/quota/flag tables migrate with indexes and constraints independently of their future behavior |
+| [S01-T05](../../implementation/sprint-01-data-contracts/S01-T05-implement-zod-dtos-and-openapi-generation.md) | Implement Zod DTOs and OpenAPI generation | 8 | Project Co-owner | ✅ done | Input/output validators and generated API agree with planned OpenAPI; database-only fields never reach browser DTOs |
+| [S01-T06](../../implementation/sprint-01-data-contracts/S01-T06-create-isolated-seeds-and-fixtures.md) | Create isolated seeds and fixtures | 6 | Project Co-owner | ✅ done | Four roles, three projects and two templates exist only in development/test; production seed refuses fixed credentials |
+| [S01-T07](../../implementation/sprint-01-data-contracts/S01-T07-test-constraints-rollback-and-naming-races.md) | Test constraints rollback and naming races | 6 | Project Co-owner | ✅ done | Concurrent same-name creation yields one active node; rollback and same-project FKs preserve invariants |
+| [S01-T08](../../implementation/sprint-01-data-contracts/S01-T08-create-private-s3-adapter.md) | Create private S3 adapter | 8 | Project Co-owner | ✅ done | put/get/head/delete/presign obey scoped keys; unauthorized cross-project URL is denied and expected SHA-256 matches |
+| [S01-T10](../../implementation/sprint-01-data-contracts/S01-T10-deliver-persisted-development-sample-vertical-slice.md) | Deliver persisted development sample vertical slice | 6 | Project Co-owner | ✅ done | Development-only sample read traverses API to PG/object storage and survives restart; route absent in production |
 
 ### DoD
 
-- [ ] Every task's acceptance and declared scope has actual evidence.
-- [ ] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
-- [ ] Permissions, persistence, privacy and real outputs are verified.
-- [ ] Contracts, progress, feature matrix and actual effort are updated.
-- [ ] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
+- [x] Every task's acceptance and declared scope has actual evidence.
+- [x] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
+- [x] Permissions, persistence, privacy and real outputs are verified.
+- [x] Contracts, progress, feature matrix and actual effort are updated.
+- [x] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
 
 ### Mitigations
 
