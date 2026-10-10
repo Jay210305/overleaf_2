@@ -66,8 +66,8 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Browser renders API readiness from a real running server, shows outage and passes CI smoke; no fake application functionality
-- [ ] PL-05: Walking skeleton and stabilized current-gate release with documented findings. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Browser renders API readiness from a real running server, shows outage and passes CI smoke; no fake application functionality
+- [x] PL-05: Walking skeleton and stabilized current-gate release with documented findings. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
 - [x] PL-04: Explicit environment/configuration, health, staging deploy and release rollback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
 - [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 

@@ -1,14 +1,38 @@
 import { loadEnvFile } from "node:process";
 import { spawn } from "node:child_process";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 loadEnvFile(".env");
-const executable = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
-const children = ["api", "web"].map((app) =>
-  spawn(executable, ["--filter", `@latex-collab/${app}`, "dev"], {
+const require = createRequire(import.meta.url);
+const vite = join(dirname(require.resolve("vite/package.json")), "bin/vite.js");
+const publicKeys = new Set([
+  "path",
+  "home",
+  "tmpdir",
+  "temp",
+  "tmp",
+  "systemroot",
+  "node_env",
+  "no_color",
+  "force_color",
+  "term",
+]);
+const webEnv = Object.fromEntries(
+  Object.entries(process.env).filter(
+    ([key]) => key.startsWith("VITE_") || publicKeys.has(key.toLowerCase()),
+  ),
+);
+const children = [
+  spawn(process.execPath, ["--import", "tsx", "apps/api/src/main.ts"], {
     stdio: "inherit",
     env: process.env,
-    shell: process.platform === "win32",
   }),
-);
+  spawn(process.execPath, [vite, "--host", "127.0.0.1"], {
+    cwd: "apps/web",
+    stdio: "inherit",
+    env: webEnv,
+  }),
+];
 let stopping = false;
 function stop(code = 0) {
   if (stopping) return;

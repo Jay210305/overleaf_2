@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "721c30c9e02d5bcdc70e031a4ed3f6550475fe7a",
+  "git_baseline": "388404c7f43748fe00834e01f7a1aedea012c3be",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -648,7 +648,7 @@
     {
       "path": "docs/test-reports/s00-t06.md",
       "role": "factory",
-      "sha256": "477db85436d68b003271b206294b63ba5096644af024b70bdbc2264bfd1ed4fc"
+      "sha256": "bb2bdca7b2a8c55b59662a2ef813072ef753dede86058ee08dcb8598b76f2e7d"
     },
     {
       "path": "docs/test-reports/s00-t07.md",
@@ -678,12 +678,12 @@
     {
       "path": "docs/test-reports/s00-t12.md",
       "role": "factory",
-      "sha256": "d4dbaaa866280ccf735f03279b950b9481d1bd7a1874de524a9517946a10610a"
+      "sha256": "b75412ece281124417445d5836411e6bc6bd648ed767f391f2101c23ae0eff45"
     },
     {
       "path": "docs/test-reports/s00-verification.md",
       "role": "factory",
-      "sha256": "9e668761d8ce6942b385aef69cdc43cc80af619b9f6c6135ad62ff8054863549"
+      "sha256": "50386910c33543fb4c88569ae00a479658232da45ebc4fb30d07a739a367c95c"
     },
     {
       "path": "eslint.config.js",
@@ -763,7 +763,7 @@
     {
       "path": "implementation/sprint-00-bootstrap/S00-T12-deliver-browser-to-api-walking-skeleton.md",
       "role": "contract",
-      "sha256": "419376850d9a05a9dd0393f2d9f1154bc40fd7d0da33b1ba54e24b57a0c7fcd5"
+      "sha256": "29105c4411f7b138846bad917d1b8047e1ba43e8cf4b7c1494e70cde3468a349"
     },
     {
       "path": "implementation/sprint-01-data-contracts/CONTEXT.md",
@@ -1798,7 +1798,7 @@
     {
       "path": "scripts/dev.ts",
       "role": "factory",
-      "sha256": "141476dda012b323fe3de3ef5ec92af6fffcbc82c3da2bcf39422187cf754b4c"
+      "sha256": "7c376956126dca849a0d0dd9586e41ec0635fec47feffb7465abe899a52e2a2d"
     },
     {
       "path": "scripts/init-env.mjs",
