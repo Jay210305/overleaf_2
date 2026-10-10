@@ -10,7 +10,8 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-10 | S00-T02 permanent agent rules on `feature/sprint-00` | Not measured | Root `AGENTS.md` rules and [acceptance review](../test-reports/s00-t02.md); Project Co-owner accepted scoped review | PL-02 and PL-07 runtime enforcement remains for later tasks; next S00-T03 |
 | 2026-10-10 | S00-T03 typed pnpm workspace on `feature/sprint-00` | Not measured | [Acceptance report](../test-reports/s00-t03.md): frozen install, 7 task tests, bootstrap lint/typecheck/build pass; Project Co-owner accepted scoped review | App builds and full lint/CI are later S00 tasks; next S00-T04 |
 
-| 2026-10-10 | S00 continuation: browser/API, configuration, real services, quality/browser tests and docs on feature/sprint-00 | Not measured | [Verification](../test-reports/s00-verification.md); original source documents preserved | Clean-copy and final code CI passed; independent co-maintainer acceptance pending at user request |
+| 2026-10-10 | S00 continuation: browser/API, configuration, real services, quality/browser tests and docs on feature/sprint-00 | Not measured | [Verification](../test-reports/s00-verification.md); original source documents preserved | Clean-copy and final code CI passed; Project Co-owner accepted S00 continuation |
+| 2026-10-10 | S00 sprint closure: accepted by Project Co-owner; transition to S01 on `codex/sprint-01-data-contracts` | Not measured | S00 closed, all 12 tasks marked DONE; GAP-10 closed | Next S01-T01 on `codex/sprint-01-data-contracts` |
 
 ## Session Record
 

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "b302e758d551dd78e97d3007a023556e6dabf2f4",
+  "git_baseline": "704074dbf78e84d983bb7c3917d275ffb6f0dfb6",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -428,7 +428,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "391c8a146bc69043380dfcac2a61cedc7d34a81379a7715bc2baae46cadc9907"
+      "sha256": "42cb04685a0c6709f12af62d41802a2cafb5e1e2b4eee380fedbbfe9ca409176"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -513,12 +513,12 @@
     {
       "path": "docs/progress/open-gaps.md",
       "role": "product",
-      "sha256": "4d65e56fceede537501fdffb537eefa10c92ffa370c038912690447361d0ae72"
+      "sha256": "93edec4b7d501bb8a3ee68220596e973387144c079cadcfa7a6a38b2daa1d95d"
     },
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "d56970a165bdd5dac8bba70794e95dd7b1a50e535c13eaa305cc9e9a794e2b93"
+      "sha256": "7335d5900353949b706e030e284bb253b6f63fdd0d76cf26018f3f5557484003"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -528,7 +528,7 @@
     {
       "path": "docs/progress/sprint-00.md",
       "role": "product",
-      "sha256": "09af1cdc2fe711a3320051cfe35bee9e1c83d9357e7373aa33e71d8acda3b0b6"
+      "sha256": "6172dba236ba989f8f519839408c525e81b15f1add3402b2f07022c0c2f04b44"
     },
     {
       "path": "docs/progress/sprint-01.md",
@@ -638,37 +638,37 @@
     {
       "path": "docs/test-reports/s00-t04.md",
       "role": "factory",
-      "sha256": "1366f272e3b4bd29585d552340bbeb5f399b11a862aa223d884e39676e36b474"
+      "sha256": "9189eea6c29360080815a970402df6e32fba5257b3c43c0a5c393af847dfe7c3"
     },
     {
       "path": "docs/test-reports/s00-t05.md",
       "role": "factory",
-      "sha256": "7210bc8c6b7410634e307d463d74cd219835f3feb6ca92e1e5152da8e5a6fc7e"
+      "sha256": "2cd95b02feceacf82925cc7581af406df541d9dd3d878dce0e21ab7fdc620378"
     },
     {
       "path": "docs/test-reports/s00-t06.md",
       "role": "factory",
-      "sha256": "bb2bdca7b2a8c55b59662a2ef813072ef753dede86058ee08dcb8598b76f2e7d"
+      "sha256": "4b4404b58b89686ca938a2c05e4cb8ada23fc394484801fef40e6c648cce20ac"
     },
     {
       "path": "docs/test-reports/s00-t07.md",
       "role": "factory",
-      "sha256": "70bf295977168721365e3990345131d3dc5a8cad6cf253040ea38b989ec47df2"
+      "sha256": "abf3f99d9ab58af51e9bc4cd34731bcbbe8088a2dc6026a1bfec5306467ea954"
     },
     {
       "path": "docs/test-reports/s00-t08.md",
       "role": "factory",
-      "sha256": "396978342744a9f7938ac80d1000b3680ec660a834a3b0720e764bc76a7c3b35"
+      "sha256": "551ff41e365db383d00ef1777cd06418ca76e21e7d0f5fa7dcd906d1fb4125df"
     },
     {
       "path": "docs/test-reports/s00-t09.md",
       "role": "factory",
-      "sha256": "73e14ce9fb6140c08ce656b896a9af4e540310a22aa323e996a9681540ed2a71"
+      "sha256": "25c52605958393f3e2532ffa1b4cf1504717be05c71c6a7cb655c398744abf12"
     },
     {
       "path": "docs/test-reports/s00-t10.md",
       "role": "factory",
-      "sha256": "3cd58ff726906820a9c48acb3caf6c6756969494ac8b63938aff9f3d2d403235"
+      "sha256": "e4503e6e194a8bd6b798a9f7c224944121971b5b73d6f1307916850560978b81"
     },
     {
       "path": "docs/test-reports/s00-t11.md",
@@ -678,12 +678,12 @@
     {
       "path": "docs/test-reports/s00-t12.md",
       "role": "factory",
-      "sha256": "b75412ece281124417445d5836411e6bc6bd648ed767f391f2101c23ae0eff45"
+      "sha256": "85f0f6eddc25800e87f98d50aeeeda8ae9ff72caaef5910b404cb4fb823d1bf5"
     },
     {
       "path": "docs/test-reports/s00-verification.md",
       "role": "factory",
-      "sha256": "77808b4f82ffdc9936558d112bb1512f0d4a64aaa13a8171caf11f81629a41ad"
+      "sha256": "5c7626431911299363c1280a2920a07dabd59490dcd996d0c98c2561449f0478"
     },
     {
       "path": "eslint.config.js",
@@ -698,7 +698,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "ff7f8508150a3ae33fc33c89ba9c4b3b607e4628ebc1dc1f343126021f971122"
+      "sha256": "012f0854c9141d18f737837794a1b11ee9deac54725ffefbc1828151a6176b9f"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -723,37 +723,37 @@
     {
       "path": "implementation/sprint-00-bootstrap/S00-T04-create-browser-shell-and-route-providers.md",
       "role": "contract",
-      "sha256": "630d1d8334deb2d1a8ee7ca18083bd8c3deab18da61476b857b59f5b3dc9f4a7"
+      "sha256": "e31f44959e4668caf12f5ed0207ed5b08368058357798fe55f3f0328a9281737"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T05-create-api-health-and-error-boundary.md",
       "role": "contract",
-      "sha256": "e62410f77bd3bfa7fd742d0ed52d0de84ffa24ac8b3e3dbb338a898a67a2efce"
+      "sha256": "1a1ee7ad55b18e65e4dd3c180f82c631083bf72165a1597b84d25947a20f07c2"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T06-configure-code-quality-and-ci.md",
       "role": "contract",
-      "sha256": "3f2fadca93921749623a2f91b985473cf0c3391945af7022ec79efb31ab1f5a6"
+      "sha256": "a873f68fb6f5ab7444cfeb82ecdf75cc4ec39ea0b3181b1ea622b69e630eef9a"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T07-create-local-services-and-validated-configuration.md",
       "role": "contract",
-      "sha256": "52586ecaca8852a5d233b3feb38fddf5062f852fe98efd5dfac108c9ec4e4edb"
+      "sha256": "5c8fd55888c00f9ad056cd22c77861fd5641492159b9131d4d513eae593adb1a"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T08-record-initial-architecture-decisions.md",
       "role": "contract",
-      "sha256": "76bf41c317ca24a6aa931a54eaf7c3397e75f8d8be506d4a892cb3e02e322dd2"
+      "sha256": "287a3e88eded6a50706a68b24e32ed1706ba327f66619f777485ec725864a092"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T09-initialize-feature-and-evidence-inventory.md",
       "role": "contract",
-      "sha256": "21aecedaa075359a6367f2c16820d14c21c7d9b257f4268e45d497098182d87d"
+      "sha256": "ee6f02ea84576820d8f0df8210e063acf40564f82c590981ab8ffe4ffbd32e3c"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T10-document-clean-development-startup.md",
       "role": "contract",
-      "sha256": "ca8a047e1d319a554080c3097c2c9c6a71add10dcbb3fb103108be335c98889e"
+      "sha256": "b22a1cb25ed39ba49a7053b57b1ba1fa87305ef7379c4c04c89dc28d4b194a8c"
     },
     {
       "path": "implementation/sprint-00-bootstrap/S00-T11-check-editor-collaboration-dependency-compatibility.md",
@@ -763,7 +763,7 @@
     {
       "path": "implementation/sprint-00-bootstrap/S00-T12-deliver-browser-to-api-walking-skeleton.md",
       "role": "contract",
-      "sha256": "29105c4411f7b138846bad917d1b8047e1ba43e8cf4b7c1494e70cde3468a349"
+      "sha256": "37b63efe664adfd2fdb1bf546670aeb647eff74fc50f3b4a81899cd0225bd0a0"
     },
     {
       "path": "implementation/sprint-01-data-contracts/CONTEXT.md",

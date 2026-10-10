@@ -25,7 +25,7 @@ Strict TypeScript; server-side authorization for every REST/WSS/object action; g
 
 ## Sprint S00: Bootstrap and walking skeleton (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 66 h (ASSUMPTION A-03) | **Status:** 🟡 IN_PROGRESS | **Owner:** Julio (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 66 h (ASSUMPTION A-03) | **Status:** ✅ DONE | **Owner:** Julio (proposed A-02)
 **Goal:** Bootstrap and walking skeleton for G1, using independently verified slices.
 
 ### Deliverables
@@ -63,22 +63,22 @@ Strict TypeScript; server-side authorization for every REST/WSS/object action; g
 | [S00-T11](../../implementation/sprint-00-bootstrap/S00-T11-check-editor-collaboration-dependency-compatibility.md) | Check editor collaboration dependency compatibility | 4 | Julio | ✅ done | Within 4h verify licensed Yjs 13/Hocuspocus/CodeMirror peer compatibility and pin a candidate or record blocker |
 | [S00-T02](../../implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md) | Write permanent agent execution rules | 4 | Julio | ✅ done | Rules enforce real functionality, trust boundary, per-task evidence and preservation of user work; retain the existing graphify trigger instruction |
 | [S00-T03](../../implementation/sprint-00-bootstrap/S00-T03-create-typed-pnpm-monorepo.md) | Create typed pnpm monorepo | 6 | Julio | ✅ done | All apps/packages resolve under pinned pnpm and strict TypeScript with a frozen lockfile install |
-| [S00-T04](../../implementation/sprint-00-bootstrap/S00-T04-create-browser-shell-and-route-providers.md) | Create browser shell and route providers | 6 | Julio | 🟡 in_progress | Browser shell loads routing/theme/providers and marks unavailable product views explicitly unavailable |
-| [S00-T05](../../implementation/sprint-00-bootstrap/S00-T05-create-api-health-and-error-boundary.md) | Create API health and error boundary | 6 | Julio | 🟡 in_progress | Live health returns 200; readiness returns 503 when a required dependency fails; errors include requestId without secrets |
-| [S00-T06](../../implementation/sprint-00-bootstrap/S00-T06-configure-code-quality-and-ci.md) | Configure code quality and CI | 8 | Julio | 🟡 in_progress | Format/lint/strict types/test/build run identically locally and CI; forbidden browser-to-server import fails lint |
-| [S00-T07](../../implementation/sprint-00-bootstrap/S00-T07-create-local-services-and-validated-configuration.md) | Create local services and validated configuration | 8 | Julio | 🟡 in_progress | PG/Redis/MinIO/Mailpit start locally; missing required config fails startup; public config contains no secret |
-| [S00-T12](../../implementation/sprint-00-bootstrap/S00-T12-deliver-browser-to-api-walking-skeleton.md) | Deliver browser to API walking skeleton | 6 | Julio | 🟡 in_progress | Browser renders API readiness from a real running server, shows outage and passes CI smoke; no fake application functionality |
-| [S00-T08](../../implementation/sprint-00-bootstrap/S00-T08-record-initial-architecture-decisions.md) | Record initial architecture decisions | 4 | Julio | 🟡 in_progress | Each ADR records alternatives and consequences; unresolved version/runtime checks remain explicit |
-| [S00-T09](../../implementation/sprint-00-bootstrap/S00-T09-initialize-feature-and-evidence-inventory.md) | Initialize feature and evidence inventory | 4 | Julio | 🟡 in_progress | All 74 source feature IDs plus NFRs are unique and mapped; no feature is marked DONE before test evidence |
-| [S00-T10](../../implementation/sprint-00-bootstrap/S00-T10-document-clean-development-startup.md) | Document clean development startup | 6 | Julio | 🟡 in_progress | A clean clone follows documented setup through service readiness and workspace build without real credentials |
+| [S00-T04](../../implementation/sprint-00-bootstrap/S00-T04-create-browser-shell-and-route-providers.md) | Create browser shell and route providers | 6 | Julio | ✅ done | Browser shell loads routing/theme/providers and marks unavailable product views explicitly unavailable |
+| [S00-T05](../../implementation/sprint-00-bootstrap/S00-T05-create-api-health-and-error-boundary.md) | Create API health and error boundary | 6 | Julio | ✅ done | Live health returns 200; readiness returns 503 when a required dependency fails; errors include requestId without secrets |
+| [S00-T06](../../implementation/sprint-00-bootstrap/S00-T06-configure-code-quality-and-ci.md) | Configure code quality and CI | 8 | Julio | ✅ done | Format/lint/strict types/test/build run identically locally and CI; forbidden browser-to-server import fails lint |
+| [S00-T07](../../implementation/sprint-00-bootstrap/S00-T07-create-local-services-and-validated-configuration.md) | Create local services and validated configuration | 8 | Julio | ✅ done | PG/Redis/MinIO/Mailpit start locally; missing required config fails startup; public config contains no secret |
+| [S00-T12](../../implementation/sprint-00-bootstrap/S00-T12-deliver-browser-to-api-walking-skeleton.md) | Deliver browser to API walking skeleton | 6 | Julio | ✅ done | Browser renders API readiness from a real running server, shows outage and passes CI smoke; no fake application functionality |
+| [S00-T08](../../implementation/sprint-00-bootstrap/S00-T08-record-initial-architecture-decisions.md) | Record initial architecture decisions | 4 | Julio | ✅ done | Each ADR records alternatives and consequences; unresolved version/runtime checks remain explicit |
+| [S00-T09](../../implementation/sprint-00-bootstrap/S00-T09-initialize-feature-and-evidence-inventory.md) | Initialize feature and evidence inventory | 4 | Julio | ✅ done | All 74 source feature IDs plus NFRs are unique and mapped; no feature is marked DONE before test evidence |
+| [S00-T10](../../implementation/sprint-00-bootstrap/S00-T10-document-clean-development-startup.md) | Document clean development startup | 6 | Julio | ✅ done | A clean clone follows documented setup through service readiness and workspace build without real credentials |
 
 ### DoD
 
-- [ ] Every task's acceptance and declared scope has actual evidence.
-- [ ] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
-- [ ] Permissions, persistence, privacy and real outputs are verified.
-- [ ] Contracts, progress, feature matrix and actual effort are updated.
-- [ ] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
+- [x] Every task's acceptance and declared scope has actual evidence.
+- [x] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
+- [x] Permissions, persistence, privacy and real outputs are verified.
+- [x] Contracts, progress, feature matrix and actual effort are updated.
+- [x] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
 
 ### Mitigations
 

@@ -16,4 +16,4 @@ These are factual execution prerequisites. Delegated planning decisions do not m
 
 Track visibly unavailable stubs during implementation. Missing credentials means BLOCKED_BY_CREDENTIALS; unavailable capability means BLOCKED_BY_PROVIDER. No product feature is currently DONE.
 
-| GAP-10 | Independent acceptance of S00 continuation | Project Co-owner | S00-T04 through T10 and T12 | PENDING: user chose to review before closure on 2026-10-10; [reviewable evidence](../test-reports/s00-verification.md); no acceptance invented |
+| GAP-10 | Independent acceptance of S00 continuation | Project Co-owner | S00-T04 through T10 and T12 | CLOSED 2026-10-10: Project Co-owner reviewed and accepted S00 continuation; all 12 S00 tasks closed |
