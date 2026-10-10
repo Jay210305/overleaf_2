@@ -1,0 +1,56 @@
+# Architecture Decisions
+
+These are planning decisions adopted under delegated scope authority. Their implementation checks remain tasks. Version compatibility and provider claims are not verified by this record.
+
+## ADR-001 — Web and Server Stack
+
+**Context:** Two contributors need a typed, reproducible academic web workspace.
+**Options:** A single hosted app, a separated TypeScript monorepo, or adopting an existing licensed platform.
+**Decision:** React/Vite/TypeScript, React Router, Fastify, pnpm/Turborepo, Drizzle/Postgres; TanStack Query for server data and local React state for UI. Introduce Zustand only with demonstrated need. Vercel/Railway remain proposed hosting choices; start locally.
+**Consequences:** Explicit cross-service contracts and deployments; no automatic AGPL code reuse; pin the chosen compatible toolchain during S00.
+
+## ADR-002 — Canonical Text and Durability
+
+**Context:** Code editing must later coedit without replacing the persistence model.
+**Options:** Plain mutable strings, separate code/visual models, or Yjs per text file.
+**Decision:** Stable compatible Yjs 13, one Y.Doc with Y.Text('content') per file, append-only PostgreSQL updates, verified compacted snapshots and commit-before-ACK. Assign per-file sequence authority through a PostgreSQL transaction/lock; avoid a Redis-only sequencer.
+**Consequences:** S04 uses the same representation as G2; local undo isolates origin; IndexedDB is pending offline resilience. Recovery and state-vector acknowledgement need integration tests.
+
+## ADR-003 — Objects and Revisions
+
+**Context:** Private binaries, PDFs and content history must survive process replacement.
+**Options:** Shared local disks, relational binary storage, or private object storage with DB metadata.
+**Decision:** UUID IDs, UTC timestamps, private S3-compatible object store (MinIO locally, proposed Railway Bucket hosted), immutable SHA-256 manifests and monotonically numbered project revisions. Temporary workspaces are not durable storage.
+**Consequences:** Cross-store reconciliation and GC are required; object paths are context-authorized; restore creates new content history without restoring ACLs.
+
+## ADR-004 — Compiler Separation
+
+**Context:** TeX is executable input with resource and exfiltration risks.
+**Options:** Compile in API, dedicated trusted worker, or per-job verified public isolation.
+**Decision:** Separate orchestration and CompilerExecutor. G1 uses only trusted team documents in a hardened dedicated runtime. G5 needs demonstrable network/filesystem/process/resource isolation, potentially outside Railway.
+**Consequences:** Shell escape disabled but insufficient alone; no API/DB secrets in runtime; public and untrusted flags stay false until verified. Public isolation availability is unresolved research, so G5 is conditional.
+
+## ADR-005 — Sessions and Multi-tenancy
+
+**Context:** REST, WSS, downloads and provider sync must share current authorization.
+**Options:** Long-lived browser tokens, opaque cookies with scoped WSS tickets, or access/refresh tokens.
+**Decision:** Opaque revocable API-host-only cookie sessions, SameSite=Lax in coherent same-site domains, CSRF token plus Origin checks, one-use 30 s WSS tickets, centralized deny-by-default permissions. No access/refresh flow in the baseline.
+**Consequences:** `/auth/refresh` is omitted unless a new ADR changes session strategy; previews need tested cookie/domain policy; revocation must affect active sockets.
+
+## ADR-006 — Extracurricular Delivery
+
+**Context:** There is no deadline, urgency, weekly capacity commitment or fixed budget.
+**Options:** Invent a calendar, retain timeboxes as requirements, or use effort-sized ordered stages.
+**Decision:** Preserve S00–S15 IDs as unscheduled stages, alternate proposed owners, estimate active hours and <=8 h tasks, use effort/blocker cut triggers, reserve a stabilization window per gate. Adopt G1 first and keep G2–G5 in the roadmap.
+**Consequences:** Calendar capacity reconciliation is not applicable; weekly availability and financial spending are never inferred. Re-estimate with actual learning progress.
+
+## ADR-007 — Visual Editing and External Providers
+
+**Context:** Arbitrary TeX and commercial provider APIs cannot be assumed fully supported.
+**Options:** Regenerate whole documents, maintain independent visual state, or patch supported canonical-source regions; universal integrations or capability-based adapters.
+**Decision:** Conservative visual projection with minimal verified patches and literal fallback; explicit provider adapters with declared capabilities, checkpoint/base checks and visible blocked states. AI is opt-in per user/project.
+**Consequences:** Parser/provider/Git/public-executor spikes precede affected implementation; 100 round-trip fixtures pin source preservation. Unsupported providers remain optional.
+
+## ADR Maintenance
+
+S00-T08 establishes individual ADR records in `docs/adr/` from this baseline. Later ADRs retain context, options, decision and consequences, add measured evidence, and state which entry they supersede. A breaking interface change requires an ADR and a MAJOR contract version bump.
