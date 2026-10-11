@@ -51,9 +51,12 @@ export function registerDevelopmentSampleRoute(
 
     try {
       const projectResult = await db.query(
-        `SELECT id, owner_id, title, compiler, status, current_revision, created_at, updated_at
-         FROM projects
-         ORDER BY created_at ASC
+        `SELECT p.id, p.owner_id, p.title, p.compiler, p.status, p.current_revision,
+                p.created_at, p.updated_at
+         FROM projects p JOIN users u ON u.id = p.owner_id
+         WHERE u.email_normalized = 'dev-sample@latex-collab.test'
+           AND p.title = 'Persisted Development Project'
+         ORDER BY p.created_at ASC
          LIMIT 1`,
       );
 

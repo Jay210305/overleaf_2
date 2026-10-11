@@ -26,6 +26,12 @@ The live S02-T03 `POST /auth/password/forgot` requires the exact configured `Ori
 
 `POST /auth/password/reset` applies the same Origin and custom-header guard. It accepts the emailed one-use token and a password of 8–128 characters, matching the trusted registration policy. The server rechecks the token and account under PostgreSQL row locks, then changes the Argon2id hash, consumes all pending reset tokens for that user and revokes every session in one transaction. Malformed requests return 400; expired, used or unknown tokens return 401; disabled accounts return 403. Distributed rate limiting and its 429 response remain S02-T06 work.
 
+## G1 Project Policy Guard Slice
+
+S02-T04 installs a default-deny pre-handler for project-scoped REST routes under `/api/v1/projects/{projectId}/...`. Each route must declare a server-owned `projectAction`; absent or unknown actions return 403 before the handler. The guard requires exact Origin, a current verified/enabled account with an unexpired, unrevoked opaque session, and a matching session CSRF token on mutations. It reads the current project owner or active membership from PostgreSQL for each request. A malformed project ID returns 400, missing session 401, disabled account or denied role/action 403, and absent or foreign project 404 without project content. Non-active projects are hidden except for a permitted restore action.
+
+`packages/auth` owns the pure OWNER/EDITOR/REVIEWER/VIEWER action matrix below. Reviewer/viewer compile and source export default to denied; explicit capability arguments are supported by the pure function but the live guard does not grant them until a later persisted policy source exists. No user-facing project CRUD route is implemented in this slice; S03-T01 owns those operations and must declare the correct action and recheck authorization inside each mutation transaction. WSS and object access remain later boundaries. The non-production persisted sample endpoint is constrained to its own named fixture project and cannot select an arbitrary user's earliest project.
+
 | Action | OWNER | EDITOR | REVIEWER | VIEWER |
 |---|---|---|---|---|
 | Read project/PDF | Yes | Yes | Yes | Yes |

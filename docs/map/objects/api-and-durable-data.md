@@ -4,7 +4,7 @@ cluster: runtime-design
 universe: live
 status: verified
 entity: apps/api/src/server.ts
-sources: ["docs/contracts/http-api.md", "apps/api/src/server.ts", "apps/api/src/modules/development/sample.ts", "apps/api/src/modules/auth/register.ts", "apps/api/src/modules/auth/verify-email.ts", "apps/api/src/modules/auth/session.ts", "apps/api/src/modules/auth/password-reset.ts", "apps/api/src/modules/auth/routes.ts", "apps/api/src/modules/auth/mail.ts", "apps/api/src/plugins/csrf.ts", "apps/api/src/operator/invite-trusted.ts", "apps/api/src/readiness.ts", "apps/api/src/plugins/errors.ts", "tests/integration/persisted-sample.test.ts", "tests/integration/s02-t01.test.ts", "tests/integration/s02-t02.test.ts", "tests/integration/s02-t03.test.ts", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md"]
+sources: ["docs/contracts/http-api.md", "apps/api/src/server.ts", "apps/api/src/modules/development/sample.ts", "apps/api/src/modules/auth/register.ts", "apps/api/src/modules/auth/verify-email.ts", "apps/api/src/modules/auth/session.ts", "apps/api/src/modules/auth/password-reset.ts", "apps/api/src/modules/auth/routes.ts", "apps/api/src/modules/auth/mail.ts", "apps/api/src/plugins/csrf.ts", "apps/api/src/plugins/require-session.ts", "packages/auth/src/project-policy.ts", "apps/api/src/operator/invite-trusted.ts", "apps/api/src/readiness.ts", "apps/api/src/plugins/errors.ts", "tests/integration/persisted-sample.test.ts", "tests/integration/s02-t01.test.ts", "tests/integration/s02-t02.test.ts", "tests/integration/s02-t03.test.ts", "tests/integration/s02-t04.test.ts", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md"]
 runtime: implemented
 verified_on: 2026-10-11
 snapshot: _meta/file-inventory.json
@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-Fastify serves health routes, a development-only persisted sample, accepted trusted registration, verification, sessions and password recovery. Project and collaboration routes remain unimplemented.
+Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions and password recovery, plus an S02-T04 project guard awaiting review. User-facing project and collaboration routes remain unimplemented.
 
 ## Why this shape
 
@@ -22,7 +22,7 @@ The sample checks the API-to-PostgreSQL-to-object-store path before user-facing 
 
 ## Shape
 
-`apps/api/src/server.ts` registers live/ready checks, the development sample and auth routes. The sample is omitted in production. Trusted registration requires an operator-issued email-bound invitation, exact Origin and a custom CSRF header; it stores Argon2id hashes and sends a one-use verification link through SMTP. Verification atomically consumes the hashed token in PostgreSQL. Login issues a hashed opaque session and a separate CSRF secret; session read rotates both under a row lock; logout revokes the row. Recovery stores a hashed expiring token, sends a reset link through SMTP and atomically changes the password while revoking sessions. Exact Origin and CSRF checks guard mutations. Public signup remains disabled. Readiness probes PostgreSQL, Redis, MinIO and Mailpit. The server generates UUID request IDs and redacts errors. It does not expose project CRUD or collaboration.
+`apps/api/src/server.ts` registers live/ready checks, the development sample and auth routes. The sample is omitted in production and queries only its own fixture project in development. Trusted registration requires an operator-issued email-bound invitation, exact Origin and a custom CSRF header; it stores Argon2id hashes and sends a one-use verification link through SMTP. Verification atomically consumes the hashed token in PostgreSQL. Login issues a hashed opaque session and a separate CSRF secret; session read rotates both under a row lock; logout revokes the row. Recovery stores a hashed expiring token, sends a reset link through SMTP and atomically changes the password while revoking sessions. `require-session.ts` checks current session, Origin/CSRF and PostgreSQL membership for project-scoped routes; a server-owned action is required and the pure `packages/auth` policy decides role access. Public signup remains disabled. Readiness probes PostgreSQL, Redis, MinIO and Mailpit. The server generates UUID request IDs and redacts errors. It does not expose project CRUD or collaboration.
 
 ## Connected to
 
@@ -46,8 +46,11 @@ Node 24 API, Compose services, injected API tests and persisted sample restart t
 - [Session logic](../../../apps/api/src/modules/auth/session.ts)
 - [Password recovery](../../../apps/api/src/modules/auth/password-reset.ts)
 - [CSRF checks](../../../apps/api/src/plugins/csrf.ts)
+- [Project guard](../../../apps/api/src/plugins/require-session.ts)
+- [Role policy](../../../packages/auth/src/project-policy.ts)
 - [HTTP contract](../../contracts/http-api.md)
 - [S01-T10 evidence](../../test-reports/s01-t10.md)
 - [S02-T01 evidence](../../test-reports/s02-t01.md)
 - [S02-T02 evidence](../../test-reports/s02-t02.md)
 - [S02-T03 evidence](../../test-reports/s02-t03.md)
+- [S02-T04 evidence](../../test-reports/s02-t04.md)

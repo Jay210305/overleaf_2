@@ -55,7 +55,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | CMP-12 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-01 | G2 | Must | IN_PROGRESS | [S00-T11 compatibility research](test-reports/s00-t11.md#acceptance-review); [remaining tasks](planning/traceability.md) |
 | COL-02 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| COL-03 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t06.md) (accepted 2026-10-10); [S02-T02 identity boundary accepted](test-reports/s02-t02.md); project-role guards remain S02-T04 |
+| COL-03 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t06.md) (accepted 2026-10-10); [S02-T02 identity boundary accepted](test-reports/s02-t02.md); [S02-T04 REST guard implemented, review pending](test-reports/s02-t04.md); product project routes S03 and WSS G2 remain |
 | COL-04 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-05 | G2 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-06 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |

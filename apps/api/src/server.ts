@@ -9,6 +9,7 @@ import type { StorageAdapter } from "@latex-collab/storage";
 import { registerAuthRoutes } from "./modules/auth/routes.js";
 import type { SendVerification } from "./modules/auth/register.js";
 import type { SendPasswordReset } from "./modules/auth/password-reset.js";
+import { installProjectGuard } from "./plugins/require-session.js";
 
 export interface ServerOptions {
   checkReadiness: () => Promise<boolean>;
@@ -52,6 +53,11 @@ export function createServer(options: ServerOptions) {
       .header("x-request-id", request.id)
       .header("cache-control", "no-store")
       .header("x-content-type-options", "nosniff");
+  });
+  installProjectGuard(app, {
+    db: options.db,
+    origin: options.origin,
+    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
   });
   app.get("/api/v1/health/live", async (request) =>
     healthSchema.parse({ status: "live", requestId: request.id }),
