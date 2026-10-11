@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-Fastify serves health routes, a development-only persisted sample, accepted trusted registration, verification and sessions, plus S02-T03 password recovery awaiting review. Project and collaboration routes remain unimplemented.
+Fastify serves health routes, a development-only persisted sample, accepted trusted registration, verification, sessions and password recovery. Project and collaboration routes remain unimplemented.
 
 ## Why this shape
 
