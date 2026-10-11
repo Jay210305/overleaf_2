@@ -436,9 +436,29 @@
       "post": {
         "operationId": "post__auth_password_forgot",
         "summary": "POST /auth/password/forgot",
-        "description": "Permission: public. Public operation with token/rate/origin policy as applicable. Unknown input fields are rejected. All errors use Problem.",
+        "description": "Live S02-T03: exact Origin and custom X-CSRF-Token required. Valid known and unknown addresses receive the same 202 Accepted body. Only eligible verified accounts receive a one-hour email reset link. SMTP delivery failure invalidates the undelivered token and still returns 202. Without configured SMTP, all requests return 503. 429 limiting is S02-T06.",
         "security": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http://127.0.0.1:5173"
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8
+            },
+            "example": "recovery-bootstrap"
+          }
+        ],
         "responses": {
           "202": {
             "description": "Successful 202",
@@ -488,7 +508,7 @@
           }
         },
         "x-permission": "public",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -522,9 +542,29 @@
       "post": {
         "operationId": "post__auth_password_reset",
         "summary": "POST /auth/password/reset",
-        "description": "Permission: public. Public operation with token/rate/origin policy as applicable. Unknown input fields are rejected. All errors use Problem.",
+        "description": "Live S02-T03: exact Origin and custom X-CSRF-Token required. A valid one-use reset token atomically updates the Argon2id password, consumes all pending reset links and revokes every session. Expired, used or unknown tokens return 401; disabled accounts return 403. 429 limiting is S02-T06.",
         "security": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http://127.0.0.1:5173"
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8
+            },
+            "example": "recovery-bootstrap"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful 200",
@@ -574,7 +614,7 @@
           }
         },
         "x-permission": "public",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -585,7 +625,7 @@
               "examples": {
                 "valid": {
                   "value": {
-                    "token": "xxxxxxxxxxxxxxxx",
+                    "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                     "password": "xxxxxxxxxxxx"
                   }
                 },
@@ -11930,12 +11970,13 @@
         "properties": {
           "token": {
             "type": "string",
-            "minLength": 16,
-            "maxLength": 2048
+            "minLength": 43,
+            "maxLength": 43,
+            "pattern": "^[A-Za-z0-9_-]{43}$"
           },
           "password": {
             "type": "string",
-            "minLength": 12,
+            "minLength": 8,
             "maxLength": 128
           }
         },

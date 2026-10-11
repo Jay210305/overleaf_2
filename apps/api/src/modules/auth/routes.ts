@@ -6,6 +6,7 @@ import { AuthError } from "./errors.js";
 import { registerTrustedAccount, type SendVerification } from "./register.js";
 import { verifyEmail } from "./verify-email.js";
 import { requireAnonymousCsrf, requireExactOrigin } from "../../plugins/csrf.js";
+import { requestPasswordReset, resetPassword, type SendPasswordReset } from "./password-reset.js";
 import {
   expiredSessionCookie,
   login,
@@ -21,6 +22,7 @@ export interface AuthRouteOptions {
   db?: DatabaseClient | undefined;
   origin?: string | undefined;
   sendVerification?: SendVerification | undefined;
+  sendPasswordReset?: SendPasswordReset | undefined;
   secureCookies?: boolean | undefined;
 }
 
@@ -116,6 +118,31 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
       const token = readSessionCookie(request.headers.cookie, secureCookies);
       await logout(options.db, token, request.headers["x-csrf-token"]);
       return reply.header("set-cookie", expiredSessionCookie(secureCookies)).code(204).send();
+    } catch (error) {
+      if (error instanceof AuthError) return reject(reply, request, error);
+      throw error;
+    }
+  });
+
+  app.post("/api/v1/auth/password/forgot", async (request, reply) => {
+    try {
+      requireAnonymousCsrf(request, options.origin);
+      if (!options.db || !options.sendPasswordReset)
+        throw new AuthError(503, "SERVICE_UNAVAILABLE");
+      await requestPasswordReset(options.db, request.body, options.sendPasswordReset);
+      return reply.code(202).send({ accepted: true });
+    } catch (error) {
+      if (error instanceof AuthError) return reject(reply, request, error);
+      throw error;
+    }
+  });
+
+  app.post("/api/v1/auth/password/reset", async (request, reply) => {
+    try {
+      requireAnonymousCsrf(request, options.origin);
+      if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
+      await resetPassword(options.db, request.body);
+      return reply.code(200).send({ accepted: true });
     } catch (error) {
       if (error instanceof AuthError) return reject(reply, request, error);
       throw error;

@@ -8,6 +8,7 @@ import type { DatabaseClient } from "@latex-collab/db";
 import type { StorageAdapter } from "@latex-collab/storage";
 import { registerAuthRoutes } from "./modules/auth/routes.js";
 import type { SendVerification } from "./modules/auth/register.js";
+import type { SendPasswordReset } from "./modules/auth/password-reset.js";
 
 export interface ServerOptions {
   checkReadiness: () => Promise<boolean>;
@@ -16,6 +17,7 @@ export interface ServerOptions {
   db?: DatabaseClient | undefined;
   storage?: StorageAdapter | undefined;
   sendVerification?: SendVerification | undefined;
+  sendPasswordReset?: SendPasswordReset | undefined;
   secureCookies?: boolean | undefined;
 }
 export function safeLoggerOptions(level = "info") {
@@ -73,6 +75,7 @@ export function createServer(options: ServerOptions) {
     db: options.db,
     origin: options.origin,
     sendVerification: options.sendVerification,
+    sendPasswordReset: options.sendPasswordReset,
     secureCookies: options.secureCookies,
   });
   return app;

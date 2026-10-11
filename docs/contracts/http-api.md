@@ -20,6 +20,12 @@ The live S02-T02 `POST /auth/login` accepts only verified, enabled trusted accou
 
 `GET /auth/session` requires the exact Origin and a valid cookie. It atomically rotates both secrets, returns only the current user and extends the seven-day idle expiry no later than 30 days from creation. The old cookie is immediately invalid. `POST /auth/logout` requires the exact Origin, a valid cookie and the matching CSRF header; it persists revocation and clears the cookie. Expired, revoked and unknown cookies return 401, while forged Origin/CSRF and disabled accounts return 403. A login rate limit and 429 response remain S02-T06 work. Project-role authorization and session inventory remain S02-T04/T07 work; this slice supplies only the authenticated identity boundary.
 
+## G1 Password Recovery Slice
+
+The live S02-T03 `POST /auth/password/forgot` requires the exact configured `Origin` and a custom `X-CSRF-Token` header. A syntactically valid known or unknown email returns the same 202 `{ "accepted": true }` body; only a verified, enabled account with a password receives mail. The one-hour, 32-byte random token is stored only as a SHA-256 hash. A later request invalidates an earlier unused reset token. SMTP delivery failure invalidates the undelivered token and preserves the 202 response; if SMTP is not configured, the route returns 503 for all addresses. Response-status/body parity is tested; external SMTP latency parity is not established.
+
+`POST /auth/password/reset` applies the same Origin and custom-header guard. It accepts the emailed one-use token and a password of 8–128 characters, matching the trusted registration policy. The server rechecks the token and account under PostgreSQL row locks, then changes the Argon2id hash, consumes all pending reset tokens for that user and revokes every session in one transaction. Malformed requests return 400; expired, used or unknown tokens return 401; disabled accounts return 403. Distributed rate limiting and its 429 response remain S02-T06 work.
+
 | Action | OWNER | EDITOR | REVIEWER | VIEWER |
 |---|---|---|---|---|
 | Read project/PDF | Yes | Yes | Yes | Yes |

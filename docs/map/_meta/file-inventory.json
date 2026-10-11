@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "a202b918ca1d644779fb72246bb75870d6e21f1b",
+  "git_baseline": "e01b2782772309fd1bf784403bba23824f8e4e78",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -88,7 +88,7 @@
     {
       "path": "apps/api/src/main.ts",
       "role": "factory",
-      "sha256": "1ffa3bda5ea4c110e0f63b1d18b9bc0b55fd87b44c77dbfedb6badb559a3a618"
+      "sha256": "4dad208e9c11ff571e07e397976c23f52207a0d74bc9887638adfcc56a754e93"
     },
     {
       "path": "apps/api/src/modules/auth/errors.ts",
@@ -98,7 +98,12 @@
     {
       "path": "apps/api/src/modules/auth/mail.ts",
       "role": "factory",
-      "sha256": "aa5d86878d969bf5bae8d3764b5fe9180517ba160957ac0f4b30e64152b438f2"
+      "sha256": "cbb1be82f737df64df3fbfbb71d85c6b233b6c202e30c75fb12b168707f03c27"
+    },
+    {
+      "path": "apps/api/src/modules/auth/password-reset.ts",
+      "role": "factory",
+      "sha256": "20a75e6b0bbabf6cfb605087d501c1748c710490a90bd2381b258819d8261011"
     },
     {
       "path": "apps/api/src/modules/auth/register.ts",
@@ -108,7 +113,7 @@
     {
       "path": "apps/api/src/modules/auth/routes.ts",
       "role": "factory",
-      "sha256": "9bc36ab63127ae88bf7ef10af8cb263bb480b4d137e6c0e1e37c24219bf0837f"
+      "sha256": "daa408e927f6b74bc7d3db3f1250cbaacc0fcf1f7ace5b3e8814ed98591e2627"
     },
     {
       "path": "apps/api/src/modules/auth/session.ts",
@@ -148,7 +153,7 @@
     {
       "path": "apps/api/src/server.ts",
       "role": "factory",
-      "sha256": "effedf95419290becf3efef4e1887c2de0982a5c72253a9f5cb2c8c85a6080f8"
+      "sha256": "f7a00c17a0fe34af25ca23b23aa04a96d1453ba4a136cbd7d38ce4ad95dd0dd7"
     },
     {
       "path": "apps/api/tsconfig.json",
@@ -253,7 +258,7 @@
     {
       "path": "docs/api/openapi.json",
       "role": "factory",
-      "sha256": "27ed0d6220119266b204d47af9d44fd626950e6ed9d255100d8ac64852c3cec1"
+      "sha256": "138ce42044018a47aeb9c0e0ced38307e288f34310964d8f52992133cf0e7c6c"
     },
     {
       "path": "docs/CONTEXT.md",
@@ -293,7 +298,7 @@
     {
       "path": "docs/contracts/http-api.md",
       "role": "contract",
-      "sha256": "2cb4bc446415023717c7075185c2b6e53c48dfc4d6ad71e8a40e1c1fb524af62"
+      "sha256": "651fcc78b214d69c5f686bd9e4afdc53657724cb1274fd0ce39028db4250df2b"
     },
     {
       "path": "docs/contracts/http-operations.md",
@@ -308,7 +313,7 @@
     {
       "path": "docs/contracts/openapi.json",
       "role": "contract",
-      "sha256": "27ed0d6220119266b204d47af9d44fd626950e6ed9d255100d8ac64852c3cec1"
+      "sha256": "138ce42044018a47aeb9c0e0ced38307e288f34310964d8f52992133cf0e7c6c"
     },
     {
       "path": "docs/contracts/README.md",
@@ -323,7 +328,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "ed5faf54bdd838ef90ac3524a7c08d1d3910703a3dc3a96552bf678444bfe644"
+      "sha256": "afae6eb02041e9191929f94b6795a2c3395c75a11797ec92015897e6d7384cd4"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -378,7 +383,7 @@
     {
       "path": "docs/map/objects/api-and-durable-data.md",
       "role": "factory",
-      "sha256": "871f4a85dd1ffab33324bdc5ecca3eabd62d88b1bfe43583b82e8868ad0eaf06"
+      "sha256": "0e2f197e0efd58229e7e7b746d63023c190c8a12b81df6bc37fad8379b28c985"
     },
     {
       "path": "docs/map/objects/browser-and-editing.md",
@@ -408,7 +413,7 @@
     {
       "path": "docs/map/objects/interface-contracts.md",
       "role": "factory",
-      "sha256": "045ae26f3f0520eb788f044bc408261afc4c14ea0e78d96d01ee8339fc3d10e9"
+      "sha256": "55cc93d3259c3fcd3029e903d4dc5f9ff0986c7d9921acffc1a0c641e01aa834"
     },
     {
       "path": "docs/map/objects/planning-baseline.md",
@@ -423,7 +428,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "e0c7073e7c8885651cdfa50f5d9ac2c1e5b988f75739fa69fac91d0e19fed527"
+      "sha256": "31acc7860afe43c5f76ec59bf7a4a21df142e6df92afdc93dddd6441d6ad2173"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -478,7 +483,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "e0714596365129e45ec646121d42ef15b8b32b148f238e9065e0839b9e9734f5"
+      "sha256": "c41a01f79b0c63733a5488dc9426df0fa84a073dab5bc448a913b2e1129bb86a"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -563,12 +568,12 @@
     {
       "path": "docs/progress/open-gaps.md",
       "role": "product",
-      "sha256": "7b7c21fa3b0ce43c7683a5be3c5831f4bb0246ea9a93a7ea912f2a4fa96907e9"
+      "sha256": "a40e707d4d316853e3e94a7030a2530c0cf3d405fac8bce73ac2fb91f37854af"
     },
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "ebb0cab6871d3858799015c65c142037b306f425ecf0ac4202e25a967df93f14"
+      "sha256": "e4207e11fca00f558215e330894e92a9776314397593d72991a120b2a3c92367"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -588,7 +593,7 @@
     {
       "path": "docs/progress/sprint-02.md",
       "role": "product",
-      "sha256": "89f6ce127c15d15e0ae755f65df0144e42df2831913fd9a6223ab4cf725223f9"
+      "sha256": "ad32f2e06da9f5db777bb4c2225f52bc2752bae6f7098f42c4f21b5bfba130eb"
     },
     {
       "path": "docs/progress/sprint-03.md",
@@ -796,6 +801,11 @@
       "sha256": "1a6f10151e72cab15aeff62909c6e7d942fdb3f9fa19ea88207d7d7080bc2ca5"
     },
     {
+      "path": "docs/test-reports/s02-t03.md",
+      "role": "factory",
+      "sha256": "c511cb081f83ded2afbcf73713b1e5936ae18da9c4b626ca4ffba2205ee4371d"
+    },
+    {
       "path": "eslint.config.js",
       "role": "factory",
       "sha256": "f259d21a7ef0efe32df87f94ef650f1df2a7226c91cdf3220f3b5c681193a5a0"
@@ -808,7 +818,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "f877365ff8ccdb3e1b38c1f5378e1d65bdcca25d19b0d29ca19ddbc50cd17614"
+      "sha256": "50bf805168bef49aa49d43b4df7d6edfb56658752e316d25b4638659a685fbc9"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -948,7 +958,7 @@
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T03-implement-password-recovery.md",
       "role": "contract",
-      "sha256": "9ef9a39da905a7adfe327adcad971baeb79804ac71b27a126f373bdf57cabf02"
+      "sha256": "0d69bc1ff41b41a40f07e5dd1f1e669e6e89454c9e4d1e356f9a2e7f757b98f3"
     },
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T04-implement-session-and-project-policy-guards.md",
@@ -1858,7 +1868,7 @@
     {
       "path": "packages/contracts/src/index.ts",
       "role": "factory",
-      "sha256": "9e66bad017921cf432f0a51cc7e44cb3f6caae8055fb0445f16aea7ac7c8241b"
+      "sha256": "8243d3fc83c24753066c0a23db83f55369833941cfe9ecc46b5cfd3c3d1804d1"
     },
     {
       "path": "packages/contracts/src/storage.ts",
@@ -2058,7 +2068,7 @@
     {
       "path": "tests/helpers/s02-session.ts",
       "role": "factory",
-      "sha256": "b4721894852a392a391734a59e204df0f9176f437f918e51fc676bc242a5aa65"
+      "sha256": "884cc398b4eee0f698c080d765683455db03abb32b9cff0b6a3d7c1007ef6065"
     },
     {
       "path": "tests/integration/database-constraints.test.ts",
@@ -2161,6 +2171,11 @@
       "sha256": "94021b4b2e5a0eb26977116271a21eab58fdfd7d1e02c27be5197da9b09061e0"
     },
     {
+      "path": "tests/integration/s02-t03.test.ts",
+      "role": "factory",
+      "sha256": "f76ba9fd413ecc3895eb4c6998876069dae6092a46c26728e94ee6403aef439a"
+    },
+    {
       "path": "tests/regression/acc-01/s02-t01.test.ts",
       "role": "factory",
       "sha256": "913c39e79306fd107a28ac11544484ba21e517d2b8c971d5c0b901dc9440cf4b"
@@ -2171,9 +2186,19 @@
       "sha256": "2efc6c02bd63053fbd8f92233fa5ea24d447ee6f07b7fa1bed453eec5f4de0dd"
     },
     {
+      "path": "tests/regression/acc-01/s02-t03.test.ts",
+      "role": "factory",
+      "sha256": "7b239d2a115578661d3891fec891cd7bf67c944cc2fa56619bd6072c30c197cb"
+    },
+    {
       "path": "tests/regression/acc-02/s02-t02.test.ts",
       "role": "factory",
       "sha256": "76968a28d581a9086c969178195d9314b65b4521a4cf6369cc5de8de51932d42"
+    },
+    {
+      "path": "tests/regression/acc-06/s02-t03.test.ts",
+      "role": "factory",
+      "sha256": "dbd14ee6fd5ccc965bedcfb9bf10d4eb7c40a486d2a6adf6a38a013b8185bdf0"
     },
     {
       "path": "tests/regression/col-03/s01-t06.test.ts",

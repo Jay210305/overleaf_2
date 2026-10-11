@@ -175,4 +175,13 @@ export const loginRequestSchema = z.strictObject({
 });
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 
+export const emailRequestSchema = z.strictObject({ email: z.email().max(254) });
+export type EmailRequest = z.infer<typeof emailRequestSchema>;
+
+export const passwordResetRequestSchema = z.strictObject({
+  token: z.string().regex(/^[A-Za-z0-9_-]{43}$/),
+  password: z.string().min(8).max(128),
+});
+export type PasswordResetRequest = z.infer<typeof passwordResetRequestSchema>;
+
 export * from "./storage.js";

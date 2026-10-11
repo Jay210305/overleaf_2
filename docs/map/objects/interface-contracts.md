@@ -4,7 +4,7 @@ cluster: contracts
 universe: live
 status: verified
 entity: docs/contracts/README.md
-sources: ["docs/contracts/README.md", "docs/contracts/http-api.md", "docs/contracts/openapi.json", "docs/api/openapi.json", "docs/contracts/data-model.md", "docs/contracts/collaboration.md", "docs/contracts/compilation.md", "docs/contracts/integrations.md", "packages/contracts/src/index.ts", "packages/contracts/src/storage.ts", "tests/integration/s01-t05.test.ts", "docs/test-reports/s01-t05.md", "docs/test-reports/s02-t02.md"]
+sources: ["docs/contracts/README.md", "docs/contracts/http-api.md", "docs/contracts/openapi.json", "docs/api/openapi.json", "docs/contracts/data-model.md", "docs/contracts/collaboration.md", "docs/contracts/compilation.md", "docs/contracts/integrations.md", "packages/contracts/src/index.ts", "packages/contracts/src/storage.ts", "tests/integration/s01-t05.test.ts", "docs/test-reports/s01-t05.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md"]
 runtime: not-applicable
 verified_on: 2026-10-11
 snapshot: _meta/file-inventory.json
@@ -22,7 +22,7 @@ Producer and consumer tasks must share one interface definition instead of diver
 
 ## Shape
 
-The catalog links data, HTTP/OpenAPI, revisions, collaboration, compilation, editing, integrations and development tooling. `packages/contracts/src/index.ts` defines Zod DTOs; `storage.ts` defines object and revision types. The HTTP contract and both static OpenAPI copies describe the trusted S02-T01 registration routes and the live S02-T02 login/session/logout slice. The S01-T05 test checks file existence, version and path count, but does not prove generation or DTO parity; see [GAP-12](../../progress/open-gaps.md).
+The catalog links data, HTTP/OpenAPI, revisions, collaboration, compilation, editing, integrations and development tooling. `packages/contracts/src/index.ts` defines Zod DTOs; `storage.ts` defines object and revision types. The HTTP contract and both static OpenAPI copies describe the trusted S02-T01 registration routes, accepted S02-T02 login/session/logout and implemented S02-T03 recovery. The S01-T05 test checks file existence, version and path count, but does not prove generation or DTO parity; see [GAP-12](../../progress/open-gaps.md).
 
 ## Connected to
 

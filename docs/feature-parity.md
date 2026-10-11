@@ -4,12 +4,12 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 
 | ID | Gate | Priority | Status | Evidence |
 |---|---|---|---|---|
-| ACC-01 | G1 | Must | IN_PROGRESS | [S02-T01 registration and verification accepted](test-reports/s02-t01.md); [S02-T02 login/logout accepted](test-reports/s02-t02.md); recovery remains |
+| ACC-01 | G1 | Must | IN_PROGRESS | [S02-T01 registration and verification accepted](test-reports/s02-t01.md); [S02-T02 login/logout accepted](test-reports/s02-t02.md); [S02-T03 recovery implemented, review pending](test-reports/s02-t03.md); browser flow remains S02-T05 |
 | ACC-02 | G1 | Must | IN_PROGRESS | [S02-T02 opaque session, CSRF, expiry and revocation accepted](test-reports/s02-t02.md); session inventory remains S02-T07 |
 | ACC-03 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-04 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-05 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| ACC-06 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| ACC-06 | G1 | Must | IN_PROGRESS | [S02-T03 recovery reset revokes sessions, review pending](test-reports/s02-t03.md); authenticated password change remains S02-T10 |
 | ACC-07 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-08 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-01 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t03.md) (accepted 2026-10-10); remaining mapped tasks still apply |

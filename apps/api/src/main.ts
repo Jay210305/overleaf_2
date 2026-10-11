@@ -3,7 +3,10 @@ import { DatabaseClient } from "@latex-collab/db";
 import { S3StorageAdapter } from "@latex-collab/storage";
 import { createReadiness } from "./readiness.js";
 import { createServer, safeLoggerOptions } from "./server.js";
-import { createSmtpVerificationSender } from "./modules/auth/mail.js";
+import {
+  createSmtpVerificationSender,
+  createSmtpPasswordResetSender,
+} from "./modules/auth/mail.js";
 async function main() {
   const config = parseServerConfig(process.env);
   const probes = createReadiness(config);
@@ -27,6 +30,10 @@ async function main() {
     sendVerification:
       config.SMTP_URL && config.EMAIL_FROM
         ? createSmtpVerificationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
+        : undefined,
+    sendPasswordReset:
+      config.SMTP_URL && config.EMAIL_FROM
+        ? createSmtpPasswordResetSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
         : undefined,
     secureCookies: config.NODE_ENV === "production" || config.APP_ORIGIN.startsWith("https://"),
   });
