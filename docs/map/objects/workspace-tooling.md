@@ -4,7 +4,7 @@ cluster: tooling
 universe: live
 status: verified
 entity: package.json
-sources: ["package.json","pnpm-workspace.yaml","pnpm-lock.yaml","turbo.json","tsconfig.json","tsconfig.build.json","scripts/check-workspace.ts","tests/integration/s00-t03.test.ts","tests/regression/pl-01/s00-t03.test.ts","docs/test-reports/s00-t03.md"]
+sources: ["package.json", "pnpm-workspace.yaml", "pnpm-lock.yaml", "turbo.json", "tsconfig.json", "tsconfig.build.json", "scripts/check-workspace.ts", "packages/db/package.json", "packages/storage/package.json", "packages/test-utils/package.json", "docs/progress/sprint-01.md"]
 runtime: implemented
 verified_on: 2026-10-10
 snapshot: _meta/file-inventory.json
@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-The live pnpm workspace links the initial browser/API manifests to shared contracts/config manifests. A strict TypeScript configuration covers source as it is added.
+The pnpm workspace builds the browser/API, shared contracts/config, and S01 database, storage and test utilities packages under strict TypeScript checks.
 
 ## Why this shape
 
@@ -22,15 +22,15 @@ Pinned versions, local-only workspace links and a frozen lockfile make the boots
 
 ## Shape
 
-`pnpm-workspace.yaml` discovers `apps/*` and `packages/*`. The lockfile currently has five importers including root. `pnpm build` compiles shared packages, the Fastify API, browser assets and the workspace validator. The root scripts run formatting, ESLint/boundaries, strict types, coverage, real services and browser tests. CI uses the same scripts.
+`pnpm-workspace.yaml` discovers `apps/*` and `packages/*`. The lockfile includes root, two apps and five shared packages. `pnpm build` compiles packages, Fastify API, browser assets and the workspace validator. Root scripts cover formatting, ESLint/boundaries, strict types, tests, real services and browser checks; consult CI for its exact matrix.
 
 ## Connected to
 
-Consumes Development Tooling and S00-T03; implemented browser/API/config tasks supply source/build/startup. S00-T06 owns full lint/CI rules and S00-T07 owns validated service configuration.
+Consumes Development Tooling and S00-T03/S01 evidence; browser/API/config/db/storage tasks supply source/build/startup. S00-T06 owns lint/CI rules and S00-T07 owns validated service configuration.
 
 ## If you change this
 
-- **Hits:** Lockfile, workspace links, TypeScript/test resolution, package task graph, S00-T03 evidence and later S00 tooling tasks.
+- **Hits:** Lockfile, workspace links, TypeScript/test resolution, package task graph and affected S00/S01 evidence.
 - **Does not hit:** Later project authorization, CRDT durability or compiler isolation proof.
 
 ## Surfaces
@@ -45,4 +45,4 @@ Maintainers run frozen install, task tests, ESLint/boundary checks, typecheck an
 - [turbo.json](../../../turbo.json)
 - [tsconfig.json](../../../tsconfig.json)
 - [scripts/check-workspace.ts](../../../scripts/check-workspace.ts)
-- [docs/test-reports/s00-t03.md](../../test-reports/s00-t03.md)
+- [docs/progress/sprint-01.md](../../progress/sprint-01.md)

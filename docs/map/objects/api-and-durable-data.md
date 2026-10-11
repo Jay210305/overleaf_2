@@ -4,7 +4,7 @@ cluster: runtime-design
 universe: live
 status: verified
 entity: apps/api/src/server.ts
-sources: ["docs/planning/02-architecture.md", "docs/contracts/http-api.md", "docs/contracts/openapi.json", "docs/contracts/data-model.md", "docs/contracts/collaboration.md", "docs/contracts/storage-and-revisions.md", "apps/api/src/server.ts", "apps/api/src/readiness.ts", "apps/api/src/plugins/errors.ts", "packages/config/src/server.ts", "tests/services/local-services.test.ts"]
+sources: ["docs/contracts/http-api.md", "apps/api/src/server.ts", "apps/api/src/modules/development/sample.ts", "apps/api/src/readiness.ts", "apps/api/src/plugins/errors.ts", "tests/integration/persisted-sample.test.ts", "docs/test-reports/s01-t10.md"]
 runtime: implemented
 verified_on: 2026-10-10
 snapshot: _meta/file-inventory.json
@@ -14,34 +14,32 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-Fastify live/readiness and controlled errors are implemented. PostgreSQL/Redis/private S3/Mailpit readiness is real; domain persistence and collaboration remain planned.
+Fastify serves health routes and a development-only persisted sample. Production identity, project and collaboration routes remain unimplemented.
 
 ## Why this shape
 
-Saved acknowledgements require durable writes, and permission checks must cover every access surface.
+The sample checks the API-to-PostgreSQL-to-object-store path before user-facing operations are added; public actions will require server-side authorization.
 
 ## Shape
 
-API exposes only /api/v1/health/live and /api/v1/health/ready. Readiness probes all four dependencies. UUID request IDs are server-generated, logs omit private request data, and errors reveal no internal details. Future project endpoints remain unavailable.
+`apps/api/src/server.ts:38` registers live and ready checks; line 61 registers the sample module. `apps/api/src/modules/development/sample.ts:13` omits that route in production. In development, it reads or creates a PostgreSQL project and reads or creates a MinIO object. Readiness probes PostgreSQL, Redis, MinIO and Mailpit. The server generates UUID request IDs and redacts errors. It does not expose project CRUD or collaboration.
 
 ## Connected to
 
-Produces browser API/ticket contracts and durable updates; revisions are inputs to compilation and provider checkpoints.
+Consumes [Data Model and Persistence](data-model-and-persistence.md) and [Private Object Storage](private-object-storage.md) for the sample. HTTP contracts cover future user-facing routes.
 
 ## If you change this
 
-- **Hits:** HTTP/OpenAPI, DB model/migrations design, collaboration protocol, revision rules and S01–S09 producer/consumer tasks.
+- **Hits:** API route tests, the development sample, DB/storage dependencies and HTTP contracts when a public route is added.
 - **Does not hit:** External provider capabilities; changing local persistence does not verify a remote API.
 
 ## Surfaces
 
-Node 24 API, Compose services, injected API tests and real dependency/outage checks.
+Node 24 API, Compose services, injected API tests and persisted sample restart tests.
 
 ## See
 
-- [docs/planning/02-architecture.md](../../planning/02-architecture.md)
-- [docs/contracts/http-api.md](../../contracts/http-api.md)
-- [docs/contracts/openapi.json](../../contracts/openapi.json)
-- [docs/contracts/data-model.md](../../contracts/data-model.md)
-- [docs/contracts/collaboration.md](../../contracts/collaboration.md)
-- [docs/contracts/storage-and-revisions.md](../../contracts/storage-and-revisions.md)
+- [Server](../../../apps/api/src/server.ts)
+- [Development sample](../../../apps/api/src/modules/development/sample.ts)
+- [HTTP contract](../../contracts/http-api.md)
+- [S01-T10 evidence](../../test-reports/s01-t10.md)

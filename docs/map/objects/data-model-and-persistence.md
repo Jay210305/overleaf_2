@@ -1,0 +1,45 @@
+---
+type: object
+cluster: runtime-design
+universe: live
+status: verified
+entity: packages/db/src/client.ts
+sources: ["packages/db/src/client.ts", "packages/db/src/repositories/projects.ts", "packages/db/src/schema/core.ts", "packages/db/src/schema/collaboration.ts", "packages/db/src/schema/integrations.ts", "packages/db/migrations/0001-core.sql", "packages/db/migrations/0002-support.sql", "packages/db/seeds/development.ts", "docs/progress/sprint-01.md", "docs/test-reports/s01-t07.md"]
+runtime: implemented
+verified_on: 2026-10-10
+snapshot: _meta/file-inventory.json
+---
+
+# Data Model and Persistence
+
+## Summary
+
+S01 supplies typed Drizzle entities, two PostgreSQL migrations, transaction primitives, a project list repository and isolated development seed data.
+
+## Why this shape
+
+Database constraints and transactions establish durable boundaries for later identity, project, collaboration and revision services.
+
+## Shape
+
+`packages/db/src/schema/core.ts` defines users, sessions, projects, nodes, revisions, jobs and artifacts. `collaboration.ts` and `integrations.ts` define support entities. Migrations `0001-core.sql` and `0002-support.sql` create their PostgreSQL tables and constraints. `packages/db/src/client.ts:77` wraps pooled queries and transactions with mapped errors. `packages/db/src/repositories/projects.ts:44` lists owned/shared/recent projects with cursor pagination. These schemas do not implement Yjs update commits, user-facing CRUD or access checks for every action.
+
+## Connected to
+
+The [API](api-and-durable-data.md) uses this package for its development sample; [Private Object Storage](private-object-storage.md) holds object bytes referenced by future revisions. The [Compilation](compilation-and-artifacts.md) card remains proposed.
+
+## If you change this
+
+- **Hits:** Corresponding SQL migration, Drizzle schema, repository code, seed/fixtures, S01 constraint tests and data/HTTP contracts.
+- **Does not hit:** TeX executor isolation; database constraints do not prove safe compilation.
+
+## Surfaces
+
+API and future services read/write PostgreSQL; maintainers run migrations, seeds and integration tests.
+
+## See
+
+- [Database client](../../../packages/db/src/client.ts)
+- [Core schema](../../../packages/db/src/schema/core.ts)
+- [Core migration](../../../packages/db/migrations/0001-core.sql)
+- [S01 progress](../../progress/sprint-01.md)
