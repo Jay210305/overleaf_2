@@ -4,9 +4,9 @@ cluster: runtime-design
 universe: live
 status: verified
 entity: packages/db/src/client.ts
-sources: ["packages/db/src/client.ts", "packages/db/src/repositories/projects.ts", "packages/db/src/schema/core.ts", "packages/db/src/schema/collaboration.ts", "packages/db/src/schema/integrations.ts", "packages/db/migrations/0001-core.sql", "packages/db/migrations/0002-support.sql", "packages/db/seeds/development.ts", "docs/progress/sprint-01.md", "docs/test-reports/s01-t07.md"]
+sources: ["packages/db/src/client.ts", "packages/db/src/repositories/projects.ts", "packages/db/src/schema/core.ts", "packages/db/src/schema/collaboration.ts", "packages/db/src/schema/integrations.ts", "packages/db/migrations/0001-core.sql", "packages/db/migrations/0002-support.sql", "packages/db/migrations/0003-session-security.sql", "packages/db/seeds/development.ts", "docs/progress/sprint-01.md", "docs/test-reports/s01-t07.md", "docs/test-reports/s02-t02.md"]
 runtime: implemented
-verified_on: 2026-10-10
+verified_on: 2026-10-11
 snapshot: _meta/file-inventory.json
 ---
 
@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-S01 supplies typed Drizzle entities, two PostgreSQL migrations, transaction primitives, a project list repository and isolated development seed data.
+S01 supplies typed Drizzle entities, two PostgreSQL migrations, transaction primitives, a project list repository and isolated development seed data. S02-T02 adds a session-security migration.
 
 ## Why this shape
 
@@ -22,7 +22,7 @@ Database constraints and transactions establish durable boundaries for later ide
 
 ## Shape
 
-`packages/db/src/schema/core.ts` defines users, sessions, projects, nodes, revisions, jobs and artifacts. `collaboration.ts` and `integrations.ts` define support entities. Migrations `0001-core.sql` and `0002-support.sql` create their PostgreSQL tables and constraints. `packages/db/src/client.ts` wraps pooled queries and transactions, maps SQLSTATE failures, and preserves application errors raised inside transactions. `packages/db/src/repositories/projects.ts` lists owned/shared/recent projects with cursor pagination. These schemas do not implement Yjs update commits, user-facing CRUD or access checks for every action.
+`packages/db/src/schema/core.ts` defines users, sessions, projects, nodes, revisions, jobs and artifacts. `collaboration.ts` and `integrations.ts` define support entities. Migrations `0001-core.sql` and `0002-support.sql` create their PostgreSQL tables and constraints; `0003-session-security.sql` adds creation time and CSRF hash to sessions. `packages/db/src/client.ts` wraps pooled queries and transactions, maps SQLSTATE failures, and preserves application errors raised inside transactions. `packages/db/src/repositories/projects.ts` lists owned/shared/recent projects with cursor pagination. These schemas do not implement Yjs update commits, user-facing project CRUD or access checks for every action.
 
 ## Connected to
 
@@ -42,4 +42,5 @@ API and future services read/write PostgreSQL; maintainers run migrations, seeds
 - [Database client](../../../packages/db/src/client.ts)
 - [Core schema](../../../packages/db/src/schema/core.ts)
 - [Core migration](../../../packages/db/migrations/0001-core.sql)
+- [Session migration](../../../packages/db/migrations/0003-session-security.sql)
 - [S01 progress](../../progress/sprint-01.md)

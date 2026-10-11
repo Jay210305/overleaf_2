@@ -28,6 +28,7 @@ async function main() {
       config.SMTP_URL && config.EMAIL_FROM
         ? createSmtpVerificationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
         : undefined,
+    secureCookies: config.NODE_ENV === "production" || config.APP_ORIGIN.startsWith("https://"),
   });
   app.addHook("onClose", async () => {
     probes.close();

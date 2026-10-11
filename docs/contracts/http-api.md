@@ -14,6 +14,12 @@ Until G5 isolation and release approval, `PUBLIC_SIGNUP_ENABLED=false`. The live
 
 API-host-only opaque session cookie; HttpOnly, Secure under TLS, SameSite=Lax, 7-day idle and 30-day absolute expiry as configurable starting proposals. Hash stored session/token values. Use CSRF token header plus exact Origin validation on mutations. Test local/staging domain behavior; never weaken production cookie policy to fix development.
 
+## G1 Cookie Session Slice
+
+The live S02-T02 `POST /auth/login` accepts only verified, enabled trusted accounts. It requires the exact configured `Origin` and a custom `X-CSRF-Token` header, returns a browser-safe user view and a separate random CSRF secret in a response header, and sets a host-only opaque HttpOnly SameSite=Lax cookie. Production HTTPS uses `__Host-latex_session` with `Secure`; local HTTP uses `latex_session` without a `Domain` attribute. Credentialed CORS is restricted to the configured origin. The raw session and CSRF secrets are never stored in PostgreSQL.
+
+`GET /auth/session` requires the exact Origin and a valid cookie. It atomically rotates both secrets, returns only the current user and extends the seven-day idle expiry no later than 30 days from creation. The old cookie is immediately invalid. `POST /auth/logout` requires the exact Origin, a valid cookie and the matching CSRF header; it persists revocation and clears the cookie. Expired, revoked and unknown cookies return 401, while forged Origin/CSRF and disabled accounts return 403. A login rate limit and 429 response remain S02-T06 work. Project-role authorization and session inventory remain S02-T04/T07 work; this slice supplies only the authenticated identity boundary.
+
 | Action | OWNER | EDITOR | REVIEWER | VIEWER |
 |---|---|---|---|---|
 | Read project/PDF | Yes | Yes | Yes | Yes |

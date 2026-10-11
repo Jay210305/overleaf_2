@@ -16,6 +16,7 @@ export interface ServerOptions {
   db?: DatabaseClient | undefined;
   storage?: StorageAdapter | undefined;
   sendVerification?: SendVerification | undefined;
+  secureCookies?: boolean | undefined;
 }
 export function safeLoggerOptions(level = "info") {
   return {
@@ -39,9 +40,10 @@ export function createServer(options: ServerOptions) {
   if (options.origin)
     void app.register(cors, {
       origin: options.origin,
-      credentials: false,
+      credentials: true,
       methods: ["GET", "POST"],
       allowedHeaders: ["content-type", "x-csrf-token", "x-registration-invite"],
+      exposedHeaders: ["x-csrf-token", "x-request-id"],
     });
   app.addHook("onSend", async (request, reply) => {
     reply
@@ -71,6 +73,7 @@ export function createServer(options: ServerOptions) {
     db: options.db,
     origin: options.origin,
     sendVerification: options.sendVerification,
+    secureCookies: options.secureCookies,
   });
   return app;
 }

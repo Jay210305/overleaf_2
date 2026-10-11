@@ -32,7 +32,7 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S01-T08 | [Create private S3 adapter](sprint-01-data-contracts/S01-T08-create-private-s3-adapter.md) | Project Co-owner (proposed) | 8 | done |
 | S01-T10 | [Deliver persisted development sample vertical slice](sprint-01-data-contracts/S01-T10-deliver-persisted-development-sample-vertical-slice.md) | Project Co-owner (proposed) | 6 | done |
 | S02-T01 | [Implement registration and verification](sprint-02-identity-permissions/S02-T01-implement-registration-and-verification.md) | Julio (proposed) | 8 | done |
-| S02-T02 | [Implement cookie sessions and logout](sprint-02-identity-permissions/S02-T02-implement-cookie-sessions-and-logout.md) | Julio (proposed) | 8 | todo |
+| S02-T02 | [Implement cookie sessions and logout](sprint-02-identity-permissions/S02-T02-implement-cookie-sessions-and-logout.md) | Julio (proposed) | 8 | in_progress |
 | S02-T03 | [Implement password recovery](sprint-02-identity-permissions/S02-T03-implement-password-recovery.md) | Julio (proposed) | 8 | todo |
 | S02-T04 | [Implement session and project policy guards](sprint-02-identity-permissions/S02-T04-implement-session-and-project-policy-guards.md) | Julio (proposed) | 8 | todo |
 | S02-T05 | [Create accessible authentication forms](sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md) | Julio (proposed) | 8 | todo |
