@@ -3,13 +3,13 @@ import { DatabaseClient } from "@latex-collab/db";
 import { S3StorageAdapter } from "@latex-collab/storage";
 import { createReadiness } from "./readiness.js";
 import { createServer, safeLoggerOptions } from "./server.js";
+import { createSmtpVerificationSender } from "./modules/auth/mail.js";
 async function main() {
   const config = parseServerConfig(process.env);
   const probes = createReadiness(config);
-  let db: DatabaseClient | undefined;
+  const db = new DatabaseClient(config.DATABASE_URL);
   let storage: S3StorageAdapter | undefined;
   if (process.env.NODE_ENV !== "production") {
-    db = new DatabaseClient(config.DATABASE_URL);
     storage = new S3StorageAdapter({
       endpoint: config.S3_ENDPOINT,
       region: config.S3_REGION,
@@ -24,10 +24,14 @@ async function main() {
     logger: safeLoggerOptions(config.LOG_LEVEL),
     db,
     storage,
+    sendVerification:
+      config.SMTP_URL && config.EMAIL_FROM
+        ? createSmtpVerificationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
+        : undefined,
   });
   app.addHook("onClose", async () => {
     probes.close();
-    if (db) await db.close();
+    await db.close();
   });
   const stop = () => {
     void app.close().catch(() => {

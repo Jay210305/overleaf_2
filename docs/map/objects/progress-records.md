@@ -4,7 +4,7 @@ cluster: execution
 universe: live
 status: verified
 entity: docs/progress/progress-log.md
-sources: ["docs/progress/progress-log.md", "docs/progress/open-gaps.md", "docs/progress/technical-debt.md", "docs/progress/sprint-00.md", "docs/progress/sprint-01.md", "docs/test-reports/s00-verification.md", "docs/test-reports/s01-t10.md", "docs/feature-parity.md"]
+sources: ["docs/progress/progress-log.md", "docs/progress/open-gaps.md", "docs/progress/technical-debt.md", "docs/progress/sprint-00.md", "docs/progress/sprint-01.md", "docs/progress/sprint-02.md", "docs/test-reports/s00-verification.md", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/feature-parity.md"]
 runtime: not-applicable
 verified_on: 2026-10-10
 snapshot: _meta/file-inventory.json
@@ -22,7 +22,7 @@ Plans and estimates must remain distinguishable from actual actions and measured
 
 ## Shape
 
-A global log, per-stage task matrices, gap/debt files, feature-parity evidence and scoped reports. S00 is closed; S01 records ten accepted tasks. Feature rows remain incomplete because later user-facing work is still required. Missing credentials and research choices are tracked as gaps.
+A global log, per-stage task matrices, gap/debt files, feature-parity evidence and scoped reports. S00 is closed; S01 records ten accepted tasks; S02-T01 has implementation evidence and awaits independent review. Feature rows remain incomplete because login, recovery and later user-facing work are still required. Missing credentials and research choices are tracked as gaps.
 
 ## Connected to
 
@@ -44,5 +44,7 @@ Maintainers and executing agents write observed evidence; reviewers inspect comm
 - [docs/progress/technical-debt.md](../../progress/technical-debt.md)
 - [docs/progress/sprint-00.md](../../progress/sprint-00.md)
 - [docs/progress/sprint-01.md](../../progress/sprint-01.md)
+- [docs/progress/sprint-02.md](../../progress/sprint-02.md)
 - [S01-T10 evidence](../../test-reports/s01-t10.md)
+- [S02-T01 evidence](../../test-reports/s02-t01.md)
 - [docs/feature-parity.md](../../feature-parity.md)

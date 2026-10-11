@@ -17,6 +17,8 @@ export const serverConfigSchema = z.object({
   S3_ACCESS_KEY_ID: z.string().min(1),
   S3_SECRET_ACCESS_KEY: z.string().min(16),
   MAILPIT_URL: urlFor(["http:", "https:"]),
+  SMTP_URL: urlFor(["smtp:", "smtps:"]).optional(),
+  EMAIL_FROM: z.email().optional(),
   PUBLIC_SIGNUP_ENABLED: z.literal("false").default("false"),
   UNTRUSTED_COMPILE_ENABLED: z.literal("false").default("false"),
   COMPILER_EXECUTION_MODE: z.literal("trusted_worker").default("trusted_worker"),

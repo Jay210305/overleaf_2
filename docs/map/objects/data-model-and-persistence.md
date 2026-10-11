@@ -22,7 +22,7 @@ Database constraints and transactions establish durable boundaries for later ide
 
 ## Shape
 
-`packages/db/src/schema/core.ts` defines users, sessions, projects, nodes, revisions, jobs and artifacts. `collaboration.ts` and `integrations.ts` define support entities. Migrations `0001-core.sql` and `0002-support.sql` create their PostgreSQL tables and constraints. `packages/db/src/client.ts:77` wraps pooled queries and transactions with mapped errors. `packages/db/src/repositories/projects.ts:44` lists owned/shared/recent projects with cursor pagination. These schemas do not implement Yjs update commits, user-facing CRUD or access checks for every action.
+`packages/db/src/schema/core.ts` defines users, sessions, projects, nodes, revisions, jobs and artifacts. `collaboration.ts` and `integrations.ts` define support entities. Migrations `0001-core.sql` and `0002-support.sql` create their PostgreSQL tables and constraints. `packages/db/src/client.ts` wraps pooled queries and transactions, maps SQLSTATE failures, and preserves application errors raised inside transactions. `packages/db/src/repositories/projects.ts` lists owned/shared/recent projects with cursor pagination. These schemas do not implement Yjs update commits, user-facing CRUD or access checks for every action.
 
 ## Connected to
 

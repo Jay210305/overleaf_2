@@ -14,6 +14,7 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-10 | S00 sprint closure: accepted by Project Co-owner; transition to S01 on `codex/sprint-01-data-contracts` | Not measured | S00 closed, all 12 tasks marked DONE; GAP-10 closed | Next S01-T01 on `codex/sprint-01-data-contracts` |
 | 2026-10-10 | S01 branch initialization and evidence synchronization on `codex/sprint-01-data-contracts` | Not measured | Dedicated branch published with upstream tracking; base `644c6f0` recorded in [S01 progress](sprint-01.md); [feature evidence](../feature-parity.md) updated | Next S01-T01 |
 | 2026-10-10 | S01 data contracts and storage slice delivery on `codex/sprint-01-data-contracts` | Not measured | [S01 progress](sprint-01.md) and reports [s01-t01](../test-reports/s01-t01.md) through [s01-t10](../test-reports/s01-t10.md); tests, lint, typecheck, build pass | S01 closed, all 10 tasks marked DONE; next S02-T01 |
+| 2026-10-10 | S02-T01 trusted registration and email verification on `feature/identity-permissions` | Not measured | [S02-T01 report](../test-reports/s02-t01.md): real PostgreSQL/Mailpit behavior, denial and replay tests; final quality gates tracked in report | Independent co-maintainer review pending; S02-T02 follows after S02-T01 acceptance |
 
 
 ## Session Record

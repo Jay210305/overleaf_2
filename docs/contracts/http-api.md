@@ -6,6 +6,10 @@
 
 Proposed additions to the original inventory include REST text-state read/save, account password/avatar/privacy routes, bulk/ownership/statistics routes, import/sync status and Git token management. They close requirements absent from the original endpoint tables. `/auth/refresh` is intentionally excluded under ADR-005's opaque-session decision; an access/refresh change needs an ADR.
 
+## G1 Trusted Registration Slice
+
+Until G5 isolation and release approval, `PUBLIC_SIGNUP_ENABLED=false`. The live S02-T01 `POST /auth/register` accepts the planned email/password/displayName body only with an operator-issued, email-bound, one-use `X-Registration-Invite` secret. The operator command sends that secret by SMTP; no public route issues it. Registration and `POST /auth/verify-email` require the exact configured `Origin` and a nonempty custom `X-CSRF-Token` header. The latter is a browser mutation guard for this anonymous, cookie-free flow; authenticated session CSRF is S02-T02 work. Both routes return the planned `Accepted` body, or `application/problem+json` on denial. The registration invitation and email-verification token are stored only as SHA-256 hashes, expire after 24 hours and are consumed under PostgreSQL row locks. Actual 429 abuse limiting is S02-T06 work and must not be inferred from the planned OpenAPI response list.
+
 ## Security and Permission Matrix
 
 API-host-only opaque session cookie; HttpOnly, Secure under TLS, SameSite=Lax, 7-day idle and 30-day absolute expiry as configurable starting proposals. Hash stored session/token values. Use CSRF token header plus exact Origin validation on mutations. Test local/staging domain behavior; never weaken production cookie policy to fix development.

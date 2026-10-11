@@ -6,6 +6,8 @@ import { registerErrors, problem } from "./plugins/errors.js";
 import { registerDevelopmentSampleRoute } from "./modules/development/sample.js";
 import type { DatabaseClient } from "@latex-collab/db";
 import type { StorageAdapter } from "@latex-collab/storage";
+import { registerAuthRoutes } from "./modules/auth/routes.js";
+import type { SendVerification } from "./modules/auth/register.js";
 
 export interface ServerOptions {
   checkReadiness: () => Promise<boolean>;
@@ -13,6 +15,7 @@ export interface ServerOptions {
   origin?: string;
   db?: DatabaseClient | undefined;
   storage?: StorageAdapter | undefined;
+  sendVerification?: SendVerification | undefined;
 }
 export function safeLoggerOptions(level = "info") {
   return {
@@ -34,7 +37,12 @@ export function createServer(options: ServerOptions) {
   });
   registerErrors(app);
   if (options.origin)
-    void app.register(cors, { origin: options.origin, credentials: false, methods: ["GET"] });
+    void app.register(cors, {
+      origin: options.origin,
+      credentials: false,
+      methods: ["GET", "POST"],
+      allowedHeaders: ["content-type", "x-csrf-token", "x-registration-invite"],
+    });
   app.addHook("onSend", async (request, reply) => {
     reply
       .header("x-request-id", request.id)
@@ -59,5 +67,10 @@ export function createServer(options: ServerOptions) {
     return healthSchema.parse({ status: "ready", requestId: request.id });
   });
   registerDevelopmentSampleRoute(app, { db: options.db, storage: options.storage });
+  registerAuthRoutes(app, {
+    db: options.db,
+    origin: options.origin,
+    sendVerification: options.sendVerification,
+  });
   return app;
 }

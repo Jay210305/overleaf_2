@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-The pnpm workspace builds the browser/API, shared contracts/config, and S01 database, storage and test utilities packages under strict TypeScript checks.
+The pnpm workspace builds the browser/API, shared contracts/config, and database, storage and test utilities packages under strict TypeScript checks. S02-T01 pins Argon2 and Nodemailer for the API.
 
 ## Why this shape
 
@@ -22,7 +22,7 @@ Pinned versions, local-only workspace links and a frozen lockfile make the boots
 
 ## Shape
 
-`pnpm-workspace.yaml` discovers `apps/*` and `packages/*`. The lockfile includes root, two apps and five shared packages. `pnpm build` compiles packages, Fastify API, browser assets and the workspace validator. Root scripts cover formatting, ESLint/boundaries, strict types, tests, real services and browser checks; consult CI for its exact matrix.
+`pnpm-workspace.yaml` discovers `apps/*` and `packages/*` and permits Argon2's reviewed native build hook. The lockfile includes root, two apps and five shared packages. `pnpm build` compiles packages, Fastify API, browser assets and the workspace validator. Root scripts cover formatting, ESLint/boundaries, strict types, tests, real services and browser checks; consult CI for its exact matrix. The full S02-T01 test suite passes; repository-wide formatting remains red on 94 previously unformatted files (GAP-13).
 
 ## Connected to
 
