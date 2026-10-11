@@ -2,7 +2,7 @@
 
 ## Uniform Quality Gates
 
-These are **target scripts to implement in S00**, not commands that already exist in this planning-only repository. Local checks and GitHub Actions invoke the same scripts. Task files reference this table rather than redefine thresholds.
+S00 implements the local/CI scripts below for its delivered scope. GitHub Actions uses the same scripts; remote execution status is in [S00 verification](../test-reports/s00-verification.md). No later product tests are implied by bootstrap checks.
 
 | Gate | Local and CI command | Pass condition |
 |---|---|---|

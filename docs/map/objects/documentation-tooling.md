@@ -22,7 +22,7 @@ Generated outputs and cross-file consistency need reproducible tooling rather th
 
 ## Shape
 
-plan_lint.py checks tasks, links, source preservation and API examples. build_icm_map.py writes map twins/index/inventory and has a read-only --check mode.
+plan_lint.py checks tasks, links, source preservation and API examples. build_icm_map.py writes map twins/index/inventory and has a read-only --check mode. The inventory excludes installed dependencies, generated build output and local pnpm cache/store/temp directories.
 
 ## Connected to
 

@@ -1,0 +1,24 @@
+{
+  "name": "@latex-collab/test-utils",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@latex-collab/contracts": "workspace:*",
+    "@latex-collab/db": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./factories": {
+      "types": "./src/factories.ts",
+      "default": "./dist/factories.js"
+    },
+    "./package.json": "./package.json"
+  }
+}

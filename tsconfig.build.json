@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": false,
+    "rootDir": ".",
+    "outDir": "dist",
+    "declaration": true
+  },
+  "include": ["scripts/check-workspace.ts"]
+}

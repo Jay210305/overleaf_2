@@ -2,7 +2,7 @@
 
 ## Commands
 
-These commands are target interfaces created during S00 and extended with feature tasks. No application command is claimed available in this planning-only checkout.
+S00 now supplies frozen installation, formatting/lint/types/coverage, app/package builds, generated local env, real Compose services/private bucket, browser/API dev startup and smoke checks. See [S00 verification](../test-reports/s00-verification.md). Migration, seed, collaboration and compiler commands remain later task interfaces; no implementation is claimed for them.
 
 | Command | Input / output | Exit / behavior |
 |---|---|---|

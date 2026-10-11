@@ -23,6 +23,8 @@ GENERATED = {
 IGNORED = {
     ".git", "node_modules", "__pycache__", ".venv", ".pytest_cache",
     ".turbo", "dist", "build", "coverage", ".codex", ".agents",
+    "graphify-out", "playwright-report", "test-results", ".env",
+    ".tmp", ".pnpm-store", ".pnpm-cache",
 }
 
 
@@ -171,7 +173,15 @@ def main() -> None:
     for relative, content in outputs.items():
         destination = ROOT / relative
         if args.check:
-            if not destination.is_file() or destination.read_bytes() != content:
+            fresh = destination.is_file() and destination.read_bytes() == content
+            if destination.is_file() and relative == "docs/map/_meta/file-inventory.json":
+                recorded = json.loads(destination.read_bytes())
+                expected = json.loads(content)
+                # HEAD moving alone does not alter the working-file snapshot.
+                recorded.pop("git_baseline", None)
+                expected.pop("git_baseline", None)
+                fresh = recorded == expected
+            if not fresh:
                 raise ValueError(f"Generated output is stale: {relative}; run without --check")
         else:
             destination.parent.mkdir(parents=True, exist_ok=True)

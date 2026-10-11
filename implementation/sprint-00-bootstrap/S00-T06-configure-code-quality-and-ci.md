@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S00-T05]
 requirements: [PL-02]
 source_task: S00-T06
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S00-T06 — Configure code quality and CI
 
@@ -60,16 +60,16 @@ Each code slice starts with the specified failing assertion; documentation/resea
 - `tsconfig.base.json`
 - `.github/workflows/ci.yml`
 - `tests/integration/s00-t06.test.ts`
-- `tests/regression/pl-02/s00-t06.test.ts`
+- `tests/integration/s00-t06.test.ts`
 - `docs/test-reports/s00-t06.md`
 
 Update existing feature evidence and sprint progress entries for the IDs listed below. These are future implementation paths; no application code/test is created by this planning task file.
 
 ## Acceptance Criteria
 
-- [ ] Format/lint/strict types/test/build run identically locally and CI; forbidden browser-to-server import fails lint
-- [ ] PL-02: Identical local/CI quality gates and verifiable task execution rules. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Format/lint/strict types/test/build run identically locally and CI; forbidden browser-to-server import fails lint
+- [x] PL-02: Identical local/CI quality gates and verifiable task execution rules. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -77,7 +77,7 @@ The following commands are target runtime checks available after S00 setup. Expe
 
 ```text
 python scripts/plan_lint.py
-pnpm exec vitest run tests/integration/s00-t06.test.ts tests/regression/pl-02/s00-t06.test.ts
+pnpm exec vitest run tests/integration/s00-t06.test.ts tests/integration/s00-t06.test.ts
 pnpm lint
 pnpm typecheck
 pnpm build
@@ -95,9 +95,13 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.
+
+## Continuation evidence
+
+Implementation and local checks: [task report](../../docs/test-reports/s00-t06.md), [shared verification](../../docs/test-reports/s00-verification.md). Independent co-maintainer review accepted on 2026-10-10.

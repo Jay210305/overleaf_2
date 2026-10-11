@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-Root AGENTS.md routes execution to workflow, plans, skills and the ICM map while preserving the graphify trigger.
+Root AGENTS.md routes execution to workflow, plans, skills and the ICM map, states core execution rules, and preserves the graphify trigger.
 
 ## Why this shape
 
@@ -22,7 +22,7 @@ A small entry helps agents find one owning source instead of loading the entire 
 
 ## Shape
 
-Root routing and workspace context; detailed agent workflow and skill catalog live on their own shelves. Recommended external skills are not installed by this setup.
+Root routing, concise execution boundaries and workspace context; detailed agent workflow and skill catalog live on their own shelves. Recommended external skills are not installed by this setup.
 
 ## Connected to
 

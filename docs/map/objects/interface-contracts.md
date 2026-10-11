@@ -22,7 +22,7 @@ Producer and consumer tasks must share one interface definition instead of diver
 
 ## Shape
 
-The contract catalog links data, HTTP/OpenAPI, revisions, collaboration, compilation, editing, integrations and development tooling. Runtime implementation is explicitly NOT_STARTED.
+The contract catalog links data, HTTP/OpenAPI, revisions, collaboration, compilation, editing, integrations and development tooling. The development-tooling contract has a verified S00-T03 workspace slice; application runtime contracts remain proposed.
 
 ## Connected to
 

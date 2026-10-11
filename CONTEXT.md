@@ -16,7 +16,7 @@ Use [AGENTS.md](AGENTS.md) to route. Inspect actual files, select a Ready task, 
 
 ## Outputs and State
 
-The current repository contains documentation, task specifications and a planning validator. Application paths in the architecture are proposed; task presence is not evidence of implementation. Status lives in task frontmatter and progress/evidence records. See the [ICM Map](docs/map/AGENTS.md) for actual owning files and proposed runtime areas.
+The repository contains an implemented S00 React/Vite shell, Fastify health API, private local services and quality/test tooling alongside documentation and task specifications. Domain data, identity, editing, collaboration and compilation remain proposed. Task presence is not evidence of implementation. Status lives in task frontmatter and progress/evidence records. See the [ICM Map](docs/map/AGENTS.md) for actual owning files and proposed runtime areas.
 
 ## Human Check
 

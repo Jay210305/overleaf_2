@@ -2,7 +2,7 @@
 
 ## Source of Truth
 
-The English package is the operative baseline under the user's scope delegation. Task files carry local context and reference authoritative contracts. The original Spanish master is retained unchanged for provenance; its whole-document reading instruction is superseded for this reorganized workflow. Discovery and ADR-006 record the methodology adaptations.
+The English package supplies operative task contracts and documented scope adaptations. Task files carry local context and reference authoritative contracts. Per the user's renewed instruction of 2026-10-10, read the complete original Spanish master before project work in a new session and follow its product, security and delivery requirements together with this package; retain it unchanged. Discovery and ADR-006 record the methodology adaptations. Each new sprint uses a dedicated published `codex/sprint-XX-<topic>` branch; reuse the existing `feature/sprint-00` for S00 and follow the branch procedure in [Agent Workflow](../agent-workflow.md).
 
 ## Agent Rules for S00
 

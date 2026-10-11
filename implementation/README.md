@@ -9,28 +9,28 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 
 | ID | File | Owner | Hours | Status |
 |---|---|---|---|---|
-| S00-T01 | [Inspect repository and preserve contributor changes](sprint-00-bootstrap/S00-T01-inspect-repository-and-preserve-contributor-changes.md) | Julio (proposed) | 4 | todo |
-| S00-T11 | [Check editor collaboration dependency compatibility](sprint-00-bootstrap/S00-T11-check-editor-collaboration-dependency-compatibility.md) | Julio (proposed) | 4 | todo |
-| S00-T02 | [Write permanent agent execution rules](sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md) | Julio (proposed) | 4 | todo |
-| S00-T03 | [Create typed pnpm monorepo](sprint-00-bootstrap/S00-T03-create-typed-pnpm-monorepo.md) | Julio (proposed) | 6 | todo |
-| S00-T04 | [Create browser shell and route providers](sprint-00-bootstrap/S00-T04-create-browser-shell-and-route-providers.md) | Julio (proposed) | 6 | todo |
-| S00-T05 | [Create API health and error boundary](sprint-00-bootstrap/S00-T05-create-api-health-and-error-boundary.md) | Julio (proposed) | 6 | todo |
-| S00-T06 | [Configure code quality and CI](sprint-00-bootstrap/S00-T06-configure-code-quality-and-ci.md) | Julio (proposed) | 8 | todo |
-| S00-T07 | [Create local services and validated configuration](sprint-00-bootstrap/S00-T07-create-local-services-and-validated-configuration.md) | Julio (proposed) | 8 | todo |
-| S00-T12 | [Deliver browser to API walking skeleton](sprint-00-bootstrap/S00-T12-deliver-browser-to-api-walking-skeleton.md) | Julio (proposed) | 6 | todo |
-| S00-T08 | [Record initial architecture decisions](sprint-00-bootstrap/S00-T08-record-initial-architecture-decisions.md) | Julio (proposed) | 4 | todo |
-| S00-T09 | [Initialize feature and evidence inventory](sprint-00-bootstrap/S00-T09-initialize-feature-and-evidence-inventory.md) | Julio (proposed) | 4 | todo |
-| S00-T10 | [Document clean development startup](sprint-00-bootstrap/S00-T10-document-clean-development-startup.md) | Julio (proposed) | 6 | todo |
-| S01-T01 | [Define core Drizzle entities](sprint-01-data-contracts/S01-T01-define-core-drizzle-entities.md) | Project Co-owner (proposed) | 8 | todo |
-| S01-T02 | [Create SQL migrations and constraints](sprint-01-data-contracts/S01-T02-create-sql-migrations-and-constraints.md) | Project Co-owner (proposed) | 8 | todo |
-| S01-T03 | [Create transaction and repository primitives](sprint-01-data-contracts/S01-T03-create-transaction-and-repository-primitives.md) | Project Co-owner (proposed) | 6 | todo |
-| S01-T04 | [Define future collaboration and integration tables](sprint-01-data-contracts/S01-T04-define-future-collaboration-and-integration-tables.md) | Project Co-owner (proposed) | 8 | todo |
-| S01-T09 | [Complete support entity migration slices](sprint-01-data-contracts/S01-T09-complete-support-entity-migration-slices.md) | Project Co-owner (proposed) | 8 | todo |
-| S01-T05 | [Implement Zod DTOs and OpenAPI generation](sprint-01-data-contracts/S01-T05-implement-zod-dtos-and-openapi-generation.md) | Project Co-owner (proposed) | 8 | todo |
-| S01-T06 | [Create isolated seeds and fixtures](sprint-01-data-contracts/S01-T06-create-isolated-seeds-and-fixtures.md) | Project Co-owner (proposed) | 6 | todo |
-| S01-T07 | [Test constraints rollback and naming races](sprint-01-data-contracts/S01-T07-test-constraints-rollback-and-naming-races.md) | Project Co-owner (proposed) | 6 | todo |
-| S01-T08 | [Create private S3 adapter](sprint-01-data-contracts/S01-T08-create-private-s3-adapter.md) | Project Co-owner (proposed) | 8 | todo |
-| S01-T10 | [Deliver persisted development sample vertical slice](sprint-01-data-contracts/S01-T10-deliver-persisted-development-sample-vertical-slice.md) | Project Co-owner (proposed) | 6 | todo |
+| S00-T01 | [Inspect repository and preserve contributor changes](sprint-00-bootstrap/S00-T01-inspect-repository-and-preserve-contributor-changes.md) | Julio (proposed) | 4 | done |
+| S00-T11 | [Check editor collaboration dependency compatibility](sprint-00-bootstrap/S00-T11-check-editor-collaboration-dependency-compatibility.md) | Julio (proposed) | 4 | done |
+| S00-T02 | [Write permanent agent execution rules](sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md) | Julio (proposed) | 4 | done |
+| S00-T03 | [Create typed pnpm monorepo](sprint-00-bootstrap/S00-T03-create-typed-pnpm-monorepo.md) | Julio (proposed) | 6 | done |
+| S00-T04 | [Create browser shell and route providers](sprint-00-bootstrap/S00-T04-create-browser-shell-and-route-providers.md) | Julio (proposed) | 6 | done |
+| S00-T05 | [Create API health and error boundary](sprint-00-bootstrap/S00-T05-create-api-health-and-error-boundary.md) | Julio (proposed) | 6 | done |
+| S00-T06 | [Configure code quality and CI](sprint-00-bootstrap/S00-T06-configure-code-quality-and-ci.md) | Julio (proposed) | 8 | done |
+| S00-T07 | [Create local services and validated configuration](sprint-00-bootstrap/S00-T07-create-local-services-and-validated-configuration.md) | Julio (proposed) | 8 | done |
+| S00-T12 | [Deliver browser to API walking skeleton](sprint-00-bootstrap/S00-T12-deliver-browser-to-api-walking-skeleton.md) | Julio (proposed) | 6 | done |
+| S00-T08 | [Record initial architecture decisions](sprint-00-bootstrap/S00-T08-record-initial-architecture-decisions.md) | Julio (proposed) | 4 | done |
+| S00-T09 | [Initialize feature and evidence inventory](sprint-00-bootstrap/S00-T09-initialize-feature-and-evidence-inventory.md) | Julio (proposed) | 4 | done |
+| S00-T10 | [Document clean development startup](sprint-00-bootstrap/S00-T10-document-clean-development-startup.md) | Julio (proposed) | 6 | done |
+| S01-T01 | [Define core Drizzle entities](sprint-01-data-contracts/S01-T01-define-core-drizzle-entities.md) | Project Co-owner (proposed) | 8 | done |
+| S01-T02 | [Create SQL migrations and constraints](sprint-01-data-contracts/S01-T02-create-sql-migrations-and-constraints.md) | Project Co-owner (proposed) | 8 | done |
+| S01-T03 | [Create transaction and repository primitives](sprint-01-data-contracts/S01-T03-create-transaction-and-repository-primitives.md) | Project Co-owner (proposed) | 6 | done |
+| S01-T04 | [Define future collaboration and integration tables](sprint-01-data-contracts/S01-T04-define-future-collaboration-and-integration-tables.md) | Project Co-owner (proposed) | 8 | done |
+| S01-T09 | [Complete support entity migration slices](sprint-01-data-contracts/S01-T09-complete-support-entity-migration-slices.md) | Project Co-owner (proposed) | 8 | done |
+| S01-T05 | [Implement Zod DTOs and OpenAPI generation](sprint-01-data-contracts/S01-T05-implement-zod-dtos-and-openapi-generation.md) | Project Co-owner (proposed) | 8 | done |
+| S01-T06 | [Create isolated seeds and fixtures](sprint-01-data-contracts/S01-T06-create-isolated-seeds-and-fixtures.md) | Project Co-owner (proposed) | 6 | done |
+| S01-T07 | [Test constraints rollback and naming races](sprint-01-data-contracts/S01-T07-test-constraints-rollback-and-naming-races.md) | Project Co-owner (proposed) | 6 | done |
+| S01-T08 | [Create private S3 adapter](sprint-01-data-contracts/S01-T08-create-private-s3-adapter.md) | Project Co-owner (proposed) | 8 | done |
+| S01-T10 | [Deliver persisted development sample vertical slice](sprint-01-data-contracts/S01-T10-deliver-persisted-development-sample-vertical-slice.md) | Project Co-owner (proposed) | 6 | done |
 | S02-T01 | [Implement registration and verification](sprint-02-identity-permissions/S02-T01-implement-registration-and-verification.md) | Julio (proposed) | 8 | todo |
 | S02-T02 | [Implement cookie sessions and logout](sprint-02-identity-permissions/S02-T02-implement-cookie-sessions-and-logout.md) | Julio (proposed) | 8 | todo |
 | S02-T03 | [Implement password recovery](sprint-02-identity-permissions/S02-T03-implement-password-recovery.md) | Julio (proposed) | 8 | todo |

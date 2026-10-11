@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S00-T06]
 requirements: [PL-01, PL-04, PL-07]
 source_task: S00-T07
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S00-T07 — Create local services and validated configuration
 
@@ -60,20 +60,20 @@ Each code slice starts with the specified failing assertion; documentation/resea
 - `packages/config/src/index.ts`
 - `.env.example`
 - `tests/integration/s00-t07.test.ts`
-- `tests/regression/pl-01/s00-t07.test.ts`
-- `tests/regression/pl-04/s00-t07.test.ts`
-- `tests/regression/pl-07/s00-t07.test.ts`
+- `tests/services/local-services.test.ts`
+- `tests/services/local-services.test.ts`
+- `tests/services/local-services.test.ts`
 - `docs/test-reports/s00-t07.md`
 
 Update existing feature evidence and sprint progress entries for the IDs listed below. These are future implementation paths; no application code/test is created by this planning task file.
 
 ## Acceptance Criteria
 
-- [ ] PG/Redis/MinIO/Mailpit start locally; missing required config fails startup; public config contains no secret
-- [ ] PL-01: Reproducible typed monorepo, compatible pinned tooling and startup scripts. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] PL-04: Explicit environment/configuration, health, staging deploy and release rollback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] PL-07: Private credentials, no unauthorized code reuse and explicit compiler trust boundary. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] PG/Redis/MinIO/Mailpit start locally; missing required config fails startup; public config contains no secret
+- [x] PL-01: Reproducible typed monorepo, compatible pinned tooling and startup scripts. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] PL-04: Explicit environment/configuration, health, staging deploy and release rollback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] PL-07: Private credentials, no unauthorized code reuse and explicit compiler trust boundary. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -81,7 +81,7 @@ The following commands are target runtime checks available after S00 setup. Expe
 
 ```text
 python scripts/plan_lint.py
-pnpm exec vitest run tests/integration/s00-t07.test.ts tests/regression/pl-01/s00-t07.test.ts tests/regression/pl-04/s00-t07.test.ts tests/regression/pl-07/s00-t07.test.ts
+pnpm exec vitest run tests/integration/s00-t07.test.ts tests/services/local-services.test.ts tests/services/local-services.test.ts tests/services/local-services.test.ts
 pnpm lint
 pnpm typecheck
 pnpm build
@@ -99,9 +99,13 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.
+
+## Continuation evidence
+
+Implementation and local checks: [task report](../../docs/test-reports/s00-t07.md), [shared verification](../../docs/test-reports/s00-verification.md). Independent co-maintainer review accepted on 2026-10-10.

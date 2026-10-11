@@ -17,6 +17,7 @@ Sprint means an unscheduled work stage; Project Co-owner means the user's unname
 | How is work divided? | [Task Library](objects/task-library.md) |
 | Where is actual completion evidence? | [Progress Records](objects/progress-records.md) |
 | What validates planning structure? | [Documentation Tooling](objects/documentation-tooling.md) |
+| What validates the typed pnpm workspace? | [Workspace Tooling](objects/workspace-tooling.md) |
 | How are skills selected? | [Agent Guidance](objects/agent-guidance.md) |
 | What editor code is proposed? | [Browser and Editing](objects/browser-and-editing.md) |
 | What API/data code is proposed? | [API and Durable Data](objects/api-and-durable-data.md) |

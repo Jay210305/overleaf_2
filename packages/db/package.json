@@ -1,0 +1,48 @@
+{
+  "name": "@latex-collab/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@latex-collab/contracts": "workspace:*",
+    "drizzle-orm": "^0.45.4",
+    "pg": "8.23.1"
+  },
+  "devDependencies": {
+    "@types/pg": "8.23.1"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./schema/core": {
+      "types": "./src/schema/core.ts",
+      "default": "./dist/schema/core.js"
+    },
+    "./schema/collaboration": {
+      "types": "./src/schema/collaboration.ts",
+      "default": "./dist/schema/collaboration.js"
+    },
+    "./schema/integrations": {
+      "types": "./src/schema/integrations.ts",
+      "default": "./dist/schema/integrations.js"
+    },
+    "./client": {
+      "types": "./src/client.ts",
+      "default": "./dist/client.js"
+    },
+    "./repositories/projects": {
+      "types": "./src/repositories/projects.ts",
+      "default": "./dist/repositories/projects.js"
+    },
+    "./seeds/development": {
+      "types": "./seeds/development.ts",
+      "default": "./seeds/development.js"
+    },
+    "./package.json": "./package.json"
+  }
+}

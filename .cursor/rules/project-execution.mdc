@@ -1,0 +1,13 @@
+---
+description: Master-plan reading and one published GitHub branch per sprint
+alwaysApply: true
+---
+
+# Project execution
+
+Follow the root AGENTS.md and docs/agent-workflow.md.
+Read PLAN_IMPLEMENTACION_EDITOR_LATEX_COLABORATIVO.md completely before project work in a new session; retain English contracts and documented scope adaptations.
+For each new sprint, create and publish codex/sprint-XX-<topic> with origin upstream before implementation (for example codex/sprint-01-data-contracts).
+Derive XX and topic from the selected implementation/sprint-XX-topic directory; use lowercase hyphenated topics.
+Reuse feature/sprint-00 for the existing S00. Verify prerequisite evidence and branch base, preserve contributor changes, and never force-push or merge automatically.
+Record actual branch/base and passing evidence; unavailable GitHub access is an explicit blocker.

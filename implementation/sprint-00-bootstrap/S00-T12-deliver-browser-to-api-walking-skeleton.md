@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S00-T07]
 requirements: [PL-05, PL-04]
 source_task: S00-T04
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S00-T12 — Deliver browser to API walking skeleton
 
@@ -48,7 +48,7 @@ Each code slice starts with the specified failing assertion; documentation/resea
 
 | Step | Hours | Test / review first and work |
 |---|---|---|
-| 1.1 | 1 | Write and run failing contract/behavior assertions in tests/integration/s00-t12.test.ts for the exact acceptance criteria below; include Missing Docker/configuration or secret-bearing browser import fails visibly. |
+| 1.1 | 1 | Write and run failing contract/behavior assertions in tests/integration/s00-t12.test.tsx for the exact acceptance criteria below; include Missing Docker/configuration or secret-bearing browser import fails visibly. |
 | 1.2 | 2 | Start with a failing positive-input assertion; implement the producer/core slice in apps/web/src/features/health/health-panel.tsx using the named contract input/output. |
 | 1.3 | 2 | Start with a failing consumer/persistence assertion; complete the consumer or integration slice in tests/e2e/walking-skeleton.spec.ts and connect the real behavior. |
 | 1.4 | 1 | Run the task assertions and applicable shared quality gates; refactor under green checks and record actual effort, failures, feature status and documentation. |
@@ -57,19 +57,19 @@ Each code slice starts with the specified failing assertion; documentation/resea
 
 - `apps/web/src/features/health/health-panel.tsx`
 - `tests/e2e/walking-skeleton.spec.ts`
-- `tests/integration/s00-t12.test.ts`
-- `tests/regression/pl-05/s00-t12.test.ts`
-- `tests/regression/pl-04/s00-t12.test.ts`
+- `tests/integration/s00-t12.test.tsx`
+- `tests/integration/s00-t12.test.tsx`
+- `tests/integration/s00-t12.test.tsx`
 - `docs/test-reports/s00-t12.md`
 
 Update existing feature evidence and sprint progress entries for the IDs listed below. These are future implementation paths; no application code/test is created by this planning task file.
 
 ## Acceptance Criteria
 
-- [ ] Browser renders API readiness from a real running server, shows outage and passes CI smoke; no fake application functionality
-- [ ] PL-05: Walking skeleton and stabilized current-gate release with documented findings. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] PL-04: Explicit environment/configuration, health, staging deploy and release rollback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Browser renders API readiness from a real running server, shows outage and passes CI smoke; no fake application functionality
+- [x] PL-05: Walking skeleton and stabilized current-gate release with documented findings. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] PL-04: Explicit environment/configuration, health, staging deploy and release rollback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -77,7 +77,7 @@ The following commands are target runtime checks available after S00 setup. Expe
 
 ```text
 python scripts/plan_lint.py
-pnpm exec vitest run tests/integration/s00-t12.test.ts tests/regression/pl-05/s00-t12.test.ts tests/regression/pl-04/s00-t12.test.ts
+pnpm exec vitest run tests/integration/s00-t12.test.tsx tests/integration/s00-t12.test.tsx tests/integration/s00-t12.test.tsx
 pnpm lint
 pnpm typecheck
 pnpm build
@@ -95,9 +95,13 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.
+
+## Continuation evidence
+
+Implementation and local checks: [task report](../../docs/test-reports/s00-t12.md), [shared verification](../../docs/test-reports/s00-verification.md). Independent co-maintainer review accepted on 2026-10-10.
