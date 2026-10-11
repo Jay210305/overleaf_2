@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T03]
 requirements: [COL-03]
 source_task: S02-T04
-status: in_progress
-readiness: implementation-tested-review-pending
+status: done
+readiness: completed
 ---
 # S02-T04 — Implement session and project policy guards
 
@@ -100,4 +100,4 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 - [x] Runtime behavior is real, permission-checked and persistent when applicable.
 - [x] Report, progress, feature evidence and contract changes are updated; actual hours were not measured.
 - [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Independent co-maintainer review complete; accepted by the Project Co-owner on 2026-10-11 in this conversation.

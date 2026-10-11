@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions and password recovery, plus an S02-T04 project guard awaiting review. User-facing project and collaboration routes remain unimplemented.
+Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions, password recovery and the S02-T04 project guard. User-facing project and collaboration routes remain unimplemented.
 
 ## Why this shape
 
