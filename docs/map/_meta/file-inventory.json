@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "b350cbcd4fb7118871df53cd7524498a10bfb9c2",
+  "git_baseline": "a202b918ca1d644779fb72246bb75870d6e21f1b",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -323,7 +323,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "4b77fec8edcac80aa57bfc41dd7e09db1d95140da87c715719d825141f9db91d"
+      "sha256": "ed5faf54bdd838ef90ac3524a7c08d1d3910703a3dc3a96552bf678444bfe644"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -423,7 +423,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "9e4c9cec65d295df4f1f4c36834a9ef4a073ff168edb89c2a21519c264ade163"
+      "sha256": "e0c7073e7c8885651cdfa50f5d9ac2c1e5b988f75739fa69fac91d0e19fed527"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -478,7 +478,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "78ffc934b51fd8ccb7c6bd5b303e44f1f1c44338291cddd4462e32edae246fe3"
+      "sha256": "e0714596365129e45ec646121d42ef15b8b32b148f238e9065e0839b9e9734f5"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -568,7 +568,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "01c30af4210e80b00dc7ecc580cb2e464c06b8d8facd180a71818a6f6a4a37a7"
+      "sha256": "ebb0cab6871d3858799015c65c142037b306f425ecf0ac4202e25a967df93f14"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -588,7 +588,7 @@
     {
       "path": "docs/progress/sprint-02.md",
       "role": "product",
-      "sha256": "d72aaf6dec63b96e4115848d6bd81564a511e653753f103561ff97e1ca8610d5"
+      "sha256": "89f6ce127c15d15e0ae755f65df0144e42df2831913fd9a6223ab4cf725223f9"
     },
     {
       "path": "docs/progress/sprint-03.md",
@@ -793,7 +793,7 @@
     {
       "path": "docs/test-reports/s02-t02.md",
       "role": "factory",
-      "sha256": "4ef30a18e26b5a741af6067f8b89a2f81a3ba3eacf94e0d303debe93b8a9a375"
+      "sha256": "1a6f10151e72cab15aeff62909c6e7d942fdb3f9fa19ea88207d7d7080bc2ca5"
     },
     {
       "path": "eslint.config.js",
@@ -808,7 +808,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "bc390885c5f44951770369683bae51daeec22e15f9a5635a4b30b6e1496376e9"
+      "sha256": "f877365ff8ccdb3e1b38c1f5378e1d65bdcca25d19b0d29ca19ddbc50cd17614"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -943,7 +943,7 @@
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T02-implement-cookie-sessions-and-logout.md",
       "role": "contract",
-      "sha256": "897ab65843f1fb4f2c91f5f8d439ad8253201564676fc1dbd179ace12aa8e42d"
+      "sha256": "8a70aaf07181da0bfc63a9894753a6d3502b0a452d4e0be23623d50881c55f65"
     },
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T03-implement-password-recovery.md",

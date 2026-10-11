@@ -4,8 +4,8 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 
 | ID | Gate | Priority | Status | Evidence |
 |---|---|---|---|---|
-| ACC-01 | G1 | Must | IN_PROGRESS | [S02-T01 registration and verification accepted](test-reports/s02-t01.md); [S02-T02 login/logout evidence](test-reports/s02-t02.md) awaits review; recovery remains |
-| ACC-02 | G1 | Must | IN_PROGRESS | [S02-T02 opaque session, CSRF, expiry and revocation evidence](test-reports/s02-t02.md) awaits review; session inventory remains S02-T07 |
+| ACC-01 | G1 | Must | IN_PROGRESS | [S02-T01 registration and verification accepted](test-reports/s02-t01.md); [S02-T02 login/logout accepted](test-reports/s02-t02.md); recovery remains |
+| ACC-02 | G1 | Must | IN_PROGRESS | [S02-T02 opaque session, CSRF, expiry and revocation accepted](test-reports/s02-t02.md); session inventory remains S02-T07 |
 | ACC-03 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-04 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-05 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -55,7 +55,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | CMP-12 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-01 | G2 | Must | IN_PROGRESS | [S00-T11 compatibility research](test-reports/s00-t11.md#acceptance-review); [remaining tasks](planning/traceability.md) |
 | COL-02 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| COL-03 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t06.md) (accepted 2026-10-10); [S02-T02 identity boundary](test-reports/s02-t02.md) awaits review; project-role guards remain S02-T04 |
+| COL-03 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t06.md) (accepted 2026-10-10); [S02-T02 identity boundary accepted](test-reports/s02-t02.md); project-role guards remain S02-T04 |
 | COL-04 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-05 | G2 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-06 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |

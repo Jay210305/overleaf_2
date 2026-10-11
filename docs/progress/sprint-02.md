@@ -7,7 +7,7 @@
 | ID | Status | Actual hours | Evidence |
 |---|---|---|---|
 | [S02-T01](../../implementation/sprint-02-identity-permissions/S02-T01-implement-registration-and-verification.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t01.md); independent co-maintainer accepted 2026-10-11 |
-| [S02-T02](../../implementation/sprint-02-identity-permissions/S02-T02-implement-cookie-sessions-and-logout.md) | IN_PROGRESS | Not measured | [Scoped report](../test-reports/s02-t02.md); independent review pending |
+| [S02-T02](../../implementation/sprint-02-identity-permissions/S02-T02-implement-cookie-sessions-and-logout.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t02.md); independent co-maintainer accepted 2026-10-11 |
 | [S02-T03](../../implementation/sprint-02-identity-permissions/S02-T03-implement-password-recovery.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S02-T04](../../implementation/sprint-02-identity-permissions/S02-T04-implement-session-and-project-policy-guards.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S02-T05](../../implementation/sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md) | NOT_STARTED | Not recorded | No implementation evidence |
@@ -35,4 +35,4 @@ Track actual findings in Open Gaps and Technical Debt, referencing the task.
 
 ## Next Task
 
-S02-T02 independent co-maintainer review, then S02-T03 password recovery.
+S02-T03 password recovery.
