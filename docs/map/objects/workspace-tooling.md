@@ -4,9 +4,9 @@ cluster: tooling
 universe: live
 status: verified
 entity: package.json
-sources: ["package.json", "pnpm-workspace.yaml", "pnpm-lock.yaml", "turbo.json", "tsconfig.json", "tsconfig.build.json", "scripts/check-workspace.ts", "packages/db/package.json", "packages/storage/package.json", "packages/test-utils/package.json", "docs/progress/sprint-01.md"]
+sources: [".gitattributes", "package.json", "pnpm-workspace.yaml", "pnpm-lock.yaml", "turbo.json", "tsconfig.json", "tsconfig.build.json", "scripts/check-workspace.ts", "packages/db/package.json", "packages/storage/package.json", "packages/test-utils/package.json", "docs/progress/sprint-01.md", "docs/test-reports/s02-t01.md"]
 runtime: implemented
-verified_on: 2026-10-10
+verified_on: 2026-10-11
 snapshot: _meta/file-inventory.json
 ---
 
@@ -22,7 +22,7 @@ Pinned versions, local-only workspace links and a frozen lockfile make the boots
 
 ## Shape
 
-`pnpm-workspace.yaml` discovers `apps/*` and `packages/*` and permits Argon2's reviewed native build hook. The lockfile includes root, two apps and five shared packages. `pnpm build` compiles packages, Fastify API, browser assets and the workspace validator. Root scripts cover formatting, ESLint/boundaries, strict types, tests, real services and browser checks; consult CI for its exact matrix. The full S02-T01 test suite passes; repository-wide formatting remains red on 94 previously unformatted files (GAP-13).
+`pnpm-workspace.yaml` discovers `apps/*` and `packages/*` and permits Argon2's reviewed native build hook. The lockfile includes root, two apps and five shared packages. `pnpm build` compiles packages, Fastify API, browser assets and the workspace validator. Root scripts cover formatting, ESLint/boundaries, strict types, tests, real services and browser checks; consult CI for its exact matrix. `.gitattributes` forces LF checkout for text files so the pinned Prettier gate passes on Windows. The full S02-T01 test suite passes; GAP-13 is closed.
 
 ## Connected to
 

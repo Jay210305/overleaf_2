@@ -4,7 +4,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 
 | ID | Gate | Priority | Status | Evidence |
 |---|---|---|---|---|
-| ACC-01 | G1 | Must | IN_PROGRESS | [S02-T01 registration and verification evidence](test-reports/s02-t01.md); login/logout and recovery tasks remain |
+| ACC-01 | G1 | Must | IN_PROGRESS | [S02-T01 registration and verification accepted](test-reports/s02-t01.md); login/logout and recovery tasks remain |
 | ACC-02 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-03 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-04 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |

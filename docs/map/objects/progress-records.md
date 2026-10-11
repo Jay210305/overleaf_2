@@ -6,7 +6,7 @@ status: verified
 entity: docs/progress/progress-log.md
 sources: ["docs/progress/progress-log.md", "docs/progress/open-gaps.md", "docs/progress/technical-debt.md", "docs/progress/sprint-00.md", "docs/progress/sprint-01.md", "docs/progress/sprint-02.md", "docs/test-reports/s00-verification.md", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/feature-parity.md"]
 runtime: not-applicable
-verified_on: 2026-10-10
+verified_on: 2026-10-11
 snapshot: _meta/file-inventory.json
 ---
 
@@ -22,7 +22,7 @@ Plans and estimates must remain distinguishable from actual actions and measured
 
 ## Shape
 
-A global log, per-stage task matrices, gap/debt files, feature-parity evidence and scoped reports. S00 is closed; S01 records ten accepted tasks; S02-T01 has implementation evidence and awaits independent review. Feature rows remain incomplete because login, recovery and later user-facing work are still required. Missing credentials and research choices are tracked as gaps.
+A global log, per-stage task matrices, gap/debt files, feature-parity evidence and scoped reports. S00 is closed; S01 records ten accepted tasks; S02-T01 was accepted by the independent co-maintainer on 2026-10-11. Feature rows remain incomplete because login, recovery and later user-facing work are still required. Missing credentials and research choices are tracked as gaps.
 
 ## Connected to
 

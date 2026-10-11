@@ -3,7 +3,7 @@
   "info": {
     "title": "LatexWorkspace Planned API",
     "version": "1.0.0",
-    "description": "Planning baseline only. No route is implemented or tested by this artifact. Draft examples use reserved example.test data."
+    "description": "Planning baseline with S02-T01 interim G1 route annotations. This artifact alone is not runtime evidence; see task reports and x-status. Draft examples use reserved example.test data."
   },
   "servers": [
     {
@@ -15,9 +15,13 @@
       "post": {
         "operationId": "post__auth_register",
         "summary": "POST /auth/register",
-        "description": "Permission: public. Public operation with token/rate/origin policy as applicable. Unknown input fields are rejected. All errors use Problem.",
+        "description": "G1 live slice: trusted email registration requires an operator-issued one-use X-Registration-Invite, exact Origin and custom X-CSRF-Token. Unknown-user public signup stays disabled until G5 approval. Unknown input fields are rejected. All errors use Problem; 429 is planned in S02-T06.",
         "security": [],
-        "parameters": [],
+        "parameters": [
+          { "name": "Origin", "in": "header", "required": true, "schema": { "type": "string", "format": "uri" }, "example": "https://app.example.test" },
+          { "name": "X-CSRF-Token", "in": "header", "required": true, "schema": { "type": "string", "minLength": 8 }, "example": "browser-mutation-marker" },
+          { "name": "X-Registration-Invite", "in": "header", "required": true, "schema": { "type": "string", "minLength": 32 }, "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" }
+        ],
         "responses": {
           "202": {
             "description": "Successful 202",
@@ -67,7 +71,7 @@
           }
         },
         "x-permission": "public",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -262,9 +266,12 @@
       "post": {
         "operationId": "post__auth_verify_email",
         "summary": "POST /auth/verify-email",
-        "description": "Permission: public. Public operation with token/rate/origin policy as applicable. Unknown input fields are rejected. All errors use Problem.",
+        "description": "G1 live slice: one-use email token verification requires exact Origin and custom X-CSRF-Token. Unknown input fields are rejected. All errors use Problem; 429 is planned in S02-T06.",
         "security": [],
-        "parameters": [],
+        "parameters": [
+          { "name": "Origin", "in": "header", "required": true, "schema": { "type": "string", "format": "uri" }, "example": "https://app.example.test" },
+          { "name": "X-CSRF-Token", "in": "header", "required": true, "schema": { "type": "string", "minLength": 8 }, "example": "browser-mutation-marker" }
+        ],
         "responses": {
           "200": {
             "description": "Successful 200",
@@ -314,7 +321,7 @@
           }
         },
         "x-permission": "public",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {

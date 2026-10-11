@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S01-T10]
 requirements: [ACC-01]
 source_task: S02-T01
-status: in_progress
-readiness: implementation-tested-review-pending
+status: done
+readiness: completed
 ---
 # S02-T01 — Implement registration and verification
 
@@ -67,7 +67,7 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [x] Normalized unique email plus Argon2id hash persist; verification expires and can be consumed once — local PostgreSQL and Mailpit evidence in [S02-T01 report](../../docs/test-reports/s02-t01.md); independent review pending.
+- [x] Normalized unique email plus Argon2id hash persist; verification expires and can be consumed once — local PostgreSQL and Mailpit evidence in [S02-T01 report](../../docs/test-reports/s02-t01.md); independent co-maintainer accepted on 2026-10-11.
 - [ ] ACC-01: Email registration, verification, login/logout and single-use password recovery tokens. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
 - [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim. See scoped integration and regression report; 429 is assigned to S02-T06.
 
@@ -95,9 +95,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.
