@@ -1,6 +1,6 @@
 # S02 — Identity and permissions
 
-**Status:** IN_PROGRESS | **Owner:** Julio (proposed A-02) | **Estimate:** 78 h (A-03)
+**Status:** DONE (11/11 tasks accepted) | **Owner:** Julio (proposed A-02) | **Estimate:** 78 h (A-03)
 
 ## Task Matrix
 
@@ -16,7 +16,7 @@
 | [S02-T07](../../implementation/sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t07.md); independent co-maintainer accepted 2026-10-12 |
 | [S02-T10](../../implementation/sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t10.md); independent co-maintainer accepted 2026-10-12 |
 | [S02-T11](../../implementation/sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t11.md); independent co-maintainer accepted 2026-10-12 |
-| [S02-T08](../../implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | IN_PROGRESS; review pending | Not measured | [Scoped report](../test-reports/s02-t08.md); local security verification passes, independent review pending |
+| [S02-T08](../../implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t08.md); independent co-maintainer accepted 2026-10-12 |
 
 ## Decisions and Migrations
 
@@ -35,12 +35,12 @@
 
 ## Validation
 
-S02-T01 through S02-T07 and S02-T09 through S02-T11 are accepted. S02-T08 local commands and limits are in its [scoped report](../test-reports/s02-t08.md); independent review is pending. Full sprint and gate acceptance remain open.
+All 11 S02 tasks have scoped local evidence and independent co-maintainer acceptance. The final S02-T08 run passed 72 test files / 219 tests, strict typecheck, lint, formatting, local-services integration, build, secret/dependency and artifact scripts. Edge authentication/profile flows passed 3/3 with temporary local Mailpit settings; the first browser run returned 503 because the local `.env` did not configure SMTP. Planning and ICM checks passed. Exact commands, failures and limits are in the [S02-T08 report](../test-reports/s02-t08.md) and earlier scoped reports. The available GitHub combined-status query returned no statuses and the PR-run query returned no PR runs; push CI was not confirmed, so remote CI is **NOT_VERIFIED**. G1 release acceptance is still open.
 
 ## Risks and Debt
 
-Track actual findings in Open Gaps and Technical Debt, referencing the task.
+Open [GAP-12](open-gaps.md) covers OpenAPI generation/DTO parity; [GAP-14](open-gaps.md) covers recovery response timing. [DT-03](technical-debt.md) covers reconciliation if both avatar metadata commit and rollback deletion fail. Per-IP rate thresholds need release tuning. Hosted deployment, migration rollout and broader G1 product gates were not exercised by this sprint.
 
-## Next Task
+## Next Sprint
 
-Obtain independent S02-T08 review, then assess sprint completion and remaining G1 gate work.
+[S03 — Projects and files](../../implementation/sprint-03-projects-files/CONTEXT.md) begins with [S03-T01 project CRUD and pagination](../../implementation/sprint-03-projects-files/S03-T01-implement-project-crud-and-pagination.md). Its branch and prerequisite checks belong to the next sprint's start.

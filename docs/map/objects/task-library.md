@@ -22,7 +22,7 @@ A selected task should carry enough local context to execute without reading the
 
 ## Shape
 
-S00–S15 directories contain Sxx-Tyy task files. ID, status, effort, dependencies and requirement IDs are frontmatter. CONTEXT.md files route each stage and are not tasks. S02-T08 is the current security-verification slice and awaits independent review.
+S00–S15 directories contain Sxx-Tyy task files. ID, status, effort, dependencies and requirement IDs are frontmatter. CONTEXT.md files route each stage and are not tasks. All 11 S02 task slices have independent acceptance; the G1 release gate remains separate.
 
 ## Connected to
 

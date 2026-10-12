@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions, password recovery and the S02-T04 project guard. S02-T06 adds accepted Redis authentication limits and redacted logs. S02-T09 adds accepted transaction-scoped audit events. S02-T07 adds accepted current-user profile/preferences and session inventory/revocation routes. S02-T10 adds accepted authenticated password change. S02-T11 adds accepted private current-user avatar routes and replacement cleanup. S02-T08 tests current REST tenancy, revocation, suspension and CSRF behavior; independent review is pending. User-facing project and collaboration routes remain unimplemented.
+Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions, password recovery and the S02-T04 project guard. S02-T06 adds accepted Redis authentication limits and redacted logs. S02-T09 adds accepted transaction-scoped audit events. S02-T07 adds accepted current-user profile/preferences and session inventory/revocation routes. S02-T10 adds accepted authenticated password change. S02-T11 adds accepted private current-user avatar routes and replacement cleanup. S02-T08 accepted tests verify current REST tenancy, revocation, suspension and CSRF behavior. User-facing project and collaboration routes remain unimplemented.
 
 ## Why this shape
 

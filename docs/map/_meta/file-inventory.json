@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "93cca801c23f5015390908f584ff921533f667f6",
+  "git_baseline": "1a846a4316eaf00a42adc74a77df31043c9ac9d8",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -373,7 +373,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "c77d8dc198b2fbe3699173415903ccbe10edb49147b2a5934ae63b7a0bd5a42a"
+      "sha256": "32879676d2ade5c3c5c3b5cdfd354ccd773dd9a643e8d988b893e203c38f0da6"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -428,7 +428,7 @@
     {
       "path": "docs/map/objects/api-and-durable-data.md",
       "role": "factory",
-      "sha256": "de2bfe878b3973075b0777f6bfdb3206a77e688a04206b894f2f14aeba39079f"
+      "sha256": "3455fc8b5332d78f664f7ec12fc8e1f7bce6a3a57414ac530971b35e74a4f45b"
     },
     {
       "path": "docs/map/objects/browser-and-editing.md",
@@ -473,7 +473,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "9fbcb446cb334afaa133d6f002af94f5aa7941f243cb488dd04b49416f9a92d7"
+      "sha256": "0da017a1dbdc5879c5ef7bbd6c4d35a7cb53eb558c3d06fb020d9157114e2c1c"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -483,7 +483,7 @@
     {
       "path": "docs/map/objects/task-library.md",
       "role": "factory",
-      "sha256": "21001941b1d7d2293fed9b01f3e790904b81db6877c6328e41e3d8268ff939f4"
+      "sha256": "be9ac37de5e73f634c096d1f30c26da944daea7ba32b562b38bfb1369ac82b7e"
     },
     {
       "path": "docs/map/objects/workspace-tooling.md",
@@ -528,7 +528,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "594d95f895781c67369dad69235e302ff6b6549e6c60b562c7d27622bc88633d"
+      "sha256": "3c3a7f0a6e15fa5ea9c026da9a1265f61cbb165d3908764b38d497bc56cb0041"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -618,7 +618,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "534c5e47f95cc6eee85f71ec5cca360a74b509b0a7468551113b68db3778fad1"
+      "sha256": "a457ae5950ca4351dc0eb8dd30f9acecf4a7ab1d294ba102906587d9d3b904f7"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -638,7 +638,7 @@
     {
       "path": "docs/progress/sprint-02.md",
       "role": "product",
-      "sha256": "f71fda89c75222eab48f78c1dcffa411e68a79b26aa7493de2caf2a9d82c7e7f"
+      "sha256": "7df5826764dcd629b446d75c260a89c668bd0fa089db99382bd818477c6cd9e9"
     },
     {
       "path": "docs/progress/sprint-03.md",
@@ -873,7 +873,7 @@
     {
       "path": "docs/test-reports/s02-t08.md",
       "role": "factory",
-      "sha256": "29fbdf039804ebe656caf0be932f20972f569cb47ec5c39ecbcd92d3f714de70"
+      "sha256": "ce9497ca635e2761da7cc3c4b71ff31d9afce04c2b79abfdeb378eff3eccd032"
     },
     {
       "path": "docs/test-reports/s02-t09.md",
@@ -903,7 +903,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "528b6765a5e445f5196e2f458fb76a94945ac6ffb1c1556985658ec09e99805d"
+      "sha256": "7d111f650f2268d187cf592f4d276136382416bf15874b0aab0618d7643fd9d2"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -1068,7 +1068,7 @@
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md",
       "role": "contract",
-      "sha256": "7ffa80655e334261151c3081c399446eb0906f1be9eeab0ebc9bf5f2fda9c976"
+      "sha256": "ab924f8fac12ff3407a036e70455d62091ab782d6b1a87522ac7e424413a3ec0"
     },
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md",

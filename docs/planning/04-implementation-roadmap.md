@@ -171,7 +171,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 | [S02-T07](../../implementation/sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | Implement profile preferences and session management | 8 | Julio | ✅ done | Profile/preferences persist, sessions can be listed/revoked and user-specific locale/timezone/theme survive reload |
 | [S02-T10](../../implementation/sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | Implement authenticated password change | 6 | Julio | ✅ done | Verify current password and CSRF, replace Argon2id hash, invalidate other sessions and reject incorrect password without changes |
 | [S02-T11](../../implementation/sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | Implement private avatar upload lifecycle | 6 | Julio | ✅ done | Validated bounded avatar is scoped to user, profile displays it, replacement schedules old private blob cleanup and foreign modification fails |
-| [S02-T08](../../implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | Verify tenancy revocation suspension and CSRF | 6 | Julio | 🔄 in_progress | 401/403, disabled user, revoked cookie, forged CSRF and another-project IDs are rejected without private output |
+| [S02-T08](../../implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | Verify tenancy revocation suspension and CSRF | 6 | Julio | ✅ done | 401/403, disabled user, revoked cookie, forged CSRF and another-project IDs are rejected without private output |
 
 ### DoD
 
