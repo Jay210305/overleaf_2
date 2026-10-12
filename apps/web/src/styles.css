@@ -66,6 +66,51 @@ section {
   padding: 24px 0;
   border-top: 1px solid #b7c9bf;
 }
+.auth-card {
+  width: min(560px, 100%);
+  margin: 0 auto;
+  padding: 0 0 36px;
+}
+.auth-card form {
+  display: grid;
+  gap: 18px;
+  margin-top: 28px;
+}
+.auth-card label {
+  display: grid;
+  gap: 7px;
+  font-weight: 600;
+}
+.auth-card input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #6c887b;
+  border-radius: 6px;
+  background: #fff;
+  color: #182622;
+  font: inherit;
+}
+.auth-card form button {
+  justify-self: start;
+  margin-top: 6px;
+}
+.form-message {
+  padding: 12px 16px;
+  border-left: 4px solid #28725b;
+  background: #eaf4ee;
+  color: #182622;
+}
+.form-message.error {
+  border-left-color: #9c2539;
+  background: #fff0f1;
+}
+.auth-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 28px;
+}
 footer {
   padding: 24px 6vw;
   border-top: 1px solid #b7c9bf;
@@ -84,6 +129,11 @@ footer {
 }
 .dark :focus-visible {
   outline-color: #9bdac2;
+}
+.dark .auth-card input {
+  background: #203a30;
+  border-color: #a4bcaf;
+  color: #f3f7f4;
 }
 .skip {
   position: absolute;

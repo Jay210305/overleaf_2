@@ -1,8 +1,19 @@
 import { useState, lazy, Suspense } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import type { AuthMode } from "../features/auth/auth-forms";
 const HealthPanel = lazy(() =>
   import("../features/health/health-panel").then((module) => ({ default: module.HealthPanel })),
 );
+const AuthForms = lazy(() =>
+  import("../features/auth/auth-forms").then((module) => ({ default: module.AuthForms })),
+);
+function AuthRoute({ mode }: { mode: AuthMode }) {
+  return (
+    <Suspense fallback={<p role="status">Loading account form…</p>}>
+      <AuthForms mode={mode} />
+    </Suspense>
+  );
+}
 function Shell() {
   const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
   return (
@@ -15,6 +26,7 @@ function Shell() {
         <nav aria-label="Main">
           <Link to="/projects">Projects</Link>
           <Link to="/settings">Settings</Link>
+          <Link to="/login">Sign in</Link>
         </nav>
         <button
           aria-pressed={dark}
@@ -64,6 +76,11 @@ function Shell() {
               </>
             }
           />
+          <Route path="/register" element={<AuthRoute mode="register" />} />
+          <Route path="/verify-email" element={<AuthRoute mode="verify" />} />
+          <Route path="/login" element={<AuthRoute mode="login" />} />
+          <Route path="/forgot-password" element={<AuthRoute mode="forgot" />} />
+          <Route path="/reset-password" element={<AuthRoute mode="reset" />} />
           <Route
             path="*"
             element={
@@ -75,7 +92,7 @@ function Shell() {
           />
         </Routes>
       </main>
-      <footer>Local development · S00 bootstrap</footer>
+      <footer>Local development · trusted accounts only</footer>
     </div>
   );
 }

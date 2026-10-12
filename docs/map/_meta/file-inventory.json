@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "046078f528a40fb0ac91887ee1a37c717f4e6438",
+  "git_baseline": "471292dda516dc3862116c207aa0b44b0a15d0e6",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -183,7 +183,12 @@
     {
       "path": "apps/web/src/app/router.tsx",
       "role": "factory",
-      "sha256": "de49788dbab31b784e53d4b820ed6adeac22e535ea8828210bef5be02604fdef"
+      "sha256": "7daa600b0dee5f21ebdc7a59ab1d46e8ff9eb6c0da95ecf9df97621bd1d74d7e"
+    },
+    {
+      "path": "apps/web/src/features/auth/auth-forms.tsx",
+      "role": "factory",
+      "sha256": "f2eea736a657f50a102ddf8cdd932e3d9fb07812c6196b029fe5883562408074"
     },
     {
       "path": "apps/web/src/features/health/health-panel.tsx",
@@ -198,7 +203,7 @@
     {
       "path": "apps/web/src/styles.css",
       "role": "factory",
-      "sha256": "1fee13bbcc5087c67a7078b8b79be328406cda97a0b9302317534b90a652d442"
+      "sha256": "c2b99ada52aa3f1486cb81a22ad8ab55eda0347d2a498e8994fb9627b1e34324"
     },
     {
       "path": "apps/web/src/vite-env.d.ts",
@@ -333,7 +338,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "510054119f6d7bfad416ecc1a7dc7c11afff3e450d0c3df1bda14ec07a78340c"
+      "sha256": "3db6cd82aca7bb69743cd3e12f05647c2a4e62b73eabaf82603c76a8f61559cd"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -393,7 +398,7 @@
     {
       "path": "docs/map/objects/browser-and-editing.md",
       "role": "factory",
-      "sha256": "c993734c8cf55b112ab800d6a8ef9d61a2c86d97794d84564a6ad72d2f1726a0"
+      "sha256": "982388ebef8146d1764326b586c3e340384076d63dd2e06bdf3c91118827c169"
     },
     {
       "path": "docs/map/objects/compilation-and-artifacts.md",
@@ -433,7 +438,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "fa78ebd21a7822610011f41feda4d7c19019c6fbe21205b9aa473302de713988"
+      "sha256": "2b295bf61e31cc415bf6c495de44ce10cef1a8924e2b80692ac1cce887bdd27c"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -488,7 +493,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "82a13e622b59583885b55ea0c8cc2a3370f1815f986a57841d7730d0aa4905a9"
+      "sha256": "bf26fd8ded4773e7ba97e409f1956041f9ee713883a4b02f884968248d32f63b"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -578,7 +583,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "ac4e47a9a41797578f755b94dd0ef7ca50cf95a1090d3c408a7c75b32da8ec4b"
+      "sha256": "130de4d8c08658fe5afd385370806a1d1aa5804113efb109edfe9da4af53406f"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -598,7 +603,7 @@
     {
       "path": "docs/progress/sprint-02.md",
       "role": "product",
-      "sha256": "c1e2640204d96e1c0c411811274b3223844b38d27e557be92e58e0986e03b5ac"
+      "sha256": "3d36b3f99692184a817b005ae54a3d27c1d8db218bc9b959d40eb2ef1a8fd2c8"
     },
     {
       "path": "docs/progress/sprint-03.md",
@@ -816,6 +821,11 @@
       "sha256": "e6e01084f789492d0f360faf253f71f02d6163fd2881ce38cecc207a510b7950"
     },
     {
+      "path": "docs/test-reports/s02-t05.md",
+      "role": "factory",
+      "sha256": "c55b6d4ae9ff2db2af9ccb45cb8cdd301ccfebd9ef245ed2d37f253e9c650df3"
+    },
+    {
       "path": "eslint.config.js",
       "role": "factory",
       "sha256": "f259d21a7ef0efe32df87f94ef650f1df2a7226c91cdf3220f3b5c681193a5a0"
@@ -828,7 +838,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "8c6ea0d6c751275da2fe2f3c374de13576fae2664afb95b1de2376c112e10d90"
+      "sha256": "0a6dd2fe0045386a04845422cb609a1be6297d251d53d495bc2f0963bf8347bf"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -978,7 +988,7 @@
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md",
       "role": "contract",
-      "sha256": "e8a5c719e1f4db9df5df1eff09572c036b3844fdcdce671c15d62763a9717d34"
+      "sha256": "b1871cdc3e637739b62a5ee0548c698dc4f35f69846ed63f9dd746372bef6e80"
     },
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md",
@@ -2086,6 +2096,11 @@
       "sha256": "36b4c2a9fd671260e37c6865be79f79dcf1e45b2ad34028caf887b09ee8016f8"
     },
     {
+      "path": "tests/e2e/auth-forms.spec.ts",
+      "role": "factory",
+      "sha256": "4721220d2bbaace60bf08c5d8baef73c26810dcb5112fda6d06749e4fa471cbc"
+    },
+    {
       "path": "tests/e2e/recovery.spec.ts",
       "role": "factory",
       "sha256": "202c2ddb73970b06870e984fd8a47a261b616b7edc4145bfa25255c634f1e56b"
@@ -2211,6 +2226,11 @@
       "sha256": "e876b31e4e480145f13cecccabb376efe0d646ff7c7c4fe7d89c9e5dc9b2e61c"
     },
     {
+      "path": "tests/integration/s02-t05.test.ts",
+      "role": "factory",
+      "sha256": "cb17ac849ce0ea65997294b02b802a93a356e931374d6351f735d7e9c31a4484"
+    },
+    {
       "path": "tests/regression/acc-01/s02-t01.test.ts",
       "role": "factory",
       "sha256": "913c39e79306fd107a28ac11544484ba21e517d2b8c971d5c0b901dc9440cf4b"
@@ -2224,6 +2244,11 @@
       "path": "tests/regression/acc-01/s02-t03.test.ts",
       "role": "factory",
       "sha256": "7b239d2a115578661d3891fec891cd7bf67c944cc2fa56619bd6072c30c197cb"
+    },
+    {
+      "path": "tests/regression/acc-01/s02-t05.test.ts",
+      "role": "factory",
+      "sha256": "0b4f4050b506c946846c25a5bd57dbccf892974368db27cfd3f7d2b5a7aed93a"
     },
     {
       "path": "tests/regression/acc-02/s02-t02.test.ts",
@@ -2249,6 +2274,11 @@
       "path": "tests/regression/col-03/s02-t04.test.ts",
       "role": "factory",
       "sha256": "960a07abb238e842e5baaa38f0d1abd5fa32d8eeb687e3b36c4f3eaf935ddb06"
+    },
+    {
+      "path": "tests/regression/nfr-08/s02-t05.test.ts",
+      "role": "factory",
+      "sha256": "4e29a438f26228eb16c9be66784cc91ccc1e4ec5d9b68509d2542932cba559b9"
     },
     {
       "path": "tests/regression/nfr-10/s00-t05.test.ts",

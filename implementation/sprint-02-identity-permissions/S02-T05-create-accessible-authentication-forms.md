@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T04]
 requirements: [ACC-01, NFR-08]
 source_task: S02-T05
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: review-pending
 ---
 # S02-T05 — Create accessible authentication forms
 
@@ -67,10 +67,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Register/login/verify/forgot/reset work through real API with network and 429 states, labels and keyboard focus
-- [ ] ACC-01: Email registration, verification, login/logout and single-use password recovery tokens. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] NFR-08: WCAG 2.2 AA target: axe checks plus manual keyboard review for delivered scope. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Register/login/verify/forgot/reset work through real API with network and 429 states, labels and keyboard focus; see the [scoped report](../../docs/test-reports/s02-t05.md).
+- [x] ACC-01: This task's browser registration, verification, login/logout and recovery assertions pass; feature-wide G1 completion remains open.
+- [ ] NFR-08: Edge axe and automated keyboard checks pass; independent human keyboard review remains for the co-maintainer.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; the browser flow uses the actual API, PostgreSQL and Mailpit.
 
 ## Verification
 
@@ -96,9 +96,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence in the [report](../../docs/test-reports/s02-t05.md), except human keyboard review pending below.
+- [x] Dependencies/contracts and applicable shared quality gates pass on the available Edge browser and local services.
+- [x] Runtime behavior uses the real API and persisted session/account state.
+- [x] Report, progress and feature evidence are updated; actual hours were not measured. No contract or ADR change was needed.
+- [x] No secret/private source in artifacts or logs; browser availability limits are recorded in the report.
 - [ ] Independent co-maintainer review complete; status updated to done only after evidence.

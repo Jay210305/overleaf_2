@@ -35,7 +35,7 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S02-T02 | [Implement cookie sessions and logout](sprint-02-identity-permissions/S02-T02-implement-cookie-sessions-and-logout.md) | Julio (proposed) | 8 | done |
 | S02-T03 | [Implement password recovery](sprint-02-identity-permissions/S02-T03-implement-password-recovery.md) | Julio (proposed) | 8 | done |
 | S02-T04 | [Implement session and project policy guards](sprint-02-identity-permissions/S02-T04-implement-session-and-project-policy-guards.md) | Julio (proposed) | 8 | done |
-| S02-T05 | [Create accessible authentication forms](sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md) | Julio (proposed) | 8 | todo |
+| S02-T05 | [Create accessible authentication forms](sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md) | Julio (proposed) | 8 | in_progress |
 | S02-T06 | [Add authentication rate limits and redaction](sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md) | Julio (proposed) | 6 | todo |
 | S02-T09 | [Create redacted audit event writer](sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | Julio (proposed) | 6 | todo |
 | S02-T07 | [Implement profile preferences and session management](sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | Julio (proposed) | 8 | todo |
