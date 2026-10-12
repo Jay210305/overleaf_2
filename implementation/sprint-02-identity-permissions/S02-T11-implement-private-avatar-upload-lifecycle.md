@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T10]
 requirements: [ACC-03, PL-07]
 source_task: S02-T07
-status: in_progress
-readiness: review-pending
+status: done
+readiness: accepted
 ---
 # S02-T11 — Implement private avatar upload lifecycle
 
@@ -101,4 +101,4 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 - [x] Runtime behavior is real, permission-checked and persistent when applicable.
 - [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
 - [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

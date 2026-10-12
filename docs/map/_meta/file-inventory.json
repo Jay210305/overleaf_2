@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "c858eb66fb5fdcf923af8dd1f59715a15aff1316",
+  "git_baseline": "ad4f4bc47c0f8207b80c77a189f1c6b16b3da8eb",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -373,7 +373,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "6cef1004aa8d72b4e0a4b19abb3a91d114ef5a94117f6bf9af4875a1a9adb901"
+      "sha256": "2eca8e23fd9e12537c5508f4282350c59c3e8426b106206a86430a6b54e7f40f"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -428,7 +428,7 @@
     {
       "path": "docs/map/objects/api-and-durable-data.md",
       "role": "factory",
-      "sha256": "3940c2bd6d8f6ba59d2837303046c289991d6614c19e225c13c90180d6143174"
+      "sha256": "fbe861585d9109505f44eabb4c8592171bbc7b813ddd2f151ac9e0186192b49f"
     },
     {
       "path": "docs/map/objects/browser-and-editing.md",
@@ -473,7 +473,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "1976f46599f21ef7a629985af28a3ba078536815c8364d7825ef0e1c3957b4e4"
+      "sha256": "ec40d7b8704a4c9876c61a9b0d0c105b6d6b87dda41f537e236813a176449c96"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -528,7 +528,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "13faa9ae5f521bafe8d16443dd64d0bc217cfc348bc8550bc674bc5027e22a7d"
+      "sha256": "2a590879506df93a38651ad3914695b54a89f6c5e44ad9ffdb104081f54fd8d8"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -618,7 +618,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "74d80727eb2787cd51ef1d7563410ba8bb9263391cc7e39b72580d802f25de4b"
+      "sha256": "6063a737c2a06cc2542735a3aba4c4e5067506eba415f4e4c8311defb3ba85c6"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -638,7 +638,7 @@
     {
       "path": "docs/progress/sprint-02.md",
       "role": "product",
-      "sha256": "cafd1dc1d23457135f88f8a1d893569b62406d5a749ec15ccbaf00fdbcf08cca"
+      "sha256": "efcb2f21ac463ee88b47151b5387955d5c457c2ac3622317dceb9aff35869efe"
     },
     {
       "path": "docs/progress/sprint-03.md",
@@ -883,7 +883,7 @@
     {
       "path": "docs/test-reports/s02-t11.md",
       "role": "factory",
-      "sha256": "3f1ef885ebf53fd0b6bfee20e40c6f9f2da559b557593d4361175fc1664dba00"
+      "sha256": "4a196e2815bcd3fceebf4544ab79a44949ec7dae436abac7ea54bda97748b920"
     },
     {
       "path": "eslint.config.js",
@@ -898,7 +898,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "900f01fae82d50f38964b5b1468bca4197a55253f514a96d3cfccf540df9aa91"
+      "sha256": "289382d050d20b3f2535aed236314b120680cdde7787d26b6074e449cad9df84"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -1078,7 +1078,7 @@
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md",
       "role": "contract",
-      "sha256": "d4e62ada9a4bb45174f4d071e886cf53469cbebfa9d24b4c22e6da5e2cb79f7e"
+      "sha256": "fe969623a5eeed893f47bbc2d5dffd4f71ff63b71f33f56270e22be21f19b5e0"
     },
     {
       "path": "implementation/sprint-03-projects-files/CONTEXT.md",

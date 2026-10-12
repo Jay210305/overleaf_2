@@ -15,7 +15,7 @@
 | [S02-T09](../../implementation/sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t09.md); independent co-maintainer accepted 2026-10-11 |
 | [S02-T07](../../implementation/sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t07.md); independent co-maintainer accepted 2026-10-12 |
 | [S02-T10](../../implementation/sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t10.md); independent co-maintainer accepted 2026-10-12 |
-| [S02-T11](../../implementation/sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | IN_PROGRESS; review pending | Not measured | [Scoped report](../test-reports/s02-t11.md); local behavior and gates pass, independent review pending |
+| [S02-T11](../../implementation/sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t11.md); independent co-maintainer accepted 2026-10-12 |
 | [S02-T08](../../implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | NOT_STARTED | Not recorded | No implementation evidence |
 
 ## Decisions and Migrations
@@ -34,7 +34,7 @@
 
 ## Validation
 
-S02-T01 through S02-T07, S02-T09 and S02-T10 are accepted. S02-T11 local commands and limits are in its [scoped report](../test-reports/s02-t11.md); independent review is pending. Full sprint and gate acceptance remain open.
+S02-T01 through S02-T07 and S02-T09 through S02-T11 are accepted. S02-T11 commands and limits are in its [scoped report](../test-reports/s02-t11.md). Full sprint and gate acceptance remain open.
 
 ## Risks and Debt
 
@@ -42,4 +42,4 @@ Track actual findings in Open Gaps and Technical Debt, referencing the task.
 
 ## Next Task
 
-Obtain independent S02-T11 review, then S02-T08 tenancy/revocation/suspension/CSRF verification.
+S02-T08 tenancy/revocation/suspension/CSRF verification.

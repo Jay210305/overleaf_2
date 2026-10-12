@@ -40,7 +40,7 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S02-T09 | [Create redacted audit event writer](sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | Julio (proposed) | 6 | done |
 | S02-T07 | [Implement profile preferences and session management](sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | Julio (proposed) | 8 | done |
 | S02-T10 | [Implement authenticated password change](sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | Julio (proposed) | 6 | done |
-| S02-T11 | [Implement private avatar upload lifecycle](sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | Julio (proposed) | 6 | in_progress |
+| S02-T11 | [Implement private avatar upload lifecycle](sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | Julio (proposed) | 6 | done |
 | S02-T08 | [Verify tenancy revocation suspension and CSRF](sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | Julio (proposed) | 6 | todo |
 | S03-T01 | [Implement project CRUD and pagination](sprint-03-projects-files/S03-T01-implement-project-crud-and-pagination.md) | Project Co-owner (proposed) | 8 | todo |
 | S03-T02 | [Create duplicate and rename project sources](sprint-03-projects-files/S03-T02-create-duplicate-and-rename-project-sources.md) | Project Co-owner (proposed) | 8 | todo |
