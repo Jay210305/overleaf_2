@@ -22,7 +22,7 @@ Plans and estimates must remain distinguishable from actual actions and measured
 
 ## Shape
 
-A global log, per-stage task matrices, gap/debt files, feature-parity evidence and scoped reports. S00 is closed; S01 records ten accepted tasks; S02-T01 through S02-T06 and S02-T09 were accepted by the independent co-maintainer on 2026-10-11. S02-T07 was accepted on 2026-10-12; S02-T10 has local password-change evidence and awaits review. Feature rows remain incomplete because avatar lifecycle, product project routes and later work are still required. Missing credentials and research choices are tracked as gaps.
+A global log, per-stage task matrices, gap/debt files, feature-parity evidence and scoped reports. S00 is closed; S01 records ten accepted tasks; S02-T01 through S02-T06 and S02-T09 were accepted by the independent co-maintainer on 2026-10-11. S02-T07 and S02-T10 were accepted on 2026-10-12. Feature rows remain incomplete because avatar lifecycle, product project routes and later work are still required. Missing credentials and research choices are tracked as gaps.
 
 ## Connected to
 

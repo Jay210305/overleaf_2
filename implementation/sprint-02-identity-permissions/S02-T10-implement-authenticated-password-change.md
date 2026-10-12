@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T07]
 requirements: [ACC-06, ACC-02]
 source_task: S02-T03
-status: in_progress
-readiness: review-pending
+status: done
+readiness: completed
 ---
 # S02-T10 — Implement authenticated password change
 
@@ -100,4 +100,4 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 - [x] Runtime behavior is real, permission-checked and persistent when applicable.
 - [x] Report, progress, feature evidence and HTTP contract are updated; actual hours were not measured. No ADR was needed.
 - [x] No secret/private source in artifacts or logs; no new external access was required.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Independent co-maintainer review complete; accepted by the Project Co-owner on 2026-10-12 in this conversation.

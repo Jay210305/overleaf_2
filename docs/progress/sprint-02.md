@@ -14,7 +14,7 @@
 | [S02-T06](../../implementation/sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t06.md); independent co-maintainer accepted 2026-10-11 |
 | [S02-T09](../../implementation/sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t09.md); independent co-maintainer accepted 2026-10-11 |
 | [S02-T07](../../implementation/sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t07.md); independent co-maintainer accepted 2026-10-12 |
-| [S02-T10](../../implementation/sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | IN_PROGRESS | Not measured | [Scoped report](../test-reports/s02-t10.md); independent review pending |
+| [S02-T10](../../implementation/sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t10.md); independent co-maintainer accepted 2026-10-12 |
 | [S02-T11](../../implementation/sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S02-T08](../../implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | NOT_STARTED | Not recorded | No implementation evidence |
 
@@ -33,7 +33,7 @@
 
 ## Validation
 
-S02-T01 through S02-T07 and S02-T09 are accepted. S02-T10 is tested and awaits independent co-maintainer review; its commands and limits are in its [scoped report](../test-reports/s02-t10.md). Full sprint and gate acceptance remain open.
+S02-T01 through S02-T07, S02-T09 and S02-T10 are accepted. S02-T10 commands and limits are in its [scoped report](../test-reports/s02-t10.md). Full sprint and gate acceptance remain open.
 
 ## Risks and Debt
 
@@ -41,4 +41,4 @@ Track actual findings in Open Gaps and Technical Debt, referencing the task.
 
 ## Next Task
 
-S02-T10 independent review, then S02-T11 private avatar lifecycle.
+S02-T11 private avatar lifecycle.
