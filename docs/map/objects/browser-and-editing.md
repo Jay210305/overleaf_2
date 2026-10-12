@@ -4,9 +4,9 @@ cluster: runtime-design
 universe: live
 status: verified
 entity: apps/web/src/app/router.tsx
-sources: ["docs/planning/02-architecture.md", "docs/planning/03-technical-spec.md", "docs/contracts/editing-and-review.md", "docs/contracts/collaboration.md", "apps/web/src/app/router.tsx", "apps/web/src/app/providers.tsx", "apps/web/src/features/health/health-panel.tsx", "apps/web/src/features/auth/auth-forms.tsx", "apps/web/src/features/account/profile.tsx", "tests/e2e/walking-skeleton.spec.ts", "tests/e2e/auth-forms.spec.ts", "tests/e2e/profile.spec.ts", "docs/test-reports/s02-t05.md", "docs/test-reports/s02-t07.md"]
+sources: ["docs/planning/02-architecture.md", "docs/planning/03-technical-spec.md", "docs/contracts/editing-and-review.md", "docs/contracts/collaboration.md", "apps/web/src/app/router.tsx", "apps/web/src/app/providers.tsx", "apps/web/src/features/health/health-panel.tsx", "apps/web/src/features/auth/auth-forms.tsx", "apps/web/src/features/account/profile.tsx", "apps/web/src/features/account/avatar.tsx", "tests/e2e/walking-skeleton.spec.ts", "tests/e2e/auth-forms.spec.ts", "tests/e2e/profile.spec.ts", "docs/test-reports/s02-t05.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t11.md"]
 runtime: implemented
-verified_on: 2026-10-11
+verified_on: 2026-10-12
 snapshot: _meta/file-inventory.json
 ---
 
@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-React/Vite shell, routes, real API readiness, accepted S02-T05 authentication forms and tested S02-T07 account settings are implemented. User-specific theme is now loaded from persisted preferences on the settings page. CodeMirror, PDF and collaborative editing remain planned.
+React/Vite shell, routes, real API readiness, accepted S02-T05 authentication forms, S02-T07 account settings and tested S02-T11 private avatar controls are implemented. User-specific theme is loaded from persisted preferences on the settings page. CodeMirror, PDF and collaborative editing remain planned.
 
 ## Why this shape
 
@@ -22,7 +22,7 @@ Code and visual surfaces must share canonical source and preserve unsupported La
 
 ## Shape
 
-The SPA uses React Router, TanStack Query, a lazy readiness panel and a browser-safe health schema. Project routes explicitly state unavailable product features. Auth routes use the real trusted-account API for invitation registration, verification, login/logout, session restoration and password recovery. Tokens are removed from URL fragments after opening. S02-T07 settings routes read/update profile preferences and list/revoke sessions through the current cookie and CSRF secret. API errors stay visible and retry is available.
+The SPA uses React Router, TanStack Query, a lazy readiness panel and a browser-safe health schema. Project routes explicitly state unavailable product features. Auth routes use the real trusted-account API for invitation registration, verification, login/logout, session restoration and password recovery. Tokens are removed from URL fragments after opening. S02-T07 settings routes read/update profile preferences and list/revoke sessions through the current cookie and CSRF secret. S02-T11 loads a private avatar with credentials into a local blob preview and posts validated PNG bytes with CSRF. API errors stay visible and retry is available.
 
 ## Connected to
 
@@ -45,3 +45,5 @@ Browser navigation, theme, keyboard and health/outage/recovery were exercised in
 - [docs/contracts/collaboration.md](../../contracts/collaboration.md)
 - [Profile settings](../../../apps/web/src/features/account/profile.tsx)
 - [S02-T07 evidence](../../test-reports/s02-t07.md)
+- [Avatar control](../../../apps/web/src/features/account/avatar.tsx)
+- [S02-T11 evidence](../../test-reports/s02-t11.md)

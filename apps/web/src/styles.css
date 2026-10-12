@@ -199,3 +199,10 @@ footer {
     margin-top: 24px;
   }
 }
+.avatar-preview {
+  display: block;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  object-fit: cover;
+}

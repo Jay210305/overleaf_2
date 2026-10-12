@@ -1,4 +1,6 @@
 import { randomUUID } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { loadEnvFile } from "node:process";
 import argon2 from "argon2";
 import { test, expect } from "@playwright/test";
@@ -32,6 +34,12 @@ test("profile preferences persist and a selected browser session can be revoked"
       )
       .toBe(200);
     await db.query(
+      readFileSync(
+        resolve(import.meta.dirname, "../../packages/db/migrations/0004-avatar-cleanup.sql"),
+        "utf8",
+      ),
+    );
+    await db.query(
       "INSERT INTO users (email_normalized, display_name, password_hash, email_verified_at) VALUES ($1, 'Profile Writer', $2, NOW())",
       [email, await argon2.hash(password, { type: argon2.argon2id })],
     );
@@ -59,6 +67,19 @@ test("profile preferences persist and a selected browser session can be revoked"
     await expect(page.getByLabel("Timezone")).toHaveValue("America/Lima");
     await expect(page.getByLabel("Theme")).toHaveValue("dark");
     await expect(page.locator(".shell")).toHaveClass(/dark/);
+    await page.getByLabel("Avatar PNG").setInputFiles({
+      name: "avatar.png",
+      mimeType: "image/png",
+      buffer: Buffer.from(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=",
+        "base64",
+      ),
+    });
+    await page.getByRole("button", { name: "Upload avatar" }).click();
+    await expect(page.getByText("Avatar saved.")).toBeVisible();
+    await expect(page.getByRole("img", { name: "Updated Profile Writer avatar" })).toBeVisible();
+    await page.reload();
+    await expect(page.getByRole("img", { name: "Updated Profile Writer avatar" })).toBeVisible();
     const audit = await new AxeBuilder({ page }).analyze();
     expect(
       audit.violations.filter((violation) =>

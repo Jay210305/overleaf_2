@@ -11,6 +11,7 @@ import {
   type AccountProfileView,
   type AccountSessionView,
 } from "@latex-collab/contracts";
+import { AvatarSettings } from "./avatar.js";
 
 const { VITE_API_URL } = parsePublicConfig(import.meta.env);
 type ProfileView = AccountProfileView;
@@ -238,6 +239,7 @@ export function Profile() {
       {!loading && !profile && <Link to="/login">Sign in</Link>}
       {profile && preferences && (
         <>
+          {csrf && <AvatarSettings profile={profile} csrf={csrf} onProfileChange={setProfile} />}
           <form onSubmit={(event) => void saveProfile(event)}>
             <h2>Profile</h2>
             <p>Email: {profile.email}</p>

@@ -4,7 +4,7 @@ cluster: runtime-design
 universe: live
 status: verified
 entity: apps/api/src/server.ts
-sources: ["docs/contracts/http-api.md", "apps/api/src/server.ts", "apps/api/src/main.ts", "apps/api/src/modules/development/sample.ts", "apps/api/src/modules/auth/register.ts", "apps/api/src/modules/auth/verify-email.ts", "apps/api/src/modules/auth/session.ts", "apps/api/src/modules/auth/password-reset.ts", "apps/api/src/modules/auth/routes.ts", "apps/api/src/modules/account/profile.ts", "apps/api/src/modules/account/password-change.ts", "apps/api/src/modules/auth/mail.ts", "apps/api/src/plugins/csrf.ts", "apps/api/src/plugins/require-session.ts", "apps/api/src/plugins/rate-limit.ts", "apps/api/src/plugins/logging.ts", "packages/auth/src/project-policy.ts", "apps/api/src/operator/invite-trusted.ts", "apps/api/src/readiness.ts", "apps/api/src/plugins/errors.ts", "tests/integration/persisted-sample.test.ts", "tests/integration/s02-t01.test.ts", "tests/integration/s02-t02.test.ts", "tests/integration/s02-t03.test.ts", "tests/integration/s02-t04.test.ts", "tests/integration/s02-t06.test.ts", "tests/integration/s02-t09.test.ts", "tests/integration/s02-t07.test.ts", "tests/integration/s02-t10.test.ts", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md", "docs/test-reports/s02-t06.md", "docs/test-reports/s02-t09.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t10.md"]
+sources: ["docs/contracts/http-api.md", "apps/api/src/server.ts", "apps/api/src/main.ts", "apps/api/src/modules/development/sample.ts", "apps/api/src/modules/auth/register.ts", "apps/api/src/modules/auth/verify-email.ts", "apps/api/src/modules/auth/session.ts", "apps/api/src/modules/auth/password-reset.ts", "apps/api/src/modules/auth/routes.ts", "apps/api/src/modules/account/profile.ts", "apps/api/src/modules/account/password-change.ts", "apps/api/src/modules/account/avatar.ts", "apps/api/src/modules/auth/mail.ts", "apps/api/src/plugins/csrf.ts", "apps/api/src/plugins/require-session.ts", "apps/api/src/plugins/rate-limit.ts", "apps/api/src/plugins/logging.ts", "packages/auth/src/project-policy.ts", "apps/api/src/operator/invite-trusted.ts", "apps/api/src/readiness.ts", "apps/api/src/plugins/errors.ts", "tests/integration/persisted-sample.test.ts", "tests/integration/s02-t01.test.ts", "tests/integration/s02-t02.test.ts", "tests/integration/s02-t03.test.ts", "tests/integration/s02-t04.test.ts", "tests/integration/s02-t06.test.ts", "tests/integration/s02-t09.test.ts", "tests/integration/s02-t07.test.ts", "tests/integration/s02-t10.test.ts", "tests/integration/s02-t11.test.ts", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md", "docs/test-reports/s02-t06.md", "docs/test-reports/s02-t09.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t10.md", "docs/test-reports/s02-t11.md"]
 runtime: implemented
 verified_on: 2026-10-12
 snapshot: _meta/file-inventory.json
@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions, password recovery and the S02-T04 project guard. S02-T06 adds accepted Redis authentication limits and redacted logs. S02-T09 adds accepted transaction-scoped audit events. S02-T07 adds accepted current-user profile/preferences and session inventory/revocation routes. S02-T10 adds accepted authenticated password change. User-facing project and collaboration routes remain unimplemented.
+Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions, password recovery and the S02-T04 project guard. S02-T06 adds accepted Redis authentication limits and redacted logs. S02-T09 adds accepted transaction-scoped audit events. S02-T07 adds accepted current-user profile/preferences and session inventory/revocation routes. S02-T10 adds accepted authenticated password change. S02-T11 adds tested private current-user avatar routes and replacement cleanup; independent review is pending. User-facing project and collaboration routes remain unimplemented.
 
 ## Why this shape
 
@@ -27,6 +27,8 @@ The sample checks the API-to-PostgreSQL-to-object-store path before user-facing 
 `modules/account/profile.ts` serves current-user profile/preferences and session inventory. Its writes recheck the current session and CSRF under a transaction; selected revocations write audit events. The shared Redis limiter also covers these routes.
 
 `modules/account/password-change.ts` verifies the current password and session CSRF, then atomically replaces the Argon2id hash, consumes pending recovery tokens, revokes other sessions and audits those revocations.
+
+`modules/account/avatar.ts` validates bounded PNG bytes, stores a user-scoped private object, updates the profile under a row lock and queues the prior key for deletion. The content route reads only the authenticated user's database key; a bounded worker retries old-object cleanup.
 
 ## Connected to
 
@@ -66,3 +68,5 @@ Node 24 API, Compose services, injected API tests and persisted sample restart t
 - [S02-T07 evidence](../../test-reports/s02-t07.md)
 - [Password change](../../../apps/api/src/modules/account/password-change.ts)
 - [S02-T10 evidence](../../test-reports/s02-t10.md)
+- [Avatar routes and cleanup](../../../apps/api/src/modules/account/avatar.ts)
+- [S02-T11 evidence](../../test-reports/s02-t11.md)

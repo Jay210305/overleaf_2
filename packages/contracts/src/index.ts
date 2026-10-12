@@ -233,6 +233,7 @@ export const accountProfileViewSchema = z.object({
   displayName: z.string(),
   locale: z.string(),
   timezone: z.string(),
+  avatarUrl: z.string().nullable().optional(),
 });
 export const accountPreferencesViewSchema = z.object({
   locale: z.string(),

@@ -965,7 +965,7 @@
       "post": {
         "operationId": "post__me_avatar",
         "summary": "POST /me/avatar",
-        "description": "Permission: session. Current session and authoritative resource permission required. Unknown input fields are rejected. All errors use Problem.",
+        "description": "Current-account PNG upload, at most 1,000,000 bytes and 1024 pixels per side. Exact Origin, opaque session and CSRF required; replacement queues the previous private object for cleanup.",
         "security": [
           {
             "sessionCookie": [],
@@ -985,7 +985,7 @@
                   "id": "11111111-1111-4111-8111-111111111111",
                   "email": "developer@example.test",
                   "displayName": "x",
-                  "avatarUrl": "https://example.test/resource",
+                  "avatarUrl": "/api/v1/me/avatar/content",
                   "emailVerified": false,
                   "locale": "x",
                   "timezone": "x"
@@ -1028,32 +1028,20 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "image/png": {
               "schema": {
-                "$ref": "#/components/schemas/AvatarRequest"
-              },
-              "examples": {
-                "valid": {
-                  "value": {
-                    "uploadId": "11111111-1111-4111-8111-111111111111"
-                  }
-                },
-                "invalid": {
-                  "value": {
-                    "unexpectedField": true
-                  },
-                  "description": "Reject unknown field and/or missing required fields with 400 VALIDATION_ERROR."
-                }
+                "type": "string",
+                "format": "binary"
               }
             }
           }
         },
         "x-invalid-example": {
-          "case": "Invalid requestBody example",
+          "case": "Invalid PNG bytes or dimensions",
           "expectedStatus": 400
         }
       }
@@ -11745,6 +11733,56 @@
           "expectedStatus": 401
         }
       }
+    },
+    "/api/v1/me/avatar/content": {
+      "get": {
+        "operationId": "get__me_avatar_content",
+        "summary": "GET /me/avatar/content",
+        "description": "Private current-account image read. Exact Origin and opaque session required; no object key or user ID accepted.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Own PNG avatar",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        },
+        "x-permission": "session",
+        "x-status": "IN_PROGRESS",
+        "x-invalid-example": {
+          "case": "Foreign user ID query is rejected",
+          "expectedStatus": 400
+        }
+      }
     }
   },
   "components": {
@@ -11849,8 +11887,7 @@
           "avatarUrl": {
             "anyOf": [
               {
-                "type": "string",
-                "format": "uri"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -15097,19 +15134,6 @@
           "key",
           "enabled",
           "scope"
-        ],
-        "additionalProperties": false
-      },
-      "AvatarRequest": {
-        "type": "object",
-        "properties": {
-          "uploadId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "required": [
-          "uploadId"
         ],
         "additionalProperties": false
       },

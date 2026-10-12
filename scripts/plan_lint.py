@@ -278,9 +278,12 @@ def main() -> int:
                 if "example" in parameter:
                     check(schema_accepts(parameter["example"], parameter["schema"], models), f"Invalid parameter example: {method} {route}")
             if "requestBody" in operation:
-                content = operation["requestBody"]["content"]["application/json"]
-                check(schema_accepts(content["examples"]["valid"]["value"], content["schema"], models), f"Invalid positive body example: {method} {route}")
-                check(not schema_accepts(content["examples"]["invalid"]["value"], content["schema"], models), f"Negative body unexpectedly valid: {method} {route}")
+                for mime, content in operation["requestBody"]["content"].items():
+                    if mime == "application/json":
+                        check(schema_accepts(content["examples"]["valid"]["value"], content["schema"], models), f"Invalid positive body example: {method} {route}")
+                        check(not schema_accepts(content["examples"]["invalid"]["value"], content["schema"], models), f"Negative body unexpectedly valid: {method} {route}")
+                    else:
+                        check(mime == "image/png" and content["schema"] == {"type": "string", "format": "binary"}, f"Unsupported binary body contract: {method} {route}")
             for status, response in operation["responses"].items():
                 if "$ref" in response:
                     response = api["components"]["responses"][response["$ref"].split("/")[-1]]

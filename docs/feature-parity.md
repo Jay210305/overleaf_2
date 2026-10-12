@@ -6,7 +6,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 |---|---|---|---|---|
 | ACC-01 | G1 | Must | IN_PROGRESS | [S02-T01 registration and verification accepted](test-reports/s02-t01.md); [S02-T02 login/logout accepted](test-reports/s02-t02.md); [S02-T03 recovery accepted](test-reports/s02-t03.md); [S02-T05 browser flow accepted](test-reports/s02-t05.md); [S02-T06 server rate limits accepted](test-reports/s02-t06.md); recovery timing GAP-14 remains |
 | ACC-02 | G1 | Must | IN_PROGRESS | [S02-T02 opaque session, CSRF, expiry and revocation accepted](test-reports/s02-t02.md); [S02-T06 auth limits accepted](test-reports/s02-t06.md); [S02-T07 session inventory/revocation accepted](test-reports/s02-t07.md); [S02-T10 other-session revocation accepted](test-reports/s02-t10.md); remaining mapped checks apply |
-| ACC-03 | G1 | Must | IN_PROGRESS | [S02-T07 profile/preferences scope accepted](test-reports/s02-t07.md); private avatar lifecycle remains S02-T11 |
+| ACC-03 | G1 | Must | IN_PROGRESS | [S02-T07 profile/preferences scope accepted](test-reports/s02-t07.md); [S02-T11 private avatar local checks pass](test-reports/s02-t11.md), independent review pending; G1 gate still open |
 | ACC-04 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-05 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-06 | G1 | Must | IN_PROGRESS | [S02-T03 recovery reset revokes sessions, accepted](test-reports/s02-t03.md); [S02-T10 authenticated change accepted](test-reports/s02-t10.md); remaining gate checks apply |
@@ -96,4 +96,4 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | PL-04 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PL-05 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t10.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PL-06 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t01.md) (accepted 2026-10-10); remaining mapped tasks still apply |
-| PL-07 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); remaining mapped tasks still apply |
+| PL-07 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S02-T11 private avatar boundary local checks pass](test-reports/s02-t11.md), independent review pending; remaining mapped tasks still apply |

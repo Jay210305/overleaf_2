@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "df59bb47f1a82c45e857723cd6c8dfcb876bf3bd",
+  "git_baseline": "c858eb66fb5fdcf923af8dd1f59715a15aff1316",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -88,7 +88,12 @@
     {
       "path": "apps/api/src/main.ts",
       "role": "factory",
-      "sha256": "944ada20616a1f04835cd47a000b1c46957678faf1228a10b7130f3a2474049d"
+      "sha256": "85bcd48128f15b216e24ea8a11c5d71afb2b918c3fabba7bd2b722149a76f558"
+    },
+    {
+      "path": "apps/api/src/modules/account/avatar.ts",
+      "role": "factory",
+      "sha256": "31849940410431539473adeb1e749c1a6d33fc47a151fbb463d2412bf9ee1f63"
     },
     {
       "path": "apps/api/src/modules/account/password-change.ts",
@@ -98,7 +103,7 @@
     {
       "path": "apps/api/src/modules/account/profile.ts",
       "role": "factory",
-      "sha256": "ae94fe13e05064e7d0d0379a467f3cd08b2d3987ff320681d1133685d4c478a5"
+      "sha256": "849fa384026b2552437b2b07f4d214d69bf97352da4a6a876be36aa9aa8e4261"
     },
     {
       "path": "apps/api/src/modules/auth/errors.ts",
@@ -163,7 +168,7 @@
     {
       "path": "apps/api/src/plugins/rate-limit.ts",
       "role": "factory",
-      "sha256": "0bfe778a6c2e5053626930d910fdaeae6139c6a5ad8e78f48a6709fc38e3d4ff"
+      "sha256": "04fcfc9dec6c5358baac21ffb5b74dc6b0a53eb8bf80ba2fbed3dca26769b84b"
     },
     {
       "path": "apps/api/src/plugins/require-session.ts",
@@ -178,7 +183,7 @@
     {
       "path": "apps/api/src/server.ts",
       "role": "factory",
-      "sha256": "e72cb608e44059b605cfc9ec7ed7dd1faeb6c7d69fa81e4c730203af14165f67"
+      "sha256": "30b10e005ef8159f1c22a20834d79cf14ec2c356542cfbc7a7d970975858a7d9"
     },
     {
       "path": "apps/api/tsconfig.json",
@@ -206,9 +211,14 @@
       "sha256": "759941f7b2701d092cdfd2534a19222f21cd1a0d0f770ee48328465880ae8439"
     },
     {
+      "path": "apps/web/src/features/account/avatar.tsx",
+      "role": "factory",
+      "sha256": "645c7eb3df9ffc542870929163be1ba9b78a85291a6b66fa77f33d9e945914f4"
+    },
+    {
       "path": "apps/web/src/features/account/profile.tsx",
       "role": "factory",
-      "sha256": "10e3f6baba62b8ad0e0783f7b6876e8b0823ae3f34b17670eb28665fd839ff4a"
+      "sha256": "17d74e0c1ce705b15d25c63dc77ec2c35ccad42d79110304636284bb3a66f267"
     },
     {
       "path": "apps/web/src/features/auth/auth-forms.tsx",
@@ -228,7 +238,7 @@
     {
       "path": "apps/web/src/styles.css",
       "role": "factory",
-      "sha256": "45c8839d3d663715201d6477de52b6a8d859226acc6aa4bf628ca57066d11adf"
+      "sha256": "2fed376cc3dd37876b45009b866410aad1b39e176a52b6ced5dbd90e61303463"
     },
     {
       "path": "apps/web/src/vite-env.d.ts",
@@ -293,7 +303,7 @@
     {
       "path": "docs/api/openapi.json",
       "role": "factory",
-      "sha256": "4535057495ccde6a5f852e4320e595a346177f1f80a18704e85d8c0b3c583455"
+      "sha256": "3d6c38deed086554d29acc36ecd84ff7fc9198b7b33908e1d0f75dd0c1481b9d"
     },
     {
       "path": "docs/CONTEXT.md",
@@ -318,7 +328,7 @@
     {
       "path": "docs/contracts/data-model.md",
       "role": "contract",
-      "sha256": "8c5596a329d51ca569761b93d27e63c6978679ecbecb06587a262d40ef7a9273"
+      "sha256": "5445500dbec76a078e01e9d8444006971cb90c5bc77eb7c27621d406a3ee790f"
     },
     {
       "path": "docs/contracts/development-tooling.md",
@@ -333,7 +343,7 @@
     {
       "path": "docs/contracts/http-api.md",
       "role": "contract",
-      "sha256": "d77ff1d1b722c7435aac93793896b2421350efb85e02ea0ecd2a7313aca46fa0"
+      "sha256": "432d98760691c1516f49b4c510cbcac3c22f738166ceb1eca2bae98cb80d9f29"
     },
     {
       "path": "docs/contracts/http-operations.md",
@@ -348,7 +358,7 @@
     {
       "path": "docs/contracts/openapi.json",
       "role": "contract",
-      "sha256": "4535057495ccde6a5f852e4320e595a346177f1f80a18704e85d8c0b3c583455"
+      "sha256": "3d6c38deed086554d29acc36ecd84ff7fc9198b7b33908e1d0f75dd0c1481b9d"
     },
     {
       "path": "docs/contracts/README.md",
@@ -358,12 +368,12 @@
     {
       "path": "docs/contracts/storage-and-revisions.md",
       "role": "contract",
-      "sha256": "c9aa598225bcef46d2a763e2c0b0e2eb05e872b39bd6cc7bcacec2633f2bc2cf"
+      "sha256": "14d2a9c403324cf2bc9c1109a4ce937201dab6f6780a78e829ba70f057bf7285"
     },
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "2d90601154a6ff15692634cfe6506293d95c4e5e3d8acefe13d8830ed047e1fc"
+      "sha256": "6cef1004aa8d72b4e0a4b19abb3a91d114ef5a94117f6bf9af4875a1a9adb901"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -418,12 +428,12 @@
     {
       "path": "docs/map/objects/api-and-durable-data.md",
       "role": "factory",
-      "sha256": "d3acafc7565b221f44c38ac9d314b66f24d74847080abd38ff9ffa5e7db9c54d"
+      "sha256": "3940c2bd6d8f6ba59d2837303046c289991d6614c19e225c13c90180d6143174"
     },
     {
       "path": "docs/map/objects/browser-and-editing.md",
       "role": "factory",
-      "sha256": "479cfd7cae5f2daab1e4159271e32d4a18e2cd6a8803e137736cf663946c00e9"
+      "sha256": "a4c8d7b0ce4f21c989e501a61f7715be3a547a20180a1b2f40be595724e705f5"
     },
     {
       "path": "docs/map/objects/compilation-and-artifacts.md",
@@ -438,7 +448,7 @@
     {
       "path": "docs/map/objects/data-model-and-persistence.md",
       "role": "factory",
-      "sha256": "78f5a828a0c5e48d1a1e4bfa13be0030bf1cd2c10ab85de6335fcdee89a19274"
+      "sha256": "8969e43f85970cdbbed316e3b4fa91ea7e8e9f01bbb55e44348677be4ef36587"
     },
     {
       "path": "docs/map/objects/documentation-tooling.md",
@@ -448,7 +458,7 @@
     {
       "path": "docs/map/objects/interface-contracts.md",
       "role": "factory",
-      "sha256": "f3689127abf8d84b7c8cbf6c2d97812cd8ee8ea84a90ac7026b2b252479d9ab4"
+      "sha256": "d092a2d5c1098b188eb92175f279504b4e4bf44632efb944ff8700504a5e8c64"
     },
     {
       "path": "docs/map/objects/planning-baseline.md",
@@ -458,12 +468,12 @@
     {
       "path": "docs/map/objects/private-object-storage.md",
       "role": "factory",
-      "sha256": "822be4a0820a0c13b4a7eb43bb663a7b0f25bb027c5a5bd40b4a64f0991f6dc6"
+      "sha256": "8aeaf078a64d82546f4cb93569e6b1d0ca166e07bac39c461cde73d11083b077"
     },
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "36b9c103fb5182179aa9f52d6c7eed21ea472ee724c93c85304d53a68d7fd22e"
+      "sha256": "1976f46599f21ef7a629985af28a3ba078536815c8364d7825ef0e1c3957b4e4"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -478,7 +488,7 @@
     {
       "path": "docs/map/objects/workspace-tooling.md",
       "role": "factory",
-      "sha256": "b225d88459163e3aedf4e5eada85b598d625640f9a04c03583988c8a9c60839a"
+      "sha256": "1d9438c0527c58147ef201f9af47759d00fc2f6304c30fe60218076cfacf5d02"
     },
     {
       "path": "docs/map/processes/CONTEXT.md",
@@ -518,7 +528,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "44ca8dceaf0fed74819552b80712d33d334903a1e1a41c06b7850533ae5cb6aa"
+      "sha256": "13faa9ae5f521bafe8d16443dd64d0bc217cfc348bc8550bc674bc5027e22a7d"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -608,7 +618,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "0ca58932ca647c054004bff49ee1122a49696b0e48f122315f1a9c2ebb058399"
+      "sha256": "74d80727eb2787cd51ef1d7563410ba8bb9263391cc7e39b72580d802f25de4b"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -628,7 +638,7 @@
     {
       "path": "docs/progress/sprint-02.md",
       "role": "product",
-      "sha256": "47bf0d7ed0fcdcc75b91f623d38c9c8e0b168f9ec3bd5b159ee825b5b4cda746"
+      "sha256": "cafd1dc1d23457135f88f8a1d893569b62406d5a749ec15ccbaf00fdbcf08cca"
     },
     {
       "path": "docs/progress/sprint-03.md",
@@ -698,7 +708,7 @@
     {
       "path": "docs/progress/technical-debt.md",
       "role": "product",
-      "sha256": "ac25697ed4141353c7b6d6a8e0fbdfcb4c3fd81046f424417be74709a439e921"
+      "sha256": "de9354e78506e746279c44d2ee6a11bbe688efab2391f3f3bb84adfa0124ef14"
     },
     {
       "path": "docs/skills/CONTEXT.md",
@@ -871,6 +881,11 @@
       "sha256": "bf176382a9fb23914256759b471bcb2da7dd9bb1e7ebc21ce6095d35218bf6d4"
     },
     {
+      "path": "docs/test-reports/s02-t11.md",
+      "role": "factory",
+      "sha256": "3f1ef885ebf53fd0b6bfee20e40c6f9f2da559b557593d4361175fc1664dba00"
+    },
+    {
       "path": "eslint.config.js",
       "role": "factory",
       "sha256": "f259d21a7ef0efe32df87f94ef650f1df2a7226c91cdf3220f3b5c681193a5a0"
@@ -883,7 +898,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "8c0d63017b0b4a4a98c3bc3e7c9b0a26d234ebad47141e2b7df7b5e09560d69e"
+      "sha256": "900f01fae82d50f38964b5b1468bca4197a55253f514a96d3cfccf540df9aa91"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -1063,7 +1078,7 @@
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md",
       "role": "contract",
-      "sha256": "76ec0a2bdcb4aa076418cc658af9937e0d8869baf97c9cea6de4e61fb9ed8869"
+      "sha256": "d4e62ada9a4bb45174f4d071e886cf53469cbebfa9d24b4c22e6da5e2cb79f7e"
     },
     {
       "path": "implementation/sprint-03-projects-files/CONTEXT.md",
@@ -1953,7 +1968,7 @@
     {
       "path": "packages/contracts/src/index.ts",
       "role": "factory",
-      "sha256": "b74ac13efe4814bd9040e70cb481028fb6ccbe3d501a20c3071be04a1a9c6c71"
+      "sha256": "1f48e46110f0599d2a04f965333e006bb407acc7264b8a4791b2ac27424530c6"
     },
     {
       "path": "packages/contracts/src/storage.ts",
@@ -1979,6 +1994,11 @@
       "path": "packages/db/migrations/0003-session-security.sql",
       "role": "factory",
       "sha256": "894954e9f8a51f8420f97cf6f469f924678a3083e8ba40b5c9d9378eb1ce85f6"
+    },
+    {
+      "path": "packages/db/migrations/0004-avatar-cleanup.sql",
+      "role": "factory",
+      "sha256": "b8850b88a63cf356bfa9a694dde34a6589281a155e297afc8767fccaa86f4a4a"
     },
     {
       "path": "packages/db/package.json",
@@ -2043,7 +2063,7 @@
     {
       "path": "packages/storage/src/s3.ts",
       "role": "factory",
-      "sha256": "ac1080d8ce8ae90fe806798692603e561b109bf653d6e01f42ae4a90ea62a7ef"
+      "sha256": "7aa5028ebb48ee040f57657e7d9a6e5e38eb62b249983e3375ee6be4948ef161"
     },
     {
       "path": "packages/storage/tsconfig.json",
@@ -2143,7 +2163,7 @@
     {
       "path": "scripts/plan_lint.py",
       "role": "factory",
-      "sha256": "36b4c2a9fd671260e37c6865be79f79dcf1e45b2ad34028caf887b09ee8016f8"
+      "sha256": "aeb823b2e4434637b2c9987e1bda94d3ca8e6b8027497351ed83d82a05d5e709"
     },
     {
       "path": "tests/e2e/auth-forms.spec.ts",
@@ -2153,7 +2173,7 @@
     {
       "path": "tests/e2e/profile.spec.ts",
       "role": "factory",
-      "sha256": "04f7cf8add21c2f6c4c67878112b5cb6a750c9ee90062fff40adee64eb9bbfd2"
+      "sha256": "a31170f24ffbff5ea43e7e9d8cc0c526abda1161b19dcb7706ab0116d58c3a9f"
     },
     {
       "path": "tests/e2e/recovery.spec.ts",
@@ -2306,6 +2326,11 @@
       "sha256": "1eb5b5730f3e576bf14fecb40aaef2cc809839ea685cb10eec8fd958a56e8ae3"
     },
     {
+      "path": "tests/integration/s02-t11.test.ts",
+      "role": "factory",
+      "sha256": "bd106dc5bf2ccfeba9b44a5d41c7d7d11fede68963a00acbe02eccf4a53c4115"
+    },
+    {
       "path": "tests/regression/acc-01/s02-t01.test.ts",
       "role": "factory",
       "sha256": "13145d20336559dc51b7e543c3022be25a02c4cbff07cf32c371b649d833c1ce"
@@ -2349,6 +2374,16 @@
       "path": "tests/regression/acc-03/s02-t07.test.tsx",
       "role": "factory",
       "sha256": "9049e9e76a62f1319f1fb1fa977e4f7f707eebe19539bf251cd936a433457c22"
+    },
+    {
+      "path": "tests/regression/acc-03/s02-t11-browser.test.tsx",
+      "role": "factory",
+      "sha256": "7d2ecfa119479f0b42807882b8916167b93cd078ec2b3ad1bd2f0fd83fc59fb5"
+    },
+    {
+      "path": "tests/regression/acc-03/s02-t11.test.ts",
+      "role": "factory",
+      "sha256": "0b92dbf98f7ddf6cc582d87d0a010b65f45a30594a2fb5a04353e4aa829f535d"
     },
     {
       "path": "tests/regression/acc-06/s02-t03.test.ts",
@@ -2459,6 +2494,11 @@
       "path": "tests/regression/pl-07/s01-t08.test.ts",
       "role": "factory",
       "sha256": "54fc0b4612014adaaffaec9f5bcfcd54cc75932db5c7e15c3259cd8631409a11"
+    },
+    {
+      "path": "tests/regression/pl-07/s02-t11.test.ts",
+      "role": "factory",
+      "sha256": "e3daee09e8a2b268effa2d145f2fa105b04c8662edb03eebb0aa4f7b0dd94be3"
     },
     {
       "path": "tests/regression/pro-01/s01-t03.test.ts",

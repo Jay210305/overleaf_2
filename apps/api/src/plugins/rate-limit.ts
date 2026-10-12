@@ -32,6 +32,8 @@ const limits: Record<string, number> = {
   "GET /api/v1/me/sessions/:sessionId": 60,
   "DELETE /api/v1/me/sessions/:sessionId": 30,
   "POST /api/v1/me/password": 10,
+  "POST /api/v1/me/avatar": 10,
+  "GET /api/v1/me/avatar/content": 60,
 };
 
 export async function createRedisAuthRateLimiter(

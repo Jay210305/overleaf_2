@@ -41,6 +41,7 @@ type ProfileRow = {
   display_name: string;
   locale: string;
   timezone: string;
+  avatar_key: string | null;
 };
 type PreferencesRow = {
   locale: string;
@@ -130,9 +131,9 @@ async function lockCurrent(
   if (row.disabled_at || !row.email_verified_at) throw new AuthError(403, "ACCOUNT_DISABLED");
   requireSessionCsrf(csrf, row.csrf_hash);
 }
-async function readProfile(db: DatabaseClient, userId: string) {
+export async function readProfile(db: DatabaseClient, userId: string) {
   const found = await db.query<ProfileRow>(
-    `SELECT u.id, u.email_normalized, u.display_name, COALESCE(p.locale, 'en') AS locale,
+    `SELECT u.id, u.email_normalized, u.display_name, u.avatar_key, COALESCE(p.locale, 'en') AS locale,
             COALESCE(p.timezone, 'UTC') AS timezone
      FROM users u LEFT JOIN user_preferences p ON p.user_id = u.id WHERE u.id = $1`,
     [userId],
@@ -143,7 +144,7 @@ async function readProfile(db: DatabaseClient, userId: string) {
     id: row.id,
     email: row.email_normalized,
     displayName: row.display_name,
-    avatarUrl: null,
+    avatarUrl: row.avatar_key ? "/api/v1/me/avatar/content" : null,
     emailVerified: true,
     locale: row.locale,
     timezone: row.timezone,
