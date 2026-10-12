@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T05]
 requirements: [ACC-02, NFR-10]
 source_task: S02-T06
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: review-pending
 ---
 # S02-T06 — Add authentication rate limits and redaction
 
@@ -67,10 +67,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Repeated auth abuse returns 429 with Retry-After; password/token values never appear in captured logs
-- [ ] ACC-02: Secure opaque cookies, expiry, rotation, revocation and session inventory. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] NFR-10: Zero credentials/tokens/private source content in application logs. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Repeated auth abuse returns 429 with Retry-After; password/token values never appear in captured logs in the [scoped report](../../docs/test-reports/s02-t06.md).
+- [x] ACC-02: This task's auth-limit assertions pass; session inventory and feature-wide G1 completion remain open.
+- [x] NFR-10: This task's captured-log redaction assertions pass; feature-wide completion remains open.
+- [x] Valid requests below the limit keep their existing behavior; excess attempts and Redis failure leave auth state safe.
 
 ## Verification
 
@@ -96,9 +96,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence in the [report](../../docs/test-reports/s02-t06.md).
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior uses shared Redis counters and preserves the existing authorization checks.
+- [x] Report, progress, feature evidence and HTTP contract are updated; actual hours were not measured. No ADR was needed.
+- [x] No secret/private source in artifacts or logs; unverified response timing remains tracked as GAP-14.
 - [ ] Independent co-maintainer review complete; status updated to done only after evidence.

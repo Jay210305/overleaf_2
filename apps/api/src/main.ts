@@ -3,6 +3,7 @@ import { DatabaseClient } from "@latex-collab/db";
 import { S3StorageAdapter } from "@latex-collab/storage";
 import { createReadiness } from "./readiness.js";
 import { createServer, safeLoggerOptions } from "./server.js";
+import { createRedisAuthRateLimiter } from "./plugins/rate-limit.js";
 import {
   createSmtpVerificationSender,
   createSmtpPasswordResetSender,
@@ -11,6 +12,7 @@ async function main() {
   const config = parseServerConfig(process.env);
   const probes = createReadiness(config);
   const db = new DatabaseClient(config.DATABASE_URL);
+  const rateLimiter = await createRedisAuthRateLimiter(config.REDIS_URL);
   let storage: S3StorageAdapter | undefined;
   if (process.env.NODE_ENV !== "production") {
     storage = new S3StorageAdapter({
@@ -26,6 +28,7 @@ async function main() {
     origin: config.APP_ORIGIN,
     logger: safeLoggerOptions(config.LOG_LEVEL),
     db,
+    rateLimiter,
     storage,
     sendVerification:
       config.SMTP_URL && config.EMAIL_FROM
@@ -40,6 +43,7 @@ async function main() {
   app.addHook("onClose", async () => {
     probes.close();
     await db.close();
+    await rateLimiter.close();
   });
   const stop = () => {
     void app.close().catch(() => {

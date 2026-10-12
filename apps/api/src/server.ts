@@ -10,6 +10,20 @@ import { registerAuthRoutes } from "./modules/auth/routes.js";
 import type { SendVerification } from "./modules/auth/register.js";
 import type { SendPasswordReset } from "./modules/auth/password-reset.js";
 import { installProjectGuard } from "./plugins/require-session.js";
+import { safeLoggerOptions } from "./plugins/logging.js";
+import type { AuthRateLimiter } from "./plugins/rate-limit.js";
+
+export { safeLoggerOptions } from "./plugins/logging.js";
+
+const authScopes = new Set([
+  "POST /api/v1/auth/register",
+  "POST /api/v1/auth/verify-email",
+  "POST /api/v1/auth/login",
+  "GET /api/v1/auth/session",
+  "POST /api/v1/auth/logout",
+  "POST /api/v1/auth/password/forgot",
+  "POST /api/v1/auth/password/reset",
+]);
 
 export interface ServerOptions {
   checkReadiness: () => Promise<boolean>;
@@ -20,16 +34,7 @@ export interface ServerOptions {
   sendVerification?: SendVerification | undefined;
   sendPasswordReset?: SendPasswordReset | undefined;
   secureCookies?: boolean | undefined;
-}
-export function safeLoggerOptions(level = "info") {
-  return {
-    level,
-    serializers: {
-      req: (req: { method: string }) => ({ method: req.method }),
-      res: (res: { statusCode: number }) => ({ statusCode: res.statusCode }),
-    },
-    redact: ["req.headers.authorization", "req.headers.cookie", "password", "token"],
-  };
+  rateLimiter?: AuthRateLimiter | undefined;
 }
 export function createServer(options: ServerOptions) {
   const app = Fastify({
@@ -46,8 +51,26 @@ export function createServer(options: ServerOptions) {
       credentials: true,
       methods: ["GET", "POST"],
       allowedHeaders: ["content-type", "x-csrf-token", "x-registration-invite"],
-      exposedHeaders: ["x-csrf-token", "x-request-id"],
+      exposedHeaders: ["x-csrf-token", "x-request-id", "retry-after"],
     });
+  app.addHook("onRequest", async (request, reply) => {
+    const scope = `${request.method} ${request.routeOptions.url ?? ""}`;
+    if (!options.rateLimiter || !authScopes.has(scope)) return;
+    try {
+      const result = await options.rateLimiter.consume(request.ip, scope);
+      if (!result.allowed)
+        return reply
+          .header("retry-after", String(Math.max(1, result.retryAfterSeconds)))
+          .code(429)
+          .type("application/problem+json")
+          .send(problem(429, "RATE_LIMITED", request.id));
+    } catch {
+      return reply
+        .code(503)
+        .type("application/problem+json")
+        .send(problem(503, "SERVICE_UNAVAILABLE", request.id));
+    }
+  });
   app.addHook("onSend", async (request, reply) => {
     reply
       .header("x-request-id", request.id)
