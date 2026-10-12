@@ -184,6 +184,12 @@ export const passwordResetRequestSchema = z.strictObject({
 });
 export type PasswordResetRequest = z.infer<typeof passwordResetRequestSchema>;
 
+export const passwordChangeRequestSchema = z.strictObject({
+  currentPassword: z.string().min(1).max(128),
+  newPassword: z.string().min(8).max(128),
+});
+export type PasswordChangeRequest = z.infer<typeof passwordChangeRequestSchema>;
+
 export const profilePatchSchema = z
   .strictObject({
     displayName: z.string().trim().min(1).max(100).optional(),

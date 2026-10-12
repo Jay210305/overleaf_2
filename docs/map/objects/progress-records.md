@@ -4,9 +4,9 @@ cluster: execution
 universe: live
 status: verified
 entity: docs/progress/progress-log.md
-sources: ["docs/progress/progress-log.md", "docs/progress/open-gaps.md", "docs/progress/technical-debt.md", "docs/progress/sprint-00.md", "docs/progress/sprint-01.md", "docs/progress/sprint-02.md", "docs/test-reports/s00-verification.md", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md", "docs/test-reports/s02-t05.md", "docs/test-reports/s02-t06.md", "docs/test-reports/s02-t09.md", "docs/test-reports/s02-t07.md", "docs/feature-parity.md"]
+sources: ["docs/progress/progress-log.md", "docs/progress/open-gaps.md", "docs/progress/technical-debt.md", "docs/progress/sprint-00.md", "docs/progress/sprint-01.md", "docs/progress/sprint-02.md", "docs/test-reports/s00-verification.md", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md", "docs/test-reports/s02-t05.md", "docs/test-reports/s02-t06.md", "docs/test-reports/s02-t09.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t10.md", "docs/feature-parity.md"]
 runtime: not-applicable
-verified_on: 2026-10-11
+verified_on: 2026-10-12
 snapshot: _meta/file-inventory.json
 ---
 
@@ -22,7 +22,7 @@ Plans and estimates must remain distinguishable from actual actions and measured
 
 ## Shape
 
-A global log, per-stage task matrices, gap/debt files, feature-parity evidence and scoped reports. S00 is closed; S01 records ten accepted tasks; S02-T01 through S02-T06 and S02-T09 were accepted by the independent co-maintainer on 2026-10-11. S02-T07 was accepted on 2026-10-12. Feature rows remain incomplete because avatar lifecycle, product project routes and later work are still required. Missing credentials and research choices are tracked as gaps.
+A global log, per-stage task matrices, gap/debt files, feature-parity evidence and scoped reports. S00 is closed; S01 records ten accepted tasks; S02-T01 through S02-T06 and S02-T09 were accepted by the independent co-maintainer on 2026-10-11. S02-T07 was accepted on 2026-10-12; S02-T10 has local password-change evidence and awaits review. Feature rows remain incomplete because avatar lifecycle, product project routes and later work are still required. Missing credentials and research choices are tracked as gaps.
 
 ## Connected to
 
@@ -52,4 +52,5 @@ Maintainers and executing agents write observed evidence; reviewers inspect comm
 - [S02-T04 evidence](../../test-reports/s02-t04.md)
 - [S02-T09 evidence](../../test-reports/s02-t09.md)
 - [S02-T07 evidence](../../test-reports/s02-t07.md)
+- [S02-T10 evidence](../../test-reports/s02-t10.md)
 - [docs/feature-parity.md](../../feature-parity.md)

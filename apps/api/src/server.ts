@@ -13,6 +13,7 @@ import { installProjectGuard } from "./plugins/require-session.js";
 import { safeLoggerOptions } from "./plugins/logging.js";
 import type { AuthRateLimiter } from "./plugins/rate-limit.js";
 import { registerProfileRoutes } from "./modules/account/profile.js";
+import { registerPasswordChangeRoute } from "./modules/account/password-change.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -31,6 +32,7 @@ const authScopes = new Set([
   "GET /api/v1/me/sessions",
   "GET /api/v1/me/sessions/:sessionId",
   "DELETE /api/v1/me/sessions/:sessionId",
+  "POST /api/v1/me/password",
 ]);
 
 export interface ServerOptions {
@@ -116,6 +118,11 @@ export function createServer(options: ServerOptions) {
     secureCookies: options.secureCookies,
   });
   registerProfileRoutes(app, {
+    db: options.db,
+    origin: options.origin,
+    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+  });
+  registerPasswordChangeRoute(app, {
     db: options.db,
     origin: options.origin,
     secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
