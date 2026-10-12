@@ -7,9 +7,11 @@ Read the relevant object card below, then its owning source and selected task. C
 | Change | Open before editing |
 |---|---|
 | Scope, priorities, release gates or estimates | [Planning Baseline](../objects/planning-baseline.md), [Task Library](../objects/task-library.md), [Progress](../objects/progress-records.md) |
-| HTTP schema or database shape | [Contracts](../objects/interface-contracts.md), [API/Data](../objects/api-and-durable-data.md), [Task Library](../objects/task-library.md) |
-| Durable save or collaboration protocol | [API/Data](../objects/api-and-durable-data.md), [Browser](../objects/browser-and-editing.md), [Contracts](../objects/interface-contracts.md) |
-| Compile input, artifact authorization or executor boundary | [Compilation](../objects/compilation-and-artifacts.md), [API/Data](../objects/api-and-durable-data.md), [Planning](../objects/planning-baseline.md) |
+| HTTP route or DTO | [Contracts](../objects/interface-contracts.md), [API](../objects/api-and-durable-data.md), [Task Library](../objects/task-library.md) |
+| Database shape, migration or repository | [Data Model](../objects/data-model-and-persistence.md), [Contracts](../objects/interface-contracts.md), [API](../objects/api-and-durable-data.md) |
+| Durable save or collaboration protocol | [Data Model](../objects/data-model-and-persistence.md), [Browser](../objects/browser-and-editing.md), [Contracts](../objects/interface-contracts.md) |
+| Private object key, scope or URL | [Private Storage](../objects/private-object-storage.md), [API](../objects/api-and-durable-data.md), [Contracts](../objects/interface-contracts.md) |
+| Compile input, artifact authorization or executor boundary | [Compilation](../objects/compilation-and-artifacts.md), [Private Storage](../objects/private-object-storage.md), [Data Model](../objects/data-model-and-persistence.md) |
 | Source-preserving visual editing | [Browser](../objects/browser-and-editing.md), [Contracts](../objects/interface-contracts.md), [Task Library](../objects/task-library.md) |
 | Provider checkpoint, credentials or Git transport | [Adapters](../objects/provider-and-git-adapters.md), [Compilation/Artifacts](../objects/compilation-and-artifacts.md), [Contracts](../objects/interface-contracts.md) |
 | A task's state or completion evidence | [Task Library](../objects/task-library.md), [Progress](../objects/progress-records.md) |

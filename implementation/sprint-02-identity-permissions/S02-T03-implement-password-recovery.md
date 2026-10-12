@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T02]
 requirements: [ACC-01, ACC-06]
 source_task: S02-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S02-T03 — Implement password recovery
 
@@ -67,10 +67,12 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Known/unknown emails have indistinguishable accepted response; hashed token expires/uses once and resets revoke sessions
-- [ ] ACC-01: Email registration, verification, login/logout and single-use password recovery tokens. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] ACC-06: Password change invalidates sessions; optional TOTP MFA belongs to G4. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Known/unknown emails have indistinguishable accepted response; hashed token expires/uses once and resets revoke sessions
+- [x] ACC-01: This task's single-use password recovery token and reset assertions pass. The overall feature remains IN_PROGRESS for browser flow and later gate checks.
+- [x] ACC-06: Recovery reset revokes sessions. Authenticated password change remains S02-T10; optional TOTP MFA belongs to G4.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+
+The accepted-response assertion covers status, body and content type. SMTP timing parity is not established; see [scoped report](../../docs/test-reports/s02-t03.md) and GAP-14.
 
 ## Verification
 
@@ -96,9 +98,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence in the [report](../../docs/test-reports/s02-t03.md); SMTP timing parity and 429 remain open.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated; actual hours were not measured.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; accepted by the Project Co-owner on 2026-10-11 in this conversation.

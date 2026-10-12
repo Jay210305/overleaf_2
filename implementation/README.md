@@ -31,17 +31,17 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S01-T07 | [Test constraints rollback and naming races](sprint-01-data-contracts/S01-T07-test-constraints-rollback-and-naming-races.md) | Project Co-owner (proposed) | 6 | done |
 | S01-T08 | [Create private S3 adapter](sprint-01-data-contracts/S01-T08-create-private-s3-adapter.md) | Project Co-owner (proposed) | 8 | done |
 | S01-T10 | [Deliver persisted development sample vertical slice](sprint-01-data-contracts/S01-T10-deliver-persisted-development-sample-vertical-slice.md) | Project Co-owner (proposed) | 6 | done |
-| S02-T01 | [Implement registration and verification](sprint-02-identity-permissions/S02-T01-implement-registration-and-verification.md) | Julio (proposed) | 8 | todo |
-| S02-T02 | [Implement cookie sessions and logout](sprint-02-identity-permissions/S02-T02-implement-cookie-sessions-and-logout.md) | Julio (proposed) | 8 | todo |
-| S02-T03 | [Implement password recovery](sprint-02-identity-permissions/S02-T03-implement-password-recovery.md) | Julio (proposed) | 8 | todo |
-| S02-T04 | [Implement session and project policy guards](sprint-02-identity-permissions/S02-T04-implement-session-and-project-policy-guards.md) | Julio (proposed) | 8 | todo |
-| S02-T05 | [Create accessible authentication forms](sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md) | Julio (proposed) | 8 | todo |
-| S02-T06 | [Add authentication rate limits and redaction](sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md) | Julio (proposed) | 6 | todo |
-| S02-T09 | [Create redacted audit event writer](sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | Julio (proposed) | 6 | todo |
-| S02-T07 | [Implement profile preferences and session management](sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | Julio (proposed) | 8 | todo |
-| S02-T10 | [Implement authenticated password change](sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | Julio (proposed) | 6 | todo |
-| S02-T11 | [Implement private avatar upload lifecycle](sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | Julio (proposed) | 6 | todo |
-| S02-T08 | [Verify tenancy revocation suspension and CSRF](sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | Julio (proposed) | 6 | todo |
+| S02-T01 | [Implement registration and verification](sprint-02-identity-permissions/S02-T01-implement-registration-and-verification.md) | Julio (proposed) | 8 | done |
+| S02-T02 | [Implement cookie sessions and logout](sprint-02-identity-permissions/S02-T02-implement-cookie-sessions-and-logout.md) | Julio (proposed) | 8 | done |
+| S02-T03 | [Implement password recovery](sprint-02-identity-permissions/S02-T03-implement-password-recovery.md) | Julio (proposed) | 8 | done |
+| S02-T04 | [Implement session and project policy guards](sprint-02-identity-permissions/S02-T04-implement-session-and-project-policy-guards.md) | Julio (proposed) | 8 | done |
+| S02-T05 | [Create accessible authentication forms](sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md) | Julio (proposed) | 8 | done |
+| S02-T06 | [Add authentication rate limits and redaction](sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md) | Julio (proposed) | 6 | done |
+| S02-T09 | [Create redacted audit event writer](sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | Julio (proposed) | 6 | done |
+| S02-T07 | [Implement profile preferences and session management](sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | Julio (proposed) | 8 | done |
+| S02-T10 | [Implement authenticated password change](sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | Julio (proposed) | 6 | done |
+| S02-T11 | [Implement private avatar upload lifecycle](sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | Julio (proposed) | 6 | done |
+| S02-T08 | [Verify tenancy revocation suspension and CSRF](sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | Julio (proposed) | 6 | done |
 | S03-T01 | [Implement project CRUD and pagination](sprint-03-projects-files/S03-T01-implement-project-crud-and-pagination.md) | Project Co-owner (proposed) | 8 | todo |
 | S03-T02 | [Create duplicate and rename project sources](sprint-03-projects-files/S03-T02-create-duplicate-and-rename-project-sources.md) | Project Co-owner (proposed) | 8 | todo |
 | S03-T03 | [Create API-backed dashboard](sprint-03-projects-files/S03-T03-create-api-backed-dashboard.md) | Project Co-owner (proposed) | 8 | todo |

@@ -4,7 +4,7 @@ cluster: runtime-design
 universe: ghost
 status: stub
 entity: apps/tex-executor
-sources: ["docs/contracts/compilation.md","docs/contracts/storage-and-revisions.md","docs/planning/02-architecture.md","docs/planning/release-and-postmortem.md","docs/planning/07-risks.md"]
+sources: ["docs/contracts/compilation.md", "docs/contracts/storage-and-revisions.md", "docs/planning/02-architecture.md", "docs/planning/release-and-postmortem.md", "docs/planning/07-risks.md", "packages/db/migrations/0001-core.sql", "packages/contracts/src/storage.ts"]
 runtime: proposed
 ---
 
@@ -12,7 +12,7 @@ runtime: proposed
 
 ## Summary
 
-The proposed jobs, object storage and separate TeX executor produce private artifacts from immutable revisions.
+Compilation jobs, artifact authorization and the separate TeX executor are proposed. The S01 private object adapter is mapped separately as live code.
 
 ## Why this shape
 
@@ -20,11 +20,11 @@ Execution and artifacts must preserve source identity, authorization and the tru
 
 ## Shape
 
-Proposed paths: `apps/jobs`, `apps/tex-executor`, `packages/storage`, `infra`. Pinned TeX Live/latexmk and private S3-compatible objects are planned; G1 is trusted execution.
+Proposed paths: `apps/jobs` and `apps/tex-executor`. The database has `compile_jobs` and `artifact_sets` tables (`packages/db/migrations/0001-core.sql:234`), and [Private Object Storage](private-object-storage.md) has an S3 adapter, but no compilation execution or PDF generation exists. Pinned TeX Live/latexmk remains S06 work; G1 is trusted execution.
 
 ## Connected to
 
-Consumes durable revision manifests; browser preview and integration exports consume authorized artifacts.
+Future jobs consume immutable revision manifests; browser preview and integration exports will consume authorized artifacts.
 
 ## If you change this
 
@@ -33,7 +33,7 @@ Consumes durable revision manifests; browser preview and integration exports con
 
 ## Surfaces
 
-Currently design and release-checklist documents; no executor or object-store implementation is inspected.
+Design and release-checklist documents plus future job/artifact consumers. No executor or generated PDF has been verified.
 
 ## See
 

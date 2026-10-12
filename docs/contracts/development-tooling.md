@@ -11,6 +11,7 @@ S00 now supplies frozen installation, formatting/lint/types/coverage, app/packag
 | `pnpm db:migrate` | DATABASE_URL + reviewed SQL / migration report | 0 applied; nonzero failure/rollback; no production auto-reset |
 | `pnpm db:seed` | Explicit development/test environment / role/sample fixtures | 0 seeded; nonzero production environment refusal |
 | `pnpm dev` | Valid local env / web API and applicable collab/jobs logs | Long-running; useful readiness; nonzero startup error |
+| `pnpm --filter @latex-collab/api invite:trusted <email> <display name>` | Reviewed trusted recipient plus DATABASE_URL, SMTP_URL and EMAIL_FROM / invitation email | 0 only after SMTP acceptance; nonzero on invalid recipient, existing registered account or provider failure; never prints the secret token. Registration/verification remain S02-T01 in progress. |
 | Quality scripts | See QG-01–QG-09 in planning doc 06 | 0 pass; nonzero failures, unavailable dependency or unimplemented script |
 | `python scripts/plan_lint.py` | Current Markdown plan / consistency report | 0 structural pass; 1 errors; no product-test claim |
 

@@ -2,7 +2,7 @@
 
 ## Purpose and Method
 
-Provide orientation and first-order edit impact for the existing documentation repository. Uses the requested [ICM Architect](https://raw.githubusercontent.com/RinDig/icm-architect/refs/heads/main/SKILL.md) and its installed system-map guidance. Source files own facts; cards link to them.
+Provide orientation and first-order edit impact for the planning documents and current implementation. Uses the requested [ICM Architect](https://raw.githubusercontent.com/RinDig/icm-architect/refs/heads/main/SKILL.md) and its installed system-map guidance. Source files own facts; cards link to them.
 
 ## Inputs
 
@@ -14,11 +14,11 @@ Provide orientation and first-order edit impact for the existing documentation r
 
 | Universe | Meaning here |
 |---|---|
-| `live` | Operative documentation or an existing local documentation tool |
+| `live` | Operative documentation, local tooling or inspected application code |
 | `ghost` | Planned app/module path with no inspected runtime implementation |
 | `leftover` | A retained superseded path; none declared by this initial map |
 
-Object status is `stub`, `verified` or `stale`. Runtime readiness is separate. A verified ghost card only verifies the design reference and explicitly says runtime is proposed. This map keeps ghost cards `stub` until actual code is inspected.
+Object status is `stub`, `verified` or `stale`. Runtime readiness is separate. A verified live runtime card confirms a cited code surface exists; it does not complete the product requirement. Ghost cards remain `stub` until actual code is inspected.
 
 ## Process and Outputs
 
@@ -37,6 +37,6 @@ External consumers of repository paths (other repos, jobs, issue links) are **un
 
 ## Cold Walk
 
-Root [AGENTS.md](../../AGENTS.md) → map catalog → one card must identify the owner and direct impact. Follow its source link and distinguish design from evidence. For collaboration durability, open API/Durable Data, then the collaboration contract; for skill choice, open Agent Guidance, then the skill catalog. Verify sources and hashes before marking a card verified after a change.
+Root [AGENTS.md](../../AGENTS.md) → map catalog → one card must identify the owner and direct impact. Follow its source link and distinguish design from evidence. For collaboration durability, open Data Model and Persistence, then the collaboration contract; for object keys, open Private Object Storage and the storage contract. For skill choice, open Agent Guidance, then the skill catalog. Verify sources and hashes before marking a card verified after a change.
 
 Initial observed routes and documentation-check results: [Walk Report](_meta/walk-report.md).

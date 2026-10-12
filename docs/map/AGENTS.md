@@ -3,9 +3,9 @@
 Catalog source: edit this file; `python scripts/build_icm_map.py` regenerates its twins.
 `AGENTS.md` and `routing.md` in this folder must remain byte-identical to this catalog.
 
-The subject is the current planning repository for a collaborative LaTeX editor.
-`live` means a document/tool in force; `ghost` means a proposed runtime component.
-`verified` on a live document card verifies its cited file, not implemented product behavior.
+The subject is the current planning and implementation repository for a collaborative LaTeX editor.
+`live` means an existing document or code surface; `ghost` means a proposed runtime component.
+`verified` confirms the cited surface was inspected, not that a full product feature is complete.
 Sprint means an unscheduled work stage; Project Co-owner means the user's unnamed contributor role.
 
 | Question | Open |
@@ -20,8 +20,10 @@ Sprint means an unscheduled work stage; Project Co-owner means the user's unname
 | What validates the typed pnpm workspace? | [Workspace Tooling](objects/workspace-tooling.md) |
 | How are skills selected? | [Agent Guidance](objects/agent-guidance.md) |
 | What editor code is proposed? | [Browser and Editing](objects/browser-and-editing.md) |
-| What API/data code is proposed? | [API and Durable Data](objects/api-and-durable-data.md) |
-| What compile/storage code is proposed? | [Compilation and Artifacts](objects/compilation-and-artifacts.md) |
+| What API routes exist? | [API and Durable Data](objects/api-and-durable-data.md) |
+| What database layer exists? | [Data Model and Persistence](objects/data-model-and-persistence.md) |
+| What private object adapter exists? | [Private Object Storage](objects/private-object-storage.md) |
+| What compilation code is proposed? | [Compilation and Artifacts](objects/compilation-and-artifacts.md) |
 | What external integration code is proposed? | [Provider and Git Adapters](objects/provider-and-git-adapters.md) |
 | What should I read before changing something? | [Change Impact](effects/CONTEXT.md) |
 | How do document changes propagate? | [Planning Maintenance](processes/planning-maintenance.md) |

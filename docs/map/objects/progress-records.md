@@ -4,9 +4,9 @@ cluster: execution
 universe: live
 status: verified
 entity: docs/progress/progress-log.md
-sources: ["docs/progress/progress-log.md","docs/progress/open-gaps.md","docs/progress/technical-debt.md","docs/progress/sprint-00.md","docs/progress/repository-audit.md","docs/adr/compatibility-spike.md","docs/test-reports/s00-t01.md","docs/test-reports/s00-t11.md","docs/test-reports/s00-t02.md","docs/test-reports/s00-t03.md","docs/feature-parity.md"]
+sources: ["docs/progress/progress-log.md", "docs/progress/open-gaps.md", "docs/progress/technical-debt.md", "docs/progress/sprint-00.md", "docs/progress/sprint-01.md", "docs/progress/sprint-02.md", "docs/test-reports/s00-verification.md", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md", "docs/test-reports/s02-t05.md", "docs/test-reports/s02-t06.md", "docs/test-reports/s02-t09.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t10.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s02-t08.md", "docs/feature-parity.md"]
 runtime: not-applicable
-verified_on: 2026-10-10
+verified_on: 2026-10-12
 snapshot: _meta/file-inventory.json
 ---
 
@@ -22,7 +22,7 @@ Plans and estimates must remain distinguishable from actual actions and measured
 
 ## Shape
 
-A global log, per-stage task matrices, gap/debt files, feature-parity evidence, scoped reports and a candidate compatibility record. Missing credentials and research choices are tracked as gaps rather than invented success.
+A global log, per-stage task matrices, gap/debt files, feature-parity evidence and scoped reports. S00 is closed; S01 records ten accepted tasks; all 11 S02 tasks have independent co-maintainer acceptance through 2026-10-12. The S02 work package is done; G1 release and feature rows remain incomplete because project routes, editing, compilation and later gates are still required. Missing credentials and research choices are tracked as gaps.
 
 ## Connected to
 
@@ -43,10 +43,16 @@ Maintainers and executing agents write observed evidence; reviewers inspect comm
 - [docs/progress/open-gaps.md](../../progress/open-gaps.md)
 - [docs/progress/technical-debt.md](../../progress/technical-debt.md)
 - [docs/progress/sprint-00.md](../../progress/sprint-00.md)
-- [docs/progress/repository-audit.md](../../progress/repository-audit.md)
-- [docs/adr/compatibility-spike.md](../../adr/compatibility-spike.md)
-- [docs/test-reports/s00-t01.md](../../test-reports/s00-t01.md)
-- [docs/test-reports/s00-t11.md](../../test-reports/s00-t11.md)
-- [docs/test-reports/s00-t02.md](../../test-reports/s00-t02.md)
-- [docs/test-reports/s00-t03.md](../../test-reports/s00-t03.md)
+- [docs/progress/sprint-01.md](../../progress/sprint-01.md)
+- [docs/progress/sprint-02.md](../../progress/sprint-02.md)
+- [S01-T10 evidence](../../test-reports/s01-t10.md)
+- [S02-T01 evidence](../../test-reports/s02-t01.md)
+- [S02-T02 evidence](../../test-reports/s02-t02.md)
+- [S02-T03 evidence](../../test-reports/s02-t03.md)
+- [S02-T04 evidence](../../test-reports/s02-t04.md)
+- [S02-T09 evidence](../../test-reports/s02-t09.md)
+- [S02-T07 evidence](../../test-reports/s02-t07.md)
+- [S02-T10 evidence](../../test-reports/s02-t10.md)
+- [S02-T11 evidence](../../test-reports/s02-t11.md)
+- [S02-T08 evidence](../../test-reports/s02-t08.md)
 - [docs/feature-parity.md](../../feature-parity.md)

@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T03]
 requirements: [COL-03]
 source_task: S02-T04
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S02-T04 — Implement session and project policy guards
 
@@ -67,9 +67,9 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Server denies every unsupported action by default; wrong tenant yields no project content; role policy is pure and tested
-- [ ] COL-03: OWNER/EDITOR/REVIEWER/VIEWER are enforced on REST; WSS enforcement lands in G2. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Server denies every unsupported action by default; wrong tenant yields no project content; role policy is pure and tested
+- [x] COL-03: The four roles are enforced by the installed REST guard on project-scoped routes in the PostgreSQL integration fixture. S03 owns product CRUD routes; WSS enforcement lands in G2. COL-03 remains IN_PROGRESS.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -95,9 +95,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence in the [report](../../docs/test-reports/s02-t04.md).
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence and contract changes are updated; actual hours were not measured.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; accepted by the Project Co-owner on 2026-10-11 in this conversation.

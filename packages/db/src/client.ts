@@ -160,7 +160,9 @@ export class DatabaseClient {
         throw error;
       }
       const err = error as { code?: string };
-      if (err.code && typeof err.code === "string") {
+      // Application errors may also carry a `code`; only SQLSTATE values
+      // should be translated into persistence failures here.
+      if (typeof err.code === "string" && /^[0-9A-Z]{5}$/.test(err.code)) {
         throw mapDatabaseError(error);
       }
       throw error;

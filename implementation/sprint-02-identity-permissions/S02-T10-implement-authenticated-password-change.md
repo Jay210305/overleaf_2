@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T07]
 requirements: [ACC-06, ACC-02]
 source_task: S02-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S02-T10 — Implement authenticated password change
 
@@ -66,10 +66,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Verify current password and CSRF, replace Argon2id hash, invalidate other sessions and reject incorrect password without changes
-- [ ] ACC-06: Password change invalidates sessions; optional TOTP MFA belongs to G4. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] ACC-02: Secure opaque cookies, expiry, rotation, revocation and session inventory. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Verify current password and CSRF, replace Argon2id hash, invalidate other sessions and reject incorrect password without changes.
+- [x] ACC-06: Authenticated password change revokes other sessions and unused reset tokens; optional TOTP MFA remains G4. ACC-06 remains IN_PROGRESS for its remaining gate checks.
+- [x] ACC-02: Scoped session preservation/revocation and expired-cookie denial are tested; ACC-02 remains IN_PROGRESS for later mapped checks.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -95,9 +95,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence in the [report](../../docs/test-reports/s02-t10.md).
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence and HTTP contract are updated; actual hours were not measured. No ADR was needed.
+- [x] No secret/private source in artifacts or logs; no new external access was required.
+- [x] Independent co-maintainer review complete; accepted by the Project Co-owner on 2026-10-12 in this conversation.

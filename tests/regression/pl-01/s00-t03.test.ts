@@ -12,6 +12,12 @@ describe("PL-01 frozen installation", () => {
     try {
       copyFileSync(join(root, "pnpm-lock.yaml"), join(fixture, "pnpm-lock.yaml"));
       copyFileSync(join(root, "pnpm-workspace.yaml"), join(fixture, "pnpm-workspace.yaml"));
+      // This fixture isolates frozen-lockfile behavior. Offline registry
+      // metadata for the workspace supply-chain policy may not be cached.
+      writeFileSync(
+        join(fixture, "pnpm-workspace.yaml"),
+        `${readFileSync(join(fixture, "pnpm-workspace.yaml"), "utf8")}\ntrustLockfile: true\n`,
+      );
       const originalLock = readFileSync(join(fixture, "pnpm-lock.yaml"), "utf8");
       const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8")) as Record<
         string,

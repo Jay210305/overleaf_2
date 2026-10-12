@@ -171,8 +171,89 @@ export type RegisterRequest = z.infer<typeof registerRequestSchema>;
 
 export const loginRequestSchema = z.strictObject({
   email: z.string().email(),
-  password: z.string().min(1).max(128),
+  password: z.string().min(8).max(128),
 });
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
+
+export const emailRequestSchema = z.strictObject({ email: z.email().max(254) });
+export type EmailRequest = z.infer<typeof emailRequestSchema>;
+
+export const passwordResetRequestSchema = z.strictObject({
+  token: z.string().regex(/^[A-Za-z0-9_-]{43}$/),
+  password: z.string().min(8).max(128),
+});
+export type PasswordResetRequest = z.infer<typeof passwordResetRequestSchema>;
+
+export const passwordChangeRequestSchema = z.strictObject({
+  currentPassword: z.string().min(1).max(128),
+  newPassword: z.string().min(8).max(128),
+});
+export type PasswordChangeRequest = z.infer<typeof passwordChangeRequestSchema>;
+
+export const profilePatchSchema = z
+  .strictObject({
+    displayName: z.string().trim().min(1).max(100).optional(),
+    locale: z.string().min(1).max(35).optional(),
+    timezone: z.string().min(1).max(64).optional(),
+  })
+  .refine((value) => Object.keys(value).length > 0);
+
+export const editorSettingsSchema = z.strictObject({
+  fontFamily: z.string().min(1).max(100),
+  fontSize: z.number().int().min(10).max(32),
+  tabWidth: z.number().int().min(1).max(8),
+  wrap: z.boolean(),
+  autoClose: z.boolean(),
+  autocomplete: z.boolean(),
+  reducedMotion: z.boolean(),
+});
+export const notificationSettingsSchema = z.strictObject({
+  email: z.boolean(),
+  inApp: z.boolean(),
+  mentions: z.boolean(),
+  replies: z.boolean(),
+  invitations: z.boolean(),
+});
+export const preferencesPatchSchema = z
+  .strictObject({
+    locale: z.string().min(1).max(35).optional(),
+    timezone: z.string().min(1).max(64).optional(),
+    theme: z.enum(["light", "dark", "system"]).optional(),
+    editor: editorSettingsSchema.optional(),
+    notifications: notificationSettingsSchema.optional(),
+  })
+  .refine((value) => Object.keys(value).length > 0);
+
+export type ProfilePatch = z.infer<typeof profilePatchSchema>;
+export type PreferencesPatch = z.infer<typeof preferencesPatchSchema>;
+
+export const accountProfileViewSchema = z.object({
+  id: z.uuid(),
+  email: z.email(),
+  displayName: z.string(),
+  locale: z.string(),
+  timezone: z.string(),
+  avatarUrl: z.string().nullable().optional(),
+});
+export const accountPreferencesViewSchema = z.object({
+  locale: z.string(),
+  timezone: z.string(),
+  theme: z.enum(["light", "dark", "system"]),
+});
+export const accountSessionViewSchema = z.object({
+  id: z.uuid(),
+  deviceLabel: z.string(),
+  createdAt: z.string(),
+  lastSeenAt: z.string(),
+  expiresAt: z.string(),
+  current: z.boolean(),
+});
+export const accountSessionPageSchema = z.object({
+  items: z.array(accountSessionViewSchema),
+  nextCursor: z.string().nullable(),
+});
+export type AccountProfileView = z.infer<typeof accountProfileViewSchema>;
+export type AccountPreferencesView = z.infer<typeof accountPreferencesViewSchema>;
+export type AccountSessionView = z.infer<typeof accountSessionViewSchema>;
 
 export * from "./storage.js";

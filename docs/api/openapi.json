@@ -3,7 +3,7 @@
   "info": {
     "title": "LatexWorkspace Planned API",
     "version": "1.0.0",
-    "description": "Planning baseline only. No route is implemented or tested by this artifact. Draft examples use reserved example.test data."
+    "description": "Planning baseline with S02-T01 interim G1 route annotations. This artifact alone is not runtime evidence; see task reports and x-status. Draft examples use reserved example.test data."
   },
   "servers": [
     {
@@ -15,9 +15,40 @@
       "post": {
         "operationId": "post__auth_register",
         "summary": "POST /auth/register",
-        "description": "Permission: public. Public operation with token/rate/origin policy as applicable. Unknown input fields are rejected. All errors use Problem.",
+        "description": "G1 live slice: trusted email registration requires an operator-issued one-use X-Registration-Invite, exact Origin and custom X-CSRF-Token. Unknown-user public signup stays disabled until G5 approval. Unknown input fields are rejected. All errors use Problem; 429 is planned in S02-T06.",
         "security": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uri"
+            },
+            "example": "https://app.example.test"
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8
+            },
+            "example": "browser-mutation-marker"
+          },
+          {
+            "name": "X-Registration-Invite",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            },
+            "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        ],
         "responses": {
           "202": {
             "description": "Successful 202",
@@ -67,7 +98,7 @@
           }
         },
         "x-permission": "public",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -103,9 +134,29 @@
       "post": {
         "operationId": "post__auth_login",
         "summary": "POST /auth/login",
-        "description": "Permission: public. Public operation with token/rate/origin policy as applicable. Unknown input fields are rejected. All errors use Problem.",
+        "description": "Live S02-T02: verified trusted accounts only. Exact Origin and a nonempty X-CSRF-Token header are required. A successful response sets a host-only opaque HttpOnly session cookie and returns a separate X-CSRF-Token for later mutations. 429 rate limiting is S02-T06.",
         "security": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http://127.0.0.1:5173"
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8
+            },
+            "example": "login-bootstrap"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful 200",
@@ -131,6 +182,12 @@
                   "type": "string"
                 },
                 "description": "Host-only opaque session; HttpOnly; Secure on HTTPS; SameSite=Lax"
+              },
+              "X-CSRF-Token": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Separate random CSRF secret; only its SHA-256 hash is stored."
               }
             }
           },
@@ -169,7 +226,7 @@
           }
         },
         "x-permission": "public",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -204,14 +261,24 @@
       "post": {
         "operationId": "post__auth_logout",
         "summary": "POST /auth/logout",
-        "description": "Permission: session. Current session and authoritative resource permission required. Unknown input fields are rejected. All errors use Problem.",
+        "description": "Live S02-T02: exact Origin, current opaque cookie and matching X-CSRF-Token required. Revokes the session in PostgreSQL and clears the cookie. 429 rate limiting is S02-T06.",
         "security": [
           {
             "sessionCookie": [],
             "csrfToken": []
           }
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http://127.0.0.1:5173"
+          }
+        ],
         "responses": {
           "204": {
             "description": "Successful 204"
@@ -251,7 +318,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -262,9 +329,30 @@
       "post": {
         "operationId": "post__auth_verify_email",
         "summary": "POST /auth/verify-email",
-        "description": "Permission: public. Public operation with token/rate/origin policy as applicable. Unknown input fields are rejected. All errors use Problem.",
+        "description": "G1 live slice: one-use email token verification requires exact Origin and custom X-CSRF-Token. Unknown input fields are rejected. All errors use Problem; 429 is planned in S02-T06.",
         "security": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uri"
+            },
+            "example": "https://app.example.test"
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8
+            },
+            "example": "browser-mutation-marker"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful 200",
@@ -314,7 +402,7 @@
           }
         },
         "x-permission": "public",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -348,9 +436,29 @@
       "post": {
         "operationId": "post__auth_password_forgot",
         "summary": "POST /auth/password/forgot",
-        "description": "Permission: public. Public operation with token/rate/origin policy as applicable. Unknown input fields are rejected. All errors use Problem.",
+        "description": "Live S02-T03: exact Origin and custom X-CSRF-Token required. Valid known and unknown addresses receive the same 202 Accepted body. Only eligible verified accounts receive a one-hour email reset link. SMTP delivery failure invalidates the undelivered token and still returns 202. Without configured SMTP, all requests return 503. 429 limiting is S02-T06.",
         "security": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http://127.0.0.1:5173"
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8
+            },
+            "example": "recovery-bootstrap"
+          }
+        ],
         "responses": {
           "202": {
             "description": "Successful 202",
@@ -400,7 +508,7 @@
           }
         },
         "x-permission": "public",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -434,9 +542,29 @@
       "post": {
         "operationId": "post__auth_password_reset",
         "summary": "POST /auth/password/reset",
-        "description": "Permission: public. Public operation with token/rate/origin policy as applicable. Unknown input fields are rejected. All errors use Problem.",
+        "description": "Live S02-T03: exact Origin and custom X-CSRF-Token required. A valid one-use reset token atomically updates the Argon2id password, consumes all pending reset links and revokes every session. Expired, used or unknown tokens return 401; disabled accounts return 403. 429 limiting is S02-T06.",
         "security": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http://127.0.0.1:5173"
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8
+            },
+            "example": "recovery-bootstrap"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful 200",
@@ -486,7 +614,7 @@
           }
         },
         "x-permission": "public",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -497,7 +625,7 @@
               "examples": {
                 "valid": {
                   "value": {
-                    "token": "xxxxxxxxxxxxxxxx",
+                    "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                     "password": "xxxxxxxxxxxx"
                   }
                 },
@@ -583,7 +711,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -655,7 +783,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -802,7 +930,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -837,7 +965,7 @@
       "post": {
         "operationId": "post__me_avatar",
         "summary": "POST /me/avatar",
-        "description": "Permission: session. Current session and authoritative resource permission required. Unknown input fields are rejected. All errors use Problem.",
+        "description": "Current-account PNG upload, at most 1,000,000 bytes and 1024 pixels per side. Exact Origin, opaque session and CSRF required; replacement queues the previous private object for cleanup.",
         "security": [
           {
             "sessionCookie": [],
@@ -857,7 +985,7 @@
                   "id": "11111111-1111-4111-8111-111111111111",
                   "email": "developer@example.test",
                   "displayName": "x",
-                  "avatarUrl": "https://example.test/resource",
+                  "avatarUrl": "/api/v1/me/avatar/content",
                   "emailVerified": false,
                   "locale": "x",
                   "timezone": "x"
@@ -900,32 +1028,20 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "image/png": {
               "schema": {
-                "$ref": "#/components/schemas/AvatarRequest"
-              },
-              "examples": {
-                "valid": {
-                  "value": {
-                    "uploadId": "11111111-1111-4111-8111-111111111111"
-                  }
-                },
-                "invalid": {
-                  "value": {
-                    "unexpectedField": true
-                  },
-                  "description": "Reject unknown field and/or missing required fields with 400 VALIDATION_ERROR."
-                }
+                "type": "string",
+                "format": "binary"
               }
             }
           }
         },
         "x-invalid-example": {
-          "case": "Invalid requestBody example",
+          "case": "Invalid PNG bytes or dimensions",
           "expectedStatus": 400
         }
       }
@@ -1008,7 +1124,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -1092,7 +1208,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -1204,7 +1320,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -1287,7 +1403,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -1354,7 +1470,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -11544,6 +11660,129 @@
           "expectedStatus": 503
         }
       }
+    },
+    "/api/v1/auth/session": {
+      "get": {
+        "operationId": "get__auth_session",
+        "summary": "GET /auth/session",
+        "description": "Live S02-T02: exact Origin and current opaque cookie required. Returns only the authenticated account, atomically rotates session and CSRF secrets, and extends idle expiry within the 30-day absolute limit.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "http://127.0.0.1:5173"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current authenticated account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserView"
+                },
+                "example": {
+                  "id": "11111111-1111-4111-8111-111111111111",
+                  "email": "developer@example.test",
+                  "displayName": "x",
+                  "avatarUrl": "https://example.test/resource",
+                  "emailVerified": false,
+                  "locale": "x",
+                  "timezone": "x"
+                }
+              }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Rotated host-only opaque session; HttpOnly; Secure on HTTPS; SameSite=Lax"
+              },
+              "X-CSRF-Token": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Rotated CSRF secret"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        },
+        "x-permission": "session",
+        "x-status": "IN_PROGRESS",
+        "x-invalid-example": {
+          "case": "Missing, expired or revoked session cookie",
+          "expectedStatus": 401
+        }
+      }
+    },
+    "/api/v1/me/avatar/content": {
+      "get": {
+        "operationId": "get__me_avatar_content",
+        "summary": "GET /me/avatar/content",
+        "description": "Private current-account image read. Exact Origin and opaque session required; no object key or user ID accepted.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Own PNG avatar",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        },
+        "x-permission": "session",
+        "x-status": "IN_PROGRESS",
+        "x-invalid-example": {
+          "case": "Foreign user ID query is rejected",
+          "expectedStatus": 400
+        }
+      }
     }
   },
   "components": {
@@ -11551,7 +11790,8 @@
       "sessionCookie": {
         "type": "apiKey",
         "in": "cookie",
-        "name": "latex_session"
+        "name": "latex_session",
+        "description": "Development HTTP uses latex_session; production HTTPS uses __Host-latex_session with Secure. Both are host-only, HttpOnly, SameSite=Lax."
       },
       "csrfToken": {
         "type": "apiKey",
@@ -11647,8 +11887,7 @@
           "avatarUrl": {
             "anyOf": [
               {
-                "type": "string",
-                "format": "uri"
+                "type": "string"
               },
               {
                 "type": "null"
@@ -11690,7 +11929,7 @@
           },
           "password": {
             "type": "string",
-            "minLength": 12,
+            "minLength": 8,
             "maxLength": 128
           },
           "displayName": {
@@ -11716,7 +11955,7 @@
           },
           "password": {
             "type": "string",
-            "minLength": 12,
+            "minLength": 8,
             "maxLength": 128
           },
           "totpCode": {
@@ -11768,12 +12007,13 @@
         "properties": {
           "token": {
             "type": "string",
-            "minLength": 16,
-            "maxLength": 2048
+            "minLength": 43,
+            "maxLength": 43,
+            "pattern": "^[A-Za-z0-9_-]{43}$"
           },
           "password": {
             "type": "string",
-            "minLength": 12,
+            "minLength": 8,
             "maxLength": 128
           }
         },
@@ -11788,12 +12028,12 @@
         "properties": {
           "currentPassword": {
             "type": "string",
-            "minLength": 12,
+            "minLength": 1,
             "maxLength": 128
           },
           "newPassword": {
             "type": "string",
-            "minLength": 12,
+            "minLength": 8,
             "maxLength": 128
           }
         },
@@ -14894,19 +15134,6 @@
           "key",
           "enabled",
           "scope"
-        ],
-        "additionalProperties": false
-      },
-      "AvatarRequest": {
-        "type": "object",
-        "properties": {
-          "uploadId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "required": [
-          "uploadId"
         ],
         "additionalProperties": false
       },

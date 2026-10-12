@@ -64,7 +64,7 @@ export function validateKey(key: string): void {
     }
   }
 
-  const allowedPrefixes = ["projects/", "artifacts/", "revisions/", "templates/"];
+  const allowedPrefixes = ["projects/", "artifacts/", "revisions/", "templates/", "avatars/"];
   if (!allowedPrefixes.some((prefix) => key.startsWith(prefix))) {
     throw new StorageSecurityError(`Object key must start with an authorized prefix: ${key}`);
   }
@@ -85,6 +85,12 @@ export function assertProjectKeyScope(key: string, authorizedProjectId: string):
       `Access denied: key "${key}" is outside authorized scope for project "${authorizedProjectId}"`,
     );
   }
+}
+
+export function assertAvatarKeyScope(key: string, authorizedUserId: string): void {
+  validateKey(key);
+  if (!key.startsWith(`avatars/${authorizedUserId}/`))
+    throw new StorageSecurityError("Avatar object is outside the authorized user scope");
 }
 
 export class S3StorageAdapter implements StorageAdapter {

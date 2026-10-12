@@ -21,6 +21,8 @@ type RevisionManifest = {
 
 Object key creation is server-controlled, scoped as `projects/<projectId>/blobs/<sha256>` and separate artifacts/revisions prefixes; user input never determines unrestricted bucket keys. MinIO and hosted S3 implement the same contract. Private ACL by default; proposed signed GET TTL is 60 s, PUT TTL 300 s. authorize before every presign, and recheck completion against expected backend-calculated hash/size. ETag is not assumed to be SHA-256.
 
+S02-T11 also permits server-created `avatars/<userId>/<uuid>.png` keys for validated private profile images. Avatar reads use an authenticated API endpoint and do not return signed object URLs. Replacements queue the old key durably in PostgreSQL; a bounded worker checks that no current profile references it before deletion. Failed deletes remain queued for retry. If both the profile transaction and best-effort deletion of a newly uploaded object fail, an unreferenced private object can remain; this needs later storage reconciliation.
+
 ## Tree and Snapshot Invariants
 
 Tree uses stable node IDs and same-project parent IDs. Names reject slash/backslash, NUL, dot/dot-dot and dangerous normalized paths; proposed UTF-8 NFC normalization applies to names, not source bytes. Unique active sibling names include root nodes with null parent through explicit partial root/non-root indexes. Reject cycles and foreign parents transactionally.

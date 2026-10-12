@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T06]
 requirements: [COL-14, NFR-10]
 source_task: S01-T04
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S02-T09 — Create redacted audit event writer
 
@@ -66,10 +66,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Creation/login/revocation actions persist requestId and redacted metadata; no password/token/source body enters audit
-- [ ] COL-14: Redacted audit records creation/invitation/download/restore/revocation as features become available. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] NFR-10: Zero credentials/tokens/private source content in application logs. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Creation/login/revocation actions persist requestId and redacted metadata; no password/token/source body enters audit
+- [x] COL-14: Scoped account creation and session revocation audit records are persisted; invitation/download/restore belong to later features, so COL-14 remains IN_PROGRESS.
+- [x] NFR-10: This writer accepts no arbitrary metadata and its scoped secret regression passes; NFR-10 remains IN_PROGRESS across the product.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -95,9 +95,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence in the [report](../../docs/test-reports/s02-t09.md).
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress and feature evidence are updated; actual hours were not measured. No ADR or contract change was needed.
+- [x] No secret/private source in artifacts or logs; wider feature audit and retention work remain open.
+- [x] Independent co-maintainer review complete; accepted by the Project Co-owner on 2026-10-11 in this conversation.
