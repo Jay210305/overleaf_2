@@ -21,6 +21,12 @@ describe("ACC-01 S02-T01 denial regressions", () => {
   beforeAll(async () => {
     db = new DatabaseClient(parseServerConfig(process.env).DATABASE_URL);
     await db.query(migration);
+    await db.query(
+      readFileSync(
+        resolve(import.meta.dirname, "../../../packages/db/migrations/0002-support.sql"),
+        "utf8",
+      ),
+    );
     app = createServer({
       checkReadiness: async () => true,
       db,

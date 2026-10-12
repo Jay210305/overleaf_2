@@ -31,6 +31,12 @@ describe("S02-T03 password recovery against PostgreSQL", () => {
   beforeAll(async () => {
     db = new DatabaseClient(parseServerConfig(process.env).DATABASE_URL);
     await db.query(core);
+    await db.query(
+      readFileSync(
+        resolve(import.meta.dirname, "../../packages/db/migrations/0002-support.sql"),
+        "utf8",
+      ),
+    );
     await db.query(sessionMigration);
     email = `recover-${randomUUID()}@example.test`;
     const inserted = await db.query<{ id: string }>(

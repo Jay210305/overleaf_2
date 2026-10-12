@@ -1,7 +1,7 @@
 import { randomBytes } from "node:crypto";
 import argon2 from "argon2";
 import { emailRequestSchema, passwordResetRequestSchema } from "@latex-collab/contracts";
-import type { DatabaseClient } from "@latex-collab/db";
+import { writeAuditEvent, type DatabaseClient } from "@latex-collab/db";
 import { AuthError, tokenHash } from "./errors.js";
 import { normalizeEmail } from "./register.js";
 
@@ -57,7 +57,11 @@ export async function requestPasswordReset(
   }
 }
 
-export async function resetPassword(db: DatabaseClient, rawInput: unknown): Promise<void> {
+export async function resetPassword(
+  db: DatabaseClient,
+  rawInput: unknown,
+  requestId: string,
+): Promise<void> {
   const parsed = passwordResetRequestSchema.safeParse(rawInput);
   if (!parsed.success) throw new AuthError(400, "VALIDATION_ERROR");
   // Reject token guesses before paying the Argon2 cost. The locked
@@ -106,9 +110,16 @@ export async function resetPassword(db: DatabaseClient, rawInput: unknown): Prom
       "UPDATE verification_tokens SET used_at = NOW() WHERE user_id = $1 AND purpose = 'password_reset' AND used_at IS NULL",
       [row.user_id],
     );
-    await tx.query(
-      "UPDATE sessions SET revoked_at = NOW() WHERE user_id = $1 AND revoked_at IS NULL",
+    const revoked = await tx.query<{ id: string }>(
+      "UPDATE sessions SET revoked_at = NOW() WHERE user_id = $1 AND revoked_at IS NULL RETURNING id",
       [row.user_id],
     );
+    for (const session of revoked.rows)
+      await writeAuditEvent(tx, {
+        action: "session.revoked",
+        actorId: row.user_id,
+        targetId: session.id,
+        requestId,
+      });
   });
 }

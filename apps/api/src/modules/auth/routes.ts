@@ -55,7 +55,13 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
     if (typeof invite !== "string" || invite.length < 32 || invite.length > 256)
       return reject(reply, request, new AuthError(403, "REGISTRATION_DENIED"));
     try {
-      await registerTrustedAccount(options.db, request.body, invite, options.sendVerification);
+      await registerTrustedAccount(
+        options.db,
+        request.body,
+        invite,
+        options.sendVerification,
+        request.id,
+      );
       return reply.code(202).send({ accepted: true });
     } catch (error) {
       if (error instanceof AuthError) return reject(reply, request, error);
@@ -82,7 +88,7 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
     try {
       requireAnonymousCsrf(request, options.origin);
       if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
-      const issued = await login(options.db, request.body);
+      const issued = await login(options.db, request.body, request.id);
       return reply
         .header("set-cookie", sessionCookie(issued.token, secureCookies, issued.expiresAt))
         .header("x-csrf-token", issued.csrf)
@@ -116,7 +122,7 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
       requireExactOrigin(request, options.origin);
       if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
       const token = readSessionCookie(request.headers.cookie, secureCookies);
-      await logout(options.db, token, request.headers["x-csrf-token"]);
+      await logout(options.db, token, request.headers["x-csrf-token"], request.id);
       return reply.header("set-cookie", expiredSessionCookie(secureCookies)).code(204).send();
     } catch (error) {
       if (error instanceof AuthError) return reject(reply, request, error);
@@ -141,7 +147,7 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
     try {
       requireAnonymousCsrf(request, options.origin);
       if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
-      await resetPassword(options.db, request.body);
+      await resetPassword(options.db, request.body, request.id);
       return reply.code(200).send({ accepted: true });
     } catch (error) {
       if (error instanceof AuthError) return reject(reply, request, error);

@@ -4,7 +4,7 @@ cluster: runtime-design
 universe: live
 status: verified
 entity: apps/api/src/server.ts
-sources: ["docs/contracts/http-api.md", "apps/api/src/server.ts", "apps/api/src/main.ts", "apps/api/src/modules/development/sample.ts", "apps/api/src/modules/auth/register.ts", "apps/api/src/modules/auth/verify-email.ts", "apps/api/src/modules/auth/session.ts", "apps/api/src/modules/auth/password-reset.ts", "apps/api/src/modules/auth/routes.ts", "apps/api/src/modules/auth/mail.ts", "apps/api/src/plugins/csrf.ts", "apps/api/src/plugins/require-session.ts", "apps/api/src/plugins/rate-limit.ts", "apps/api/src/plugins/logging.ts", "packages/auth/src/project-policy.ts", "apps/api/src/operator/invite-trusted.ts", "apps/api/src/readiness.ts", "apps/api/src/plugins/errors.ts", "tests/integration/persisted-sample.test.ts", "tests/integration/s02-t01.test.ts", "tests/integration/s02-t02.test.ts", "tests/integration/s02-t03.test.ts", "tests/integration/s02-t04.test.ts", "tests/integration/s02-t06.test.ts", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md", "docs/test-reports/s02-t06.md"]
+sources: ["docs/contracts/http-api.md", "apps/api/src/server.ts", "apps/api/src/main.ts", "apps/api/src/modules/development/sample.ts", "apps/api/src/modules/auth/register.ts", "apps/api/src/modules/auth/verify-email.ts", "apps/api/src/modules/auth/session.ts", "apps/api/src/modules/auth/password-reset.ts", "apps/api/src/modules/auth/routes.ts", "apps/api/src/modules/auth/mail.ts", "apps/api/src/plugins/csrf.ts", "apps/api/src/plugins/require-session.ts", "apps/api/src/plugins/rate-limit.ts", "apps/api/src/plugins/logging.ts", "packages/auth/src/project-policy.ts", "apps/api/src/operator/invite-trusted.ts", "apps/api/src/readiness.ts", "apps/api/src/plugins/errors.ts", "tests/integration/persisted-sample.test.ts", "tests/integration/s02-t01.test.ts", "tests/integration/s02-t02.test.ts", "tests/integration/s02-t03.test.ts", "tests/integration/s02-t04.test.ts", "tests/integration/s02-t06.test.ts", "tests/integration/s02-t09.test.ts", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md", "docs/test-reports/s02-t06.md", "docs/test-reports/s02-t09.md"]
 runtime: implemented
 verified_on: 2026-10-11
 snapshot: _meta/file-inventory.json
@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions, password recovery and the S02-T04 project guard. S02-T06 adds tested Redis authentication limits and redacted logs, pending review. User-facing project and collaboration routes remain unimplemented.
+Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions, password recovery and the S02-T04 project guard. S02-T06 adds accepted Redis authentication limits and redacted logs. S02-T09 adds tested transaction-scoped audit events for account creation, login and session revocation, pending review. User-facing project and collaboration routes remain unimplemented.
 
 ## Why this shape
 
@@ -57,3 +57,4 @@ Node 24 API, Compose services, injected API tests and persisted sample restart t
 - [S02-T03 evidence](../../test-reports/s02-t03.md)
 - [S02-T04 evidence](../../test-reports/s02-t04.md)
 - [S02-T06 evidence](../../test-reports/s02-t06.md)
+- [S02-T09 evidence](../../test-reports/s02-t09.md)

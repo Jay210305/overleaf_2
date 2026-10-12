@@ -12,7 +12,7 @@
 | [S02-T04](../../implementation/sprint-02-identity-permissions/S02-T04-implement-session-and-project-policy-guards.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t04.md); independent co-maintainer accepted 2026-10-11 |
 | [S02-T05](../../implementation/sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t05.md); independent co-maintainer accepted 2026-10-11 |
 | [S02-T06](../../implementation/sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t06.md); independent co-maintainer accepted 2026-10-11 |
-| [S02-T09](../../implementation/sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | NOT_STARTED | Not recorded | No implementation evidence |
+| [S02-T09](../../implementation/sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | IN_PROGRESS | Not measured | [Scoped report](../test-reports/s02-t09.md); independent review pending |
 | [S02-T07](../../implementation/sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S02-T10](../../implementation/sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S02-T11](../../implementation/sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | NOT_STARTED | Not recorded | No implementation evidence |
@@ -27,10 +27,11 @@
 - S02-T04 adds a live-session check and default-deny project route guard, backed by current PostgreSQL ownership/membership and a pure four-role action matrix. It also restricts the non-production sample route to its own fixture project. No user-facing project CRUD route or migration was added.
 - S02-T05 adds browser forms for trusted invitation registration, email verification, login/logout, session restoration and password recovery. The forms call the real API, remove emailed secrets from URL fragments and show typed validation, network and 429 states. No migration was added.
 - S02-T06 adds Redis-backed per-IP and per-auth-route fixed windows, 429 with Retry-After, fail-closed 503 on limiter failure and redacted application logging. No migration was added. The static OpenAPI copies describe the implemented G1 auth routes but lack generation/parity evidence (GAP-12).
+- S02-T09 adds a transaction-scoped allowlist audit writer for account creation, login and session revocation (including password reset), using the existing `audit_events` schema. No migration was added; future project actions and retention work remain.
 
 ## Validation
 
-S02-T01 through S02-T06 are accepted. S02-T06 commands and limits are in its [scoped report](../test-reports/s02-t06.md). Full sprint and gate acceptance remain open.
+S02-T01 through S02-T06 are accepted. S02-T09 is tested and awaits independent co-maintainer review; its commands and limits are in its [scoped report](../test-reports/s02-t09.md). Full sprint and gate acceptance remain open.
 
 ## Risks and Debt
 
@@ -38,4 +39,4 @@ Track actual findings in Open Gaps and Technical Debt, referencing the task.
 
 ## Next Task
 
-S02-T09 redacted audit event writer.
+S02-T09 independent review, then S02-T07 profile preferences and session management.

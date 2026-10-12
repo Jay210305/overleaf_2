@@ -1,7 +1,7 @@
 import { randomBytes } from "node:crypto";
 import argon2 from "argon2";
 import { loginRequestSchema, userViewSchema, type UserView } from "@latex-collab/contracts";
-import type { DatabaseClient, TransactionContext } from "@latex-collab/db";
+import { writeAuditEvent, type DatabaseClient, type TransactionContext } from "@latex-collab/db";
 import { AuthError, tokenHash } from "./errors.js";
 import { normalizeEmail } from "./register.js";
 import { requireSessionCsrf } from "../../plugins/csrf.js";
@@ -53,7 +53,11 @@ function expiry(now: Date, createdAt: Date): Date {
   return new Date(Math.min(now.getTime() + idleMs, createdAt.getTime() + absoluteMs));
 }
 
-export async function login(db: DatabaseClient, rawInput: unknown): Promise<SessionIssue> {
+export async function login(
+  db: DatabaseClient,
+  rawInput: unknown,
+  requestId: string,
+): Promise<SessionIssue> {
   const input = rawInput as { email?: unknown; password?: unknown } | null;
   const email = typeof input?.email === "string" ? normalizeEmail(input.email) : undefined;
   const parsed = loginRequestSchema.safeParse({ ...input, email });
@@ -82,10 +86,16 @@ export async function login(db: DatabaseClient, rawInput: unknown): Promise<Sess
       throw new AuthError(401, "AUTHENTICATION_REQUIRED");
     if (locked.disabled_at) throw new AuthError(403, "ACCOUNT_DISABLED");
     if (!locked.email_verified_at) throw new AuthError(403, "EMAIL_NOT_VERIFIED");
-    await tx.query(
-      "INSERT INTO sessions (user_id, token_hash, csrf_hash, expires_at, last_seen_at, device_label) VALUES ($1, $2, $3, $4, $5, $6)",
+    const session = await tx.query<{ id: string }>(
+      "INSERT INTO sessions (user_id, token_hash, csrf_hash, expires_at, last_seen_at, device_label) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
       [locked.id, tokenHash(token), tokenHash(csrf), expiresAt, now, "Browser"],
     );
+    await writeAuditEvent(tx, {
+      action: "session.login",
+      actorId: locked.id,
+      targetId: session.rows[0]!.id,
+      requestId,
+    });
     return { user: view(locked), token, csrf, expiresAt };
   });
 }
@@ -129,11 +139,22 @@ export async function rotateSession(db: DatabaseClient, token: string): Promise<
   });
 }
 
-export async function logout(db: DatabaseClient, token: string, csrf: unknown): Promise<void> {
+export async function logout(
+  db: DatabaseClient,
+  token: string,
+  csrf: unknown,
+  requestId: string,
+): Promise<void> {
   await db.transaction(async (tx) => {
     const row = await lockedSession(tx, token);
     requireSessionCsrf(csrf, row.csrf_hash);
     await tx.query("UPDATE sessions SET revoked_at = NOW() WHERE id = $1", [row.session_id]);
+    await writeAuditEvent(tx, {
+      action: "session.revoked",
+      actorId: row.id,
+      targetId: row.session_id,
+      requestId,
+    });
   });
 }
 

@@ -26,6 +26,12 @@ export async function createSessionFixture(
     "utf8",
   );
   await db.query(core);
+  await db.query(
+    readFileSync(
+      resolve(import.meta.dirname, "../../packages/db/migrations/0002-support.sql"),
+      "utf8",
+    ),
+  );
   await db.query(sessions);
   const app = createServer({
     checkReadiness: async () => true,

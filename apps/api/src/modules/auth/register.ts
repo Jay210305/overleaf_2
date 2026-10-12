@@ -1,7 +1,7 @@
 import { randomBytes } from "node:crypto";
 import argon2 from "argon2";
 import { registerRequestSchema, type RegisterRequest } from "@latex-collab/contracts";
-import { DatabaseClient, PersistenceError } from "@latex-collab/db";
+import { DatabaseClient, PersistenceError, writeAuditEvent } from "@latex-collab/db";
 import { z } from "zod";
 import { AuthError, tokenHash } from "./errors.js";
 
@@ -69,6 +69,7 @@ export async function registerTrustedAccount(
   rawInput: unknown,
   invitation: string,
   sendVerification: SendVerification,
+  requestId: string,
 ): Promise<void> {
   const body = rawInput as Partial<RegisterRequest> | null;
   const normalized = typeof body?.email === "string" ? normalizeEmail(body.email) : undefined;
@@ -140,6 +141,12 @@ export async function registerTrustedAccount(
       "INSERT INTO verification_tokens (user_id, purpose, token_hash, expires_at) VALUES ($1, 'email_verify', $2, $3)",
       [row.user_id, tokenHash(verificationToken), new Date(Date.now() + verificationLifetimeMs)],
     );
+    await writeAuditEvent(tx, {
+      action: "account.created",
+      actorId: row.user_id,
+      targetId: row.user_id,
+      requestId,
+    });
     return { userId: row.user_id, inviteId: row.id };
   });
   try {
@@ -160,6 +167,10 @@ export async function registerTrustedAccount(
       await tx.query("UPDATE verification_tokens SET used_at = NULL WHERE id = $1", [
         registered.inviteId,
       ]);
+      await tx.query(
+        "DELETE FROM audit_events WHERE actor_id = $1 AND target_id = $1 AND action = 'account.created' AND request_id = $2",
+        [registered.userId, requestId],
+      );
     });
     throw new AuthError(502, "PROVIDER_UNAVAILABLE");
   }

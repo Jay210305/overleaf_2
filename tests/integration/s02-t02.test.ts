@@ -28,6 +28,12 @@ describe("S02-T02 persistent cookie sessions", () => {
   beforeAll(async () => {
     db = new DatabaseClient(parseServerConfig(process.env).DATABASE_URL);
     await db.query(migration);
+    await db.query(
+      readFileSync(
+        resolve(import.meta.dirname, "../../packages/db/migrations/0002-support.sql"),
+        "utf8",
+      ),
+    );
     await db.query(sessionMigration);
     email = `session-${randomUUID()}@example.test`;
     await db.query(
