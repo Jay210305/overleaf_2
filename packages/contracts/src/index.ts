@@ -48,6 +48,7 @@ export const projectViewSchema = z.strictObject({
   ownerId: z.string().uuid(),
   title: z.string().min(1).max(300),
   description: z.string().max(2000).nullable(),
+  mainFileId: z.string().uuid().nullable().optional(),
   compiler: compilerSchema,
   status: projectStatusSchema,
   currentRevision: z.number().int().nonnegative(),
@@ -71,9 +72,17 @@ export const projectNodeViewSchema = z.strictObject({
   mime: z.string().min(1).max(128),
   sizeBytes: z.number().int().nonnegative(),
   contentKind: contentKindSchema,
+  treeVersion: z.number().int().nonnegative().optional(),
   deletedAt: z.string().datetime().nullable().optional(),
 });
 export type ProjectNodeView = z.infer<typeof projectNodeViewSchema>;
+
+export const treeViewSchema = z.strictObject({
+  projectId: z.string().uuid(),
+  treeVersion: z.number().int().nonnegative(),
+  items: z.array(projectNodeViewSchema),
+});
+export type TreeView = z.infer<typeof treeViewSchema>;
 
 export const projectMemberViewSchema = z.strictObject({
   projectId: z.string().uuid(),
@@ -157,8 +166,10 @@ export type RenameNodeInput = z.infer<typeof renameNodeSchema>;
 export const listProjectsQuerySchema = z.object({
   cursor: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(100).default(20),
-  filter: z.enum(["owned", "shared", "recent"]).default("owned"),
+  filter: z.enum(["owned", "shared", "recent", "archived", "trashed"]).default("owned"),
   order: z.enum(["updatedAt", "owner"]).default("updatedAt"),
+  tagId: z.string().uuid().optional(),
+  q: z.string().min(1).max(1000).optional(),
 });
 export type ListProjectsQuery = z.infer<typeof listProjectsQuerySchema>;
 
@@ -252,8 +263,31 @@ export const accountSessionPageSchema = z.object({
   items: z.array(accountSessionViewSchema),
   nextCursor: z.string().nullable(),
 });
+export type AccountSessionView = z.infer<typeof accountSessionViewSchema>;
+export type AccountSessionPage = z.infer<typeof accountSessionPageSchema>;
 export type AccountProfileView = z.infer<typeof accountProfileViewSchema>;
 export type AccountPreferencesView = z.infer<typeof accountPreferencesViewSchema>;
-export type AccountSessionView = z.infer<typeof accountSessionViewSchema>;
+export const projectSettingsViewSchema = z.strictObject({
+  projectId: z.string().uuid(),
+  mainFileId: z.string().uuid().nullable(),
+  compiler: compilerSchema,
+  texliveImageVersion: z.string().min(1).max(64),
+  autoCompile: z.boolean().default(false),
+  timeoutSeconds: z.number().int().min(5).max(120).default(30),
+});
+export type ProjectSettingsView = z.infer<typeof projectSettingsViewSchema>;
+
+export const updateProjectSettingsSchema = z
+  .strictObject({
+    mainFileId: z.string().uuid().nullable().optional(),
+    compiler: compilerSchema.optional(),
+    texliveImageVersion: z.string().min(1).max(64).optional(),
+    autoCompile: z.boolean().optional(),
+    timeoutSeconds: z.number().int().min(5).max(120).optional(),
+  })
+  .refine((val) => Object.keys(val).length > 0, {
+    message: "At least one setting must be provided for update",
+  });
+export type UpdateProjectSettingsInput = z.infer<typeof updateProjectSettingsSchema>;
 
 export * from "./storage.js";

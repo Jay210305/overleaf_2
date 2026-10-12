@@ -42,15 +42,15 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S02-T10 | [Implement authenticated password change](sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | Julio (proposed) | 6 | done |
 | S02-T11 | [Implement private avatar upload lifecycle](sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | Julio (proposed) | 6 | done |
 | S02-T08 | [Verify tenancy revocation suspension and CSRF](sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | Julio (proposed) | 6 | done |
-| S03-T01 | [Implement project CRUD and pagination](sprint-03-projects-files/S03-T01-implement-project-crud-and-pagination.md) | Project Co-owner (proposed) | 8 | todo |
-| S03-T02 | [Create duplicate and rename project sources](sprint-03-projects-files/S03-T02-create-duplicate-and-rename-project-sources.md) | Project Co-owner (proposed) | 8 | todo |
-| S03-T03 | [Create API-backed dashboard](sprint-03-projects-files/S03-T03-create-api-backed-dashboard.md) | Project Co-owner (proposed) | 8 | todo |
-| S03-T04 | [Implement ID-based file tree mutations](sprint-03-projects-files/S03-T04-implement-id-based-file-tree-mutations.md) | Project Co-owner (proposed) | 8 | todo |
-| S03-T09 | [Verify transaction-safe move rename and delete](sprint-03-projects-files/S03-T09-verify-transaction-safe-move-rename-and-delete.md) | Project Co-owner (proposed) | 6 | todo |
-| S03-T05 | [Create file tree interactions](sprint-03-projects-files/S03-T05-create-file-tree-interactions.md) | Project Co-owner (proposed) | 8 | todo |
-| S03-T06 | [Implement project root and compiler settings](sprint-03-projects-files/S03-T06-implement-project-root-and-compiler-settings.md) | Project Co-owner (proposed) | 6 | todo |
-| S03-T07 | [Create structural revision manifests](sprint-03-projects-files/S03-T07-create-structural-revision-manifests.md) | Project Co-owner (proposed) | 8 | todo |
-| S03-T08 | [Verify project and tree journey](sprint-03-projects-files/S03-T08-verify-project-and-tree-journey.md) | Project Co-owner (proposed) | 6 | todo |
+| S03-T01 | [Implement project CRUD and pagination](sprint-03-projects-files/S03-T01-implement-project-crud-and-pagination.md) | Project Co-owner (proposed) | 8 | done |
+| S03-T02 | [Create duplicate and rename project sources](sprint-03-projects-files/S03-T02-create-duplicate-and-rename-project-sources.md) | Project Co-owner (proposed) | 8 | done |
+| S03-T03 | [Create API-backed dashboard](sprint-03-projects-files/S03-T03-create-api-backed-dashboard.md) | Project Co-owner (proposed) | 8 | done |
+| S03-T04 | [Implement ID-based file tree mutations](sprint-03-projects-files/S03-T04-implement-id-based-file-tree-mutations.md) | Project Co-owner (proposed) | 8 | done |
+| S03-T09 | [Verify transaction-safe move rename and delete](sprint-03-projects-files/S03-T09-verify-transaction-safe-move-rename-and-delete.md) | Project Co-owner (proposed) | 6 | done |
+| S03-T05 | [Create file tree interactions](sprint-03-projects-files/S03-T05-create-file-tree-interactions.md) | Project Co-owner (proposed) | 8 | done |
+| S03-T06 | [Implement project root and compiler settings](sprint-03-projects-files/S03-T06-implement-project-root-and-compiler-settings.md) | Project Co-owner (proposed) | 6 | done |
+| S03-T07 | [Create structural revision manifests](sprint-03-projects-files/S03-T07-create-structural-revision-manifests.md) | Project Co-owner (proposed) | 8 | done |
+| S03-T08 | [Verify project and tree journey](sprint-03-projects-files/S03-T08-verify-project-and-tree-journey.md) | Project Co-owner (proposed) | 6 | done |
 | S04-T01 | [Create LaTeX CodeMirror extensions](sprint-04-code-editor/S04-T01-create-latex-codemirror-extensions.md) | Julio (proposed) | 8 | todo |
 | S04-T02 | [Create canonical text document service](sprint-04-code-editor/S04-T02-create-canonical-text-document-service.md) | Julio (proposed) | 8 | todo |
 | S04-T09 | [Persist and replay canonical text updates](sprint-04-code-editor/S04-T09-persist-and-replay-canonical-text-updates.md) | Julio (proposed) | 8 | todo |

@@ -10,6 +10,16 @@ const AuthForms = lazy(() =>
 const Profile = lazy(() =>
   import("../features/account/profile").then((module) => ({ default: module.Profile })),
 );
+const ProjectsDashboard = lazy(() =>
+  import("../features/projects/dashboard").then((module) => ({
+    default: module.ProjectsDashboard,
+  })),
+);
+const ProjectWorkspace = lazy(() =>
+  import("../features/projects/workspace").then((module) => ({
+    default: module.ProjectWorkspace,
+  })),
+);
 function AuthRoute({ mode }: { mode: AuthMode }) {
   return (
     <Suspense fallback={<p role="status">Loading account form…</p>}>
@@ -82,7 +92,26 @@ function Shell() {
                 <p>
                   Not implemented yet. Project creation and editing are scheduled for later stages.
                 </p>
+                <p>
+                  <Link to="/dashboard">Go to Projects Dashboard</Link>
+                </p>
               </>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <Suspense fallback={<p role="status">Loading dashboard…</p>}>
+                <ProjectsDashboard />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/project/:id"
+            element={
+              <Suspense fallback={<p role="status">Loading workspace…</p>}>
+                <ProjectWorkspace />
+              </Suspense>
             }
           />
           <Route

@@ -4,10 +4,11 @@ import { assertUUID, DatabaseClient, PersistenceError, type UUID } from "../clie
 export type { ProjectView };
 
 export type ListProjectsInput = {
-  cursor?: string;
+  cursor?: string | undefined;
   limit: number;
-  filter: "owned" | "shared" | "recent";
+  filter: "owned" | "shared" | "recent" | "archived" | "trashed";
   order: "updatedAt" | "owner";
+  q?: string | undefined;
 };
 
 type DecodedCursor = {
@@ -52,7 +53,13 @@ export class ProjectRepository {
 
     const limit = Math.max(1, Math.min(input.limit ?? 20, 100));
     const filter = input.filter ?? "owned";
-    if (filter !== "owned" && filter !== "shared" && filter !== "recent") {
+    if (
+      filter !== "owned" &&
+      filter !== "shared" &&
+      filter !== "recent" &&
+      filter !== "archived" &&
+      filter !== "trashed"
+    ) {
       throw new PersistenceError("CONSTRAINT_VIOLATION", `Invalid filter: ${filter}`, false);
     }
     const order = input.order ?? "updatedAt";
@@ -64,17 +71,30 @@ export class ProjectRepository {
     const params: unknown[] = [actorId];
 
     if (filter === "owned") {
-      filterSql = "p.owner_id = $1";
+      filterSql = "p.owner_id = $1 AND p.status = 'active'";
     } else if (filter === "shared") {
       filterSql = `p.id IN (
         SELECT pm.project_id FROM project_members pm
         WHERE pm.user_id = $1 AND pm.revoked_at IS NULL AND pm.role != 'OWNER'
-      ) AND p.owner_id != $1`;
+      ) AND p.owner_id != $1 AND p.status = 'active'`;
     } else if (filter === "recent") {
       filterSql = `(p.owner_id = $1 OR p.id IN (
         SELECT pm.project_id FROM project_members pm
         WHERE pm.user_id = $1 AND pm.revoked_at IS NULL
-      ))`;
+      )) AND p.status = 'active'`;
+    } else if (filter === "archived") {
+      filterSql = `(p.owner_id = $1 OR p.id IN (
+        SELECT pm.project_id FROM project_members pm
+        WHERE pm.user_id = $1 AND pm.revoked_at IS NULL
+      )) AND p.status = 'archived'`;
+    } else if (filter === "trashed") {
+      filterSql = "p.owner_id = $1 AND p.status = 'trashed'";
+    }
+
+    let searchSql = "";
+    if (input.q && input.q.trim().length > 0) {
+      params.push(`%${input.q.trim()}%`);
+      searchSql = `AND p.title ILIKE $${params.length}`;
     }
 
     let cursorCondition = "";
@@ -106,6 +126,7 @@ export class ProjectRepository {
         p.owner_id AS "ownerId",
         p.title,
         p.description,
+        p.main_file_id AS "mainFileId",
         p.compiler,
         p.status,
         p.current_revision AS "currentRevision",
@@ -113,6 +134,7 @@ export class ProjectRepository {
         p.updated_at AS "updatedAt"
       FROM projects p
       WHERE ${filterSql}
+      ${searchSql}
       ${cursorCondition}
       ORDER BY ${orderBy}
       LIMIT $${limitIdx}
@@ -128,6 +150,7 @@ export class ProjectRepository {
       ownerId: String(r.ownerId),
       title: String(r.title),
       description: r.description ? String(r.description) : null,
+      mainFileId: r.mainFileId ? String(r.mainFileId) : null,
       compiler: r.compiler as ProjectView["compiler"],
       status: r.status as ProjectView["status"],
       currentRevision: Number(r.currentRevision),

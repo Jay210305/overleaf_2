@@ -15,6 +15,9 @@ import type { AuthRateLimiter } from "./plugins/rate-limit.js";
 import { registerProfileRoutes } from "./modules/account/profile.js";
 import { registerPasswordChangeRoute } from "./modules/account/password-change.js";
 import { registerAvatarRoutes } from "./modules/account/avatar.js";
+import { registerProjectRoutes } from "./modules/projects/routes.js";
+import { registerProjectSettingsRoutes } from "./modules/projects/settings.js";
+import { registerTreeRoutes } from "./modules/files/tree.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -63,8 +66,14 @@ export function createServer(options: ServerOptions) {
       origin: options.origin,
       credentials: true,
       methods: ["GET", "POST", "PATCH", "DELETE"],
-      allowedHeaders: ["content-type", "x-csrf-token", "x-registration-invite"],
-      exposedHeaders: ["x-csrf-token", "x-request-id", "retry-after"],
+      allowedHeaders: [
+        "content-type",
+        "x-csrf-token",
+        "x-registration-invite",
+        "if-match",
+        "idempotency-key",
+      ],
+      exposedHeaders: ["x-csrf-token", "x-request-id", "retry-after", "etag"],
     });
   app.addHook("onRequest", async (request, reply) => {
     const scope = `${request.method} ${request.routeOptions.url ?? ""}`;
@@ -136,5 +145,22 @@ export function createServer(options: ServerOptions) {
     origin: options.origin,
     secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
   });
+  if (options.db) {
+    registerProjectRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+    registerProjectSettingsRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+    registerTreeRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+  }
   return app;
 }
