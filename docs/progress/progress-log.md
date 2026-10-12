@@ -22,6 +22,7 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-11 | S02-T05 accessible authentication forms on `feature/identity-permissions` | Not measured | [S02-T05 report](../test-reports/s02-t05.md): real browser/API/PostgreSQL/Mailpit flow, Edge axe and keyboard checks, network and 429 UI, local gates | Independent co-maintainer accepted S02-T05 on 2026-10-11; server rate limits remain S02-T06 |
 | 2026-10-11 | S02-T06 Redis auth limits and redacted API logging on `feature/identity-permissions` | Not measured | [S02-T06 report](../test-reports/s02-t06.md): cross-instance Redis 429, Retry-After, outage denial, seven auth routes, captured-log redaction and local gates | Independent co-maintainer accepted S02-T06 on 2026-10-11; timing parity GAP-14 and session inventory remain open |
 | 2026-10-11 | S02-T09 transaction-scoped redacted audit writer on `feature/identity-permissions` | Not measured | [S02-T09 report](../test-reports/s02-t09.md): PostgreSQL creation/login/revocation events, request IDs, secret exclusion, rollback and local gates | Independent co-maintainer accepted S02-T09 on 2026-10-11; next S02-T07 |
+| 2026-10-11 | S02-T07 profile preferences and session management on `feature/identity-permissions` | Not measured | [S02-T07 report](../test-reports/s02-t07.md): PostgreSQL profile/preferences, session inventory/revocation, Edge reload and axe/keyboard checks, local gates | Independent co-maintainer review pending; then S02-T10 |
 
 
 ## Session Record

@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import type { AuthMode } from "../features/auth/auth-forms";
 const HealthPanel = lazy(() =>
@@ -6,6 +6,9 @@ const HealthPanel = lazy(() =>
 );
 const AuthForms = lazy(() =>
   import("../features/auth/auth-forms").then((module) => ({ default: module.AuthForms })),
+);
+const Profile = lazy(() =>
+  import("../features/account/profile").then((module) => ({ default: module.Profile })),
 );
 function AuthRoute({ mode }: { mode: AuthMode }) {
   return (
@@ -15,7 +18,24 @@ function AuthRoute({ mode }: { mode: AuthMode }) {
   );
 }
 function Shell() {
-  const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
+  const resolvedDark = () => {
+    const preference = localStorage.getItem("theme");
+    return (
+      preference === "dark" ||
+      (preference === "system" && !!window.matchMedia?.("(prefers-color-scheme: dark)").matches)
+    );
+  };
+  const [dark, setDark] = useState(resolvedDark);
+  useEffect(() => {
+    const update = () => setDark(resolvedDark());
+    window.addEventListener("workspace-theme-change", update);
+    const media = window.matchMedia?.("(prefers-color-scheme: dark)");
+    media?.addEventListener("change", update);
+    return () => {
+      window.removeEventListener("workspace-theme-change", update);
+      media?.removeEventListener("change", update);
+    };
+  }, []);
   return (
     <div className={dark ? "shell dark" : "shell"}>
       <a className="skip" href="#main">
@@ -25,7 +45,7 @@ function Shell() {
         <Link to="/">LaTeX Workspace</Link>
         <nav aria-label="Main">
           <Link to="/projects">Projects</Link>
-          <Link to="/settings">Settings</Link>
+          <Link to="/settings/profile">Settings</Link>
           <Link to="/login">Sign in</Link>
         </nav>
         <button
@@ -68,12 +88,25 @@ function Shell() {
           <Route
             path="/settings"
             element={
-              <>
-                <h1>Settings</h1>
-                <p>
-                  Account preferences are not implemented yet. Theme is available in the header.
-                </p>
-              </>
+              <Suspense fallback={<p role="status">Loading account…</p>}>
+                <Profile />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/settings/profile"
+            element={
+              <Suspense fallback={<p role="status">Loading account…</p>}>
+                <Profile />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/settings/security"
+            element={
+              <Suspense fallback={<p role="status">Loading account…</p>}>
+                <Profile />
+              </Suspense>
             }
           />
           <Route path="/register" element={<AuthRoute mode="register" />} />

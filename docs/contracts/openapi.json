@@ -711,7 +711,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -783,7 +783,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -1136,7 +1136,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -1220,7 +1220,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -1332,7 +1332,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -1415,7 +1415,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -1482,7 +1482,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400

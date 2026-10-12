@@ -95,6 +95,40 @@ section {
   justify-self: start;
   margin-top: 6px;
 }
+.account-card {
+  width: min(680px, 100%);
+  margin: 0 auto;
+}
+.account-card form {
+  display: grid;
+  gap: 16px;
+  margin: 30px 0;
+}
+.account-card label {
+  display: grid;
+  gap: 7px;
+  font-weight: 600;
+}
+.account-card input,
+.account-card select {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #6c887b;
+  border-radius: 6px;
+  background: #fff;
+  color: #182622;
+  font: inherit;
+}
+.account-card form button {
+  justify-self: start;
+}
+.account-card li {
+  margin: 12px 0;
+  line-height: 1.6;
+}
+.account-card li button {
+  margin-left: 12px;
+}
 .form-message {
   padding: 12px 16px;
   border-left: 4px solid #28725b;
@@ -131,6 +165,12 @@ footer {
   outline-color: #9bdac2;
 }
 .dark .auth-card input {
+  background: #203a30;
+  border-color: #a4bcaf;
+  color: #f3f7f4;
+}
+.dark .account-card input,
+.dark .account-card select {
   background: #203a30;
   border-color: #a4bcaf;
   color: #f3f7f4;

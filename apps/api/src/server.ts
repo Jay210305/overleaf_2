@@ -12,6 +12,7 @@ import type { SendPasswordReset } from "./modules/auth/password-reset.js";
 import { installProjectGuard } from "./plugins/require-session.js";
 import { safeLoggerOptions } from "./plugins/logging.js";
 import type { AuthRateLimiter } from "./plugins/rate-limit.js";
+import { registerProfileRoutes } from "./modules/account/profile.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -23,6 +24,13 @@ const authScopes = new Set([
   "POST /api/v1/auth/logout",
   "POST /api/v1/auth/password/forgot",
   "POST /api/v1/auth/password/reset",
+  "GET /api/v1/me",
+  "PATCH /api/v1/me",
+  "GET /api/v1/me/preferences",
+  "PATCH /api/v1/me/preferences",
+  "GET /api/v1/me/sessions",
+  "GET /api/v1/me/sessions/:sessionId",
+  "DELETE /api/v1/me/sessions/:sessionId",
 ]);
 
 export interface ServerOptions {
@@ -49,7 +57,7 @@ export function createServer(options: ServerOptions) {
     void app.register(cors, {
       origin: options.origin,
       credentials: true,
-      methods: ["GET", "POST"],
+      methods: ["GET", "POST", "PATCH", "DELETE"],
       allowedHeaders: ["content-type", "x-csrf-token", "x-registration-invite"],
       exposedHeaders: ["x-csrf-token", "x-request-id", "retry-after"],
     });
@@ -106,6 +114,11 @@ export function createServer(options: ServerOptions) {
     sendVerification: options.sendVerification,
     sendPasswordReset: options.sendPasswordReset,
     secureCookies: options.secureCookies,
+  });
+  registerProfileRoutes(app, {
+    db: options.db,
+    origin: options.origin,
+    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
   });
   return app;
 }
