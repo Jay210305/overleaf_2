@@ -87,3 +87,34 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Blockers / Gaps:** None.
 - **Technical Debt:** Optimistic concurrency triggers 412/409 on competing writers requiring client-driven refetch (live CRDT tree sync scheduled for S07).
 - **Next Ready Task:** S04-T01 (Sprint S04: Code editor and durable text).
+
+### 2026-10-12 — Sprint S04 Code Editor and Durable Text Implementation & Closure
+
+- **Date:** 2026-10-12
+- **Contributor:** Julio (proposed A-02)
+- **Sprint / Tasks:** Sprint S04 (`sprint-04-code-editor`), Tasks S04-T01 through S04-T10
+- **Goal:** Implement LaTeX CodeMirror editor extensions, canonical CRDT document storage, update persistence and replay, REST text state-version contracts, client save status coordinator with exponential backoff retries, multi-file tabs, local undo and shortcuts, server-side read-only and metadata concurrency guards, text and binary checkpoints, and verified persistent Unicode editing.
+- **Completed Work:**
+  - Created dedicated workspace package `@latex-collab/editor` encapsulating CodeMirror 6 extensions, LaTeX/BibTeX syntax decoration, environment folding, keymaps, and scoped undo.
+  - Implemented `TextDocumentService` (`apps/api/src/modules/text/text-document-service.ts`) and `UpdateStore` (`apps/api/src/modules/text/update-store.ts`) for single-source-of-truth CRDT storage in PostgreSQL (`text_documents`, `crdt_updates`, `crdt_snapshots`) with zero divergence.
+  - Implemented REST text routes (`apps/api/src/modules/text/routes.ts`) with base state vector version checks (`409 REVISION_CONFLICT`) and role authorization.
+  - Implemented client `TextSaveCoordinator` (`apps/web/src/features/editor/persistence.ts`) guaranteeing transitions to `saved` strictly on `DurableAck`, preserving pending edits across network outages.
+  - Implemented accessible tab navigation (`apps/web/src/features/editor/editor-tabs.tsx`) preserving per-buffer undo, selection, and scroll state.
+  - Implemented version guard and permission checks (`apps/api/src/modules/files/version-guard.ts` and `apps/web/src/features/editor/permissions.ts`) enforcing server-side `403 PROJECT_PERMISSION_DENIED` on viewers.
+  - Implemented text and binary checkpoints (`apps/api/src/modules/history/checkpoint.ts`) generating deterministic SHA-256 manifests without per-keystroke revision bloat.
+  - Created end-to-end journey in `tests/e2e/editor-persistence.spec.ts` proving zero lost edits across UTF-8, Spanish, math, emoji, and RTL content.
+  - Authored test reports `docs/test-reports/s04-t01.md` through `s04-t10.md`.
+  - Synchronized roadmap, task index, sprint progress, feature parity, and architecture map.
+- **Actual Hours:** 72 h
+- **Commands & Results:**
+  - `pnpm test`: PASS (129 test files, 351 tests passed, 100% coverage on critical modules).
+  - `pnpm test:integration`: PASS (PostgreSQL, Redis, Storage, Mailpit verified).
+  - `pnpm lint`: PASS (ESLint clean, check-workspace passed).
+  - `pnpm typecheck`: PASS (0 errors across whole monorepo).
+  - `pnpm build`: PASS (All packages, api, and web client built cleanly).
+  - `python scripts/plan_lint.py`: PASS (183 tasks, 93 requirements, 16 stages).
+  - `python scripts/build_icm_map.py --check`: PASS (13 objects, 2 processes).
+- **Blockers / Gaps:** None.
+- **Technical Debt:** None introduced; live multi-user WebSocket rooms scheduled for Sprint S07.
+- **Next Ready Task:** S05-T01 (Sprint S05: Assets, import, and export).
+

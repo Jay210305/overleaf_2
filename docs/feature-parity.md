@@ -27,14 +27,14 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | PRO-13 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-14 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-15 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-01 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-02 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-03 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-04 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| EDT-01 | G1 | Must | IN_PROGRESS | [S04-T01 CodeMirror extensions](test-reports/s04-t01.md); [S04-T08 Unicode editing](test-reports/s04-t08.md); G1 gate stabilization applies |
+| EDT-02 | G1 | Must | IN_PROGRESS | [S04-T02 canonical text](test-reports/s04-t02.md); [S04-T03 save status/retry](test-reports/s04-t03.md); [S04-T06 read-only concurrency](test-reports/s04-t06.md); [S04-T08 Unicode journey](test-reports/s04-t08.md); [S04-T09 update persistence](test-reports/s04-t09.md); [S04-T10 REST state version](test-reports/s04-t10.md); [S07-T11 durable collab](planning/traceability.md) applies |
+| EDT-03 | G1 | Must | IN_PROGRESS | [S04-T04 tabs and navigation](test-reports/s04-t04.md); G1 gate stabilization applies |
+| EDT-04 | G1 | Must | IN_PROGRESS | [S04-T05 local undo and search](test-reports/s04-t05.md); remaining mapped tasks apply |
 | EDT-05 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | EDT-06 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | EDT-07 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| EDT-08 | G3 | Should | IN_PROGRESS | [S04-T05 editor shortcuts](test-reports/s04-t05.md); remaining mapped tasks apply |
 | EDT-09 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | EDT-10 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | EDT-11 | G3 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -55,14 +55,14 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | CMP-12 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-01 | G2 | Must | IN_PROGRESS | [S00-T11 compatibility research](test-reports/s00-t11.md#acceptance-review); [remaining tasks](planning/traceability.md) |
 | COL-02 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| COL-03 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t06.md) (accepted 2026-10-10); [S02-T02 identity boundary accepted](test-reports/s02-t02.md); [S02-T04 REST guard accepted](test-reports/s02-t04.md); [S02-T08 role/revocation checks accepted](test-reports/s02-t08.md); [S03-T01 project role guards accepted](test-reports/s03-t01.md); WSS G2 remains |
+| COL-03 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t06.md) (accepted 2026-10-10); [S02-T02 identity boundary accepted](test-reports/s02-t02.md); [S02-T04 REST guard accepted](test-reports/s02-t04.md); [S02-T08 role/revocation checks accepted](test-reports/s02-t08.md); [S03-T01 project role guards accepted](test-reports/s03-t01.md); [S04-T06 viewer edit rejection](test-reports/s04-t06.md); [S04-T10 REST role enforcement](test-reports/s04-t10.md); WSS G2 remains |
 | COL-04 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-05 | G2 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-06 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-07 | G2 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-09 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| COL-10 | G3 | Should | IN_PROGRESS | [S03-T07 structural revision manifests](test-reports/s03-t07.md); remaining collaboration manifests apply |
+| COL-10 | G3 | Should | IN_PROGRESS | [S03-T07 structural revision manifests](test-reports/s03-t07.md); [S04-T07 text/binary checkpoints](test-reports/s04-t07.md); remaining collaboration manifests apply |
 | COL-11 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-12 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-13 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -78,12 +78,12 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | INT-09 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-10 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-11 | G5 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| NFR-01 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| NFR-01 | G1 | Must | IN_PROGRESS | [S04-T02 crash recovery](test-reports/s04-t02.md); [S04-T03 retry outage](test-reports/s04-t03.md); [S04-T09 uncompacted replay](test-reports/s04-t09.md); [S04-T08 Unicode journey](test-reports/s04-t08.md); remaining collaboration tasks apply |
 | NFR-02 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-03 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-04 | G5 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-05 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| NFR-06 | G1 | Must | IN_PROGRESS | [S03-T07 structural revision manifests](test-reports/s03-t07.md); remaining mapped tasks apply |
+| NFR-06 | G1 | Must | IN_PROGRESS | [S03-T07 structural revision manifests](test-reports/s03-t07.md); [S04-T07 text/binary checkpoints](test-reports/s04-t07.md); remaining mapped tasks apply |
 | NFR-07 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-08 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); [S02-T05 Edge axe and keyboard scope accepted](test-reports/s02-t05.md); [S03-T03 dashboard axe](test-reports/s03-t03.md); [S03-T05 file tree axe](test-reports/s03-t05.md); [S03-T08 project-tree e2e axe](test-reports/s03-t08.md); remaining mapped tasks still apply |
 | NFR-09 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
