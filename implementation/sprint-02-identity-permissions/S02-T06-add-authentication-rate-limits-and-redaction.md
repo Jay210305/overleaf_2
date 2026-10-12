@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T05]
 requirements: [ACC-02, NFR-10]
 source_task: S02-T06
-status: in_progress
-readiness: review-pending
+status: done
+readiness: completed
 ---
 # S02-T06 — Add authentication rate limits and redaction
 
@@ -101,4 +101,4 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 - [x] Runtime behavior uses shared Redis counters and preserves the existing authorization checks.
 - [x] Report, progress, feature evidence and HTTP contract are updated; actual hours were not measured. No ADR was needed.
 - [x] No secret/private source in artifacts or logs; unverified response timing remains tracked as GAP-14.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Independent co-maintainer review complete; accepted by the Project Co-owner on 2026-10-11 in this conversation.

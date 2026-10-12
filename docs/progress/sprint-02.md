@@ -11,7 +11,7 @@
 | [S02-T03](../../implementation/sprint-02-identity-permissions/S02-T03-implement-password-recovery.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t03.md); independent co-maintainer accepted 2026-10-11 |
 | [S02-T04](../../implementation/sprint-02-identity-permissions/S02-T04-implement-session-and-project-policy-guards.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t04.md); independent co-maintainer accepted 2026-10-11 |
 | [S02-T05](../../implementation/sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t05.md); independent co-maintainer accepted 2026-10-11 |
-| [S02-T06](../../implementation/sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md) | IN_PROGRESS | Not measured | [Scoped report](../test-reports/s02-t06.md); independent co-maintainer review pending |
+| [S02-T06](../../implementation/sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t06.md); independent co-maintainer accepted 2026-10-11 |
 | [S02-T09](../../implementation/sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S02-T07](../../implementation/sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S02-T10](../../implementation/sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | NOT_STARTED | Not recorded | No implementation evidence |
@@ -30,7 +30,7 @@
 
 ## Validation
 
-S02-T01 through S02-T05 are accepted. S02-T06 passed local Redis and browser checks and awaits independent co-maintainer review; commands and limits are in its [scoped report](../test-reports/s02-t06.md). Full sprint and gate acceptance remain open.
+S02-T01 through S02-T06 are accepted. S02-T06 commands and limits are in its [scoped report](../test-reports/s02-t06.md). Full sprint and gate acceptance remain open.
 
 ## Risks and Debt
 
@@ -38,4 +38,4 @@ Track actual findings in Open Gaps and Technical Debt, referencing the task.
 
 ## Next Task
 
-Independent review of S02-T06, then S02-T09 redacted audit event writer.
+S02-T09 redacted audit event writer.
