@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type FormEvent } from "react";
 import {
   emailRequestSchema,
   loginRequestSchema,
@@ -77,7 +77,7 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
     null,
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (message) messageRef.current?.focus();
   }, [message]);
 
@@ -199,6 +199,9 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
         if (!parsed.success || !csrf) throw new Error("Invalid session response");
         setUser(parsed.data);
         setSessionCsrf(csrf);
+        try {
+          sessionStorage.setItem("csrf_token", csrf);
+        } catch {}
         setPassword("");
         setMessage({ kind: "success", text: `Signed in as ${parsed.data.displayName}.` });
       } else if (mode === "register") {

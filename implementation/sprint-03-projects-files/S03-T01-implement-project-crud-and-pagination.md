@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T08]
 requirements: [PRO-01, PRO-03, COL-03]
 source_task: S03-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S03-T01 — Implement project CRUD and pagination
 
@@ -69,11 +69,11 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] List/create/read/update/delete check author/membership and stable pagination/search/filter/order contracts
-- [ ] PRO-01: Paginated searchable owned/shared/recent dashboard with modification and owner ordering. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] PRO-03: Rename/duplicate projects and persist ownership, dates and optional description. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] COL-03: OWNER/EDITOR/REVIEWER/VIEWER are enforced on REST; WSS enforcement lands in G2. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] List/create/read/update/delete check author/membership and stable pagination/search/filter/order contracts
+- [x] PRO-01: Paginated searchable owned/shared/recent dashboard with modification and owner ordering. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] PRO-03: Rename/duplicate projects and persist ownership, dates and optional description. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] COL-03: OWNER/EDITOR/REVIEWER/VIEWER are enforced on REST; WSS enforcement lands in G2. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -99,9 +99,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

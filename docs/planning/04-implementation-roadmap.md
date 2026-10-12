@@ -187,7 +187,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S03: Projects and file tree (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 66 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Project Co-owner (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 66 h (ASSUMPTION A-03) | **Status:** ✅ DONE | **Owner:** Project Co-owner (proposed A-02)
 **Goal:** Projects and file tree for G1, using independently verified slices.
 
 ### Deliverables
@@ -206,23 +206,23 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S03-T01](../../implementation/sprint-03-projects-files/S03-T01-implement-project-crud-and-pagination.md) | Implement project CRUD and pagination | 8 | Project Co-owner | ⬜ todo | List/create/read/update/delete check author/membership and stable pagination/search/filter/order contracts |
-| [S03-T02](../../implementation/sprint-03-projects-files/S03-T02-create-duplicate-and-rename-project-sources.md) | Create duplicate and rename project sources | 8 | Project Co-owner | ⬜ todo | Blank project has valid main.tex; clone copies source without memberships or external secrets; title changes persist |
-| [S03-T03](../../implementation/sprint-03-projects-files/S03-T03-create-api-backed-dashboard.md) | Create API-backed dashboard | 8 | Project Co-owner | ⬜ todo | Owned/shared/recent projects render through API pagination with empty/loading/error states |
-| [S03-T04](../../implementation/sprint-03-projects-files/S03-T04-implement-id-based-file-tree-mutations.md) | Implement ID-based file tree mutations | 8 | Project Co-owner | ⬜ todo | Create/move/rename/delete reject cycles, traversal, foreign parent and stale If-Match; committed treeVersion increments |
-| [S03-T09](../../implementation/sprint-03-projects-files/S03-T09-verify-transaction-safe-move-rename-and-delete.md) | Verify transaction-safe move rename and delete | 6 | Project Co-owner | ⬜ todo | Competing parent/name/version operations yield one committed tree state and explicit conflicts; no orphan or cyclic nodes |
-| [S03-T05](../../implementation/sprint-03-projects-files/S03-T05-create-file-tree-interactions.md) | Create file tree interactions | 8 | Project Co-owner | ⬜ todo | Context menu/dialog/breadcrumb actions call actual routes and recover from 403/409 without phantom nodes |
-| [S03-T06](../../implementation/sprint-03-projects-files/S03-T06-implement-project-root-and-compiler-settings.md) | Implement project root and compiler settings | 6 | Project Co-owner | ⬜ todo | Only same-project active .tex may be root; engine is allowlisted and server caps client timeout options |
-| [S03-T07](../../implementation/sprint-03-projects-files/S03-T07-create-structural-revision-manifests.md) | Create structural revision manifests | 8 | Project Co-owner | ⬜ todo | Structural mutation makes an immutable consistent revision; manifest pins paths/hashes/settings and increments project revision |
-| [S03-T08](../../implementation/sprint-03-projects-files/S03-T08-verify-project-and-tree-journey.md) | Verify project and tree journey | 6 | Project Co-owner | ⬜ todo | Create/rename/open/create-node/move/delete journey persists across reload and never accesses another project |
+| [S03-T01](../../implementation/sprint-03-projects-files/S03-T01-implement-project-crud-and-pagination.md) | Implement project CRUD and pagination | 8 | Project Co-owner | ✅ done | List/create/read/update/delete check author/membership and stable pagination/search/filter/order contracts |
+| [S03-T02](../../implementation/sprint-03-projects-files/S03-T02-create-duplicate-and-rename-project-sources.md) | Create duplicate and rename project sources | 8 | Project Co-owner | ✅ done | Blank project has valid main.tex; clone copies source without memberships or external secrets; title changes persist |
+| [S03-T03](../../implementation/sprint-03-projects-files/S03-T03-create-api-backed-dashboard.md) | Create API-backed dashboard | 8 | Project Co-owner | ✅ done | Owned/shared/recent projects render through API pagination with empty/loading/error states |
+| [S03-T04](../../implementation/sprint-03-projects-files/S03-T04-implement-id-based-file-tree-mutations.md) | Implement ID-based file tree mutations | 8 | Project Co-owner | ✅ done | Create/move/rename/delete reject cycles, traversal, foreign parent and stale If-Match; committed treeVersion increments |
+| [S03-T09](../../implementation/sprint-03-projects-files/S03-T09-verify-transaction-safe-move-rename-and-delete.md) | Verify transaction-safe move rename and delete | 6 | Project Co-owner | ✅ done | Competing parent/name/version operations yield one committed tree state and explicit conflicts; no orphan or cyclic nodes |
+| [S03-T05](../../implementation/sprint-03-projects-files/S03-T05-create-file-tree-interactions.md) | Create file tree interactions | 8 | Project Co-owner | ✅ done | Context menu/dialog/breadcrumb actions call actual routes and recover from 403/409 without phantom nodes |
+| [S03-T06](../../implementation/sprint-03-projects-files/S03-T06-implement-project-root-and-compiler-settings.md) | Implement project root and compiler settings | 6 | Project Co-owner | ✅ done | Only same-project active .tex may be root; engine is allowlisted and server caps client timeout options |
+| [S03-T07](../../implementation/sprint-03-projects-files/S03-T07-create-structural-revision-manifests.md) | Create structural revision manifests | 8 | Project Co-owner | ✅ done | Structural mutation makes an immutable consistent revision; manifest pins paths/hashes/settings and increments project revision |
+| [S03-T08](../../implementation/sprint-03-projects-files/S03-T08-verify-project-and-tree-journey.md) | Verify project and tree journey | 6 | Project Co-owner | ✅ done | Create/rename/open/create-node/move/delete journey persists across reload and never accesses another project |
 
 ### DoD
 
-- [ ] Every task's acceptance and declared scope has actual evidence.
-- [ ] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
-- [ ] Permissions, persistence, privacy and real outputs are verified.
-- [ ] Contracts, progress, feature matrix and actual effort are updated.
-- [ ] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
+- [x] Every task's acceptance and declared scope has actual evidence.
+- [x] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
+- [x] Permissions, persistence, privacy and real outputs are verified.
+- [x] Contracts, progress, feature matrix and actual effort are updated.
+- [x] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
 
 ### Mitigations
 
