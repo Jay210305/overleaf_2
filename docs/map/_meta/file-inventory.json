@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "471292dda516dc3862116c207aa0b44b0a15d0e6",
+  "git_baseline": "0636eb4f85dda618d881b26b6b3be5bc630cacdd",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -338,7 +338,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "3db6cd82aca7bb69743cd3e12f05647c2a4e62b73eabaf82603c76a8f61559cd"
+      "sha256": "d0156bd1153e887c87f818e4ed5b1cf132104efaa676e0726dbba472d17e2517"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -438,7 +438,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "2b295bf61e31cc415bf6c495de44ce10cef1a8924e2b80692ac1cce887bdd27c"
+      "sha256": "9adc1be662e2d86d04270d2a485eca472ee0176aece6c32c608176ec5385a55f"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -493,7 +493,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "bf26fd8ded4773e7ba97e409f1956041f9ee713883a4b02f884968248d32f63b"
+      "sha256": "2ab4491b966c0a26256b35ea65cad7c84659e599b555c3a6f97e971d0a7cc1b5"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -583,7 +583,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "130de4d8c08658fe5afd385370806a1d1aa5804113efb109edfe9da4af53406f"
+      "sha256": "4c8a5e7801a837c56e9443ed0d5a975325173543c1825ec8573c27c41b1e78fc"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -603,7 +603,7 @@
     {
       "path": "docs/progress/sprint-02.md",
       "role": "product",
-      "sha256": "3d36b3f99692184a817b005ae54a3d27c1d8db218bc9b959d40eb2ef1a8fd2c8"
+      "sha256": "efad7160295f587653eb50e6ba3a364691779df051e77a88c5425b41c4a6bcd7"
     },
     {
       "path": "docs/progress/sprint-03.md",
@@ -823,7 +823,7 @@
     {
       "path": "docs/test-reports/s02-t05.md",
       "role": "factory",
-      "sha256": "c55b6d4ae9ff2db2af9ccb45cb8cdd301ccfebd9ef245ed2d37f253e9c650df3"
+      "sha256": "0cb9d01202e1c9dc0e04da1d3061653070c3818838c151808483b50984573e89"
     },
     {
       "path": "eslint.config.js",
@@ -838,7 +838,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "0a6dd2fe0045386a04845422cb609a1be6297d251d53d495bc2f0963bf8347bf"
+      "sha256": "f0264d4b05af1be2dee92e6af68e333b794ff4bd044d66098bd83d123c478cf1"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -988,7 +988,7 @@
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md",
       "role": "contract",
-      "sha256": "b1871cdc3e637739b62a5ee0548c698dc4f35f69846ed63f9dd746372bef6e80"
+      "sha256": "546ee27f459b53aad5d3ad615e1e6529ba8b0195aa122d5ee8cc439f192860ad"
     },
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md",

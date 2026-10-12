@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T04]
 requirements: [ACC-01, NFR-08]
 source_task: S02-T05
-status: in_progress
-readiness: review-pending
+status: done
+readiness: completed
 ---
 # S02-T05 — Create accessible authentication forms
 
@@ -69,7 +69,7 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 - [x] Register/login/verify/forgot/reset work through real API with network and 429 states, labels and keyboard focus; see the [scoped report](../../docs/test-reports/s02-t05.md).
 - [x] ACC-01: This task's browser registration, verification, login/logout and recovery assertions pass; feature-wide G1 completion remains open.
-- [ ] NFR-08: Edge axe and automated keyboard checks pass; independent human keyboard review remains for the co-maintainer.
+- [x] NFR-08: Edge axe and automated keyboard checks pass; the independent co-maintainer accepted this scoped evidence on 2026-10-11. Feature-wide completion remains open.
 - [x] Valid input passes, invalid input produces the specified failure and leaves state safe; the browser flow uses the actual API, PostgreSQL and Mailpit.
 
 ## Verification
@@ -101,4 +101,4 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 - [x] Runtime behavior uses the real API and persisted session/account state.
 - [x] Report, progress and feature evidence are updated; actual hours were not measured. No contract or ADR change was needed.
 - [x] No secret/private source in artifacts or logs; browser availability limits are recorded in the report.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Independent co-maintainer review complete; accepted by the Project Co-owner on 2026-10-11 in this conversation.
