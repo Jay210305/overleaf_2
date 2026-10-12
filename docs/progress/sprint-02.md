@@ -16,7 +16,7 @@
 | [S02-T07](../../implementation/sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t07.md); independent co-maintainer accepted 2026-10-12 |
 | [S02-T10](../../implementation/sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t10.md); independent co-maintainer accepted 2026-10-12 |
 | [S02-T11](../../implementation/sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t11.md); independent co-maintainer accepted 2026-10-12 |
-| [S02-T08](../../implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | NOT_STARTED | Not recorded | No implementation evidence |
+| [S02-T08](../../implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md) | IN_PROGRESS; review pending | Not measured | [Scoped report](../test-reports/s02-t08.md); local security verification passes, independent review pending |
 
 ## Decisions and Migrations
 
@@ -31,10 +31,11 @@
 - S02-T07 adds current-user profile/preferences routes and browser settings, session inventory and selected revocation, plus per-route Redis limits. The existing `user_preferences` and `sessions` tables are reused; no migration was added. Static OpenAPI copies mark these methods IN_PROGRESS but still lack generation/parity evidence (GAP-12).
 - S02-T10 adds current-password and session-CSRF checked password change, atomic Argon2id replacement, consumption of unused recovery tokens and audit-backed revocation of other sessions. The current session stays valid. No migration was added. Static OpenAPI copies mark this method IN_PROGRESS; generation/parity evidence remains GAP-12.
 - S02-T11 adds bounded PNG avatars in private S3 storage, an authenticated current-user content route, browser upload/preview and queued deletion of replaced objects. Migration `0004-avatar-cleanup.sql` adds the retryable cleanup queue. Static OpenAPI copies mark the routes IN_PROGRESS; generation/parity evidence remains GAP-12. Production rollout must apply the migration before enabling the API worker.
+- S02-T08 adds PostgreSQL-backed and captured-log verification for the existing project guard, session lifecycle and identity routes. No production route, contract, schema or migration changed. Product project CRUD and WSS/object authorization remain later gates.
 
 ## Validation
 
-S02-T01 through S02-T07 and S02-T09 through S02-T11 are accepted. S02-T11 commands and limits are in its [scoped report](../test-reports/s02-t11.md). Full sprint and gate acceptance remain open.
+S02-T01 through S02-T07 and S02-T09 through S02-T11 are accepted. S02-T08 local commands and limits are in its [scoped report](../test-reports/s02-t08.md); independent review is pending. Full sprint and gate acceptance remain open.
 
 ## Risks and Debt
 
@@ -42,4 +43,4 @@ Track actual findings in Open Gaps and Technical Debt, referencing the task.
 
 ## Next Task
 
-S02-T08 tenancy/revocation/suspension/CSRF verification.
+Obtain independent S02-T08 review, then assess sprint completion and remaining G1 gate work.

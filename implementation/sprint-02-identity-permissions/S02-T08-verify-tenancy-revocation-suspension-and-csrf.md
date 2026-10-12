@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S02-T11]
 requirements: [COL-03, ACC-02, NFR-10]
 source_task: S02-T08
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: review-pending
 ---
 # S02-T08 — Verify tenancy revocation suspension and CSRF
 
@@ -67,11 +67,11 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] 401/403, disabled user, revoked cookie, forged CSRF and another-project IDs are rejected without private output
-- [ ] COL-03: OWNER/EDITOR/REVIEWER/VIEWER are enforced on REST; WSS enforcement lands in G2. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] ACC-02: Secure opaque cookies, expiry, rotation, revocation and session inventory. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] NFR-10: Zero credentials/tokens/private source content in application logs. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] 401/403, disabled user, revoked cookie, forged CSRF and another-project IDs are rejected without private output
+- [x] COL-03: OWNER/EDITOR/REVIEWER/VIEWER are enforced on REST; WSS enforcement lands in G2. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] ACC-02: Secure opaque cookies, expiry, rotation, revocation and session inventory. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] NFR-10: Zero credentials/tokens/private source content in application logs. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -97,9 +97,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
 - [ ] Independent co-maintainer review complete; status updated to done only after evidence.

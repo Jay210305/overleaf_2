@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "ad4f4bc47c0f8207b80c77a189f1c6b16b3da8eb",
+  "git_baseline": "93cca801c23f5015390908f584ff921533f667f6",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -373,7 +373,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "2eca8e23fd9e12537c5508f4282350c59c3e8426b106206a86430a6b54e7f40f"
+      "sha256": "c77d8dc198b2fbe3699173415903ccbe10edb49147b2a5934ae63b7a0bd5a42a"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -428,7 +428,7 @@
     {
       "path": "docs/map/objects/api-and-durable-data.md",
       "role": "factory",
-      "sha256": "fbe861585d9109505f44eabb4c8592171bbc7b813ddd2f151ac9e0186192b49f"
+      "sha256": "de2bfe878b3973075b0777f6bfdb3206a77e688a04206b894f2f14aeba39079f"
     },
     {
       "path": "docs/map/objects/browser-and-editing.md",
@@ -473,7 +473,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "ec40d7b8704a4c9876c61a9b0d0c105b6d6b87dda41f537e236813a176449c96"
+      "sha256": "9fbcb446cb334afaa133d6f002af94f5aa7941f243cb488dd04b49416f9a92d7"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -483,7 +483,7 @@
     {
       "path": "docs/map/objects/task-library.md",
       "role": "factory",
-      "sha256": "f2d766978bcf3cdf236b579bb3d3239a79c3e5c431f73b708715855804527b5b"
+      "sha256": "21001941b1d7d2293fed9b01f3e790904b81db6877c6328e41e3d8268ff939f4"
     },
     {
       "path": "docs/map/objects/workspace-tooling.md",
@@ -528,7 +528,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "2a590879506df93a38651ad3914695b54a89f6c5e44ad9ffdb104081f54fd8d8"
+      "sha256": "594d95f895781c67369dad69235e302ff6b6549e6c60b562c7d27622bc88633d"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -618,7 +618,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "6063a737c2a06cc2542735a3aba4c4e5067506eba415f4e4c8311defb3ba85c6"
+      "sha256": "534c5e47f95cc6eee85f71ec5cca360a74b509b0a7468551113b68db3778fad1"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -638,7 +638,7 @@
     {
       "path": "docs/progress/sprint-02.md",
       "role": "product",
-      "sha256": "efcb2f21ac463ee88b47151b5387955d5c457c2ac3622317dceb9aff35869efe"
+      "sha256": "f71fda89c75222eab48f78c1dcffa411e68a79b26aa7493de2caf2a9d82c7e7f"
     },
     {
       "path": "docs/progress/sprint-03.md",
@@ -871,6 +871,11 @@
       "sha256": "0425da0bac7d5ed4f825a0ba97effb624cb82c02ed65a91d7d576b1956f1f91f"
     },
     {
+      "path": "docs/test-reports/s02-t08.md",
+      "role": "factory",
+      "sha256": "29fbdf039804ebe656caf0be932f20972f569cb47ec5c39ecbcd92d3f714de70"
+    },
+    {
       "path": "docs/test-reports/s02-t09.md",
       "role": "factory",
       "sha256": "28c55c3405dd496f00af7b74c83ed5057cc43b1dc32e7e2f4a3b6e2f1d70e345"
@@ -898,7 +903,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "289382d050d20b3f2535aed236314b120680cdde7787d26b6074e449cad9df84"
+      "sha256": "528b6765a5e445f5196e2f458fb76a94945ac6ffb1c1556985658ec09e99805d"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -1063,7 +1068,7 @@
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md",
       "role": "contract",
-      "sha256": "50e92642fd55a62af28af048f75bb28b5cff17260ed8b7bbdbd68a7dadeaec17"
+      "sha256": "7ffa80655e334261151c3081c399446eb0906f1be9eeab0ebc9bf5f2fda9c976"
     },
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md",
@@ -2316,6 +2321,11 @@
       "sha256": "534034713f0d8eec65acc6647f2bd34bb2d9b0dbaf85b3315963803acdd3c10a"
     },
     {
+      "path": "tests/integration/s02-t08.test.ts",
+      "role": "factory",
+      "sha256": "0f47f45e9e52b1d8de1c1fb4372302bc3a3a8f8dbf7d6222f2636683f440a459"
+    },
+    {
       "path": "tests/integration/s02-t09.test.ts",
       "role": "factory",
       "sha256": "115977890d843698750eaa922ab0e87e480388679d9259da0f2a24f06288a3d0"
@@ -2366,6 +2376,11 @@
       "sha256": "df12bccc11d6c8a70aa7e76f90a195209012fb0bcfb9ee3d648b00015b610240"
     },
     {
+      "path": "tests/regression/acc-02/s02-t08.test.ts",
+      "role": "factory",
+      "sha256": "8340b94c16d71567f4b1b61e227e3a5e903c9a908bdd3e59f7d859bc3ea53201"
+    },
+    {
       "path": "tests/regression/acc-02/s02-t10.test.ts",
       "role": "factory",
       "sha256": "11f0dcfed200ad0c8acc63756470560552a66b074500640ef35ce2d7581a3022"
@@ -2411,6 +2426,11 @@
       "sha256": "960a07abb238e842e5baaa38f0d1abd5fa32d8eeb687e3b36c4f3eaf935ddb06"
     },
     {
+      "path": "tests/regression/col-03/s02-t08.test.ts",
+      "role": "factory",
+      "sha256": "5d40970620d67ee638bcf50cdd04e5b2e4a48b6b2c7cde60454be0f71059a253"
+    },
+    {
       "path": "tests/regression/col-14/s02-t09.test.ts",
       "role": "factory",
       "sha256": "f21faf95f27b70f20bedaa840b4c5149e1590abf44d8e46187f23bce6f3758b8"
@@ -2429,6 +2449,11 @@
       "path": "tests/regression/nfr-10/s02-t06.test.ts",
       "role": "factory",
       "sha256": "c18cee1c2e010e53bca9a1f824c7f8c1add4f728cb522d6e5be103844f1096b1"
+    },
+    {
+      "path": "tests/regression/nfr-10/s02-t08.test.ts",
+      "role": "factory",
+      "sha256": "86aef274ced9a82f7ca61a5fd2ab5681c74b255e436bf8434df8924fbb71a0cd"
     },
     {
       "path": "tests/regression/nfr-10/s02-t09.test.ts",
@@ -2524,6 +2549,11 @@
       "path": "tests/regression/pro-06/s01-t08.test.ts",
       "role": "factory",
       "sha256": "74439dedef85edfaac05de1c52c7bd2d0eb784afdf4b88ae7110eb3b3a647154"
+    },
+    {
+      "path": "tests/security/auth-tenancy.test.ts",
+      "role": "factory",
+      "sha256": "593f1c93ec041024f08103b1d6006067fe78bf334cd159c16462e668c957b2e3"
     },
     {
       "path": "tests/services/local-services.test.ts",
