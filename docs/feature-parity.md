@@ -66,7 +66,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | COL-11 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-12 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-13 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| COL-14 | G1 | Must | IN_PROGRESS | [S02-T09 account/session audit scope awaiting review](test-reports/s02-t09.md); invitation/download/restore actions remain later work |
+| COL-14 | G1 | Must | IN_PROGRESS | [S02-T09 account/session audit scope accepted](test-reports/s02-t09.md); invitation/download/restore actions remain later work |
 | INT-01 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-02 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-03 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -87,7 +87,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | NFR-07 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-08 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); [S02-T05 Edge axe and keyboard scope accepted](test-reports/s02-t05.md); remaining mapped tasks still apply |
 | NFR-09 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| NFR-10 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); [S02-T06 captured-log redaction accepted](test-reports/s02-t06.md); [S02-T09 redacted audit scope awaiting review](test-reports/s02-t09.md); remaining mapped tasks still apply |
+| NFR-10 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); [S02-T06 captured-log redaction accepted](test-reports/s02-t06.md); [S02-T09 redacted audit scope accepted](test-reports/s02-t09.md); remaining mapped tasks still apply |
 | NFR-11 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-12 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PL-01 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t06.md) (accepted 2026-10-10); remaining mapped tasks still apply |

@@ -37,7 +37,7 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S02-T04 | [Implement session and project policy guards](sprint-02-identity-permissions/S02-T04-implement-session-and-project-policy-guards.md) | Julio (proposed) | 8 | done |
 | S02-T05 | [Create accessible authentication forms](sprint-02-identity-permissions/S02-T05-create-accessible-authentication-forms.md) | Julio (proposed) | 8 | done |
 | S02-T06 | [Add authentication rate limits and redaction](sprint-02-identity-permissions/S02-T06-add-authentication-rate-limits-and-redaction.md) | Julio (proposed) | 6 | done |
-| S02-T09 | [Create redacted audit event writer](sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | Julio (proposed) | 6 | in_progress |
+| S02-T09 | [Create redacted audit event writer](sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md) | Julio (proposed) | 6 | done |
 | S02-T07 | [Implement profile preferences and session management](sprint-02-identity-permissions/S02-T07-implement-profile-preferences-and-session-management.md) | Julio (proposed) | 8 | todo |
 | S02-T10 | [Implement authenticated password change](sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md) | Julio (proposed) | 6 | todo |
 | S02-T11 | [Implement private avatar upload lifecycle](sprint-02-identity-permissions/S02-T11-implement-private-avatar-upload-lifecycle.md) | Julio (proposed) | 6 | todo |

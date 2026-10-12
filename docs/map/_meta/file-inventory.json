@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "7e54606e3b5737712b7db0a3a4880fe8742037f2",
+  "git_baseline": "9294addd9565d672b27b3981c0a7bd30d0ee23c8",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -348,7 +348,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "5434ae50c479f5a6ddb33dfd9cf862d9543122e8bffbdcfb184b10737c792364"
+      "sha256": "5ae4c5da1468c66f56309925e1bf91ae992ac4cd411ee9c99c20774676f1ce5a"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -403,7 +403,7 @@
     {
       "path": "docs/map/objects/api-and-durable-data.md",
       "role": "factory",
-      "sha256": "4de7bd8b841714424e0398daf47b2529fee2c4ba03c40656a036b1cfffab7428"
+      "sha256": "be1ad0dbb82ae9274a79b0dad742a7ec97b39d6221e91f823ff9c4f65799c030"
     },
     {
       "path": "docs/map/objects/browser-and-editing.md",
@@ -448,7 +448,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "47043549d6db4c719c2c8b681568faf678f748af1da83fba61e9f4edbdd731e3"
+      "sha256": "b053b0f2d9bbbd75df1746d4711eb369ba8fc435e955898976b0c6824afb1628"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -503,7 +503,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "e2269c10f03f55faf95bdb31eadc8e58eab44a948ffe096439bc316d907b5da0"
+      "sha256": "dc142de8fa538997700461a45e8c41e36182383a62e157d4296eca9f9173416d"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -593,7 +593,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "09fa3a729b5e12314a45e3f7cb3c97716a70e523ccb7ee5a5d8f992594fd9d92"
+      "sha256": "472960d2a3782c6d9466ad60a248609001fcba6e8850f7d83ad39cb5f28b9f78"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -613,7 +613,7 @@
     {
       "path": "docs/progress/sprint-02.md",
       "role": "product",
-      "sha256": "f5849492005a8e8ecb392711ca0f4c616f4e3777e85237a27cda3507ee66357c"
+      "sha256": "d283bfa9a4233ccda37ce5371e6cc5b1243577b54ccf470e5a4ae9f4622c731b"
     },
     {
       "path": "docs/progress/sprint-03.md",
@@ -843,7 +843,7 @@
     {
       "path": "docs/test-reports/s02-t09.md",
       "role": "factory",
-      "sha256": "b8bc9554be0257da717a61fa8408e8d3ba2d89fd52ab5bee9214d9a20d0398b1"
+      "sha256": "28c55c3405dd496f00af7b74c83ed5057cc43b1dc32e7e2f4a3b6e2f1d70e345"
     },
     {
       "path": "eslint.config.js",
@@ -858,7 +858,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "ac9b2436dc09a43a425f983c766f24381dea3b4fd0bcedb7f0900826c9715765"
+      "sha256": "b9701c20c817032222a405c372f96dfe8316f492a28aa143904c03f3c1dd0656"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -1028,7 +1028,7 @@
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T09-create-redacted-audit-event-writer.md",
       "role": "contract",
-      "sha256": "84af9da2c5ab0c4ca51ae54e62bde595baa13ba049fbb3c97c13d99771873ea2"
+      "sha256": "902370d69fe69875240993f3421f79c7f81e55d732fb04fcd56d8c8732506527"
     },
     {
       "path": "implementation/sprint-02-identity-permissions/S02-T10-implement-authenticated-password-change.md",

@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions, password recovery and the S02-T04 project guard. S02-T06 adds accepted Redis authentication limits and redacted logs. S02-T09 adds tested transaction-scoped audit events for account creation, login and session revocation, pending review. User-facing project and collaboration routes remain unimplemented.
+Fastify serves health routes, a fixture-only development sample, accepted trusted registration, verification, sessions, password recovery and the S02-T04 project guard. S02-T06 adds accepted Redis authentication limits and redacted logs. S02-T09 adds accepted transaction-scoped audit events for account creation, login and session revocation. User-facing project and collaboration routes remain unimplemented.
 
 ## Why this shape
 
