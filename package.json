@@ -30,6 +30,7 @@
     "@latex-collab/config": "workspace:*",
     "@latex-collab/contracts": "workspace:*",
     "@latex-collab/db": "workspace:*",
+    "@latex-collab/editor": "workspace:*",
     "@latex-collab/storage": "workspace:*",
     "@latex-collab/test-utils": "workspace:*",
     "@playwright/test": "1.64.0",
@@ -53,5 +54,16 @@
     "typescript-eslint": "8.71.1",
     "vite": "8.3.4",
     "vitest": "5.0.3"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "^6.20.3",
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/search": "^6.7.2",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.14",
+    "@lezer/highlight": "^1.2.5",
+    "y-codemirror.next": "0.3.5",
+    "yjs": "13.6.27"
   }
 }

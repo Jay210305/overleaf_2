@@ -75,6 +75,22 @@ export default defineConfig({
         find: "@latex-collab/test-utils",
         replacement: fileURLToPath(new URL("./packages/test-utils/src/index.ts", import.meta.url)),
       },
+      {
+        find: "@latex-collab/editor/latex-extension",
+        replacement: fileURLToPath(
+          new URL("./packages/editor/src/latex-extension.ts", import.meta.url),
+        ),
+      },
+      {
+        find: "@latex-collab/editor/keymap",
+        replacement: fileURLToPath(
+          new URL("./packages/editor/src/keymap.ts", import.meta.url),
+        ),
+      },
+      {
+        find: "@latex-collab/editor",
+        replacement: fileURLToPath(new URL("./packages/editor/src/index.ts", import.meta.url)),
+      },
     ],
   },
   test: {

@@ -6,6 +6,8 @@
   "dependencies": {
     "@latex-collab/contracts": "workspace:*",
     "@latex-collab/config": "workspace:*",
+    "@latex-collab/editor": "workspace:*",
+    "yjs": "13.6.27",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-router-dom": "7.18.4",

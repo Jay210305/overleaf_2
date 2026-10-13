@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S04-T04]
 requirements: [EDT-04, EDT-08]
 source_task: S04-T05
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S04-T05 — Implement local undo search and shortcuts
 
@@ -67,10 +67,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Undo/redo/comment/search/indent/go-to-line/save/compile shortcuts match their commands; local undo never reverses another origin
-- [ ] EDT-04: Save, undo, redo, comment, search, compile and go-to-line shortcuts work. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] EDT-08: Search/replace locally and across project with optional regex and preview. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Undo/redo/comment/search/indent/go-to-line/save/compile shortcuts match their commands; local undo never reverses another origin
+- [x] EDT-04: Save, undo, redo, comment, search, compile and go-to-line shortcuts work. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] EDT-08: Search/replace locally and across project with optional regex and preview. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -96,9 +96,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

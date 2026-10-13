@@ -230,7 +230,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S04: Code editor and durable text (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 72 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Julio (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 72 h (ASSUMPTION A-03) | **Status:** ✅ DONE | **Owner:** Julio (proposed A-02)
 **Goal:** Code editor and durable text for G1, using independently verified slices.
 
 ### Deliverables
@@ -250,24 +250,24 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S04-T01](../../implementation/sprint-04-code-editor/S04-T01-create-latex-codemirror-extensions.md) | Create LaTeX CodeMirror extensions | 8 | Julio | ⬜ todo | LaTeX/BibTeX/style/plain-text modes support lines/folding/theme and preserve Unicode source |
-| [S04-T02](../../implementation/sprint-04-code-editor/S04-T02-create-canonical-text-document-service.md) | Create canonical text document service | 8 | Julio | ⬜ todo | TextDocumentService loads/applies Yjs state; committed content is recoverable after API restart and never diverges from a second text column |
-| [S04-T09](../../implementation/sprint-04-code-editor/S04-T09-persist-and-replay-canonical-text-updates.md) | Persist and replay canonical text updates | 8 | Julio | ⬜ todo | Yjs update commit plus snapshot replay recovers identical text/hash after crash; duplicate replay does not double insert |
-| [S04-T10](../../implementation/sprint-04-code-editor/S04-T10-implement-rest-text-state-version-contract.md) | Implement REST text state-version contract | 8 | Julio | ⬜ todo | Authorized read/save with base state vector returns committed coverage; stale single-editor save reports conflict and text remains recoverable |
-| [S04-T03](../../implementation/sprint-04-code-editor/S04-T03-connect-actual-save-status-and-retries.md) | Connect actual save status and retries | 8 | Julio | ⬜ todo | Save status reaches saved only after committed coverage; retry/outage preserves pending text and gives visible error |
-| [S04-T04](../../implementation/sprint-04-code-editor/S04-T04-implement-file-tabs-and-navigation.md) | Implement file tabs and navigation | 6 | Julio | ⬜ todo | Switch files repeatedly without losing buffer/selection/undo state; deleted files close with a visible reason |
-| [S04-T05](../../implementation/sprint-04-code-editor/S04-T05-implement-local-undo-search-and-shortcuts.md) | Implement local undo search and shortcuts | 6 | Julio | ⬜ todo | Undo/redo/comment/search/indent/go-to-line/save/compile shortcuts match their commands; local undo never reverses another origin |
-| [S04-T06](../../implementation/sprint-04-code-editor/S04-T06-enforce-read-only-and-metadata-concurrency.md) | Enforce read-only and metadata concurrency | 6 | Julio | ⬜ todo | Viewer edits are rejected server-side; visible 403 and stale metadata 409/412 cannot silently overwrite content |
-| [S04-T07](../../implementation/sprint-04-code-editor/S04-T07-create-text-and-binary-checkpoints.md) | Create text and binary checkpoints | 8 | Julio | ⬜ todo | Explicit save/compile checkpoint includes text and binary hashes without creating one full revision per keystroke |
-| [S04-T08](../../implementation/sprint-04-code-editor/S04-T08-verify-persistent-unicode-editing.md) | Verify persistent Unicode editing | 6 | Julio | ⬜ todo | Write UTF-8/emoji/Spanish/RTL, refresh and restart API; recovered confirmed text equals original bytes |
+| [S04-T01](../../implementation/sprint-04-code-editor/S04-T01-create-latex-codemirror-extensions.md) | Create LaTeX CodeMirror extensions | 8 | Julio | ✅ done | LaTeX/BibTeX/style/plain-text modes support lines/folding/theme and preserve Unicode source |
+| [S04-T02](../../implementation/sprint-04-code-editor/S04-T02-create-canonical-text-document-service.md) | Create canonical text document service | 8 | Julio | ✅ done | TextDocumentService loads/applies Yjs state; committed content is recoverable after API restart and never diverges from a second text column |
+| [S04-T09](../../implementation/sprint-04-code-editor/S04-T09-persist-and-replay-canonical-text-updates.md) | Persist and replay canonical text updates | 8 | Julio | ✅ done | Yjs update commit plus snapshot replay recovers identical text/hash after crash; duplicate replay does not double insert |
+| [S04-T10](../../implementation/sprint-04-code-editor/S04-T10-implement-rest-text-state-version-contract.md) | Implement REST text state-version contract | 8 | Julio | ✅ done | Authorized read/save with base state vector returns committed coverage; stale single-editor save reports conflict and text remains recoverable |
+| [S04-T03](../../implementation/sprint-04-code-editor/S04-T03-connect-actual-save-status-and-retries.md) | Connect actual save status and retries | 8 | Julio | ✅ done | Save status reaches saved only after committed coverage; retry/outage preserves pending text and gives visible error |
+| [S04-T04](../../implementation/sprint-04-code-editor/S04-T04-implement-file-tabs-and-navigation.md) | Implement file tabs and navigation | 6 | Julio | ✅ done | Switch files repeatedly without losing buffer/selection/undo state; deleted files close with a visible reason |
+| [S04-T05](../../implementation/sprint-04-code-editor/S04-T05-implement-local-undo-search-and-shortcuts.md) | Implement local undo search and shortcuts | 6 | Julio | ✅ done | Undo/redo/comment/search/indent/go-to-line/save/compile shortcuts match their commands; local undo never reverses another origin |
+| [S04-T06](../../implementation/sprint-04-code-editor/S04-T06-enforce-read-only-and-metadata-concurrency.md) | Enforce read-only and metadata concurrency | 6 | Julio | ✅ done | Viewer edits are rejected server-side; visible 403 and stale metadata 409/412 cannot silently overwrite content |
+| [S04-T07](../../implementation/sprint-04-code-editor/S04-T07-create-text-and-binary-checkpoints.md) | Create text and binary checkpoints | 8 | Julio | ✅ done | Explicit save/compile checkpoint includes text and binary hashes without creating one full revision per keystroke |
+| [S04-T08](../../implementation/sprint-04-code-editor/S04-T08-verify-persistent-unicode-editing.md) | Verify persistent Unicode editing | 6 | Julio | ✅ done | Write UTF-8/emoji/Spanish/RTL, refresh and restart API; recovered confirmed text equals original bytes |
 
 ### DoD
 
-- [ ] Every task's acceptance and declared scope has actual evidence.
-- [ ] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
-- [ ] Permissions, persistence, privacy and real outputs are verified.
-- [ ] Contracts, progress, feature matrix and actual effort are updated.
-- [ ] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
+- [x] Every task's acceptance and declared scope has actual evidence.
+- [x] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
+- [x] Permissions, persistence, privacy and real outputs are verified.
+- [x] Contracts, progress, feature matrix and actual effort are updated.
+- [x] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
 
 ### Mitigations
 

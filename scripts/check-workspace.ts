@@ -10,6 +10,11 @@ type Manifest = {
 };
 
 const expectedPackages = ["@latex-collab/contracts", "@latex-collab/config"] as const;
+const browserAllowedPackages = [
+  "@latex-collab/contracts",
+  "@latex-collab/config",
+  "@latex-collab/editor",
+] as const;
 
 function readManifest(root: string, path: string): Manifest {
   return JSON.parse(readFileSync(join(root, path, "package.json"), "utf8")) as Manifest;
@@ -21,7 +26,7 @@ export function assertBrowserPackageBoundary(root: string): void {
   for (const dependency of Object.keys(browser.dependencies ?? {})) {
     if (
       dependency.startsWith("@latex-collab/") &&
-      !expectedPackages.includes(dependency as (typeof expectedPackages)[number])
+      !browserAllowedPackages.includes(dependency as (typeof browserAllowedPackages)[number])
     ) {
       throw new Error(`Browser workspace cannot depend on private package ${dependency}`);
     }
@@ -76,7 +81,7 @@ export function assertBrowserPackageBoundary(root: string): void {
           if (specifier) {
             const privatePackage =
               specifier.startsWith("@latex-collab/") &&
-              !expectedPackages.includes(specifier as (typeof expectedPackages)[number]);
+              !browserAllowedPackages.includes(specifier as (typeof browserAllowedPackages)[number]);
             const outsideApp =
               specifier.startsWith(".") &&
               (() => {
