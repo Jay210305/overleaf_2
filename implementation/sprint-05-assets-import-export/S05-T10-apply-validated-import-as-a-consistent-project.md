@@ -5,7 +5,7 @@ owner: "Project Co-owner"
 effort_h: 8
 effort_range_h: [6, 8, 10]
 estimate_basis: assumption-a-03
-depends_on: [S05-T03]
+depends_on: [S05-T03, S05-T12]
 requirements: [PRO-02, PRO-10]
 source_task: S05-T03
 status: todo
@@ -15,7 +15,7 @@ readiness: pending-dependencies
 
 | Sprint | Owner | Effort (h, sum to total) | Dependencies | Related docs |
 |---|---|---|---|---|
-| S05 / G1 | Project Co-owner (proposed A-02) | 8 (ASSUMPTION A-03) | [S05-T03](S05-T03-validate-archives-and-define-idempotent-import-job.md) | [Technical spec](../../docs/planning/03-technical-spec.md), [Quality gates](../../docs/planning/06-ci-cd-and-environments.md) |
+| S05 / G1 | Project Co-owner (proposed A-02) | 8 (ASSUMPTION A-03) | [S05-T03](S05-T03-validate-archives-and-define-idempotent-import-job.md), [S05-T12](S05-T12-implement-authenticated-zip-import-intake.md) | [Technical spec](../../docs/planning/03-technical-spec.md), [Quality gates](../../docs/planning/06-ci-cd-and-environments.md) |
 
 ## Purpose
 
