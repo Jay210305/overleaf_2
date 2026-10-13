@@ -275,7 +275,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S05: Assets ZIP and templates (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 80 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Project Co-owner (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 80 h (ASSUMPTION A-03) | **Status:** 🟨 IN_PROGRESS | **Owner:** Project Co-owner (proposed A-02)
 **Goal:** Assets ZIP and templates for G1, using independently verified slices.
 
 ### Deliverables
@@ -296,7 +296,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S05-T01](../../implementation/sprint-05-assets-import-export/S05-T01-implement-verified-presigned-uploads.md) | Implement verified presigned uploads | 8 | Project Co-owner | ⬜ todo | Presign checks project permission/extension/MIME/size; completion checks backend object hash and size before creating node |
+| [S05-T01](../../implementation/sprint-05-assets-import-export/S05-T01-implement-verified-presigned-uploads.md) | Implement verified presigned uploads | 8 | Project Co-owner | 🟨 in_progress | Presign checks project permission/extension/MIME/size; completion checks backend object hash and size before creating node |
 | [S05-T09](../../implementation/sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md) | Implement quota and orphan object cleanup | 8 | Project Co-owner | ⬜ todo | Reference-checked GC never deletes referenced revisions/artifacts; uploads within configured byte/node quota succeed and excess rejects |
 | [S05-T02](../../implementation/sprint-05-assets-import-export/S05-T02-create-multi-file-upload-interactions.md) | Create multi-file upload interactions | 8 | Project Co-owner | ⬜ todo | Drag/drop multiple files tracks progress/cancel/retry and exposes per-file errors without duplicate nodes |
 | [S05-T03](../../implementation/sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | Validate archives and define idempotent import job | 8 | Project Co-owner | ⬜ todo | Validated archive rejects traversal/bombs/symlinks and records an idempotent staged import job; application to canonical project state is S05-T10 |

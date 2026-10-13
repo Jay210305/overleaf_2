@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S04-T08]
 requirements: [PRO-05, PL-07]
 source_task: S05-T01
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: ready
 ---
 # S05-T01 — Implement verified presigned uploads
 

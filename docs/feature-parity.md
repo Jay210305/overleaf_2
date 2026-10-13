@@ -16,7 +16,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | PRO-02 | G1 | Must | IN_PROGRESS | [S03-T02 blank project creation](test-reports/s03-t02.md); remaining mapped tasks apply |
 | PRO-03 | G1 | Must | IN_PROGRESS | [S03-T01 rename](test-reports/s03-t01.md); [S03-T02 project clone](test-reports/s03-t02.md); G1 gate stabilization applies |
 | PRO-04 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t07.md) (accepted 2026-10-10); [S03-T04 ID-based tree](test-reports/s03-t04.md); [S03-T05 tree interactions](test-reports/s03-t05.md); [S03-T09 transaction safety](test-reports/s03-t09.md); [S03-T08 journey](test-reports/s03-t08.md); remaining mapped tasks still apply |
-| PRO-05 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); remaining mapped tasks still apply |
+| PRO-05 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S05-T01 upload API slice](test-reports/s05-t01.md) pending review; UI, import and remaining mapped tasks still apply |
 | PRO-06 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PRO-07 | G1 | Must | IN_PROGRESS | [S03-T06 root document setting](test-reports/s03-t06.md); G1 gate stabilization applies |
 | PRO-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -96,4 +96,4 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | PL-04 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PL-05 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t10.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PL-06 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t01.md) (accepted 2026-10-10); [S03-T09 transaction safety](test-reports/s03-t09.md); remaining mapped tasks still apply |
-| PL-07 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S02-T11 private avatar boundary accepted](test-reports/s02-t11.md); remaining mapped tasks still apply |
+| PL-07 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S02-T11 private avatar boundary accepted](test-reports/s02-t11.md); [S05-T01 private upload boundary](test-reports/s05-t01.md) pending review; remaining mapped tasks still apply |

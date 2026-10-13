@@ -118,3 +118,11 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Technical Debt:** None introduced; live multi-user WebSocket rooms scheduled for Sprint S07.
 - **Next Ready Task:** S05-T01 (Sprint S05: Assets, import, and export).
 
+### 2026-10-12 — Sprint S05 Branch and Verified Upload Slice
+
+- **Contributor:** Codex, carrying out the user's Sprint 05 branch and implementation request.
+- **Branch/base:** Published `codex/sprint-05-assets-import-export` from `origin/main` (`40f0870`); merge commit `d09db72` includes `origin/codex/sprint-04-code-editor` (`6549a09`). Main and the Sprint 04 branch were not changed.
+- **Task:** S05-T01 is IN_PROGRESS. Scoped API, schema/migration, storage read cap and tests are described in [the report](../test-reports/s05-t01.md); actual effort was not measured.
+- **Observed checks:** Focused S05 tests 3 files/14 tests PASS; `pnpm lint`, `pnpm typecheck`, `pnpm build`, planning lint, map check and artifact check PASS on Windows with local Compose services. Repository-wide S05 run had 361 passing tests and two inherited Mailpit failures; formatting still flags 37 inherited S03/S04 files. Shared gates and independent review remain open.
+- **Next:** Finish verification and obtain independent co-maintainer review before marking S05-T01 done; then handle S05-T09 cleanup.
+

@@ -26,6 +26,13 @@ export class StorageSecurityError extends Error {
   }
 }
 
+export class StorageLimitError extends Error {
+  constructor() {
+    super("Object exceeds the allowed byte limit");
+    this.name = "StorageLimitError";
+  }
+}
+
 export function validateKey(key: string): void {
   if (!key || typeof key !== "string" || key.trim() === "") {
     throw new StorageSecurityError("Key must be a non-empty string");
@@ -182,6 +189,27 @@ export class S3StorageAdapter implements StorageAdapter {
 
     const byteArray = await response.Body.transformToByteArray();
     return byteArray;
+  }
+
+  async getLimited(key: string, maxBytes: number): Promise<Uint8Array> {
+    validateKey(key);
+    if (!Number.isSafeInteger(maxBytes) || maxBytes < 0) {
+      throw new StorageLimitError();
+    }
+    const response = await this.s3.send(new GetObjectCommand({ Bucket: this.bucket, Key: key }));
+    if (!response.Body) throw new Error("Object has no body");
+    const body = response.Body as AsyncIterable<Uint8Array> & { destroy?: () => void };
+    const chunks: Buffer[] = [];
+    let total = 0;
+    for await (const chunk of body) {
+      total += chunk.byteLength;
+      if (total > maxBytes) {
+        body.destroy?.();
+        throw new StorageLimitError();
+      }
+      chunks.push(Buffer.from(chunk));
+    }
+    return Buffer.concat(chunks, total);
   }
 
   async head(key: string): Promise<ObjectRef | null> {

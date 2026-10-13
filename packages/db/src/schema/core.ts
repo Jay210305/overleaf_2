@@ -3,6 +3,7 @@ import {
   boolean,
   check,
   foreignKey,
+  index,
   jsonb,
   pgTable,
   primaryKey,
@@ -231,6 +232,46 @@ export const projectNodes = pgTable(
     check("project_nodes_kind_check", sql`${table.kind} IN ('FILE', 'FOLDER')`),
     check("project_nodes_content_kind_check", sql`${table.contentKind} IN ('TEXT', 'BINARY')`),
     check("project_nodes_size_bytes_check", sql`${table.sizeBytes} >= 0`),
+  ],
+);
+
+export const pendingUploads = pgTable(
+  "pending_uploads",
+  {
+    id: uuid("id").primaryKey(),
+    projectId: uuid("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    actorId: uuid("actor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    parentId: uuid("parent_id"),
+    fileName: text("file_name").notNull(),
+    mime: text("mime").notNull(),
+    contentKind: text("content_kind").notNull(),
+    expectedSize: bigint("expected_size", { mode: "number" }).notNull(),
+    expectedSha256: text("expected_sha256").notNull(),
+    stagingKey: text("staging_key").notNull().unique(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+    completedNodeId: uuid("completed_node_id").references(() => projectNodes.id, {
+      onDelete: "cascade",
+    }),
+    completedKeyHash: text("completed_key_hash"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("pending_uploads_project_expiry_idx")
+      .on(table.projectId, table.expiresAt)
+      .where(sql`${table.completedNodeId} IS NULL`),
+    check("pending_uploads_content_kind_check", sql`${table.contentKind} IN ('TEXT', 'BINARY')`),
+    check(
+      "pending_uploads_expected_size_check",
+      sql`${table.expectedSize} > 0 AND ${table.expectedSize} <= 26214400`,
+    ),
+    check(
+      "pending_uploads_completion_pair",
+      sql`(${table.completedNodeId} IS NULL AND ${table.completedKeyHash} IS NULL) OR (${table.completedNodeId} IS NOT NULL AND ${table.completedKeyHash} IS NOT NULL)`,
+    ),
   ],
 );
 

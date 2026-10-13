@@ -8,6 +8,7 @@ export type ObjectRef = {
 export interface StorageAdapter {
   put(key: string, bytes: Uint8Array, mime: string): Promise<ObjectRef>;
   get(key: string): Promise<Uint8Array>;
+  getLimited(key: string, maxBytes: number): Promise<Uint8Array>;
   head(key: string): Promise<ObjectRef | null>;
   delete(key: string): Promise<void>;
   presign(key: string, operation: "get" | "put", ttlSeconds: number): Promise<string>;
