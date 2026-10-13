@@ -126,3 +126,11 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Observed checks:** Focused S05 tests 3 files/14 tests PASS; `pnpm lint`, `pnpm typecheck`, `pnpm build`, planning lint, map check and artifact check PASS on Windows with local Compose services. Repository-wide S05 run had 361 passing tests and two inherited Mailpit failures; formatting still flags 37 inherited S03/S04 files. Shared gates and independent review remain open.
 - **Next:** Finish verification and obtain independent co-maintainer review before marking S05-T01 done; then handle S05-T09 cleanup.
 
+### 2026-10-13 — Sprint S05 review of S05-T01/T09/T02 and S05-T12 planning
+
+- **Contributor:** OpenCode agent, carrying out the user's review-first request on `codex/sprint-05-assets-import-export`.
+- **Review:** Read the complete master plan and methodology, inspected the S05-T01/T09/T02 commits and their implementation (`uploads/routes.ts`, `storage-gc.ts`, `file-uploader.tsx`), and re-ran evidence: focused suites 14/14, 9/9 and 8/8 PASS with local PostgreSQL/MinIO, plus `pnpm typecheck`, `pnpm lint` and `plan_lint.py` PASS. Two LOW nits recorded in [S05 progress](sprint-05.md) without touching accepted code.
+- **Acceptance:** The user (co-maintainer side) accepted S05-T01, S05-T09 and S05-T02; task frontmatter/index/roadmap now read `done`, GAP-18/GAP-19 are closed, and S05-T03 readiness is `ready`. GAP-15 (migration wiring), GAP-16 (inherited formatting), GAP-17 (revision references) and GAP-20 (no live ZIP route) stay open.
+- **Planning:** Recorded the previously uncommitted S05-T12 authenticated-intake package (new task file, ADR-009, roadmap 80→88 h, contract/traceability updates, S05-T03/S05-T10 boundary edits) as planning only; no import route is live.
+- **Next:** Implement S05-T03 (private ZIP validator, import-job schema/repository, worker wiring) per the approved design.
+

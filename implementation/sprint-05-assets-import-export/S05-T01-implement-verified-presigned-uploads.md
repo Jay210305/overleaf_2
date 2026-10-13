@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S04-T08]
 requirements: [PRO-05, PL-07]
 source_task: S05-T01
-status: in_progress
-readiness: ready
+status: done
+readiness: completed
 ---
 # S05-T01 — Implement verified presigned uploads
 
@@ -67,10 +67,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Presign checks project permission/extension/MIME/size; completion checks backend object hash and size before creating node
-- [ ] PRO-05: Validate permitted TeX/bibliography/style/image/PDF/font uploads with progress and failures. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] PL-07: Private credentials, no unauthorized code reuse and explicit compiler trust boundary. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Presign checks project permission/extension/MIME/size; completion checks backend object hash and size before creating node
+- [x] PRO-05: Validate permitted TeX/bibliography/style/image/PDF/font uploads with progress and failures. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] PL-07: Private credentials, no unauthorized code reuse and explicit compiler trust boundary. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -96,9 +96,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

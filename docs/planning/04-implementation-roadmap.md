@@ -275,7 +275,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S05: Assets ZIP and templates (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 80 h (ASSUMPTION A-03) | **Status:** 🟨 IN_PROGRESS | **Owner:** Project Co-owner (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 88 h (ASSUMPTION A-03) | **Status:** 🟨 IN_PROGRESS | **Owner:** Project Co-owner (proposed A-02)
 **Goal:** Assets ZIP and templates for G1, using independently verified slices.
 
 ### Deliverables
@@ -284,22 +284,24 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 2. `apps/jobs/src/maintenance/storage-gc.ts`
 3. `apps/web/src/features/files/file-uploader.tsx`
 4. `apps/jobs/src/imports/zip.ts`
-5. `apps/jobs/src/imports/apply-project.ts`
-6. `apps/jobs/src/exports/zip.ts`
-7. `apps/web/src/features/files/binary-preview.tsx`
-8. `apps/api/src/modules/templates/routes.ts`
-9. `apps/web/src/features/templates/catalogue.tsx`
-10. `apps/web/src/features/templates/template-preview.tsx`
-11. `tests/integration/zip-project-tree.test.ts`
-12. `tests/security/zip-import.test.ts`
-13. `tests/e2e/zip-round-trip.spec.ts`
+5. `apps/api/src/modules/imports/routes.ts`
+6. `apps/jobs/src/imports/apply-project.ts`
+7. `apps/jobs/src/exports/zip.ts`
+8. `apps/web/src/features/files/binary-preview.tsx`
+9. `apps/api/src/modules/templates/routes.ts`
+10. `apps/web/src/features/templates/catalogue.tsx`
+11. `apps/web/src/features/templates/template-preview.tsx`
+12. `tests/integration/zip-project-tree.test.ts`
+13. `tests/security/zip-import.test.ts`
+14. `tests/e2e/zip-round-trip.spec.ts`
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S05-T01](../../implementation/sprint-05-assets-import-export/S05-T01-implement-verified-presigned-uploads.md) | Implement verified presigned uploads | 8 | Project Co-owner | 🟨 in_progress | Presign checks project permission/extension/MIME/size; completion checks backend object hash and size before creating node |
-| [S05-T09](../../implementation/sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md) | Implement quota and orphan object cleanup | 8 | Project Co-owner | 🟨 in_progress | Reference-checked GC never deletes referenced revisions/artifacts; uploads within configured byte/node quota succeed and excess rejects |
-| [S05-T02](../../implementation/sprint-05-assets-import-export/S05-T02-create-multi-file-upload-interactions.md) | Create multi-file upload interactions | 8 | Project Co-owner | 🟨 in_progress | Drag/drop multiple files tracks progress/cancel/retry and exposes per-file errors without duplicate nodes |
+| [S05-T01](../../implementation/sprint-05-assets-import-export/S05-T01-implement-verified-presigned-uploads.md) | Implement verified presigned uploads | 8 | Project Co-owner | ✅ done | Presign checks project permission/extension/MIME/size; completion checks backend object hash and size before creating node |
+| [S05-T09](../../implementation/sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md) | Implement quota and orphan object cleanup | 8 | Project Co-owner | ✅ done | Reference-checked GC never deletes referenced revisions/artifacts; uploads within configured byte/node quota succeed and excess rejects |
+| [S05-T02](../../implementation/sprint-05-assets-import-export/S05-T02-create-multi-file-upload-interactions.md) | Create multi-file upload interactions | 8 | Project Co-owner | ✅ done | Drag/drop multiple files tracks progress/cancel/retry and exposes per-file errors without duplicate nodes |
 | [S05-T03](../../implementation/sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | Validate archives and define idempotent import job | 8 | Project Co-owner | ⬜ todo | Validated archive rejects traversal/bombs/symlinks and records an idempotent staged import job; application to canonical project state is S05-T10 |
+| [S05-T12](../../implementation/sprint-05-assets-import-export/S05-T12-implement-authenticated-zip-import-intake.md) | Implement authenticated ZIP import intake | 8 | Project Co-owner | ⬜ todo | Current-session signed ZIP PUT verifies actual bytes/hash and enqueues one actor-scoped import job; foreign/forged/reused input is denied |
 | [S05-T10](../../implementation/sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | Apply validated import as a consistent project | 8 | Project Co-owner | ⬜ todo | Validated archive creates ID-based tree and canonical text/binary state transactionally; retry cannot leave partial duplicated project |
 | [S05-T04](../../implementation/sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | Export immutable source ZIP | 8 | Project Co-owner | ⬜ todo | ZIP contains only authorized manifest paths at one frozen revision; hashes survive import round trip |
 | [S05-T05](../../implementation/sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | Preview and download safe binary assets | 6 | Project Co-owner | ⬜ todo | Permitted images/PDF use authorized resources; active HTML/SVG are attachment-only and never execute in trusted UI |
@@ -848,7 +850,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 | S02 | 78 | Sum of task/sub-task hours; provisional |
 | S03 | 66 | Sum of task/sub-task hours; provisional |
 | S04 | 72 | Sum of task/sub-task hours; provisional |
-| S05 | 80 | Sum of task/sub-task hours; provisional |
+| S05 | 88 | Sum of task/sub-task hours; provisional |
 | S06 | 124 | Sum of task/sub-task hours; provisional |
 | S07 | 94 | Sum of task/sub-task hours; provisional |
 | S08 | 72 | Sum of task/sub-task hours; provisional |
@@ -859,13 +861,13 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 | S13 | 58 | Sum of task/sub-task hours; provisional |
 | S14 | 90 | Sum of task/sub-task hours; provisional |
 | S15 | 100 | Sum of task/sub-task hours; provisional |
-| Planned task effort | 1320 | Includes per-task tests and documentation and explicit stabilization tasks |
-| Uncertainty allowance (15%) | 198 | ASSUMPTION A-04; unscheduled reserve, not an implementation task |
+| Planned task effort | 1328 | Includes per-task tests and documentation and explicit stabilization tasks |
+| Uncertainty allowance (15%) | 200 | ASSUMPTION A-04; unscheduled reserve, not an implementation task |
 | Documentation/validation outside tasks | 0 | Already included; avoid double counting |
 | Advisor meetings | 0 | No advisor requirement supplied |
-| Total reference effort | 1518 | Planning estimate, not a delivery commitment |
+| Total reference effort | 1528 | Planning estimate, not a delivery commitment |
 
-G1 reference: 558 h task effort + 84 h reserve = 642 h. These are estimates for learning and decomposition; no hours/week, duration, or completion date follows. Capacity-versus-calendar reconciliation is **NOT_APPLICABLE for an unscheduled project**; actual availability is recorded when work starts. If the team later chooses a timebox, compare hours to actual contributor capacity and cut optional scope first.
+G1 reference: 566 h task effort + 85 h reserve = 651 h. These are estimates for learning and decomposition; no hours/week, duration, or completion date follows. Capacity-versus-calendar reconciliation is **NOT_APPLICABLE for an unscheduled project**; actual availability is recorded when work starts. If the team later chooses a timebox, compare hours to actual contributor capacity and cut optional scope first.
 
 ## Dependency Path
 
