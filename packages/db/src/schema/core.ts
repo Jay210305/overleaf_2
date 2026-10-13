@@ -4,6 +4,7 @@ import {
   check,
   foreignKey,
   index,
+  integer,
   jsonb,
   pgTable,
   primaryKey,
@@ -271,6 +272,44 @@ export const pendingUploads = pgTable(
     check(
       "pending_uploads_completion_pair",
       sql`(${table.completedNodeId} IS NULL AND ${table.completedKeyHash} IS NULL) OR (${table.completedNodeId} IS NOT NULL AND ${table.completedKeyHash} IS NOT NULL)`,
+    ),
+  ],
+);
+
+export const importJobs = pgTable(
+  "import_jobs",
+  {
+    id: uuid("id").primaryKey(),
+    actorId: uuid("actor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    idempotencyKeyHash: text("idempotency_key_hash").notNull(),
+    archiveSha256: text("archive_sha256").notNull(),
+    archiveSize: bigint("archive_size", { mode: "number" }).notNull(),
+    title: text("title").notNull(),
+    archiveKey: text("archive_key").notNull().unique(),
+    status: text("status").notNull().default("staging"),
+    leaseExpiresAt: timestamp("lease_expires_at", { withTimezone: true, mode: "date" }),
+    attempts: integer("attempts").notNull().default(0),
+    manifest: jsonb("manifest"),
+    manifestVersion: integer("manifest_version"),
+    errorCode: text("error_code"),
+    archiveSwept: boolean("archive_swept").notNull().default(false),
+    projectId: uuid("project_id").references(() => projects.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("import_jobs_actor_key_uidx").on(table.actorId, table.idempotencyKeyHash),
+    index("import_jobs_claim_idx")
+      .on(table.status, table.leaseExpiresAt, table.createdAt)
+      .where(sql`${table.status} IN ('queued', 'validating')`),
+    index("import_jobs_sweep_idx")
+      .on(table.createdAt)
+      .where(sql`${table.status} = 'failed' AND ${table.archiveSwept} = FALSE`),
+    check(
+      "import_jobs_archive_size_check",
+      sql`${table.archiveSize} > 0 AND ${table.archiveSize} <= 26214400`,
     ),
   ],
 );

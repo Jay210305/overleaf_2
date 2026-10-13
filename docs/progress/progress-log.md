@@ -134,3 +134,10 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Planning:** Recorded the previously uncommitted S05-T12 authenticated-intake package (new task file, ADR-009, roadmap 80→88 h, contract/traceability updates, S05-T03/S05-T10 boundary edits) as planning only; no import route is live.
 - **Next:** Implement S05-T03 (private ZIP validator, import-job schema/repository, worker wiring) per the approved design.
 
+### 2026-10-13 — Sprint S05-T03 private validation and import jobs
+
+- **Contributor:** OpenCode agent, continuing the user's authorized S05 work on `codex/sprint-05-assets-import-export` after S05-T01/T09/T02 acceptance.
+- **Task:** S05-T03 is IN_PROGRESS. Added migration `0006-import-jobs.sql`, typed `ImportJobRepository` (`reserve`/`enqueue`/`claimNext`/`complete`/`fail`/`release`/`listUnswept`/`markArchiveSwept`), server-only shared content policy (S05-T01 routes refactored onto it), `yauzl` 3.4.0 bounded validator, worker pass with `imports:validate` wiring, hand-built ZIP fixtures and 17 scoped tests. Actual effort was not measured.
+- **Observed checks:** Focused S05-T03 3 files/17 tests PASS; S05-T01/T09/T02/S01-T08 regression 10 files/37 tests PASS; `pnpm typecheck`, `pnpm lint`, constituent package/app builds, secret/artifact checks and a live zero-work runner pass all PASS; `plan_lint.py` PASS. Root `pnpm build` fails only because its script calls bare `pnpm`, which is not on PATH in this shell (pre-existing environment quirk). Report in [s05-t03](../test-reports/s05-t03.md).
+- **Review:** The hostile battery exposed and fixed a real sweep-starvation bug via the new `archive_swept` flag. Independent co-maintainer review of S05-T03 remains open; S05-T12/S05-T10 are next.
+

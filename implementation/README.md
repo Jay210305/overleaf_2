@@ -64,7 +64,7 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S05-T01 | [Implement verified presigned uploads](sprint-05-assets-import-export/S05-T01-implement-verified-presigned-uploads.md) | Project Co-owner (proposed) | 8 | done |
 | S05-T09 | [Implement quota and orphan object cleanup](sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md) | Project Co-owner (proposed) | 8 | done |
 | S05-T02 | [Create multi-file upload interactions](sprint-05-assets-import-export/S05-T02-create-multi-file-upload-interactions.md) | Project Co-owner (proposed) | 8 | done |
-| S05-T03 | [Validate archives and define idempotent import job](sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | Project Co-owner (proposed) | 8 | todo |
+| S05-T03 | [Validate archives and define idempotent import job](sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | Project Co-owner (proposed) | 8 | in_progress |
 | S05-T12 | [Implement authenticated ZIP import intake](sprint-05-assets-import-export/S05-T12-implement-authenticated-zip-import-intake.md) | Project Co-owner (proposed) | 8 | todo |
 | S05-T10 | [Apply validated import as a consistent project](sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | Project Co-owner (proposed) | 8 | todo |
 | S05-T04 | [Export immutable source ZIP](sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | Project Co-owner (proposed) | 8 | todo |

@@ -9,13 +9,19 @@ import {
 } from "@latex-collab/contracts";
 import { type DatabaseClient, PersistenceError, type TransactionContext } from "@latex-collab/db";
 import { StorageLimitError, type StorageAdapter } from "@latex-collab/storage";
+import {
+  ContentPolicyError,
+  classifyUploadContent,
+  maxFileBytes,
+  maxProjectBytes,
+  maxProjectNodes,
+  verifyBinaryContent,
+  verifyTextContent,
+} from "@latex-collab/storage";
 import { problem } from "../../plugins/errors.js";
 import { AuthError } from "../auth/errors.js";
 import { validateNodeName } from "../files/tree.js";
 
-const maxFileBytes = 25 * 1024 * 1024;
-const maxProjectBytes = 100 * 1024 * 1024;
-const maxProjectNodes = 2000;
 const signedPutSeconds = 300;
 
 type UploadKind = "TEXT" | "BINARY";
@@ -39,26 +45,6 @@ function sha256(bytes: Uint8Array | string): string {
   return createHash("sha256").update(bytes).digest("hex");
 }
 
-function classify(name: string, mime: string): UploadKind {
-  const extension = name.slice(name.lastIndexOf(".")).toLowerCase();
-  const accepted: Record<string, { kind: UploadKind; mimes: string[] }> = {
-    ".tex": { kind: "TEXT", mimes: ["application/x-tex", "text/x-tex", "text/plain"] },
-    ".bib": { kind: "TEXT", mimes: ["application/x-bibtex", "text/plain"] },
-    ".sty": { kind: "TEXT", mimes: ["application/x-tex", "text/plain"] },
-    ".cls": { kind: "TEXT", mimes: ["application/x-tex", "text/plain"] },
-    ".bst": { kind: "TEXT", mimes: ["application/x-tex", "text/plain"] },
-    ".png": { kind: "BINARY", mimes: ["image/png"] },
-    ".jpg": { kind: "BINARY", mimes: ["image/jpeg"] },
-    ".jpeg": { kind: "BINARY", mimes: ["image/jpeg"] },
-    ".pdf": { kind: "BINARY", mimes: ["application/pdf"] },
-    ".ttf": { kind: "BINARY", mimes: ["font/ttf"] },
-    ".otf": { kind: "BINARY", mimes: ["font/otf"] },
-  };
-  const policy = accepted[extension];
-  if (!policy || !policy.mimes.includes(mime)) throw new AuthError(422, "UNSUPPORTED_CONTENT");
-  return policy.kind;
-}
-
 function validateRequest(
   raw: unknown,
 ): UploadRequest & { fileName: string; contentKind: UploadKind } {
@@ -69,85 +55,7 @@ function validateRequest(
   const fileName = input.fileName.normalize("NFC");
   if (validateNodeName(fileName) !== fileName || /%(?:2e|2f|5c|00)/i.test(fileName))
     throw new AuthError(400, "VALIDATION_ERROR");
-  return { ...input, fileName, contentKind: classify(fileName, input.mime) };
-}
-
-function verifiedText(bytes: Buffer): string {
-  let text: string;
-  try {
-    text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
-  } catch {
-    throw new AuthError(422, "UNSUPPORTED_CONTENT");
-  }
-  if (text.includes("\0")) throw new AuthError(422, "UNSUPPORTED_CONTENT");
-  return text;
-}
-
-const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-const pngCrcTable = Uint32Array.from({ length: 256 }, (_, value) => {
-  let crc = value;
-  for (let bit = 0; bit < 8; bit++) crc = crc & 1 ? (crc >>> 1) ^ 0xedb88320 : crc >>> 1;
-  return crc >>> 0;
-});
-
-function pngCrc(bytes: Buffer, start: number, end: number): number {
-  let crc = 0xffffffff;
-  for (let index = start; index < end; index++)
-    crc = pngCrcTable[(crc ^ bytes[index]!) & 0xff]! ^ (crc >>> 8);
-  return (crc ^ 0xffffffff) >>> 0;
-}
-
-function validPng(bytes: Buffer): boolean {
-  if (bytes.length < 57 || !bytes.subarray(0, 8).equals(pngSignature)) return false;
-  let offset = 8;
-  let sawHeader = false;
-  let sawData = false;
-  while (offset + 12 <= bytes.length) {
-    const length = bytes.readUInt32BE(offset);
-    const end = offset + 12 + length;
-    if (end > bytes.length) return false;
-    const type = bytes.toString("ascii", offset + 4, offset + 8);
-    if (!/^[A-Za-z]{4}$/.test(type)) return false;
-    if (pngCrc(bytes, offset + 4, offset + 8 + length) !== bytes.readUInt32BE(offset + 8 + length))
-      return false;
-    if (!sawHeader) {
-      if (type !== "IHDR" || length !== 13) return false;
-      if (bytes.readUInt32BE(offset + 8) === 0 || bytes.readUInt32BE(offset + 12) === 0)
-        return false;
-      sawHeader = true;
-    } else if (type === "IHDR") {
-      return false;
-    }
-    if (type === "IDAT") sawData = true;
-    if (type === "IEND") return length === 0 && sawData && end === bytes.length;
-    offset = end;
-  }
-  return false;
-}
-
-function verifyMagic(name: string, bytes: Buffer): void {
-  const extension = name.slice(name.lastIndexOf(".")).toLowerCase();
-  let valid = false;
-  if (extension === ".png") {
-    valid = validPng(bytes);
-  } else if (extension === ".jpg" || extension === ".jpeg") {
-    valid =
-      bytes.length >= 4 &&
-      bytes[0] === 0xff &&
-      bytes[1] === 0xd8 &&
-      bytes[2] === 0xff &&
-      bytes.subarray(-2).equals(Buffer.from([0xff, 0xd9]));
-  } else if (extension === ".pdf") {
-    valid =
-      bytes.length >= 12 &&
-      bytes.subarray(0, 5).toString("ascii") === "%PDF-" &&
-      bytes.subarray(-1024).includes(Buffer.from("%%EOF"));
-  } else if (extension === ".ttf") {
-    valid = bytes.length >= 12 && bytes.subarray(0, 4).equals(Buffer.from([0, 1, 0, 0]));
-  } else if (extension === ".otf") {
-    valid = bytes.length >= 12 && bytes.subarray(0, 4).toString("ascii") === "OTTO";
-  }
-  if (!valid) throw new AuthError(422, "UNSUPPORTED_CONTENT");
+  return { ...input, fileName, contentKind: classifyUploadContent(fileName, input.mime) };
 }
 
 async function ensureTarget(
@@ -232,6 +140,12 @@ function handleError(error: unknown, reply: FastifyReply, requestId: string) {
       .code(413)
       .type("application/problem+json")
       .send(problem(413, "QUOTA_EXCEEDED", requestId));
+  }
+  if (error instanceof ContentPolicyError) {
+    return reply
+      .code(error.status)
+      .type("application/problem+json")
+      .send(problem(error.status, error.code, requestId));
   }
   if (error instanceof AuthError) {
     return reply
@@ -364,8 +278,8 @@ export function registerUploadRoutes(
           sha256(bytes) !== intent.expected_sha256
         )
           throw new AuthError(422, "UNSUPPORTED_CONTENT");
-        const text = intent.content_kind === "TEXT" ? verifiedText(bytes) : null;
-        if (intent.content_kind === "BINARY") verifyMagic(intent.file_name, bytes);
+        const text = intent.content_kind === "TEXT" ? verifyTextContent(bytes) : null;
+        if (intent.content_kind === "BINARY") verifyBinaryContent(intent.file_name, bytes);
         let blobKey: string | null = null;
         if (intent.content_kind === "BINARY") {
           blobKey = `projects/${auth.projectId}/blobs/${intent.expected_sha256}`;

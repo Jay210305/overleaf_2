@@ -72,7 +72,14 @@ export function validateKey(key: string): void {
     }
   }
 
-  const allowedPrefixes = ["projects/", "artifacts/", "revisions/", "templates/", "avatars/"];
+  const allowedPrefixes = [
+    "projects/",
+    "artifacts/",
+    "revisions/",
+    "templates/",
+    "avatars/",
+    "imports/",
+  ];
   if (!allowedPrefixes.some((prefix) => key.startsWith(prefix))) {
     throw new StorageSecurityError(`Object key must start with an authorized prefix: ${key}`);
   }

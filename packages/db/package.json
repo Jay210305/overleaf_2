@@ -39,6 +39,10 @@
       "types": "./src/repositories/projects.ts",
       "default": "./dist/repositories/projects.js"
     },
+    "./repositories/import-jobs": {
+      "types": "./src/repositories/import-jobs.ts",
+      "default": "./dist/repositories/import-jobs.js"
+    },
     "./seeds/development": {
       "types": "./seeds/development.ts",
       "default": "./seeds/development.js"

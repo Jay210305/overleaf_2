@@ -9,7 +9,7 @@
 | [S05-T01](../../implementation/sprint-05-assets-import-export/S05-T01-implement-verified-presigned-uploads.md) | DONE | Not measured | [Scoped test report](../test-reports/s05-t01.md); accepted 2026-10-13 after focused 14/14 PASS re-run plus typecheck/lint PASS |
 | [S05-T09](../../implementation/sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md) | DONE | Not measured | [Scoped test report](../test-reports/s05-t09.md); accepted 2026-10-13 after focused 9/9 PASS re-run |
 | [S05-T02](../../implementation/sprint-05-assets-import-export/S05-T02-create-multi-file-upload-interactions.md) | DONE | Not measured | [Scoped test report](../test-reports/s05-t02.md); accepted 2026-10-13 after focused 8/8 PASS re-run |
-| [S05-T03](../../implementation/sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | NOT_STARTED | Not recorded | No implementation evidence |
+| [S05-T03](../../implementation/sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | IN_PROGRESS | Not measured | [Scoped test report](../test-reports/s05-t03.md); independent review pending |
 | [S05-T12](../../implementation/sprint-05-assets-import-export/S05-T12-implement-authenticated-zip-import-intake.md) | NOT_STARTED | Not recorded | Approved design and planning only; no route evidence |
 | [S05-T10](../../implementation/sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S05-T04](../../implementation/sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | NOT_STARTED | Not recorded | No implementation evidence |
@@ -35,6 +35,8 @@ Focused S05 API/regression tests passed (3 files, 14 tests) with Windows/Node 24
 
 S05-T09 focused PostgreSQL/MinIO tests pass (3 files, 9 tests), along with lint, typecheck and build. The full `pnpm test` now passes 135 files/374 tests with Docker running. Its one-shot jobs command returned a clean zero-object pass for a nonexistent project. See [S05-T09 report](../test-reports/s05-t09.md) for the current gate status.
 
+S05-T03 implements the private validator, import-job schema/repository and worker wiring with focused 17/17 PASS plus typecheck, lint, constituent builds, secret/artifact checks and a live zero-work `imports:validate --once` run. The uploads routes now consume the shared server-only content policy with no S05-T01/T09/T02/S01-T08 regression (37/37 PASS). See the [S05-T03 report](../test-reports/s05-t03.md). Independent review remains open; no ZIP route is live.
+
 S05-T02 focused tests pass (3 files, 8 tests), and a real Edge journey passed with local PostgreSQL/MinIO plus axe serious/critical checks. Lint, typecheck, build, security, artifact, planning and map checks pass; repository-wide `pnpm test` passes 138 files/382 tests. Repository-wide `pnpm format:check` remains blocked by 37 inherited S03/S04 files (GAP-16). See the [S05-T02 report](../test-reports/s05-t02.md) for commands and limits.
 
 ## Risks and Debt
@@ -43,4 +45,4 @@ S05-T09 cleanup is conservative around revisions because the current schema can 
 
 ## Next Task
 
-S05-T03 is Ready (S05-T02 accepted 2026-10-13; GAP-18/GAP-19 closed). Implement the approved S05-T03 validation/job slice before S05-T12 intake and S05-T10 application. GAP-20 tracks the still-unavailable route; GAP-17 still guards GC reclamation.
+Finish independent review of S05-T03 (focused evidence in the [S05-T03 report](../test-reports/s05-t03.md)), then implement S05-T12 intake on the accepted repository before S05-T10 application. GAP-20 tracks the still-unavailable route; GAP-17 still guards GC reclamation.

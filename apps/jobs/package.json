@@ -6,11 +6,16 @@
   "dependencies": {
     "@latex-collab/config": "workspace:*",
     "@latex-collab/db": "workspace:*",
-    "@latex-collab/storage": "workspace:*"
+    "@latex-collab/storage": "workspace:*",
+    "yauzl": "3.4.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/main.js",
-    "storage:gc": "node --env-file=../../.env --import tsx src/main.ts --once"
+    "storage:gc": "node --env-file=../../.env --import tsx src/main.ts --once",
+    "imports:validate": "node --env-file=../../.env --import tsx src/imports/worker.ts --once"
+  },
+  "devDependencies": {
+    "@types/yauzl": "3.4.0"
   }
 }

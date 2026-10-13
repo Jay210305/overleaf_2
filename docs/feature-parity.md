@@ -13,15 +13,15 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | ACC-07 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-08 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-01 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t03.md) (accepted 2026-10-10); [S03-T01 CRUD/pagination](test-reports/s03-t01.md); [S03-T03 dashboard](test-reports/s03-t03.md); [S03-T08 journey](test-reports/s03-t08.md); G1 gate stabilization applies |
-| PRO-02 | G1 | Must | IN_PROGRESS | [S03-T02 blank project creation](test-reports/s03-t02.md); remaining mapped tasks apply |
+| PRO-02 | G1 | Must | IN_PROGRESS | [S03-T02 blank project creation](test-reports/s03-t02.md); [S05-T03 import job staging](test-reports/s05-t03.md) in progress; remaining mapped tasks apply |
 | PRO-03 | G1 | Must | IN_PROGRESS | [S03-T01 rename](test-reports/s03-t01.md); [S03-T02 project clone](test-reports/s03-t02.md); G1 gate stabilization applies |
 | PRO-04 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t07.md) (accepted 2026-10-10); [S03-T04 ID-based tree](test-reports/s03-t04.md); [S03-T05 tree interactions](test-reports/s03-t05.md); [S03-T09 transaction safety](test-reports/s03-t09.md); [S03-T08 journey](test-reports/s03-t08.md); remaining mapped tasks still apply |
-| PRO-05 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S05-T01 upload API](test-reports/s05-t01.md), [S05-T09 cleanup/quota](test-reports/s05-t09.md) and [S05-T02 browser upload](test-reports/s05-t02.md) pending review; import and remaining mapped tasks still apply |
+| PRO-05 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S05-T01 upload API](test-reports/s05-t01.md), [S05-T09 cleanup/quota](test-reports/s05-t09.md) and [S05-T02 browser upload](test-reports/s05-t02.md) accepted 2026-10-13; import and remaining mapped tasks still apply |
 | PRO-06 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PRO-07 | G1 | Must | IN_PROGRESS | [S03-T06 root document setting](test-reports/s03-t06.md); G1 gate stabilization applies |
 | PRO-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-09 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PRO-10 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| PRO-10 | G1 | Must | IN_PROGRESS | [S05-T03 hostile archive validation](test-reports/s05-t03.md) in progress; remaining mapped tasks still apply |
 | PRO-11 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-12 | G3 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-13 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
