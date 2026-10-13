@@ -290,4 +290,33 @@ export const updateProjectSettingsSchema = z
   });
 export type UpdateProjectSettingsInput = z.infer<typeof updateProjectSettingsSchema>;
 
+export const textStateSchema = z.strictObject({
+  fileId: z.string().uuid(),
+  updateBase64: z.string(),
+  stateVectorBase64: z.string(),
+  persistedSeq: z.number().int().nonnegative(),
+});
+export type TextState = z.infer<typeof textStateSchema>;
+
+export const applyTextUpdateSchema = z.strictObject({
+  updateBase64: z.string().min(1),
+  baseStateVectorBase64: z.string(),
+});
+export type ApplyTextUpdateInput = z.infer<typeof applyTextUpdateSchema>;
+
+export const durableAckSchema = z.strictObject({
+  type: z.literal("text.durable_ack"),
+  version: z.literal(1),
+  fileId: z.string().uuid(),
+  persistedSeq: z.number().int().nonnegative(),
+  stateVectorBase64: z.string(),
+});
+export type DurableAck = z.infer<typeof durableAckSchema>;
+
+export const createCheckpointSchema = z.strictObject({
+  label: z.string().max(255).optional(),
+  source: z.string().max(100).default("manual"),
+});
+export type CreateCheckpointInput = z.infer<typeof createCheckpointSchema>;
+
 export * from "./storage.js";

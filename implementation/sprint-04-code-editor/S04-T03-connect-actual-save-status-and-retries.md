@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S04-T10]
 requirements: [EDT-02, NFR-01]
 source_task: S04-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S04-T03 — Connect actual save status and retries
 
@@ -68,10 +68,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Save status reaches saved only after committed coverage; retry/outage preserves pending text and gives visible error
-- [ ] EDT-02: Display saving/saved/offline/error accurately and reject racing overwrite. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] NFR-01: Zero acknowledged edits lost after controlled server restart. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Save status reaches saved only after committed coverage; retry/outage preserves pending text and gives visible error
+- [x] EDT-02: Display saving/saved/offline/error accurately and reject racing overwrite. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] NFR-01: Zero acknowledged edits lost after controlled server restart. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -97,9 +97,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

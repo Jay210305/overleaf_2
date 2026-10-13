@@ -51,16 +51,16 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S03-T06 | [Implement project root and compiler settings](sprint-03-projects-files/S03-T06-implement-project-root-and-compiler-settings.md) | Project Co-owner (proposed) | 6 | done |
 | S03-T07 | [Create structural revision manifests](sprint-03-projects-files/S03-T07-create-structural-revision-manifests.md) | Project Co-owner (proposed) | 8 | done |
 | S03-T08 | [Verify project and tree journey](sprint-03-projects-files/S03-T08-verify-project-and-tree-journey.md) | Project Co-owner (proposed) | 6 | done |
-| S04-T01 | [Create LaTeX CodeMirror extensions](sprint-04-code-editor/S04-T01-create-latex-codemirror-extensions.md) | Julio (proposed) | 8 | todo |
-| S04-T02 | [Create canonical text document service](sprint-04-code-editor/S04-T02-create-canonical-text-document-service.md) | Julio (proposed) | 8 | todo |
-| S04-T09 | [Persist and replay canonical text updates](sprint-04-code-editor/S04-T09-persist-and-replay-canonical-text-updates.md) | Julio (proposed) | 8 | todo |
-| S04-T10 | [Implement REST text state-version contract](sprint-04-code-editor/S04-T10-implement-rest-text-state-version-contract.md) | Julio (proposed) | 8 | todo |
-| S04-T03 | [Connect actual save status and retries](sprint-04-code-editor/S04-T03-connect-actual-save-status-and-retries.md) | Julio (proposed) | 8 | todo |
-| S04-T04 | [Implement file tabs and navigation](sprint-04-code-editor/S04-T04-implement-file-tabs-and-navigation.md) | Julio (proposed) | 6 | todo |
-| S04-T05 | [Implement local undo search and shortcuts](sprint-04-code-editor/S04-T05-implement-local-undo-search-and-shortcuts.md) | Julio (proposed) | 6 | todo |
-| S04-T06 | [Enforce read-only and metadata concurrency](sprint-04-code-editor/S04-T06-enforce-read-only-and-metadata-concurrency.md) | Julio (proposed) | 6 | todo |
-| S04-T07 | [Create text and binary checkpoints](sprint-04-code-editor/S04-T07-create-text-and-binary-checkpoints.md) | Julio (proposed) | 8 | todo |
-| S04-T08 | [Verify persistent Unicode editing](sprint-04-code-editor/S04-T08-verify-persistent-unicode-editing.md) | Julio (proposed) | 6 | todo |
+| S04-T01 | [Create LaTeX CodeMirror extensions](sprint-04-code-editor/S04-T01-create-latex-codemirror-extensions.md) | Julio (proposed) | 8 | done |
+| S04-T02 | [Create canonical text document service](sprint-04-code-editor/S04-T02-create-canonical-text-document-service.md) | Julio (proposed) | 8 | done |
+| S04-T09 | [Persist and replay canonical text updates](sprint-04-code-editor/S04-T09-persist-and-replay-canonical-text-updates.md) | Julio (proposed) | 8 | done |
+| S04-T10 | [Implement REST text state-version contract](sprint-04-code-editor/S04-T10-implement-rest-text-state-version-contract.md) | Julio (proposed) | 8 | done |
+| S04-T03 | [Connect actual save status and retries](sprint-04-code-editor/S04-T03-connect-actual-save-status-and-retries.md) | Julio (proposed) | 8 | done |
+| S04-T04 | [Implement file tabs and navigation](sprint-04-code-editor/S04-T04-implement-file-tabs-and-navigation.md) | Julio (proposed) | 6 | done |
+| S04-T05 | [Implement local undo search and shortcuts](sprint-04-code-editor/S04-T05-implement-local-undo-search-and-shortcuts.md) | Julio (proposed) | 6 | done |
+| S04-T06 | [Enforce read-only and metadata concurrency](sprint-04-code-editor/S04-T06-enforce-read-only-and-metadata-concurrency.md) | Julio (proposed) | 6 | done |
+| S04-T07 | [Create text and binary checkpoints](sprint-04-code-editor/S04-T07-create-text-and-binary-checkpoints.md) | Julio (proposed) | 8 | done |
+| S04-T08 | [Verify persistent Unicode editing](sprint-04-code-editor/S04-T08-verify-persistent-unicode-editing.md) | Julio (proposed) | 6 | done |
 | S05-T01 | [Implement verified presigned uploads](sprint-05-assets-import-export/S05-T01-implement-verified-presigned-uploads.md) | Project Co-owner (proposed) | 8 | todo |
 | S05-T09 | [Implement quota and orphan object cleanup](sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md) | Project Co-owner (proposed) | 8 | todo |
 | S05-T02 | [Create multi-file upload interactions](sprint-05-assets-import-export/S05-T02-create-multi-file-upload-interactions.md) | Project Co-owner (proposed) | 8 | todo |

@@ -18,6 +18,8 @@ import { registerAvatarRoutes } from "./modules/account/avatar.js";
 import { registerProjectRoutes } from "./modules/projects/routes.js";
 import { registerProjectSettingsRoutes } from "./modules/projects/settings.js";
 import { registerTreeRoutes } from "./modules/files/tree.js";
+import { registerTextRoutes } from "./modules/text/routes.js";
+import { registerCheckpointRoutes } from "./modules/history/checkpoint.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -160,6 +162,14 @@ export function createServer(options: ServerOptions) {
       db: options.db,
       origin: options.origin,
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+    registerTextRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+    registerCheckpointRoutes(app, {
+      db: options.db,
     });
   }
   return app;
