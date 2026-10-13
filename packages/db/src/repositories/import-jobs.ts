@@ -41,6 +41,7 @@ export type ImportJobView = {
   manifestVersion: number | null;
   errorCode: ImportJobErrorCode | null;
   archiveSwept: boolean;
+  pendingProjectId: string | null;
   projectId: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -68,6 +69,7 @@ type JobRow = {
   manifest_version: number | null;
   error_code: ImportJobErrorCode | null;
   archive_swept: boolean;
+  pending_project_id: string | null;
   project_id: string | null;
   created_at: Date;
   updated_at: Date;
@@ -98,6 +100,7 @@ function toView(row: JobRow): ImportJobView {
     manifestVersion: row.manifest_version,
     errorCode: row.error_code,
     archiveSwept: row.archive_swept,
+    pendingProjectId: row.pending_project_id ?? null,
     projectId: row.project_id,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -156,6 +159,26 @@ function sameFingerprint(row: JobRow, input: ReserveImportJobInput): boolean {
  */
 export class ImportJobRepository {
   constructor(private readonly client: DatabaseClient) {}
+
+  /** Reserve a stable project ID before S05-T10 writes content-addressed blobs. */
+  async reserveProjectId(jobId: string): Promise<ImportJobView> {
+    assertUUID(jobId, "jobId");
+    try {
+      const updated = await this.client.query<JobRow>(
+        `UPDATE import_jobs
+            SET pending_project_id = COALESCE(pending_project_id, $2), updated_at = NOW()
+          WHERE id = $1 AND status = 'validated'
+          RETURNING *`,
+        [jobId, randomUUID()],
+      );
+      if (updated.rows[0]) return toView(updated.rows[0]);
+    } catch (error) {
+      throw mapDatabaseError(error);
+    }
+    const current = await this.get(jobId);
+    if (current?.status === "succeeded" && current.projectId) return current;
+    throw new PersistenceError("CONSTRAINT_VIOLATION", "Import job is not validated", false);
+  }
 
   /**
    * Reserve the deterministic server-only archive key before any byte copy.
