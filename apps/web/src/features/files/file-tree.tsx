@@ -25,6 +25,7 @@ export interface FileTreeProps {
   csrfToken?: string | undefined;
   selectedNodeId?: string | null | undefined;
   onSelectNode?: ((node: ProjectNodeView) => void) | undefined;
+  refreshVersion?: number | undefined;
 }
 
 export function FileTree({
@@ -33,6 +34,7 @@ export function FileTree({
   csrfToken,
   selectedNodeId,
   onSelectNode,
+  refreshVersion,
 }: FileTreeProps) {
   const [nodes, setNodes] = useState<ProjectNodeView[]>([]);
   const [treeVersion, setTreeVersion] = useState<number>(0);
@@ -123,7 +125,7 @@ export function FileTree({
 
   useEffect(() => {
     void fetchTree();
-  }, [fetchTree]);
+  }, [fetchTree, refreshVersion]);
 
   const toggleFolder = (folderId: string) => {
     setExpandedFolders((prev) => {

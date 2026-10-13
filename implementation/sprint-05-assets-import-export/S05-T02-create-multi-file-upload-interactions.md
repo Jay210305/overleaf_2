@@ -8,7 +8,7 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T09]
 requirements: [PRO-05, NFR-08]
 source_task: S05-T02
-status: todo
+status: in_progress
 readiness: pending-dependencies
 ---
 # S05-T02 — Create multi-file upload interactions
@@ -66,6 +66,8 @@ Each code slice starts with the specified failing assertion; documentation/resea
 Update existing feature evidence and sprint progress entries for the IDs listed below. These are future implementation paths; no application code/test is created by this planning task file.
 
 ## Acceptance Criteria
+
+Local implementation and verification are recorded in [S05-T02 report](../../docs/test-reports/s05-t02.md). S05-T09 and S05-T01 independent acceptance remain open, so this task stays `in_progress`.
 
 - [ ] Drag/drop multiple files tracks progress/cancel/retry and exposes per-file errors without duplicate nodes
 - [ ] PRO-05: Validate permitted TeX/bibliography/style/image/PDF/font uploads with progress and failures. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.

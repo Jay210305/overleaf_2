@@ -16,7 +16,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | PRO-02 | G1 | Must | IN_PROGRESS | [S03-T02 blank project creation](test-reports/s03-t02.md); remaining mapped tasks apply |
 | PRO-03 | G1 | Must | IN_PROGRESS | [S03-T01 rename](test-reports/s03-t01.md); [S03-T02 project clone](test-reports/s03-t02.md); G1 gate stabilization applies |
 | PRO-04 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t07.md) (accepted 2026-10-10); [S03-T04 ID-based tree](test-reports/s03-t04.md); [S03-T05 tree interactions](test-reports/s03-t05.md); [S03-T09 transaction safety](test-reports/s03-t09.md); [S03-T08 journey](test-reports/s03-t08.md); remaining mapped tasks still apply |
-| PRO-05 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S05-T01 upload API slice](test-reports/s05-t01.md) and [S05-T09 cleanup/quota slice](test-reports/s05-t09.md) pending review; UI, import and remaining mapped tasks still apply |
+| PRO-05 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S05-T01 upload API](test-reports/s05-t01.md), [S05-T09 cleanup/quota](test-reports/s05-t09.md) and [S05-T02 browser upload](test-reports/s05-t02.md) pending review; import and remaining mapped tasks still apply |
 | PRO-06 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); remaining mapped tasks still apply |
 | PRO-07 | G1 | Must | IN_PROGRESS | [S03-T06 root document setting](test-reports/s03-t06.md); G1 gate stabilization applies |
 | PRO-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -85,7 +85,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | NFR-05 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-06 | G1 | Must | IN_PROGRESS | [S03-T07 structural revision manifests](test-reports/s03-t07.md); [S04-T07 text/binary checkpoints](test-reports/s04-t07.md); remaining mapped tasks apply |
 | NFR-07 | G1 | Must | IN_PROGRESS | [S05-T09 concurrent upload quota evidence](test-reports/s05-t09.md) pending review; compile and broader quota tasks remain |
-| NFR-08 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); [S02-T05 Edge axe and keyboard scope accepted](test-reports/s02-t05.md); [S03-T03 dashboard axe](test-reports/s03-t03.md); [S03-T05 file tree axe](test-reports/s03-t05.md); [S03-T08 project-tree e2e axe](test-reports/s03-t08.md); remaining mapped tasks still apply |
+| NFR-08 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); [S02-T05 Edge axe and keyboard scope accepted](test-reports/s02-t05.md); [S03-T03 dashboard axe](test-reports/s03-t03.md); [S03-T05 file tree axe](test-reports/s03-t05.md); [S03-T08 project-tree e2e axe](test-reports/s03-t08.md); [S05-T02 upload picker/Edge axe](test-reports/s05-t02.md) pending review; remaining mapped tasks still apply |
 | NFR-09 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-10 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); [S02-T06 captured-log redaction accepted](test-reports/s02-t06.md); [S02-T09 redacted audit scope accepted](test-reports/s02-t09.md); [S02-T08 real-route log checks accepted](test-reports/s02-t08.md); remaining mapped tasks still apply |
 | NFR-11 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
