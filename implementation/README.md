@@ -62,7 +62,7 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S04-T07 | [Create text and binary checkpoints](sprint-04-code-editor/S04-T07-create-text-and-binary-checkpoints.md) | Julio (proposed) | 8 | done |
 | S04-T08 | [Verify persistent Unicode editing](sprint-04-code-editor/S04-T08-verify-persistent-unicode-editing.md) | Julio (proposed) | 6 | done |
 | S05-T01 | [Implement verified presigned uploads](sprint-05-assets-import-export/S05-T01-implement-verified-presigned-uploads.md) | Project Co-owner (proposed) | 8 | in_progress |
-| S05-T09 | [Implement quota and orphan object cleanup](sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md) | Project Co-owner (proposed) | 8 | todo |
+| S05-T09 | [Implement quota and orphan object cleanup](sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md) | Project Co-owner (proposed) | 8 | in_progress |
 | S05-T02 | [Create multi-file upload interactions](sprint-05-assets-import-export/S05-T02-create-multi-file-upload-interactions.md) | Project Co-owner (proposed) | 8 | todo |
 | S05-T03 | [Validate archives and define idempotent import job](sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | Project Co-owner (proposed) | 8 | todo |
 | S05-T10 | [Apply validated import as a consistent project](sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | Project Co-owner (proposed) | 8 | todo |

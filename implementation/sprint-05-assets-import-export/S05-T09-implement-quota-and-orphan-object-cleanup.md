@@ -8,7 +8,7 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T01]
 requirements: [PRO-05, NFR-07]
 source_task: S05-T01
-status: todo
+status: in_progress
 readiness: pending-dependencies
 ---
 # S05-T09 — Implement quota and orphan object cleanup
@@ -66,6 +66,8 @@ Each code slice starts with the specified failing assertion; documentation/resea
 Update existing feature evidence and sprint progress entries for the IDs listed below. These are future implementation paths; no application code/test is created by this planning task file.
 
 ## Acceptance Criteria
+
+Local implementation evidence is in [S05-T09 report](../../docs/test-reports/s05-t09.md). The S05-T01 prerequisite and independent review are still open, so this task remains `in_progress`.
 
 - [ ] Reference-checked GC never deletes referenced revisions/artifacts; uploads within configured byte/node quota succeed and excess rejects
 - [ ] PRO-05: Validate permitted TeX/bibliography/style/image/PDF/font uploads with progress and failures. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.

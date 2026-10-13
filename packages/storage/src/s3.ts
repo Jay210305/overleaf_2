@@ -7,9 +7,10 @@ import {
   DeleteObjectCommand,
   HeadBucketCommand,
   CreateBucketCommand,
+  ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import type { ObjectRef, StorageAdapter } from "@latex-collab/contracts";
+import type { ObjectListPage, ObjectRef, StorageAdapter } from "@latex-collab/contracts";
 
 export type S3StorageConfig = {
   endpoint: string;
@@ -231,6 +232,7 @@ export class S3StorageAdapter implements StorageAdapter {
         sha256,
         sizeBytes,
         mime,
+        lastModified: response.LastModified,
       };
     } catch (error: unknown) {
       const err = error as { name?: string; $metadata?: { httpStatusCode?: number } };
@@ -243,6 +245,34 @@ export class S3StorageAdapter implements StorageAdapter {
       }
       throw error;
     }
+  }
+
+  async list(prefix: string, cursor?: string, limit = 1000): Promise<ObjectListPage> {
+    validateKey(prefix);
+    if (!Number.isSafeInteger(limit) || limit < 1 || limit > 1000) {
+      throw new StorageLimitError();
+    }
+    const response = await this.s3.send(
+      new ListObjectsV2Command({
+        Bucket: this.bucket,
+        Prefix: prefix,
+        ContinuationToken: cursor,
+        MaxKeys: limit,
+      }),
+    );
+    if (response.IsTruncated && !response.NextContinuationToken) {
+      throw new Error("Object listing did not return a continuation token");
+    }
+    return {
+      objects: (response.Contents ?? [])
+        .filter((item) => item.Key?.startsWith(prefix))
+        .map((item) => ({
+          key: item.Key!,
+          sizeBytes: item.Size ?? 0,
+          lastModified: item.LastModified ?? null,
+        })),
+      cursor: response.IsTruncated ? response.NextContinuationToken! : null,
+    };
   }
 
   async delete(key: string): Promise<void> {

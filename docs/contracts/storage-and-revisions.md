@@ -3,12 +3,17 @@
 ## Adapter
 
 ```ts
-type ObjectRef = { key: string; sha256: string; sizeBytes: number; mime: string };
+type ObjectRef = { key: string; sha256: string; sizeBytes: number; mime: string; lastModified?: Date };
+type ObjectListPage = {
+  objects: Array<{ key: string; sizeBytes: number; lastModified: Date | null }>;
+  cursor: string | null;
+};
 interface StorageAdapter {
   put(key: string, bytes: Uint8Array, mime: string): Promise<ObjectRef>;
   get(key: string): Promise<Uint8Array>;
   getLimited(key: string, maxBytes: number): Promise<Uint8Array>;
   head(key: string): Promise<ObjectRef | null>;
+  list(prefix: string, cursor?: string, limit?: number): Promise<ObjectListPage>;
   delete(key: string): Promise<void>;
   presign(key: string, operation: 'get' | 'put', ttlSeconds: number): Promise<string>;
 }
@@ -23,6 +28,8 @@ type RevisionManifest = {
 Object key creation is server-controlled, scoped as `projects/<projectId>/blobs/<sha256>` and separate artifacts/revisions prefixes; user input never determines unrestricted bucket keys. MinIO and hosted S3 implement the same contract. Private ACL by default; proposed signed GET TTL is 60 s, PUT TTL 300 s. authorize before every presign, and recheck completion against expected backend-calculated hash/size. ETag is not assumed to be SHA-256.
 
 S05-T01 issues a PUT URL only for a unique `projects/<projectId>/uploads/<uploadId>` staging key after a live EDIT permission check, filename/type allowlist, parent check and byte/node quota check. A durable `pending_uploads` row binds project, actor, filename, parent, MIME, expected size/hash and expiry. Completion rechecks the current permission and target under a project transaction, bounds the object read, computes SHA-256 from the bytes returned by storage, validates the actual content and creates exactly one node per upload intent. Client-supplied S3 metadata and ETag are never proof of hash or MIME. Text is inserted as the first canonical Yjs update; verified binary bytes are copied to a server-controlled content-addressed blob key. Staging objects remain private until S05-T09 expires and removes them after the signed PUT window, including failed or completed intents. A failed metadata transaction may leave an unreferenced blob for S05-T09 reference-checked cleanup; it never creates a partial project node. The signed staging URL remains usable until its short expiry even if project permissions change, but completion denies a revoked actor.
+
+S05-T09 adds a private jobs pass that lists only database-known project upload/blob prefixes. It requires an object age of at least 10 minutes, rechecks metadata and durable references under a project row lock, then deletes at most 25 objects per pass by default. Active upload intents, current nodes, revision items/manifests and artifact sets retain objects. The current `revision_items.node_id` foreign key cascades when a node is physically deleted, so a surviving revision may have lost its item reference. Until immutable revision references survive node deletion, the cleanup retains **all** project blobs whenever that project has any revision. This intentionally leaves some orphan blobs for later reconciliation rather than deleting possible historical source. Unknown project keys are not scanned; failed deletes are retried on the next pass. The jobs process is private and exposes no object endpoint.
 
 S02-T11 also permits server-created `avatars/<userId>/<uuid>.png` keys for validated private profile images. Avatar reads use an authenticated API endpoint and do not return signed object URLs. Replacements queue the old key durably in PostgreSQL; a bounded worker checks that no current profile references it before deletion. Failed deletes remain queued for retry. If both the profile transaction and best-effort deletion of a newly uploaded object fail, an unreferenced private object can remain; this needs later storage reconciliation.
 

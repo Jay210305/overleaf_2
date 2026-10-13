@@ -166,6 +166,18 @@ importers:
         specifier: 4.6.5
         version: 4.6.5
 
+  apps/jobs:
+    dependencies:
+      '@latex-collab/config':
+        specifier: workspace:*
+        version: link:../../packages/config
+      '@latex-collab/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@latex-collab/storage':
+        specifier: workspace:*
+        version: link:../../packages/storage
+
   apps/web:
     dependencies:
       '@latex-collab/config':

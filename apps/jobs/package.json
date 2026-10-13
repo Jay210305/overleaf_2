@@ -1,0 +1,16 @@
+{
+  "name": "@latex-collab/jobs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@latex-collab/config": "workspace:*",
+    "@latex-collab/db": "workspace:*",
+    "@latex-collab/storage": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js",
+    "storage:gc": "node --env-file=../../.env --import tsx src/main.ts --once"
+  }
+}
