@@ -1,6 +1,6 @@
 # S05 Archive Import Design
 
-**Status:** Design approved in conversation on 2026-10-12; written-spec review pending. **Branch:** `codex/sprint-05-assets-import-export`. **Scope:** S05-T03 archive validation and durable staged job, new S05-T12 authenticated ZIP intake, and the interface consumed by S05-T10 project application. S05-T03 product work remains behind independent S05-T02 acceptance.
+**Status:** Design and written spec approved in conversation on 2026-10-12. **Branch:** `codex/sprint-05-assets-import-export`. **Scope:** S05-T03 archive validation and durable staged job, new S05-T12 authenticated ZIP intake, and the interface consumed by S05-T10 project application. S05-T03 product work followed independent S05-T02 acceptance.
 
 ## Intent and current boundary
 

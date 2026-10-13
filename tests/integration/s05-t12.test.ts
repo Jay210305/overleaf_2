@@ -1,6 +1,4 @@
 import { createHash, randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { loadEnvFile } from "node:process";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { parseServerConfig } from "@latex-collab/config/server";
@@ -10,6 +8,7 @@ import { createServer } from "../../apps/api/src/server.js";
 import { runStorageGc } from "../../apps/jobs/src/maintenance/storage-gc.js";
 import { runImportValidationPass } from "../../apps/jobs/src/imports/worker.js";
 import { createSessionFixture, origin } from "../helpers/s02-session.js";
+import { applyImportMigrations } from "../helpers/import-migrations.js";
 import { buildZip } from "../helpers/zip-fixtures.js";
 
 loadEnvFile(".env");
@@ -77,14 +76,7 @@ describe("S05-T12 authenticated ZIP import intake", () => {
 
   beforeAll(async () => {
     fixture = await createSessionFixture();
-    for (const migration of ["0006-import-jobs.sql", "0007-import-upload-intents.sql"]) {
-      await fixture.db.query(
-        readFileSync(
-          resolve(import.meta.dirname, `../../packages/db/migrations/${migration}`),
-          "utf8",
-        ),
-      );
-    }
+    await applyImportMigrations(fixture.db, 7);
     const owner = await fixture.seed();
     ownerId = owner.id;
     const login = await fixture.login(owner.email);

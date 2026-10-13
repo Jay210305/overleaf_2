@@ -37,7 +37,7 @@ S05-T09 focused PostgreSQL/MinIO tests pass (3 files, 9 tests), along with lint,
 
 S05-T03 implements the private validator, import-job schema/repository and worker wiring with focused 17/17 PASS plus typecheck, lint, constituent builds, secret/artifact checks and a live zero-work `imports:validate --once` run. The uploads routes now consume the shared server-only content policy with no S05-T01/T09/T02/S01-T08 regression (37/37 PASS). S05-T03 was accepted 2026-10-13. See the [S05-T03 report](../test-reports/s05-t03.md).
 
-S05-T12 adds the authenticated intake routes, `0007` intents, session-only guard, actor-scoped GC phase and contract sync with focused 13/13 PASS plus typecheck/lint PASS. Repository-wide `vitest run` reaches 144 files/412 tests with 408 PASS; the 4 failures are `s00-t03`/PL-01 tests spawning bare `pnpm` (GAP-21 environment quirk, no product failure). See the [S05-T12 report](../test-reports/s05-t12.md). Independent review of S05-T12 remains open; no project is created yet.
+S05-T12 adds the authenticated intake routes, `0007` intents, session-only guard, actor-scoped GC phase and contract sync. A 2026-10-13 follow-up serialized parallel S05 test migrations and isolated a shared-queue lease assertion; focused S05-T03/T12 tests pass 30/30 and the repository-wide direct Node Vitest run passes 144 files/412 tests. Typecheck, lint and planning lint pass. See the [S05-T12 report](../test-reports/s05-t12.md). Independent review of S05-T12 remains open; no project is created yet.
 
 S05-T02 focused tests pass (3 files, 8 tests), and a real Edge journey passed with local PostgreSQL/MinIO plus axe serious/critical checks. Lint, typecheck, build, security, artifact, planning and map checks pass; repository-wide `pnpm test` passes 138 files/382 tests. Repository-wide `pnpm format:check` remains blocked by 37 inherited S03/S04 files (GAP-16). See the [S05-T02 report](../test-reports/s05-t02.md) for commands and limits.
 
@@ -47,4 +47,4 @@ S05-T09 cleanup is conservative around revisions because the current schema can 
 
 ## Next Task
 
-S05-T12 is Ready and in progress (S05-T03 accepted 2026-10-13). Implement the authenticated ZIP intake on the accepted repository, then S05-T10 application. GAP-20 tracks the still-unavailable route; GAP-17 still guards GC reclamation.
+S05-T12 is implemented and in progress pending independent co-maintainer review (S05-T03 accepted 2026-10-13). S05-T10 project application follows that acceptance. GAP-20 tracks project creation still unavailable; GAP-17 still guards GC reclamation.

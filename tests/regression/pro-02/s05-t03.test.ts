@@ -1,6 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { loadEnvFile } from "node:process";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { ImportJobRepository } from "../../../packages/db/src/repositories/import-jobs.js";
@@ -8,6 +6,7 @@ import { S3StorageAdapter } from "../../../packages/storage/src/s3.js";
 import { parseServerConfig } from "@latex-collab/config/server";
 import { runImportValidationPass } from "../../../apps/jobs/src/imports/worker.js";
 import { createSessionFixture } from "../../helpers/s02-session.js";
+import { applyImportMigrations } from "../../helpers/import-migrations.js";
 import { buildZip, minimalPng, sha256Hex } from "../../helpers/zip-fixtures.js";
 
 loadEnvFile(".env");
@@ -24,12 +23,7 @@ describe("S05-T03 PRO-02 import job staging", () => {
 
   beforeAll(async () => {
     fixture = await createSessionFixture();
-    await fixture.db.query(
-      readFileSync(
-        resolve(import.meta.dirname, "../../../packages/db/migrations/0006-import-jobs.sql"),
-        "utf8",
-      ),
-    );
+    await applyImportMigrations(fixture.db);
     actorId = (await fixture.seed()).id;
     const config = parseServerConfig(process.env);
     storage = new S3StorageAdapter({

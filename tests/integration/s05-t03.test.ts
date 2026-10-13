@@ -1,6 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { loadEnvFile } from "node:process";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { parseServerConfig } from "@latex-collab/config/server";
@@ -14,6 +12,7 @@ import { runImportValidationPass } from "../../apps/jobs/src/imports/worker.js";
 import type { DatabaseClient } from "../../packages/db/src/client.js";
 import { createProject } from "../../apps/api/src/modules/projects/create.js";
 import { createSessionFixture } from "../helpers/s02-session.js";
+import { applyImportMigrations } from "../helpers/import-migrations.js";
 import { buildZip, minimalPng, sha256Hex } from "../helpers/zip-fixtures.js";
 
 loadEnvFile(".env");
@@ -38,12 +37,7 @@ describe("S05-T03 archive validation and import jobs", () => {
 
   beforeAll(async () => {
     fixture = await createSessionFixture();
-    await fixture.db.query(
-      readFileSync(
-        resolve(import.meta.dirname, "../../packages/db/migrations/0006-import-jobs.sql"),
-        "utf8",
-      ),
-    );
+    await applyImportMigrations(fixture.db);
     const owner = await fixture.seed();
     actorId = owner.id;
     const config = parseServerConfig(process.env);
@@ -177,50 +171,31 @@ describe("S05-T03 archive validation and import jobs", () => {
     expect(left.job.id).toBe(right.job.id);
   });
 
-  it("claims, completes and releases validation leases", async () => {
-    // Sibling test workers share the global queue and may settle a staged
-    // job first. Stage (again if stolen) until this process holds a 60 s
-    // lease; the lease then excludes every other worker deterministically.
-    async function stageAndHold(): Promise<ImportJobView> {
-      for (let round = 0; round < 4; round++) {
-        const { job } = await stageValid();
-        for (let attempt = 0; attempt < 50; attempt++) {
-          const current = await jobs.get(job.id);
-          if (!current || current.status === "validated" || current.status === "failed") break;
-          if (current.status !== "queued") {
-            await new Promise((resolve) => setTimeout(resolve, 50));
-            continue;
-          }
-          const claimed = await jobs.claimNext({ leaseMs: 60_000 });
-          if (!claimed) continue;
-          if (claimed.id !== job.id) {
-            await jobs.release(claimed.id);
-            continue;
-          }
-          return claimed;
-        }
-      }
-      throw new Error("could not hold a validation lease");
-    }
-    const claimed = await stageAndHold();
-    await jobs.release(claimed.id);
-    let reclaimed: ImportJobView | null = null;
-    for (let attempt = 0; attempt < 100 && reclaimed?.id !== claimed.id; attempt++) {
-      const current = await jobs.get(claimed.id);
-      if (!current || current.status === "validated" || current.status === "failed") {
-        throw new Error("released job was settled by a sibling worker");
-      }
-      const next = await jobs.claimNext({ leaseMs: 60_000 });
-      if (!next) continue;
-      if (next.id !== claimed.id) {
-        await jobs.release(next.id);
-      } else {
-        reclaimed = next;
-      }
-    }
-    expect(reclaimed?.id).toBe(claimed.id);
-    await jobs.fail(claimed.id, "INVALID_ARCHIVE");
-    const failed = await jobs.get(claimed.id);
+  it("claims and releases expired validation leases", async () => {
+    const bytes = validArchive();
+    const reserved = await jobs.reserve({
+      actorId,
+      idempotencyKey: randomUUID(),
+      archiveSha256: sha256Hex(bytes),
+      archiveSize: bytes.length,
+      title,
+    });
+    const future = new Date(Date.now() + 60 * 60_000);
+    // Model a crashed validator whose lease expires in a virtual future.
+    // Other test workers use the real clock and cannot claim this row.
+    await fixture.db.query(
+      `UPDATE import_jobs SET status = 'validating', lease_expires_at = $2,
+         created_at = '2000-01-01' WHERE id = $1 AND status = 'staging'`,
+      [reserved.job.id, future],
+    );
+    const claimed = await jobs.claimNext({ now: new Date(future.getTime() + 1) });
+    expect(claimed?.id).toBe(reserved.job.id);
+    const releasedAt = new Date(future.getTime() + 120_000);
+    await jobs.release(reserved.job.id, releasedAt);
+    const reclaimed = await jobs.claimNext({ now: new Date(releasedAt.getTime() + 1) });
+    expect(reclaimed?.id).toBe(reserved.job.id);
+    await jobs.fail(reserved.job.id, "INVALID_ARCHIVE");
+    const failed = await jobs.get(reserved.job.id);
     expect(failed?.status).toBe("failed");
     expect(failed?.errorCode).toBe("INVALID_ARCHIVE");
   });

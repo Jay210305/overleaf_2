@@ -148,3 +148,10 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Observed checks:** Focused S05-T12 3 files/13 tests PASS; S05-T03 suites 17/17 PASS alongside; `pnpm typecheck`, `pnpm lint`, constituent builds, secret check and `plan_lint.py` (123 operations) PASS. Repository-wide `vitest run`: 144 files/412 tests with 408 PASS; the 4 failures are `s00-t03`/PL-01 tests spawning bare `pnpm`, which is not on PATH (GAP-21, pre-existing quirk). Report in [s05-t12](../test-reports/s05-t12.md).
 - **Next:** Independent co-maintainer review of S05-T12, then S05-T10 project application.
 
+### 2026-10-13 — Sprint S05-T12 shared-test verification follow-up
+
+- **Contributor:** Codex, continuing the user's authorized S05 work on `codex/sprint-05-assets-import-export`.
+- **Task:** Kept S05-T12 in progress. Parallel S05-T03/T12 suites now serialize their import migrations under a PostgreSQL advisory lock; the S05-T03 lease assertion uses a virtual future lease to avoid competition with other test workers. Product behavior was unchanged; actual effort was not measured.
+- **Observed checks:** Focused S05 archive suites 6 files/30 tests PASS and repository-wide direct Node Vitest 144 files/412 tests PASS against local PostgreSQL and MinIO. Typecheck, ESLint and planning lint PASS. The initial full run was 411/412 with only the shared-queue lease assertion failing; the follow-up run passed. See [S05-T12 report](../test-reports/s05-t12.md).
+- **Next:** Independent co-maintainer review of S05-T12, then S05-T10 project application.
+
