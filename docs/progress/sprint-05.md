@@ -10,8 +10,8 @@
 | [S05-T09](../../implementation/sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md) | DONE | Not measured | [Scoped test report](../test-reports/s05-t09.md); accepted 2026-10-13 after focused 9/9 PASS re-run |
 | [S05-T02](../../implementation/sprint-05-assets-import-export/S05-T02-create-multi-file-upload-interactions.md) | DONE | Not measured | [Scoped test report](../test-reports/s05-t02.md); accepted 2026-10-13 after focused 8/8 PASS re-run |
 | [S05-T03](../../implementation/sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | DONE | Not measured | [Scoped test report](../test-reports/s05-t03.md); accepted by the user on 2026-10-13 |
-| [S05-T12](../../implementation/sprint-05-assets-import-export/S05-T12-implement-authenticated-zip-import-intake.md) | IN_PROGRESS | Not measured | [Scoped test report](../test-reports/s05-t12.md); independent review pending |
-| [S05-T10](../../implementation/sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | NOT_STARTED | Not recorded | No implementation evidence |
+| [S05-T12](../../implementation/sprint-05-assets-import-export/S05-T12-implement-authenticated-zip-import-intake.md) | DONE | Not measured | [Scoped test report](../test-reports/s05-t12.md); accepted by the user on 2026-10-13 |
+| [S05-T10](../../implementation/sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | IN_PROGRESS | Not measured | [Scoped test report](../test-reports/s05-t10.md); application, retry and retention implemented; independent review pending |
 | [S05-T04](../../implementation/sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S05-T05](../../implementation/sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S05-T06](../../implementation/sprint-05-assets-import-export/S05-T06-create-minimal-versioned-internal-templates.md) | NOT_STARTED | Not recorded | No implementation evidence |
@@ -37,7 +37,9 @@ S05-T09 focused PostgreSQL/MinIO tests pass (3 files, 9 tests), along with lint,
 
 S05-T03 implements the private validator, import-job schema/repository and worker wiring with focused 17/17 PASS plus typecheck, lint, constituent builds, secret/artifact checks and a live zero-work `imports:validate --once` run. The uploads routes now consume the shared server-only content policy with no S05-T01/T09/T02/S01-T08 regression (37/37 PASS). S05-T03 was accepted 2026-10-13. See the [S05-T03 report](../test-reports/s05-t03.md).
 
-S05-T12 adds the authenticated intake routes, `0007` intents, session-only guard, actor-scoped GC phase and contract sync. A 2026-10-13 follow-up serialized parallel S05 test migrations and isolated a shared-queue lease assertion; focused S05-T03/T12 tests pass 30/30 and the repository-wide direct Node Vitest run passes 144 files/412 tests. Typecheck, lint and planning lint pass. See the [S05-T12 report](../test-reports/s05-t12.md). Independent review of S05-T12 remains open; no project is created yet.
+S05-T12 adds the authenticated intake routes, `0007` intents, session-only guard, actor-scoped GC phase and contract sync. A 2026-10-13 follow-up serialized parallel S05 test migrations and isolated a shared-queue lease assertion; focused S05-T03/T12 tests pass 30/30 and the repository-wide direct Node Vitest run passes 144 files/412 tests. Typecheck, lint and planning lint pass. See the [S05-T12 report](../test-reports/s05-t12.md). The user accepted S05-T12 after review on 2026-10-13; project creation remains S05-T10.
+
+S05-T10 now reopens validated archive bytes, reserves a stable project ID, verifies content-addressed binaries and commits the owner project, implicit folders, canonical Yjs text and successful job state in one transaction. The private apply pass defers retryable outages so later jobs can progress, cleans failed pre-commit blobs and source archives, and sweeps successful source archives after 14 days. Nine focused S05-T03/T12/T10 suites pass 53/53 against PostgreSQL and MinIO; the bounded-worker repository-wide `pnpm test` passes 147 files/435 tests. The task remains in progress pending independent review; see the [S05-T10 report](../test-reports/s05-t10.md).
 
 S05-T02 focused tests pass (3 files, 8 tests), and a real Edge journey passed with local PostgreSQL/MinIO plus axe serious/critical checks. Lint, typecheck, build, security, artifact, planning and map checks pass; repository-wide `pnpm test` passes 138 files/382 tests. Repository-wide `pnpm format:check` remains blocked by 37 inherited S03/S04 files (GAP-16). See the [S05-T02 report](../test-reports/s05-t02.md) for commands and limits.
 
@@ -47,4 +49,4 @@ S05-T09 cleanup is conservative around revisions because the current schema can 
 
 ## Next Task
 
-S05-T12 is implemented and in progress pending independent co-maintainer review (S05-T03 accepted 2026-10-13). S05-T10 project application follows that acceptance. GAP-20 tracks project creation still unavailable; GAP-17 still guards GC reclamation.
+S05-T10 implementation awaits final shared gates and independent review. S05-T04 immutable source ZIP export is the next unstarted slice after acceptance. GAP-17 still guards GC reclamation.

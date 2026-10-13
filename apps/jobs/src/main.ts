@@ -1,21 +1,26 @@
 import { parseServerConfig } from "@latex-collab/config/server";
 import { DatabaseClient } from "@latex-collab/db";
 import { S3StorageAdapter } from "@latex-collab/storage";
+import { runImportApplyPass } from "./imports/apply-project.js";
 import { runStorageGc } from "./maintenance/storage-gc.js";
 
 const intervalMs = 60 * 60_000;
 
 async function main(): Promise<void> {
+  const applyImports = process.argv[2] === "imports:apply";
   const once = process.argv.includes("--once");
   const projectOption = process.argv.find((value) => value.startsWith("--project-id="));
   const actorOption = process.argv.find((value) => value.startsWith("--actor-id="));
-  const allowed = new Set(["--once"]);
+  const allowed = new Set(["--once", ...(applyImports ? ["imports:apply"] : [])]);
   if (
     process.argv
       .slice(2)
       .some((value) => !allowed.has(value) && value !== projectOption && value !== actorOption)
   ) {
     throw new Error("Unknown jobs option");
+  }
+  if (applyImports && (!once || projectOption || actorOption)) {
+    throw new Error("Usage: imports:apply --once");
   }
   const config = parseServerConfig(process.env);
   const db = new DatabaseClient(config.DATABASE_URL);
@@ -36,6 +41,12 @@ async function main(): Promise<void> {
     if (active || stopping) return;
     active = true;
     try {
+      if (applyImports) {
+        const result = await runImportApplyPass(db, storage);
+        console.info("Import apply pass", result);
+        if (result.retried > 0) process.exitCode = 1;
+        return;
+      }
       const result = await runStorageGc(
         db,
         storage,

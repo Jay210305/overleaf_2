@@ -6,7 +6,7 @@ status: verified
 entity: docs/progress/progress-log.md
 sources: ["docs/progress/progress-log.md", "docs/progress/open-gaps.md", "docs/progress/technical-debt.md", "docs/progress/sprint-00.md", "docs/progress/sprint-01.md", "docs/progress/sprint-02.md", "docs/test-reports/s00-verification.md", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md", "docs/test-reports/s02-t05.md", "docs/test-reports/s02-t06.md", "docs/test-reports/s02-t09.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t10.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s02-t08.md", "docs/feature-parity.md"]
 runtime: not-applicable
-verified_on: 2026-10-12
+verified_on: 2026-10-13
 snapshot: _meta/file-inventory.json
 ---
 
@@ -23,6 +23,8 @@ Plans and estimates must remain distinguishable from actual actions and measured
 ## Shape
 
 A global log, per-stage task matrices, gap/debt files, feature-parity evidence and scoped reports. S00 is closed; S01 records ten accepted tasks; all 11 S02 tasks have independent co-maintainer acceptance through 2026-10-12. The S02 work package is done; G1 release and feature rows remain incomplete because project routes, editing, compilation and later gates are still required. Missing credentials and research choices are tracked as gaps.
+
+The [S05-T10 report](../../test-reports/s05-t10.md) records transactional ZIP application evidence while the sprint matrix keeps the task in progress until independent review.
 
 ## Connected to
 
