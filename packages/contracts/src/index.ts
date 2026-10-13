@@ -77,6 +77,61 @@ export const projectNodeViewSchema = z.strictObject({
 });
 export type ProjectNodeView = z.infer<typeof projectNodeViewSchema>;
 
+export const uploadRequestSchema = z.strictObject({
+  fileName: z.string().min(1).max(255),
+  mime: z.string().min(1).max(10000),
+  sizeBytes: z.number().int().positive(),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/),
+  parentId: z.uuid().nullable().optional(),
+});
+export type UploadRequest = z.infer<typeof uploadRequestSchema>;
+
+export const uploadViewSchema = z.strictObject({
+  uploadId: z.uuid(),
+  url: z.url(),
+  expiresAt: z.iso.datetime(),
+});
+export type UploadView = z.infer<typeof uploadViewSchema>;
+
+export const uploadCompleteSchema = z.strictObject({
+  uploadId: z.uuid(),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/),
+});
+export type UploadComplete = z.infer<typeof uploadCompleteSchema>;
+
+export const importPresignRequestSchema = z.strictObject({
+  sizeBytes: z.number().int().positive(),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/),
+});
+export type ImportPresignRequest = z.infer<typeof importPresignRequestSchema>;
+
+export const importRequestSchema = z.strictObject({
+  uploadId: z.uuid(),
+  title: z.string().min(1).max(200),
+});
+export type ImportRequest = z.infer<typeof importRequestSchema>;
+
+export const importJobStatusSchema = z.enum([
+  "staging",
+  "queued",
+  "validating",
+  "validated",
+  "failed",
+  "succeeded",
+]);
+export type ImportJobStatus = z.infer<typeof importJobStatusSchema>;
+
+export const importJobViewSchema = z.strictObject({
+  id: z.uuid(),
+  status: importJobStatusSchema,
+  title: z.string().min(1).max(200),
+  projectId: z.uuid().nullable(),
+  errorCode: z.string().min(1).nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+});
+export type ImportJobView = z.infer<typeof importJobViewSchema>;
+
 export const treeViewSchema = z.strictObject({
   projectId: z.string().uuid(),
   treeVersion: z.number().int().nonnegative(),

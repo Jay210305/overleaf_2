@@ -4,7 +4,7 @@ cluster: tooling
 universe: live
 status: verified
 entity: package.json
-sources: [".gitattributes", "package.json", "pnpm-workspace.yaml", "pnpm-lock.yaml", "turbo.json", "tsconfig.json", "tsconfig.build.json", "scripts/check-workspace.ts", "scripts/plan_lint.py", "packages/db/package.json", "packages/storage/package.json", "packages/test-utils/package.json", "docs/progress/sprint-01.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t11.md"]
+sources: [".gitattributes", "package.json", "pnpm-workspace.yaml", "pnpm-lock.yaml", "turbo.json", "tsconfig.json", "tsconfig.build.json", "scripts/check-workspace.ts", "scripts/plan_lint.py", "apps/jobs/package.json", "apps/jobs/src/main.ts", "packages/db/package.json", "packages/storage/package.json", "packages/test-utils/package.json", "docs/progress/sprint-01.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s05-t09.md"]
 runtime: implemented
 verified_on: 2026-10-12
 snapshot: _meta/file-inventory.json
@@ -22,7 +22,7 @@ Pinned versions, local-only workspace links and a frozen lockfile make the boots
 
 ## Shape
 
-`pnpm-workspace.yaml` discovers `apps/*` and `packages/*` and permits Argon2's reviewed native build hook. The lockfile includes root, two apps and five shared packages. `pnpm build` compiles packages, Fastify API, browser assets and the workspace validator. Root scripts cover formatting, ESLint/boundaries, strict types, tests, real services and browser checks; consult CI for its exact matrix. `.gitattributes` forces LF checkout for text files so the pinned Prettier gate passes on Windows. The S02-T11 OpenAPI plan linter accepts binary PNG request bodies; GAP-12 generation/parity remains open.
+`pnpm-workspace.yaml` discovers `apps/*` and `packages/*` and permits Argon2's reviewed native build hook. The lockfile includes root, browser/API/jobs apps and shared packages. `pnpm build` compiles packages, Fastify API, private jobs process, browser assets and the workspace validator. Root scripts cover formatting, ESLint/boundaries, strict types, tests, real services and browser checks; consult CI for its exact matrix. `.gitattributes` forces LF checkout for text files so the pinned Prettier gate passes on Windows. The S02-T11 OpenAPI plan linter accepts binary PNG request bodies; GAP-12 generation/parity remains open.
 
 ## Connected to
 

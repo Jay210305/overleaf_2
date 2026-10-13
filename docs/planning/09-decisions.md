@@ -51,6 +51,20 @@ These are planning decisions adopted under delegated scope authority. Their impl
 **Decision:** Conservative visual projection with minimal verified patches and literal fallback; explicit provider adapters with declared capabilities, checkpoint/base checks and visible blocked states. AI is opt-in per user/project.
 **Consequences:** Parser/provider/Git/public-executor spikes precede affected implementation; 100 round-trip fixtures pin source preservation. Unsupported providers remain optional.
 
+## ADR-008 — Browser Upload Transport
+
+**Context:** S05 needs per-file progress, cancellation and safe retry with the already implemented signed upload API.
+**Options:** Direct signed PUT, API byte proxy or one batch upload endpoint.
+**Decision:** Use a sequential browser queue with XHR PUT to the private signed URL, then server completion with a stable per-file idempotency key. Refresh the file tree only after durable completion. Restrict local MinIO CORS to the exact application origin; the pinned server does not implement bucket CORS configuration.
+**Consequences:** The browser never receives object credentials; a canceled or failed staging object is removed by S05-T09. Hosted CORS and broader browser coverage require deployment evidence. See the [S05-T02 design](../superpowers/specs/2026-10-12-s05-multi-file-upload-design.md) and [report](../test-reports/s05-t02.md).
+
+## ADR-009 — ZIP Import Staging and Validation
+
+**Context:** The project-file upload API rejects ZIP and creates a node, while a ZIP import must create a new project only after bounded validation.
+**Options:** Reuse project uploads, proxy and extract in the API request, or split signed ZIP intake, private validation and project application.
+**Decision:** Add S05-T12 for authenticated actor-bound signed ZIP intake, keep S05-T03 as a private durable validator/job, and leave atomic project application to S05-T10. A server-only copied archive key and versioned manifest separate uploaded bytes from project state.
+**Consequences:** New import jobs and storage keys require migrations, scoped cleanup and an import-specific status DTO. A `validated` job is not a completed project. Independent S05-T02 acceptance remains the prerequisite for S05-T03 product work. See the [approved design](../superpowers/specs/2026-10-12-s05-archive-import-design.md).
+
 ## ADR Maintenance
 
 S00-T08 establishes individual ADR records in `docs/adr/` from this baseline. Later ADRs retain context, options, decision and consequences, add measured evidence, and state which entry they supersede. A breaking interface change requires an ADR and a MAJOR contract version bump.

@@ -118,3 +118,40 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Technical Debt:** None introduced; live multi-user WebSocket rooms scheduled for Sprint S07.
 - **Next Ready Task:** S05-T01 (Sprint S05: Assets, import, and export).
 
+### 2026-10-12 — Sprint S05 Branch and Verified Upload Slice
+
+- **Contributor:** Codex, carrying out the user's Sprint 05 branch and implementation request.
+- **Branch/base:** Published `codex/sprint-05-assets-import-export` from `origin/main` (`40f0870`); merge commit `d09db72` includes `origin/codex/sprint-04-code-editor` (`6549a09`). Main and the Sprint 04 branch were not changed.
+- **Task:** S05-T01 is IN_PROGRESS. Scoped API, schema/migration, storage read cap and tests are described in [the report](../test-reports/s05-t01.md); actual effort was not measured.
+- **Observed checks:** Focused S05 tests 3 files/14 tests PASS; `pnpm lint`, `pnpm typecheck`, `pnpm build`, planning lint, map check and artifact check PASS on Windows with local Compose services. Repository-wide S05 run had 361 passing tests and two inherited Mailpit failures; formatting still flags 37 inherited S03/S04 files. Shared gates and independent review remain open.
+- **Next:** Finish verification and obtain independent co-maintainer review before marking S05-T01 done; then handle S05-T09 cleanup.
+
+### 2026-10-13 — Sprint S05 review of S05-T01/T09/T02 and S05-T12 planning
+
+- **Contributor:** OpenCode agent, carrying out the user's review-first request on `codex/sprint-05-assets-import-export`.
+- **Review:** Read the complete master plan and methodology, inspected the S05-T01/T09/T02 commits and their implementation (`uploads/routes.ts`, `storage-gc.ts`, `file-uploader.tsx`), and re-ran evidence: focused suites 14/14, 9/9 and 8/8 PASS with local PostgreSQL/MinIO, plus `pnpm typecheck`, `pnpm lint` and `plan_lint.py` PASS. Two LOW nits recorded in [S05 progress](sprint-05.md) without touching accepted code.
+- **Acceptance:** The user (co-maintainer side) accepted S05-T01, S05-T09 and S05-T02; task frontmatter/index/roadmap now read `done`, GAP-18/GAP-19 are closed, and S05-T03 readiness is `ready`. GAP-15 (migration wiring), GAP-16 (inherited formatting), GAP-17 (revision references) and GAP-20 (no live ZIP route) stay open.
+- **Planning:** Recorded the previously uncommitted S05-T12 authenticated-intake package (new task file, ADR-009, roadmap 80→88 h, contract/traceability updates, S05-T03/S05-T10 boundary edits) as planning only; no import route is live.
+- **Next:** Implement S05-T03 (private ZIP validator, import-job schema/repository, worker wiring) per the approved design.
+
+### 2026-10-13 — Sprint S05-T03 private validation and import jobs
+
+- **Contributor:** OpenCode agent, continuing the user's authorized S05 work on `codex/sprint-05-assets-import-export` after S05-T01/T09/T02 acceptance.
+- **Task:** S05-T03 is IN_PROGRESS. Added migration `0006-import-jobs.sql`, typed `ImportJobRepository` (`reserve`/`enqueue`/`claimNext`/`complete`/`fail`/`release`/`listUnswept`/`markArchiveSwept`), server-only shared content policy (S05-T01 routes refactored onto it), `yauzl` 3.4.0 bounded validator, worker pass with `imports:validate` wiring, hand-built ZIP fixtures and 17 scoped tests. Actual effort was not measured.
+- **Observed checks:** Focused S05-T03 3 files/17 tests PASS; S05-T01/T09/T02/S01-T08 regression 10 files/37 tests PASS; `pnpm typecheck`, `pnpm lint`, constituent package/app builds, secret/artifact checks and a live zero-work runner pass all PASS; `plan_lint.py` PASS. Root `pnpm build` fails only because its script calls bare `pnpm`, which is not on PATH in this shell (pre-existing environment quirk). Report in [s05-t03](../test-reports/s05-t03.md).
+- **Review:** The hostile battery exposed and fixed a real sweep-starvation bug via the new `archive_swept` flag. S05-T03 was accepted by the user on 2026-10-13; S05-T12 started.
+
+### 2026-10-13 — Sprint S05-T12 authenticated ZIP import intake
+
+- **Contributor:** OpenCode agent, continuing the user's authorized S05 work on `codex/sprint-05-assets-import-export`.
+- **Task:** S05-T12 is IN_PROGRESS. Added migration `0007-import-upload-intents.sql`, session-only guard support, `apps/api/src/modules/imports/routes.ts` (presign/complete/status), actor-scoped GC import phase with `--actor-id` wiring, import DTOs and OpenAPI/operations sync, and 13 scoped tests. Actual effort was not measured.
+- **Observed checks:** Focused S05-T12 3 files/13 tests PASS; S05-T03 suites 17/17 PASS alongside; `pnpm typecheck`, `pnpm lint`, constituent builds, secret check and `plan_lint.py` (123 operations) PASS. Repository-wide `vitest run`: 144 files/412 tests with 408 PASS; the 4 failures are `s00-t03`/PL-01 tests spawning bare `pnpm`, which is not on PATH (GAP-21, pre-existing quirk). Report in [s05-t12](../test-reports/s05-t12.md).
+- **Next:** Independent co-maintainer review of S05-T12, then S05-T10 project application.
+
+### 2026-10-13 — Sprint S05-T12 shared-test verification follow-up
+
+- **Contributor:** Codex, continuing the user's authorized S05 work on `codex/sprint-05-assets-import-export`.
+- **Task:** Kept S05-T12 in progress. Parallel S05-T03/T12 suites now serialize their import migrations under a PostgreSQL advisory lock; the S05-T03 lease assertion uses a virtual future lease to avoid competition with other test workers. Product behavior was unchanged; actual effort was not measured.
+- **Observed checks:** Focused S05 archive suites 6 files/30 tests PASS and repository-wide direct Node Vitest 144 files/412 tests PASS against local PostgreSQL and MinIO. Typecheck, ESLint and planning lint PASS. The initial full run was 411/412 with only the shared-queue lease assertion failing; the follow-up run passed. See [S05-T12 report](../test-reports/s05-t12.md).
+- **Next:** Independent co-maintainer review of S05-T12, then S05-T10 project application.
+

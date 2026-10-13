@@ -3,6 +3,8 @@ import {
   boolean,
   check,
   foreignKey,
+  index,
+  integer,
   jsonb,
   pgTable,
   primaryKey,
@@ -231,6 +233,112 @@ export const projectNodes = pgTable(
     check("project_nodes_kind_check", sql`${table.kind} IN ('FILE', 'FOLDER')`),
     check("project_nodes_content_kind_check", sql`${table.contentKind} IN ('TEXT', 'BINARY')`),
     check("project_nodes_size_bytes_check", sql`${table.sizeBytes} >= 0`),
+  ],
+);
+
+export const pendingUploads = pgTable(
+  "pending_uploads",
+  {
+    id: uuid("id").primaryKey(),
+    projectId: uuid("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    actorId: uuid("actor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    parentId: uuid("parent_id"),
+    fileName: text("file_name").notNull(),
+    mime: text("mime").notNull(),
+    contentKind: text("content_kind").notNull(),
+    expectedSize: bigint("expected_size", { mode: "number" }).notNull(),
+    expectedSha256: text("expected_sha256").notNull(),
+    stagingKey: text("staging_key").notNull().unique(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+    completedNodeId: uuid("completed_node_id").references(() => projectNodes.id, {
+      onDelete: "cascade",
+    }),
+    completedKeyHash: text("completed_key_hash"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("pending_uploads_project_expiry_idx")
+      .on(table.projectId, table.expiresAt)
+      .where(sql`${table.completedNodeId} IS NULL`),
+    check("pending_uploads_content_kind_check", sql`${table.contentKind} IN ('TEXT', 'BINARY')`),
+    check(
+      "pending_uploads_expected_size_check",
+      sql`${table.expectedSize} > 0 AND ${table.expectedSize} <= 26214400`,
+    ),
+    check(
+      "pending_uploads_completion_pair",
+      sql`(${table.completedNodeId} IS NULL AND ${table.completedKeyHash} IS NULL) OR (${table.completedNodeId} IS NOT NULL AND ${table.completedKeyHash} IS NOT NULL)`,
+    ),
+  ],
+);
+
+export const importJobs = pgTable(
+  "import_jobs",
+  {
+    id: uuid("id").primaryKey(),
+    actorId: uuid("actor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    idempotencyKeyHash: text("idempotency_key_hash").notNull(),
+    archiveSha256: text("archive_sha256").notNull(),
+    archiveSize: bigint("archive_size", { mode: "number" }).notNull(),
+    title: text("title").notNull(),
+    archiveKey: text("archive_key").notNull().unique(),
+    status: text("status").notNull().default("staging"),
+    leaseExpiresAt: timestamp("lease_expires_at", { withTimezone: true, mode: "date" }),
+    attempts: integer("attempts").notNull().default(0),
+    manifest: jsonb("manifest"),
+    manifestVersion: integer("manifest_version"),
+    errorCode: text("error_code"),
+    archiveSwept: boolean("archive_swept").notNull().default(false),
+    projectId: uuid("project_id").references(() => projects.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("import_jobs_actor_key_uidx").on(table.actorId, table.idempotencyKeyHash),
+    index("import_jobs_claim_idx")
+      .on(table.status, table.leaseExpiresAt, table.createdAt)
+      .where(sql`${table.status} IN ('queued', 'validating')`),
+    index("import_jobs_sweep_idx")
+      .on(table.createdAt)
+      .where(sql`${table.status} = 'failed' AND ${table.archiveSwept} = FALSE`),
+    check(
+      "import_jobs_archive_size_check",
+      sql`${table.archiveSize} > 0 AND ${table.archiveSize} <= 26214400`,
+    ),
+  ],
+);
+
+export const importUploadIntents = pgTable(
+  "import_upload_intents",
+  {
+    id: uuid("id").primaryKey(),
+    actorId: uuid("actor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expectedSize: bigint("expected_size", { mode: "number" }).notNull(),
+    expectedSha256: text("expected_sha256").notNull(),
+    stagingKey: text("staging_key").notNull().unique(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+    completedJobId: uuid("completed_job_id").references(() => importJobs.id, {
+      onDelete: "set null",
+    }),
+    completedKeyHash: text("completed_key_hash"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("import_upload_intents_actor_expiry_idx")
+      .on(table.actorId, table.expiresAt)
+      .where(sql`${table.completedJobId} IS NULL`),
+    check(
+      "import_upload_intents_expected_size_check",
+      sql`${table.expectedSize} > 0 AND ${table.expectedSize} <= 26214400`,
+    ),
   ],
 );
 

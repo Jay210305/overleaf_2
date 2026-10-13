@@ -16,7 +16,7 @@
     "format": "prettier --write apps packages scripts tests *.json *.ts *.js infra .github .prettierrc.json",
     "format:check": "prettier --check apps packages scripts tests *.json *.ts *.js infra .github .prettierrc.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "build": "pnpm --filter \"./packages/*\" build && pnpm --filter @latex-collab/api build && pnpm --filter @latex-collab/web build && tsc -p tsconfig.build.json",
+    "build": "pnpm --filter \"./packages/*\" build && pnpm --filter @latex-collab/api build && pnpm --filter @latex-collab/jobs build && pnpm --filter @latex-collab/web build && tsc -p tsconfig.build.json",
     "dev": "pnpm --filter \"./packages/*\" build && tsx scripts/dev.ts",
     "infra:up": "pnpm --filter \"./packages/*\" build && docker compose --env-file .env -f infra/docker-compose.yml up -d --wait --build && node scripts/init-storage.mjs",
     "infra:down": "docker compose --env-file .env -f infra/docker-compose.yml down",

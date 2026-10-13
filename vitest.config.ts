@@ -50,6 +50,12 @@ export default defineConfig({
         ),
       },
       {
+        find: "@latex-collab/db/repositories/import-jobs",
+        replacement: fileURLToPath(
+          new URL("./packages/db/src/repositories/import-jobs.ts", import.meta.url),
+        ),
+      },
+      {
         find: "@latex-collab/db/seeds/development",
         replacement: fileURLToPath(new URL("./packages/db/seeds/development.ts", import.meta.url)),
       },
@@ -83,9 +89,7 @@ export default defineConfig({
       },
       {
         find: "@latex-collab/editor/keymap",
-        replacement: fileURLToPath(
-          new URL("./packages/editor/src/keymap.ts", import.meta.url),
-        ),
+        replacement: fileURLToPath(new URL("./packages/editor/src/keymap.ts", import.meta.url)),
       },
       {
         find: "@latex-collab/editor",

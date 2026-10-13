@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T02]
 requirements: [PRO-02, PRO-10]
 source_task: S05-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S05-T03 — Validate archives and define idempotent import job
 
@@ -34,6 +34,7 @@ Strict TypeScript; server-side authorization for every REST/WSS/object action; g
 
 - [storage-and-revisions](../../docs/contracts/storage-and-revisions.md)
 - [http-api](../../docs/contracts/http-api.md)
+- [Approved archive design](../../docs/superpowers/specs/2026-10-12-s05-archive-import-design.md)
 
 - **Input:** Authorized upload metadata/bytes or validated archive and target immutable revision.
 - **Output:** The typed boundary result in the contract, scoped to this task's deliverables: Validated archive rejects traversal/bombs/symlinks and records an idempotent staged import job; application to canonical project state is S05-T10.
@@ -42,6 +43,8 @@ Strict TypeScript; server-side authorization for every REST/WSS/object action; g
 - **Invalid example:** Traversal, foreign presign or oversized decompression denied before apply.
 
 The contract links are the allowed supporting interface references. This task includes its acceptance and context; reading the original mega document is not a prerequisite. Configuration/paths above are planned targets, not existing runtime capabilities.
+
+This task owns the internal, runnable ZIP validator, the durable import-job schema and typed reserve/claim repository consumed by [S05-T12 authenticated intake](S05-T12-implement-authenticated-zip-import-intake.md). It does not add a ZIP upload route or create a project; S05-T10 owns project application. A `validated` job means safe to apply, not import succeeded.
 
 ## Essential Sub-tasks
 
@@ -58,6 +61,9 @@ Each code slice starts with the specified failing assertion; documentation/resea
 ## Deliverables
 
 - `apps/jobs/src/imports/zip.ts`
+- `apps/jobs/src/imports/worker.ts` and private jobs runner wiring
+- `packages/db/migrations/0006-import-jobs.sql` and typed import-job repository/schema
+- Server-only shared content policy consumed by existing uploads and ZIP validation
 - `tests/integration/s05-t03.test.ts`
 - `tests/regression/pro-02/s05-t03.test.ts`
 - `tests/regression/pro-10/s05-t03.test.ts`
@@ -67,10 +73,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Validated archive rejects traversal/bombs/symlinks and records an idempotent staged import job; application to canonical project state is S05-T10
-- [ ] PRO-02: Create blank, minimal example, internal-template and ZIP projects. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] PRO-10: Import nested ZIP projects without ZIP slip, symlinks or decompression bombs. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Validated archive rejects traversal/bombs/symlinks and records an idempotent staged import job; application to canonical project state is S05-T10
+- [x] PRO-02: Create blank, minimal example, internal-template and ZIP projects. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] PRO-10: Import nested ZIP projects without ZIP slip, symlinks or decompression bombs. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -96,9 +102,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

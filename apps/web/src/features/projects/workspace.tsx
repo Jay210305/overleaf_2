@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { parsePublicConfig } from "@latex-collab/config";
 import type { ProjectNodeView, ProjectView } from "@latex-collab/contracts";
 import { FileTree } from "../files/file-tree.js";
+import { FileUploader } from "../files/file-uploader.js";
 import { ProjectSettings } from "./settings.js";
 
 const config = parsePublicConfig(import.meta.env);
@@ -27,6 +28,7 @@ export function ProjectWorkspace({
   const [error, setError] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<ProjectNodeView | null>(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [uploadVersion, setUploadVersion] = useState(0);
 
   const fetchProject = useCallback(async () => {
     if (!projectId) return;
@@ -107,12 +109,19 @@ export function ProjectWorkspace({
       {!loading && !error && (
         <div className="workspace-layout">
           <aside className="workspace-sidebar" aria-label="Project files">
+            <FileUploader
+              projectId={projectId}
+              apiUrl={apiUrl}
+              csrfToken={csrfToken}
+              onUploaded={() => setUploadVersion((value) => value + 1)}
+            />
             <FileTree
               projectId={projectId}
               apiUrl={apiUrl}
               csrfToken={csrfToken}
               selectedNodeId={selectedNode?.id}
               onSelectNode={(node) => setSelectedNode(node)}
+              refreshVersion={uploadVersion}
             />
           </aside>
 

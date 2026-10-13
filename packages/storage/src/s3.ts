@@ -7,9 +7,10 @@ import {
   DeleteObjectCommand,
   HeadBucketCommand,
   CreateBucketCommand,
+  ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import type { ObjectRef, StorageAdapter } from "@latex-collab/contracts";
+import type { ObjectListPage, ObjectRef, StorageAdapter } from "@latex-collab/contracts";
 
 export type S3StorageConfig = {
   endpoint: string;
@@ -23,6 +24,13 @@ export class StorageSecurityError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "StorageSecurityError";
+  }
+}
+
+export class StorageLimitError extends Error {
+  constructor() {
+    super("Object exceeds the allowed byte limit");
+    this.name = "StorageLimitError";
   }
 }
 
@@ -64,7 +72,14 @@ export function validateKey(key: string): void {
     }
   }
 
-  const allowedPrefixes = ["projects/", "artifacts/", "revisions/", "templates/", "avatars/"];
+  const allowedPrefixes = [
+    "projects/",
+    "artifacts/",
+    "revisions/",
+    "templates/",
+    "avatars/",
+    "imports/",
+  ];
   if (!allowedPrefixes.some((prefix) => key.startsWith(prefix))) {
     throw new StorageSecurityError(`Object key must start with an authorized prefix: ${key}`);
   }
@@ -184,6 +199,27 @@ export class S3StorageAdapter implements StorageAdapter {
     return byteArray;
   }
 
+  async getLimited(key: string, maxBytes: number): Promise<Uint8Array> {
+    validateKey(key);
+    if (!Number.isSafeInteger(maxBytes) || maxBytes < 0) {
+      throw new StorageLimitError();
+    }
+    const response = await this.s3.send(new GetObjectCommand({ Bucket: this.bucket, Key: key }));
+    if (!response.Body) throw new Error("Object has no body");
+    const body = response.Body as AsyncIterable<Uint8Array> & { destroy?: () => void };
+    const chunks: Buffer[] = [];
+    let total = 0;
+    for await (const chunk of body) {
+      total += chunk.byteLength;
+      if (total > maxBytes) {
+        body.destroy?.();
+        throw new StorageLimitError();
+      }
+      chunks.push(Buffer.from(chunk));
+    }
+    return Buffer.concat(chunks, total);
+  }
+
   async head(key: string): Promise<ObjectRef | null> {
     validateKey(key);
     try {
@@ -203,6 +239,7 @@ export class S3StorageAdapter implements StorageAdapter {
         sha256,
         sizeBytes,
         mime,
+        lastModified: response.LastModified,
       };
     } catch (error: unknown) {
       const err = error as { name?: string; $metadata?: { httpStatusCode?: number } };
@@ -215,6 +252,34 @@ export class S3StorageAdapter implements StorageAdapter {
       }
       throw error;
     }
+  }
+
+  async list(prefix: string, cursor?: string, limit = 1000): Promise<ObjectListPage> {
+    validateKey(prefix);
+    if (!Number.isSafeInteger(limit) || limit < 1 || limit > 1000) {
+      throw new StorageLimitError();
+    }
+    const response = await this.s3.send(
+      new ListObjectsV2Command({
+        Bucket: this.bucket,
+        Prefix: prefix,
+        ContinuationToken: cursor,
+        MaxKeys: limit,
+      }),
+    );
+    if (response.IsTruncated && !response.NextContinuationToken) {
+      throw new Error("Object listing did not return a continuation token");
+    }
+    return {
+      objects: (response.Contents ?? [])
+        .filter((item) => item.Key?.startsWith(prefix))
+        .map((item) => ({
+          key: item.Key!,
+          sizeBytes: item.Size ?? 0,
+          lastModified: item.LastModified ?? null,
+        })),
+      cursor: response.IsTruncated ? response.NextContinuationToken! : null,
+    };
   }
 
   async delete(key: string): Promise<void> {

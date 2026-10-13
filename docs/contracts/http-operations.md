@@ -45,8 +45,9 @@ Generated from the planned OpenAPI baseline. All operations are NOT_STARTED. The
 | POST | `/projects/{projectId}/uploads/presign` | UploadRequest | UploadView | 200 | edit | Current policy |
 | POST | `/projects/{projectId}/uploads/complete` | UploadComplete | NodeView | 201 | edit | idem |
 | GET | `/projects/{projectId}/files/{fileId}/download` | - | DownloadView | 200 | export | Current policy |
-| POST | `/projects/imports` | ImportRequest | JobView | 202 | session | idem |
-| GET | `/projects/imports/{jobId}` | - | JobView | 200 | session | Current policy |
+| POST | `/projects/imports/presign` | ImportPresignRequest | UploadView | 200 | session | Current policy |
+| POST | `/projects/imports` | ImportRequest | ImportJobView | 202 | session | idem |
+| GET | `/projects/imports/{jobId}` | - | ImportJobView | 200 | session | Current policy |
 | GET | `/projects/{projectId}/export` | - | DownloadView | 200 | export | Current policy |
 | GET | `/projects/{projectId}/settings` | - | ProjectSettings | 200 | read | Current policy |
 | PATCH | `/projects/{projectId}/settings` | SettingsPatch | ProjectSettings | 200 | edit | version |
