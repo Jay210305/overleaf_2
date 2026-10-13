@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "86e0c5cd138dbb8ee7c2d0e02ba3121406dbfda1",
+  "git_baseline": "5088bd8a60ba42d2ea97e3d570e4295069211e85",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -854,6 +854,11 @@
       "path": "docs/superpowers/plans/2026-10-12-s05-upload-gc.md",
       "role": "factory",
       "sha256": "00cc8aad71ed6463fee365647ba74d912010169765ac058f2ab455e8f17b85df"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-12-s05-archive-import-design.md",
+      "role": "factory",
+      "sha256": "03268edc880d5f49860560b591ca244beafaa7860763ab040e39656ab48cf918"
     },
     {
       "path": "docs/superpowers/specs/2026-10-12-s05-multi-file-upload-design.md",
