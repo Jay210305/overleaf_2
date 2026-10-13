@@ -40,4 +40,4 @@ S05-T09 cleanup is conservative around revisions because the current schema can 
 
 ## Next Task
 
-Complete independent review of S05-T01, S05-T09 and S05-T02, resolve GAP-17, then select S05-T03 for archive validation and import staging.
+Complete independent review of S05-T01, S05-T09 and S05-T02, resolve GAP-17, and settle the ZIP intake boundary in GAP-20 before S05-T03 archive validation and import staging.

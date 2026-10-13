@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "db72ead7df8341fd1d5cd3f96bb9da38c47e2055",
+  "git_baseline": "86e0c5cd138dbb8ee7c2d0e02ba3121406dbfda1",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -738,7 +738,7 @@
     {
       "path": "docs/progress/open-gaps.md",
       "role": "product",
-      "sha256": "6b656003cdefdcd470f845ad0ac2933923da3fb4e8cda0e254c244e082107690"
+      "sha256": "1b6134bcf8d20e4996fd34c9e61c9f0e6afe0ae811101f91f429c695e9fae4cb"
     },
     {
       "path": "docs/progress/progress-log.md",
@@ -778,7 +778,7 @@
     {
       "path": "docs/progress/sprint-05.md",
       "role": "product",
-      "sha256": "84c7f6ba4024d9c0faa52e701c834c8c149f77e250ebd0eb4f41ef48c8864811"
+      "sha256": "572af91fd2551568fb7114279b628b3337c3fb58c0593fa844000de193146918"
     },
     {
       "path": "docs/progress/sprint-06.md",
