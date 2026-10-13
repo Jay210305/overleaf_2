@@ -178,22 +178,49 @@ describe("S05-T03 archive validation and import jobs", () => {
   });
 
   it("claims, completes and releases validation leases", async () => {
-    const { job } = await stageValid();
-    let claimed: ImportJobView | null = null;
-    for (let attempt = 0; attempt < 10 && claimed?.id !== job.id; attempt++) {
-      claimed = await jobs.claimNext({ leaseMs: 60_000 });
-      if (claimed && claimed.id !== job.id) await jobs.release(claimed.id);
+    // Sibling test workers share the global queue and may settle a staged
+    // job first. Stage (again if stolen) until this process holds a 60 s
+    // lease; the lease then excludes every other worker deterministically.
+    async function stageAndHold(): Promise<ImportJobView> {
+      for (let round = 0; round < 4; round++) {
+        const { job } = await stageValid();
+        for (let attempt = 0; attempt < 50; attempt++) {
+          const current = await jobs.get(job.id);
+          if (!current || current.status === "validated" || current.status === "failed") break;
+          if (current.status !== "queued") {
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            continue;
+          }
+          const claimed = await jobs.claimNext({ leaseMs: 60_000 });
+          if (!claimed) continue;
+          if (claimed.id !== job.id) {
+            await jobs.release(claimed.id);
+            continue;
+          }
+          return claimed;
+        }
+      }
+      throw new Error("could not hold a validation lease");
     }
-    expect(claimed?.id).toBe(job.id);
-    await jobs.release(job.id);
+    const claimed = await stageAndHold();
+    await jobs.release(claimed.id);
     let reclaimed: ImportJobView | null = null;
-    for (let attempt = 0; attempt < 10 && reclaimed?.id !== job.id; attempt++) {
-      reclaimed = await jobs.claimNext({ leaseMs: 60_000 });
-      if (reclaimed && reclaimed.id !== job.id) await jobs.release(reclaimed.id);
+    for (let attempt = 0; attempt < 100 && reclaimed?.id !== claimed.id; attempt++) {
+      const current = await jobs.get(claimed.id);
+      if (!current || current.status === "validated" || current.status === "failed") {
+        throw new Error("released job was settled by a sibling worker");
+      }
+      const next = await jobs.claimNext({ leaseMs: 60_000 });
+      if (!next) continue;
+      if (next.id !== claimed.id) {
+        await jobs.release(next.id);
+      } else {
+        reclaimed = next;
+      }
     }
-    expect(reclaimed?.id).toBe(job.id);
-    await jobs.fail(job.id, "INVALID_ARCHIVE");
-    const failed = await jobs.get(job.id);
+    expect(reclaimed?.id).toBe(claimed.id);
+    await jobs.fail(claimed.id, "INVALID_ARCHIVE");
+    const failed = await jobs.get(claimed.id);
     expect(failed?.status).toBe("failed");
     expect(failed?.errorCode).toBe("INVALID_ARCHIVE");
   });

@@ -314,6 +314,34 @@ export const importJobs = pgTable(
   ],
 );
 
+export const importUploadIntents = pgTable(
+  "import_upload_intents",
+  {
+    id: uuid("id").primaryKey(),
+    actorId: uuid("actor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expectedSize: bigint("expected_size", { mode: "number" }).notNull(),
+    expectedSha256: text("expected_sha256").notNull(),
+    stagingKey: text("staging_key").notNull().unique(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+    completedJobId: uuid("completed_job_id").references(() => importJobs.id, {
+      onDelete: "set null",
+    }),
+    completedKeyHash: text("completed_key_hash"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("import_upload_intents_actor_expiry_idx")
+      .on(table.actorId, table.expiresAt)
+      .where(sql`${table.completedJobId} IS NULL`),
+    check(
+      "import_upload_intents_expected_size_check",
+      sql`${table.expectedSize} > 0 AND ${table.expectedSize} <= 26214400`,
+    ),
+  ],
+);
+
 export const projectTags = pgTable(
   "project_tags",
   {

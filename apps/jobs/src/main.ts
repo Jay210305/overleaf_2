@@ -8,8 +8,13 @@ const intervalMs = 60 * 60_000;
 async function main(): Promise<void> {
   const once = process.argv.includes("--once");
   const projectOption = process.argv.find((value) => value.startsWith("--project-id="));
+  const actorOption = process.argv.find((value) => value.startsWith("--actor-id="));
   const allowed = new Set(["--once"]);
-  if (process.argv.slice(2).some((value) => !allowed.has(value) && value !== projectOption)) {
+  if (
+    process.argv
+      .slice(2)
+      .some((value) => !allowed.has(value) && value !== projectOption && value !== actorOption)
+  ) {
     throw new Error("Unknown jobs option");
   }
   const config = parseServerConfig(process.env);
@@ -23,13 +28,19 @@ async function main(): Promise<void> {
   });
   const projectId = projectOption?.slice("--project-id=".length);
   if (projectOption && !projectId) throw new Error("Project ID must not be empty");
+  const actorId = actorOption?.slice("--actor-id=".length);
+  if (actorOption && !actorId) throw new Error("Actor ID must not be empty");
   let active = false;
   let stopping = false;
   const pass = async (): Promise<void> => {
     if (active || stopping) return;
     active = true;
     try {
-      const result = await runStorageGc(db, storage, projectId ? { projectId } : {});
+      const result = await runStorageGc(
+        db,
+        storage,
+        projectId ? { projectId } : actorId ? { actorId } : {},
+      );
       console.info("Storage cleanup pass", result);
       if (result.failed > 0) process.exitCode = 1;
     } catch {

@@ -3916,42 +3916,29 @@
         }
       }
     },
-    "/api/v1/projects/imports": {
+    "/api/v1/projects/imports/presign": {
       "post": {
-        "operationId": "post__projects_imports",
-        "summary": "POST /projects/imports",
-        "description": "Permission: session. Current session and authoritative resource permission required. Unknown input fields are rejected. All errors use Problem.",
+        "operationId": "post__projects_imports_presign",
+        "summary": "POST /projects/imports/presign",
+        "description": "Permission: session. Current session required. Records an actor-scoped ZIP upload intent and returns a 300-second private PUT URL. Unknown input fields are rejected. All errors use Problem.",
         "security": [
           {
             "sessionCookie": [],
             "csrfToken": []
           }
         ],
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 16,
-              "maxLength": 128
-            }
-          }
-        ],
         "responses": {
-          "202": {
-            "description": "Successful 202",
+          "200": {
+            "description": "Successful 200",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/JobView"
+                  "$ref": "#/components/schemas/UploadView"
                 },
                 "example": {
-                  "id": "11111111-1111-4111-8111-111111111111",
-                  "status": "queued",
-                  "projectId": "11111111-1111-4111-8111-111111111111",
-                  "errorCode": "x"
+                  "uploadId": "11111111-1111-4111-8111-111111111111",
+                  "url": "https://example.test/resource",
+                  "expiresAt": "2026-10-09T17:00:00Z"
                 }
               }
             }
@@ -3991,7 +3978,116 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportPresignRequest"
+              },
+              "examples": {
+                "valid": {
+                  "value": {
+                    "sizeBytes": 1024,
+                    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                  }
+                },
+                "invalid": {
+                  "value": {
+                    "unexpectedField": true
+                  },
+                  "description": "Reject unknown field and/or missing required fields with 400 VALIDATION_ERROR."
+                }
+              }
+            }
+          }
+        },
+        "x-invalid-example": {
+          "case": "Invalid requestBody example",
+          "expectedStatus": 400
+        }
+      }
+    },
+    "/api/v1/projects/imports": {
+      "post": {
+        "operationId": "post__projects_imports",
+        "summary": "POST /projects/imports",
+        "description": "Permission: session. Current session and authoritative resource permission required. Unknown input fields are rejected. All errors use Problem.",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful 202",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportJobView"
+                },
+                "example": {
+                  "id": "11111111-1111-4111-8111-111111111111",
+                  "status": "queued",
+                  "title": "My paper",
+                  "projectId": null,
+                  "errorCode": null,
+                  "createdAt": "2026-10-09T17:00:00Z",
+                  "updatedAt": "2026-10-09T17:00:00Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "412": {
+            "$ref": "#/components/responses/Error412"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error422"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "502": {
+            "$ref": "#/components/responses/Error502"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        },
+        "x-permission": "session",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -4050,13 +4146,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/JobView"
+                  "$ref": "#/components/schemas/ImportJobView"
                 },
                 "example": {
                   "id": "11111111-1111-4111-8111-111111111111",
                   "status": "queued",
-                  "projectId": "11111111-1111-4111-8111-111111111111",
-                  "errorCode": "x"
+                  "title": "My paper",
+                  "projectId": null,
+                  "errorCode": null,
+                  "createdAt": "2026-10-09T17:00:00Z",
+                  "updatedAt": "2026-10-09T17:00:00Z"
                 }
               }
             }
@@ -4096,7 +4195,7 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -12831,6 +12930,90 @@
         ],
         "additionalProperties": false
       },
+      "ImportJobView": {
+        "type": "object",
+        "description": "Actor-scoped ZIP import job. validated means safe for project application, never that a project exists.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "staging",
+              "queued",
+              "validating",
+              "validated",
+              "failed",
+              "succeeded"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "projectId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorCode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "title",
+          "projectId",
+          "errorCode",
+          "createdAt",
+          "updatedAt"
+        ],
+        "additionalProperties": false
+      },
+      "ImportPresignRequest": {
+        "type": "object",
+        "properties": {
+          "sizeBytes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "sizeBytes",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
       "ImportRequest": {
         "type": "object",
         "properties": {
@@ -12841,7 +13024,7 @@
           "title": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 10000
+            "maxLength": 200
           }
         },
         "required": [

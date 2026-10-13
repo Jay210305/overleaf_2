@@ -21,6 +21,7 @@ import { registerTreeRoutes } from "./modules/files/tree.js";
 import { registerTextRoutes } from "./modules/text/routes.js";
 import { registerCheckpointRoutes } from "./modules/history/checkpoint.js";
 import { registerUploadRoutes } from "./modules/uploads/routes.js";
+import { registerImportRoutes } from "./modules/imports/routes.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -173,6 +174,7 @@ export function createServer(options: ServerOptions) {
       db: options.db,
     });
     registerUploadRoutes(app, { db: options.db, storage: options.storage });
+    registerImportRoutes(app, { db: options.db, storage: options.storage });
   }
   return app;
 }

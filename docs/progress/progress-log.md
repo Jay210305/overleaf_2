@@ -139,5 +139,12 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Contributor:** OpenCode agent, continuing the user's authorized S05 work on `codex/sprint-05-assets-import-export` after S05-T01/T09/T02 acceptance.
 - **Task:** S05-T03 is IN_PROGRESS. Added migration `0006-import-jobs.sql`, typed `ImportJobRepository` (`reserve`/`enqueue`/`claimNext`/`complete`/`fail`/`release`/`listUnswept`/`markArchiveSwept`), server-only shared content policy (S05-T01 routes refactored onto it), `yauzl` 3.4.0 bounded validator, worker pass with `imports:validate` wiring, hand-built ZIP fixtures and 17 scoped tests. Actual effort was not measured.
 - **Observed checks:** Focused S05-T03 3 files/17 tests PASS; S05-T01/T09/T02/S01-T08 regression 10 files/37 tests PASS; `pnpm typecheck`, `pnpm lint`, constituent package/app builds, secret/artifact checks and a live zero-work runner pass all PASS; `plan_lint.py` PASS. Root `pnpm build` fails only because its script calls bare `pnpm`, which is not on PATH in this shell (pre-existing environment quirk). Report in [s05-t03](../test-reports/s05-t03.md).
-- **Review:** The hostile battery exposed and fixed a real sweep-starvation bug via the new `archive_swept` flag. Independent co-maintainer review of S05-T03 remains open; S05-T12/S05-T10 are next.
+- **Review:** The hostile battery exposed and fixed a real sweep-starvation bug via the new `archive_swept` flag. S05-T03 was accepted by the user on 2026-10-13; S05-T12 started.
+
+### 2026-10-13 — Sprint S05-T12 authenticated ZIP import intake
+
+- **Contributor:** OpenCode agent, continuing the user's authorized S05 work on `codex/sprint-05-assets-import-export`.
+- **Task:** S05-T12 is IN_PROGRESS. Added migration `0007-import-upload-intents.sql`, session-only guard support, `apps/api/src/modules/imports/routes.ts` (presign/complete/status), actor-scoped GC import phase with `--actor-id` wiring, import DTOs and OpenAPI/operations sync, and 13 scoped tests. Actual effort was not measured.
+- **Observed checks:** Focused S05-T12 3 files/13 tests PASS; S05-T03 suites 17/17 PASS alongside; `pnpm typecheck`, `pnpm lint`, constituent builds, secret check and `plan_lint.py` (123 operations) PASS. Repository-wide `vitest run`: 144 files/412 tests with 408 PASS; the 4 failures are `s00-t03`/PL-01 tests spawning bare `pnpm`, which is not on PATH (GAP-21, pre-existing quirk). Report in [s05-t12](../test-reports/s05-t12.md).
+- **Next:** Independent co-maintainer review of S05-T12, then S05-T10 project application.
 

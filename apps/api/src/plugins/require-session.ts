@@ -23,6 +23,7 @@ export interface ProjectAuthorization extends SessionIdentity {
 declare module "fastify" {
   interface FastifyRequest {
     projectAuthorization?: ProjectAuthorization;
+    sessionIdentity?: SessionIdentity;
   }
 }
 
@@ -111,11 +112,24 @@ export function installProjectGuard(
   options: { db?: DatabaseClient | undefined; origin?: string | undefined; secureCookies: boolean },
 ): void {
   app.decorateRequest("projectAuthorization", undefined);
+  app.decorateRequest("sessionIdentity", undefined);
   app.addHook("preHandler", async (request, reply) => {
     if (!request.url.startsWith("/api/v1/projects/")) return;
     try {
       if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
-      const action = (request.routeOptions.config as { projectAction?: unknown }).projectAction;
+      const config = request.routeOptions.config as
+        { projectAction?: unknown; sessionOnly?: unknown } | undefined;
+      if (config?.sessionOnly === true) {
+        request.sessionIdentity = await requireSession(
+          options.db,
+          request,
+          options.origin,
+          options.secureCookies,
+          request.method !== "GET",
+        );
+        return;
+      }
+      const action = config?.projectAction;
       request.projectAuthorization = await requireProjectAction(
         options.db,
         request,
