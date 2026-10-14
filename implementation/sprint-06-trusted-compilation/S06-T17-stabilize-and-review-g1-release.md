@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T16]
 requirements: [PL-05, NFR-08, NFR-11]
 source_task: S06-T10
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T17 — Stabilize and review G1 release
 

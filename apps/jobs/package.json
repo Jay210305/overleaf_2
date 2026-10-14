@@ -5,7 +5,9 @@
   "type": "module",
   "dependencies": {
     "@latex-collab/config": "workspace:*",
+    "@latex-collab/contracts": "workspace:*",
     "@latex-collab/db": "workspace:*",
+    "@latex-collab/latex": "workspace:*",
     "@latex-collab/storage": "workspace:*",
     "yauzl": "3.4.0"
   },

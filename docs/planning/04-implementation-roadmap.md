@@ -324,7 +324,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S06: Trusted compilation and G1 release (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 124 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Julio (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 124 h (ASSUMPTION A-03) | **Status:** ✅ DONE | **Owner:** Julio (proposed A-02)
 **Goal:** Trusted compilation and G1 release for G1, using independently verified slices.
 
 ### Deliverables
@@ -356,31 +356,31 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S06-T01](../../implementation/sprint-06-trusted-compilation/S06-T01-create-durable-compile-queue-jobs.md) | Create durable compile queue jobs | 8 | Julio | ⬜ todo | Same Idempotency-Key creates one DB job; queue restarts recover status; quotas permit at most one active user/project compile |
-| [S06-T02](../../implementation/sprint-06-trusted-compilation/S06-T02-freeze-compilation-source-revision.md) | Freeze compilation source revision | 8 | Julio | ⬜ todo | Job binds immutable revision and manifest hash before enqueue; concurrent source changes do not change inputs |
-| [S06-T12](../../implementation/sprint-06-trusted-compilation/S06-T12-research-trusted-tex-runtime-and-image-limits.md) | Research trusted TeX runtime and image limits | 4 | Julio | ⬜ todo | Within 4h compile owned fixture, measure image/runtime needs and check fixed flags/resource controls; no public-isolation claim |
-| [S06-T03](../../implementation/sprint-06-trusted-compilation/S06-T03-build-pinned-tex-live-image.md) | Build pinned TeX Live image | 8 | Julio | ⬜ todo | Pinned image compiles basic trusted article with latexmk and declares package/image manifest; contains no API/DB credentials |
-| [S06-T04](../../implementation/sprint-06-trusted-compilation/S06-T04-define-compiler-executor-boundary.md) | Define compiler executor boundary | 6 | Julio | ⬜ todo | Typed CompilerExecutor separates trusted/public modes; unavailable public implementation fails closed as NOT_IMPLEMENTED |
-| [S06-T13](../../implementation/sprint-06-trusted-compilation/S06-T13-implement-trusted-worker-executor-adapter.md) | Implement trusted worker executor adapter | 8 | Julio | ⬜ todo | CompilerExecutor sends frozen manifest to separate trusted runtime and maps typed results; never invokes TeX in API/collab |
-| [S06-T05](../../implementation/sprint-06-trusted-compilation/S06-T05-enforce-trusted-compiler-execution-limits.md) | Enforce trusted compiler execution limits | 8 | Julio | ⬜ todo | Fixed argv/cwd and no-shell-escape; loop exceeds 60s and is killed; resources/input/output are finite and cleanup always runs |
-| [S06-T14](../../implementation/sprint-06-trusted-compilation/S06-T14-implement-timeout-cancellation-and-job-recovery.md) | Implement timeout cancellation and job recovery | 8 | Julio | ⬜ todo | Finite timeout and cancel_requested are reconciled; queue crash retry preserves stable job ID and does not label running work cancelled early |
-| [S06-T06](../../implementation/sprint-06-trusted-compilation/S06-T06-persist-verified-artifacts-and-job-result.md) | Persist verified artifacts and job result | 8 | Julio | ⬜ todo | Validated PDF/log/manifest stored privately; transactional job/artifact association survives retry without duplicate success |
-| [S06-T07](../../implementation/sprint-06-trusted-compilation/S06-T07-parse-diagnostics-and-compile-failures.md) | Parse diagnostics and compile failures | 8 | Julio | ⬜ todo | File/line errors/warnings/missing refs/packages and timed_out versus failed statuses are typed and redact host paths |
-| [S06-T08](../../implementation/sprint-06-trusted-compilation/S06-T08-create-real-pdf-viewer.md) | Create real PDF viewer | 8 | Julio | ⬜ todo | Parsed PDF has zoom/page/fit/download controls, expected text and revision label; previous success remains visibly old after failure |
-| [S06-T09](../../implementation/sprint-06-trusted-compilation/S06-T09-connect-compile-controls-and-status-fallback.md) | Connect compile controls and status fallback | 6 | Julio | ⬜ todo | Compile submits real job, polls reliable status and permits editing; lost notification recovers through GET |
-| [S06-T10](../../implementation/sprint-06-trusted-compilation/S06-T10-verify-genuine-compiler-fixtures.md) | Verify genuine compiler fixtures | 8 | Julio | ⬜ todo | Article/image/basic references produce parsed expected PDFs; syntax error yields diagnostic and retains old output |
-| [S06-T11](../../implementation/sprint-06-trusted-compilation/S06-T11-document-trusted-execution-and-closed-public-mode.md) | Document trusted execution and closed public mode | 4 | Julio | ⬜ todo | Allowlist enforced; PUBLIC_SIGNUP_ENABLED and UNTRUSTED_COMPILE_ENABLED false; runbook states dedicated worker is not verified public isolation |
-| [S06-T15](../../implementation/sprint-06-trusted-compilation/S06-T15-deploy-trusted-staging-slice-and-smoke.md) | Deploy trusted staging slice and smoke | 8 | Julio | ⬜ todo | Selected hosting or clean local deployment reproduces login/edit/compile/download with TLS where hosted; missing accounts remain explicit blocker |
-| [S06-T16](../../implementation/sprint-06-trusted-compilation/S06-T16-verify-trusted-release-backup-and-rollback.md) | Verify trusted-release backup and rollback | 8 | Julio | ⬜ todo | Restore PG plus object manifests from a trusted sample and demonstrate rollback; no referenced blob is missing |
-| [S06-T17](../../implementation/sprint-06-trusted-compilation/S06-T17-stabilize-and-review-g1-release.md) | Stabilize and review G1 release | 8 | Julio | ⬜ todo | All G1 Must assertions and quality gates pass with actual evidence; open later features remain NOT_STARTED; release checklist records both maintainers |
+| [S06-T01](../../implementation/sprint-06-trusted-compilation/S06-T01-create-durable-compile-queue-jobs.md) | Create durable compile queue jobs | 8 | Julio | ✅ done | Same Idempotency-Key creates one DB job; queue restarts recover status; quotas permit at most one active user/project compile |
+| [S06-T02](../../implementation/sprint-06-trusted-compilation/S06-T02-freeze-compilation-source-revision.md) | Freeze compilation source revision | 8 | Julio | ✅ done | Job binds immutable revision and manifest hash before enqueue; concurrent source changes do not change inputs |
+| [S06-T12](../../implementation/sprint-06-trusted-compilation/S06-T12-research-trusted-tex-runtime-and-image-limits.md) | Research trusted TeX runtime and image limits | 4 | Julio | ✅ done | Within 4h compile owned fixture, measure image/runtime needs and check fixed flags/resource controls; no public-isolation claim |
+| [S06-T03](../../implementation/sprint-06-trusted-compilation/S06-T03-build-pinned-tex-live-image.md) | Build pinned TeX Live image | 8 | Julio | ✅ done | Pinned image compiles basic trusted article with latexmk and declares package/image manifest; contains no API/DB credentials |
+| [S06-T04](../../implementation/sprint-06-trusted-compilation/S06-T04-define-compiler-executor-boundary.md) | Define compiler executor boundary | 6 | Julio | ✅ done | Typed CompilerExecutor separates trusted/public modes; unavailable public implementation fails closed as NOT_IMPLEMENTED |
+| [S06-T13](../../implementation/sprint-06-trusted-compilation/S06-T13-implement-trusted-worker-executor-adapter.md) | Implement trusted worker executor adapter | 8 | Julio | ✅ done | CompilerExecutor sends frozen manifest to separate trusted runtime and maps typed results; never invokes TeX in API/collab |
+| [S06-T05](../../implementation/sprint-06-trusted-compilation/S06-T05-enforce-trusted-compiler-execution-limits.md) | Enforce trusted compiler execution limits | 8 | Julio | ✅ done | Fixed argv/cwd and no-shell-escape; loop exceeds 60s and is killed; resources/input/output are finite and cleanup always runs |
+| [S06-T14](../../implementation/sprint-06-trusted-compilation/S06-T14-implement-timeout-cancellation-and-job-recovery.md) | Implement timeout cancellation and job recovery | 8 | Julio | ✅ done | Finite timeout and cancel_requested are reconciled; queue crash retry preserves stable job ID and does not label running work cancelled early |
+| [S06-T06](../../implementation/sprint-06-trusted-compilation/S06-T06-persist-verified-artifacts-and-job-result.md) | Persist verified artifacts and job result | 8 | Julio | ✅ done | Validated PDF/log/manifest stored privately; transactional job/artifact association survives retry without duplicate success |
+| [S06-T07](../../implementation/sprint-06-trusted-compilation/S06-T07-parse-diagnostics-and-compile-failures.md) | Parse diagnostics and compile failures | 8 | Julio | ✅ done | File/line errors/warnings/missing refs/packages and timed_out versus failed statuses are typed and redact host paths |
+| [S06-T08](../../implementation/sprint-06-trusted-compilation/S06-T08-create-real-pdf-viewer.md) | Create real PDF viewer | 8 | Julio | ✅ done | Parsed PDF has zoom/page/fit/download controls, expected text and revision label; previous success remains visibly old after failure |
+| [S06-T09](../../implementation/sprint-06-trusted-compilation/S06-T09-connect-compile-controls-and-status-fallback.md) | Connect compile controls and status fallback | 6 | Julio | ✅ done | Compile submits real job, polls reliable status and permits editing; lost notification recovers through GET |
+| [S06-T10](../../implementation/sprint-06-trusted-compilation/S06-T10-verify-genuine-compiler-fixtures.md) | Verify genuine compiler fixtures | 8 | Julio | ✅ done | Article/image/basic references produce parsed expected PDFs; syntax error yields diagnostic and retains old output |
+| [S06-T11](../../implementation/sprint-06-trusted-compilation/S06-T11-document-trusted-execution-and-closed-public-mode.md) | Document trusted execution and closed public mode | 4 | Julio | ✅ done | Allowlist enforced; PUBLIC_SIGNUP_ENABLED and UNTRUSTED_COMPILE_ENABLED false; runbook states dedicated worker is not verified public isolation |
+| [S06-T15](../../implementation/sprint-06-trusted-compilation/S06-T15-deploy-trusted-staging-slice-and-smoke.md) | Deploy trusted staging slice and smoke | 8 | Julio | ✅ done | Selected hosting or clean local deployment reproduces login/edit/compile/download with TLS where hosted; missing accounts remain explicit blocker |
+| [S06-T16](../../implementation/sprint-06-trusted-compilation/S06-T16-verify-trusted-release-backup-and-rollback.md) | Verify trusted-release backup and rollback | 8 | Julio | ✅ done | Restore PG plus object manifests from a trusted sample and demonstrate rollback; no referenced blob is missing |
+| [S06-T17](../../implementation/sprint-06-trusted-compilation/S06-T17-stabilize-and-review-g1-release.md) | Stabilize and review G1 release | 8 | Julio | ✅ done | All G1 Must assertions and quality gates pass with actual evidence; open later features remain NOT_STARTED; release checklist records both maintainers |
 
 ### DoD
 
-- [ ] Every task's acceptance and declared scope has actual evidence.
-- [ ] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
-- [ ] Permissions, persistence, privacy and real outputs are verified.
-- [ ] Contracts, progress, feature matrix and actual effort are updated.
-- [ ] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
+- [x] Every task's acceptance and declared scope has actual evidence.
+- [x] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
+- [x] Permissions, persistence, privacy and real outputs are verified.
+- [x] Contracts, progress, feature matrix and actual effort are updated.
+- [x] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
 
 ### Mitigations
 

@@ -22,6 +22,7 @@ import { registerTextRoutes } from "./modules/text/routes.js";
 import { registerCheckpointRoutes } from "./modules/history/checkpoint.js";
 import { registerUploadRoutes } from "./modules/uploads/routes.js";
 import { registerImportRoutes } from "./modules/imports/routes.js";
+import { registerCompilationRoutes } from "./modules/compilations/routes.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -175,6 +176,12 @@ export function createServer(options: ServerOptions) {
     });
     registerUploadRoutes(app, { db: options.db, storage: options.storage });
     registerImportRoutes(app, { db: options.db, storage: options.storage });
+    registerCompilationRoutes(app, {
+      db: options.db,
+      storage: options.storage,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
   }
   return app;
 }

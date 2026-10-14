@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T10]
 requirements: [PL-07]
 source_task: S06-T11
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T11 — Document trusted execution and closed public mode
 

@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T09]
 requirements: [CMP-01, CMP-02, CMP-03]
 source_task: S06-T10
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T10 — Verify genuine compiler fixtures
 

@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T01]
 requirements: [NFR-06, CMP-01]
 source_task: S06-T02
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T02 — Freeze compilation source revision
 
