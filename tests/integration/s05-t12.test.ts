@@ -244,7 +244,8 @@ describe("S05-T12 authenticated ZIP import intake", () => {
     const read = await status(job.id);
     expect(read.json()).toMatchObject({ id: job.id, status: "validated", projectId: null });
     const projects = await fixture.db.query<{ total: string }>(
-      "SELECT COUNT(*)::text AS total FROM projects WHERE title = 'Handoff project'",
+      "SELECT COUNT(*)::text AS total FROM projects WHERE title = 'Handoff project' AND owner_id = $1",
+      [ownerId],
     );
     expect(projects.rows[0]?.total).toBe("0");
   });

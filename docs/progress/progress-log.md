@@ -150,12 +150,24 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Observed checks:** Focused S05-T12 3 files/13 tests PASS; S05-T03 suites 17/17 PASS alongside; `pnpm typecheck`, `pnpm lint`, constituent builds, secret check and `plan_lint.py` (123 operations) PASS. Repository-wide `vitest run`: 144 files/412 tests with 408 PASS; the 4 failures are `s00-t03`/PL-01 tests spawning bare `pnpm`, which is not on PATH (GAP-21, pre-existing quirk). Report in [s05-t12](../test-reports/s05-t12.md).
 - **Next:** Independent co-maintainer review of S05-T12, then S05-T10 project application.
 
+### 2026-10-13 — S05-T12 acceptance and S05-T10 start
+
+- **Acceptance:** The user accepted S05-T12 after reviewing its implementation and refreshed 412/412 repository test evidence. Its task, index, roadmap and sprint progress now read `done`; GAP-22 is closed.
+- **Next:** The user approved the [S05-T10 implementation plan](../superpowers/plans/2026-10-13-s05-import-project-apply.md) for native execution. S05-T10 is `in_progress`; apply validated ZIPs as a consistent project with test-first evidence.
+
 ### 2026-10-13 — Sprint S05-T12 shared-test verification follow-up
 
 - **Contributor:** Codex, continuing the user's authorized S05 work on `codex/sprint-05-assets-import-export`.
 - **Task:** Kept S05-T12 in progress. Parallel S05-T03/T12 suites now serialize their import migrations under a PostgreSQL advisory lock; the S05-T03 lease assertion uses a virtual future lease to avoid competition with other test workers. Product behavior was unchanged; actual effort was not measured.
 - **Observed checks:** Focused S05 archive suites 6 files/30 tests PASS and repository-wide direct Node Vitest 144 files/412 tests PASS against local PostgreSQL and MinIO. Typecheck, ESLint and planning lint PASS. The initial full run was 411/412 with only the shared-queue lease assertion failing; the follow-up run passed. See [S05-T12 report](../test-reports/s05-t12.md).
 - **Next:** Independent co-maintainer review of S05-T12, then S05-T10 project application.
+
+### 2026-10-13 — Sprint S05-T10 transactional ZIP project application
+
+- **Contributor:** Codex on `codex/sprint-05-assets-import-export`, executing the user-approved S05-T10 plan after S05-T12 acceptance. Actual effort was not measured.
+- **Task:** Rechecked actual archive bytes and complete manifest, reserved a stable project ID, verified private binary blobs, and committed the owner project/tree/Yjs updates/successful job state atomically. Added a bounded private apply pass and 14-day successful archive retention; failed pre-commit jobs clean their unreferenced prepared blobs and source archive in bounded passes.
+- **Observed checks:** S05-T10 focused files 23/23 PASS; combined S05-T03/T12/T10 suite 53/53 PASS; repository-wide `pnpm test --coverage.enabled false --silent --maxWorkers 4` 147 files/435 tests PASS against local PostgreSQL and MinIO after a synchronized pnpm install and Docker service restart. `pnpm typecheck`, `pnpm lint`, `pnpm build`, secret and artifact checks PASS. See [S05-T10 report](../test-reports/s05-t10.md).
+- **Review:** S05-T10 remains `in_progress` pending independent co-maintainer review. GAP-15 migration deployment and GAP-17 revision-reference safety are unaffected.
 
 ### 2026-10-13 — Sprint S06 Trusted Compilation and Gate G1 Release Audit
 
@@ -223,6 +235,5 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Blockers / Gaps:** None.
 - **Technical Debt:** None. Untrusted compilation and anonymous signup remain disabled per G1/G5 boundaries.
 - **Next Ready Task:** S08-T01 (Sprint S08: Rich LaTeX document history and diffs).
-
 
 

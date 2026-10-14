@@ -295,6 +295,7 @@ export const importJobs = pgTable(
     manifestVersion: integer("manifest_version"),
     errorCode: text("error_code"),
     archiveSwept: boolean("archive_swept").notNull().default(false),
+    pendingProjectId: uuid("pending_project_id"),
     projectId: uuid("project_id").references(() => projects.id, { onDelete: "set null" }),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),

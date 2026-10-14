@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T03]
 requirements: [PRO-02, PRO-10]
 source_task: S05-T03
-status: in_progress
-readiness: ready
+status: done
+readiness: completed
 ---
 # S05-T12 — Implement authenticated ZIP import intake
 
@@ -60,11 +60,11 @@ The concrete migration number is reserved by this task package; inspect contribu
 
 ## Acceptance Criteria
 
-- [ ] Current-session signed ZIP PUT verifies actual bytes/hash and enqueues one actor-scoped import job; foreign/forged/reused input is denied
-- [ ] Current-session ZIP input stages through a private signed PUT, verifies actual bytes/hash, and enqueues exactly one durable job per actor/idempotency key/input.
-- [ ] Foreign uploads/jobs, forged Origin/CSRF, disabled sessions and changed-input key reuse are denied without exposing object keys or creating a project.
-- [ ] Expired signed-upload objects are cleaned after URL expiry; server-only job archives remain until S05-T03/S05-T10 terminal handling.
-- [ ] PRO-02/PRO-10 scoped regression tests pass. Complete new-project import remains owned by S05-T10 and later journey checks.
+- [x] Current-session signed ZIP PUT verifies actual bytes/hash and enqueues one actor-scoped import job; foreign/forged/reused input is denied
+- [x] Current-session ZIP input stages through a private signed PUT, verifies actual bytes/hash, and enqueues exactly one durable job per actor/idempotency key/input.
+- [x] Foreign uploads/jobs, forged Origin/CSRF, disabled sessions and changed-input key reuse are denied without exposing object keys or creating a project.
+- [x] Expired signed-upload objects are cleaned after URL expiry; server-only job archives remain until S05-T03/S05-T10 terminal handling.
+- [x] PRO-02/PRO-10 scoped regression tests pass. Complete new-project import remains owned by S05-T10 and later journey checks.
 
 ## Verification
 
@@ -88,7 +88,7 @@ Re-estimate if actual work exceeds the likely estimate by 50% or the same blocke
 
 ## Definition of Done
 
-- [ ] Scoped acceptance has real service-backed PASS evidence and applicable gates pass.
-- [ ] S05-T03 dependency and import-specific contracts are accepted.
-- [ ] Report, frontmatter, index, roadmap, stage progress and feature evidence are synchronized.
-- [ ] Independent co-maintainer review is complete before changing status to `done`.
+- [x] Scoped acceptance has real service-backed PASS evidence and applicable gates pass.
+- [x] S05-T03 dependency and import-specific contracts are accepted.
+- [x] Report, frontmatter, index, roadmap, stage progress and feature evidence are synchronized.
+- [x] Independent co-maintainer review is complete before changing status to `done`.

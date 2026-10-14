@@ -220,6 +220,9 @@ importers:
       yauzl:
         specifier: 3.4.0
         version: 3.4.0
+      yjs:
+        specifier: 13.6.27
+        version: 13.6.27
     devDependencies:
       '@types/yauzl':
         specifier: 3.4.0

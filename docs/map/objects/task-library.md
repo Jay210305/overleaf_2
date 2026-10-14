@@ -6,7 +6,7 @@ status: verified
 entity: implementation/README.md
 sources: ["implementation/README.md","docs/planning/04-implementation-roadmap.md","docs/planning/traceability.md","implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md","implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md"]
 runtime: not-applicable
-verified_on: 2026-10-10
+verified_on: 2026-10-13
 snapshot: _meta/file-inventory.json
 ---
 
@@ -23,6 +23,8 @@ A selected task should carry enough local context to execute without reading the
 ## Shape
 
 S00–S15 directories contain Sxx-Tyy task files. ID, status, effort, dependencies and requirement IDs are frontmatter. CONTEXT.md files route each stage and are not tasks. All 11 S02 task slices have independent acceptance; the G1 release gate remains separate.
+
+S05-T10 is the in-progress bounded ZIP project-application slice after accepted S05-T03 validation and S05-T12 intake. Its approved plan and [scoped report](../../test-reports/s05-t10.md) separate implementation evidence from independent acceptance.
 
 ## Connected to
 

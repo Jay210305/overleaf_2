@@ -41,6 +41,7 @@ export type ImportJobView = {
   manifestVersion: number | null;
   errorCode: ImportJobErrorCode | null;
   archiveSwept: boolean;
+  pendingProjectId: string | null;
   projectId: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -68,6 +69,7 @@ type JobRow = {
   manifest_version: number | null;
   error_code: ImportJobErrorCode | null;
   archive_swept: boolean;
+  pending_project_id: string | null;
   project_id: string | null;
   created_at: Date;
   updated_at: Date;
@@ -98,6 +100,7 @@ function toView(row: JobRow): ImportJobView {
     manifestVersion: row.manifest_version,
     errorCode: row.error_code,
     archiveSwept: row.archive_swept,
+    pendingProjectId: row.pending_project_id ?? null,
     projectId: row.project_id,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -156,6 +159,26 @@ function sameFingerprint(row: JobRow, input: ReserveImportJobInput): boolean {
  */
 export class ImportJobRepository {
   constructor(private readonly client: DatabaseClient) {}
+
+  /** Reserve a stable project ID before S05-T10 writes content-addressed blobs. */
+  async reserveProjectId(jobId: string): Promise<ImportJobView> {
+    assertUUID(jobId, "jobId");
+    try {
+      const updated = await this.client.query<JobRow>(
+        `UPDATE import_jobs
+            SET pending_project_id = COALESCE(pending_project_id, $2), updated_at = NOW()
+          WHERE id = $1 AND status = 'validated'
+          RETURNING *`,
+        [jobId, randomUUID()],
+      );
+      if (updated.rows[0]) return toView(updated.rows[0]);
+    } catch (error) {
+      throw mapDatabaseError(error);
+    }
+    const current = await this.get(jobId);
+    if (current?.status === "succeeded" && current.projectId) return current;
+    throw new PersistenceError("CONSTRAINT_VIOLATION", "Import job is not validated", false);
+  }
 
   /**
    * Reserve the deterministic server-only archive key before any byte copy.
@@ -347,28 +370,90 @@ export class ImportJobRepository {
     return toView(found.rows[0]);
   }
 
+  /** A validated archive that no longer matches its durable manifest cannot be applied. */
+  async failValidated(jobId: string, errorCode: ImportJobErrorCode): Promise<ImportJobView> {
+    assertUUID(jobId, "jobId");
+    if (!["UNSAFE_PATH", "LIMIT_EXCEEDED", "INVALID_ARCHIVE"].includes(errorCode)) {
+      throw new PersistenceError("CONSTRAINT_VIOLATION", "Invalid import error code", false);
+    }
+    const updated = await this.client.query<JobRow>(
+      `UPDATE import_jobs SET status = 'failed', error_code = $2,
+          manifest = NULL, manifest_version = NULL, lease_expires_at = NULL, updated_at = NOW()
+        WHERE id = $1 AND status = 'validated' RETURNING *`,
+      [jobId, errorCode],
+    );
+    if (!updated.rows[0]) {
+      throw new PersistenceError("CONSTRAINT_VIOLATION", "Import job is not validated", false);
+    }
+    return toView(updated.rows[0]);
+  }
+
+  async listValidated(limit = 5): Promise<ImportJobView[]> {
+    if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100) {
+      throw new PersistenceError("CONSTRAINT_VIOLATION", "Invalid apply limit", false);
+    }
+    const found = await this.client.query<JobRow>(
+      `SELECT * FROM import_jobs WHERE status = 'validated'
+       AND (lease_expires_at IS NULL OR lease_expires_at <= NOW())
+       ORDER BY created_at ASC LIMIT $1`,
+      [limit],
+    );
+    return found.rows.map(toView);
+  }
+
+  /** Back off a retryable apply failure so older outages cannot starve later jobs. */
+  async deferApply(jobId: string, delayMs = 60_000): Promise<void> {
+    assertUUID(jobId, "jobId");
+    if (!Number.isSafeInteger(delayMs) || delayMs < 1 || delayMs > 60 * 60_000) {
+      throw new PersistenceError("CONSTRAINT_VIOLATION", "Invalid import retry delay", false);
+    }
+    await this.client.query(
+      `UPDATE import_jobs SET lease_expires_at = NOW() + ($2::bigint * INTERVAL '1 millisecond'),
+          updated_at = NOW() WHERE id = $1 AND status = 'validated'`,
+      [jobId, delayMs],
+    );
+  }
+
+  async listExpiredSucceeded(cutoff: Date, limit = 25): Promise<ImportJobView[]> {
+    if (
+      !Number.isFinite(cutoff.getTime()) ||
+      !Number.isSafeInteger(limit) ||
+      limit < 1 ||
+      limit > 100
+    ) {
+      throw new PersistenceError("CONSTRAINT_VIOLATION", "Invalid archive retention query", false);
+    }
+    const found = await this.client.query<JobRow>(
+      `SELECT * FROM import_jobs WHERE status = 'succeeded' AND archive_swept = FALSE
+       AND updated_at <= $1 ORDER BY updated_at ASC LIMIT $2`,
+      [cutoff, limit],
+    );
+    return found.rows.map(toView);
+  }
+
   /** Failed jobs whose server-only archives still need sweeping. */
-  async listUnswept(limit = 25): Promise<ImportJobView[]> {
+  async listUnswept(limit = 25, withPendingProject = false): Promise<ImportJobView[]> {
     if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100) {
       throw new PersistenceError("CONSTRAINT_VIOLATION", "Invalid sweep limit", false);
     }
     const found = await this.client.query<JobRow>(
       `SELECT * FROM import_jobs
         WHERE status = 'failed' AND archive_swept = FALSE
+          AND (pending_project_id IS NOT NULL) = $2
         ORDER BY created_at ASC LIMIT $1`,
-      [limit],
+      [limit, withPendingProject],
     );
     return found.rows.map(toView);
   }
 
-  /** Record that a failed job's server-only archive is gone. */
+  /** Record that a failed or expired successful job's server-only archive is gone. */
   async markArchiveSwept(jobId: string): Promise<void> {
     assertUUID(jobId, "jobId");
     try {
       await this.client.query(
         `UPDATE import_jobs
             SET archive_swept = TRUE, updated_at = NOW()
-          WHERE id = $1 AND status = 'failed'`,
+          WHERE id = $1 AND status IN ('failed', 'succeeded')`,
         [jobId],
       );
     } catch (error) {
