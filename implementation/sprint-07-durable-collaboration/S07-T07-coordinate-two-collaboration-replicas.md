@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S07-T06]
 requirements: [COL-01, NFR-02]
 source_task: S07-T07
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S07-T07 — Coordinate two collaboration replicas
 

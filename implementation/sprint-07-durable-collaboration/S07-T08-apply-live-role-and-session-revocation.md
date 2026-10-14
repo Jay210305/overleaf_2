@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S07-T07]
 requirements: [COL-03, NFR-03]
 source_task: S07-T08
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S07-T08 — Apply live role and session revocation
 

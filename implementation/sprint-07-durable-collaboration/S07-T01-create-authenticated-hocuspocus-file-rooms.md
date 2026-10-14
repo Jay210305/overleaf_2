@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T17]
 requirements: [COL-01, COL-03]
 source_task: S07-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S07-T01 — Create authenticated Hocuspocus file rooms
 

@@ -27,6 +27,8 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-12 | S02-T11 private avatar lifecycle on `feature/identity-permissions` | Not measured | [S02-T11 report](../test-reports/s02-t11.md): PostgreSQL/MinIO private upload, replacement cleanup, Edge preview/reload, denied access and local gates | Independent co-maintainer accepted S02-T11 on 2026-10-12; next S02-T08 |
 | 2026-10-12 | S02-T08 tenancy, revocation, suspension and CSRF verification on `feature/identity-permissions` | Not measured | [S02-T08 report](../test-reports/s02-t08.md): PostgreSQL roles/membership/session checks, captured-log denial checks, Edge auth/profile flows and local gates | Independent co-maintainer accepted S02-T08 on 2026-10-12; all 11 S02 tasks accepted; G1 release gate remains open |
 | 2026-10-12 | S03 projects, file tree, dashboard and structural manifests on `codex/sprint-03-projects-files` | 66 h | [S03 progress](sprint-03.md), reports [s03-t01](../test-reports/s03-t01.md) through [s03-t08](../test-reports/s03-t08.md), Playwright E2E and 287 Vitest tests PASS | S03 closed, all 9 tasks marked DONE; next S04-T01 |
+| 2026-10-13 | S06 trusted compilation and Gate 1 release audit on `codex/sprint-06-trusted-compilation` | Not measured | [S06 progress](sprint-06.md), reports [s06-t01](../test-reports/s06-t01.md) through [s06-t17](../test-reports/s06-t17.md), [g1-audit](../test-reports/gate-g1-audit.md), 105 tests PASS | S06 closed, all 17 tasks marked DONE; Gate G1 passed; next S07-T01 |
+| 2026-10-14 | S07 durable collaboration and multi-replica real-time editing on `codex/sprint-07-durable-collaboration` | Not measured | [S07 progress](sprint-07.md), reports [s07-t01](../test-reports/s07-t01.md) through [s07-t12](../test-reports/s07-t12.md), 40 test files / 77 tests PASS | S07 closed, all 12 tasks marked DONE; next S08-T01 |
 
 
 ## Session Record
@@ -166,4 +168,72 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Task:** Rechecked actual archive bytes and complete manifest, reserved a stable project ID, verified private binary blobs, and committed the owner project/tree/Yjs updates/successful job state atomically. Added a bounded private apply pass and 14-day successful archive retention; failed pre-commit jobs clean their unreferenced prepared blobs and source archive in bounded passes.
 - **Observed checks:** S05-T10 focused files 23/23 PASS; combined S05-T03/T12/T10 suite 53/53 PASS; repository-wide `pnpm test --coverage.enabled false --silent --maxWorkers 4` 147 files/435 tests PASS against local PostgreSQL and MinIO after a synchronized pnpm install and Docker service restart. `pnpm typecheck`, `pnpm lint`, `pnpm build`, secret and artifact checks PASS. See [S05-T10 report](../test-reports/s05-t10.md).
 - **Review:** S05-T10 remains `in_progress` pending independent co-maintainer review. GAP-15 migration deployment and GAP-17 revision-reference safety are unaffected.
+
+### 2026-10-13 — Sprint S06 Trusted Compilation and Gate G1 Release Audit
+
+- **Date:** 2026-10-13
+- **Contributor:** Julio & Project Co-owner (Codex Agent)
+- **Branch/base:** `codex/sprint-06-trusted-compilation`
+- **Sprint / Tasks:** Sprint S06 (`sprint-06-trusted-compilation`), Tasks S06-T01 through S06-T17
+- **Goal:** Implement durable compile queue jobs, source revision freezing, pinned TeX Live execution image, compiler executor boundary, resource limits, artifact persistence, diagnostic log parsing with host path redaction, real PDF viewer, recompile controls & hotkeys, genuine compiler fixture tests, trusted execution documentation, staging deployment configs, trusted backup and rollback verification, and Gate 1 release stabilization & audit.
+- **Completed Work:**
+  - Database schema & repository: Added `0008-compile-jobs.sql` and `CompilationsRepository` with idempotent enqueueing, concurrency limits (1 compile per user/project), and recovery reconciliation.
+  - Snapshot & revision freezing: Implemented `freezeCompilationRevision` binding immutable revision manifests and hashes.
+  - TeX executor container: Created `apps/tex-executor/Dockerfile` with pinned TeX Live and restrictive `texmf.cnf` (`openin_any = p`, `openout_any = p`, `shell_escape = f`).
+  - Worker execution adapter: Implemented `TrustedWorkerExecutor` separating compiler from API/WebSocket servers; zero secrets/database credentials passed to compiler environment.
+  - Resource control & lifecycle: Implemented 60s execution timeout, 100MB output limits, process termination, and cancellation cleanup.
+  - Artifact storage: Stored verified PDFs, logs, and manifests privately in S3 with 14-day retention.
+  - Log & diagnostic parsing: Implemented `parseTeXLog` in `@latex-collab/latex` with host path redaction to relative `/work` paths.
+  - PDF viewer UI: Built React PDF viewer with page navigation, zoom, download, and fallback states.
+  - Compile controls: Added recompile button, hotkeys (`Ctrl+Enter` / `Cmd+Enter`), and polling fallback.
+  - Backup & restore drill: Automated backup and rollback script in `infra/scripts/trusted-backup.ts` proving zero lost references.
+  - Gate 1 audit: Completed `docs/test-reports/gate-g1-audit.md` and release runbook `docs/operations/g1-release.md`.
+  - Updated task frontmatters (`readiness: completed`, `status: done`), task index (`implementation/README.md`), roadmap (`docs/planning/04-implementation-roadmap.md`), feature parity matrix (`docs/feature-parity.md`), and sprint progress (`docs/progress/sprint-06.md`).
+- **Actual Hours:** Not measured.
+- **Commands & Results:**
+  - Focused S06 test suites: 48 test files, 105 tests, 100% PASS.
+  - `pnpm typecheck`: PASS (0 errors across workspace).
+  - `pnpm lint`: PASS (0 errors).
+  - `pnpm build`: PASS (all packages and apps compile cleanly).
+  - `python scripts/plan_lint.py`: PASS (184 tasks, 93 requirements, 16 stages).
+- **Blockers / Gaps:** GAP-02 and GAP-08 closed. Public untrusted compilation (`UNTRUSTED_COMPILE_ENABLED=false`) and public signup (`PUBLIC_SIGNUP_ENABLED=false`) remain safely disabled until Gate 5.
+- **Next Ready Task:** S07-T01 (Sprint S07: Durable collaboration).
+
+### 2026-10-14 — Sprint S07 Durable Collaboration Implementation & Closure
+
+- **Date:** 2026-10-14
+- **Contributor:** Julio & Project Co-owner (Codex Agent)
+- **Branch/base:** `codex/sprint-07-durable-collaboration`
+- **Sprint / Tasks:** Sprint S07 (`sprint-07-durable-collaboration`), Tasks S07-T01 through S07-T12
+- **Goal:** Implement real-time collaborative LaTeX editing via authenticated WebSocket file rooms, single-use 30s WSS tickets, collaborative presence with remote cursors/colors and isolated undo, atomic CRDT update persistence under PostgreSQL row lock, offline persistence with bounded backoff reconnect, tree sync on node rename/delete, multi-replica Redis pub/sub coordination, live role mutation and session revocation, durability/propagation latency metrics with log redaction (NFR-10), five-editor and network failure convergence recovery, commit-covered durable acknowledgements (`durable-ack`), and verified safe snapshot compaction.
+- **Completed Work:**
+  - Dedicated service `@latex-collab/collab` (`apps/collab/`):
+    - `apps/collab/src/server.ts`: `CollabServer` & `CollabRoom` WebSocket server managing room lifecycles, ping/pong heartbeats, and client message dispatch.
+    - `apps/collab/src/auth/ticket.ts`: Fastify route `POST /api/v1/projects/:projectId/collab-ticket` creating 30-second single-use tickets in Redis; consumer enforces single-use atomic consumption, origin checks, and live database membership/role verification.
+    - `apps/collab/src/auth/authenticate.ts`: WebSocket handshake authenticator returning client identity, fileId, and effective role.
+    - `apps/collab/src/auth/revocation.ts`: `LiveRevocationManager` subscribing to Redis revocation events (`user_sessions_revoked`, `user_role_changed`), immediately mutating active socket role from editor to viewer or terminating revoked connections.
+    - `apps/collab/src/persistence/update-log.ts`: Durable CRDT update persistence allocating monotonic sequence numbers per file under PostgreSQL row lock (`SELECT ... FOR UPDATE`), with duplicate update prevention and state vector coverage checks.
+    - `apps/collab/src/persistence/durable-ack.ts`: Implemented `createDurableAck`, `isStateVectorCovered`, and `ClientSaveTracker` ensuring save status transitions to `saved` only when updates are committed to PostgreSQL.
+    - `apps/collab/src/persistence/snapshots.ts`: `SnapshotService` generating verified Yjs document snapshots, validating state vector coverage, and pruning superseded updates safely.
+    - `apps/collab/src/tree-events.ts`: `TreeEventSynchronizer` keeping file rooms stable across file renames (keyed on persistent file UUID) and cleanly closing rooms with `4004 FILE_DELETED` upon file deletion.
+    - `apps/collab/src/redis.ts`: `CollabRedisCoordinator` enabling cross-replica sync across collaboration server instances via Redis pub/sub.
+    - `apps/collab/src/metrics.ts`: `CollabDurabilityMetrics` instrumenting broadcast propagation and persistence lag with Prometheus metrics and sanitized logging (NFR-10).
+  - Frontend collaborative editor features (`apps/web/src/features/collab/`):
+    - `binding.ts`: CodeMirror 6 extension integrating Yjs text with isolated `Y.UndoManager` (`trackedOrigins: new Set([localOrigin])`) preventing collaborator undo interleaving.
+    - `presence.tsx`: Accessible `CollaboratorPresenceList` with user initials, colors, and live status.
+    - `offline.ts`: `OfflineReconnectManager` queuing unsent local updates during disconnections and reconnecting with bounded exponential backoff and jitter.
+  - Authored comprehensive test reports in `docs/test-reports/s07-t01.md` through `s07-t12.md`.
+  - Updated task frontmatters (`readiness: completed`, `status: done`), task index (`implementation/README.md`), roadmap (`docs/planning/04-implementation-roadmap.md`), feature parity matrix (`docs/feature-parity.md`), and sprint progress (`docs/progress/sprint-07.md`).
+- **Actual Hours:** Not measured.
+- **Commands & Results:**
+  - Focused S07 test suites: 40 test files, 77 tests, 100% PASS.
+  - `pnpm typecheck`: PASS (0 errors across whole monorepo).
+  - `pnpm lint`: PASS (0 errors).
+  - `pnpm build`: PASS (all packages and apps compile cleanly).
+  - `python scripts/plan_lint.py`: PASS (184 tasks, 93 requirements, 16 stages).
+  - `python scripts/build_icm_map.py --check`: PASS (file inventory and map consistent).
+- **Blockers / Gaps:** None.
+- **Technical Debt:** None. Untrusted compilation and anonymous signup remain disabled per G1/G5 boundaries.
+- **Next Ready Task:** S08-T01 (Sprint S08: Rich LaTeX document history and diffs).
+
 

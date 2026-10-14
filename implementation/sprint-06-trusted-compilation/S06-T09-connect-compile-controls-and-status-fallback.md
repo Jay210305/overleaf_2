@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T08]
 requirements: [CMP-04, EDT-04]
 source_task: S06-T09
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T09 — Connect compile controls and status fallback
 

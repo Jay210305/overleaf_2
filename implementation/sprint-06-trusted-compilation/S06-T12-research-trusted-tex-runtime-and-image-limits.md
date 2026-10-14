@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T02]
 requirements: [CMP-01, PL-07]
 source_task: S06-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T12 — Research trusted TeX runtime and image limits
 

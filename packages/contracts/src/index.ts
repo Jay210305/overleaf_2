@@ -368,10 +368,103 @@ export const durableAckSchema = z.strictObject({
 });
 export type DurableAck = z.infer<typeof durableAckSchema>;
 
+export const ticketRequestSchema = z.strictObject({
+  fileId: z.string().uuid(),
+  action: z.enum(["read", "write"]),
+});
+export type TicketRequest = z.infer<typeof ticketRequestSchema>;
+
+export const ticketViewSchema = z.strictObject({
+  ticket: z.string().min(16).max(2048),
+  expiresAt: z.string().datetime(),
+});
+export type TicketView = z.infer<typeof ticketViewSchema>;
+
+export const eventEnvelopeSchema = z.strictObject({
+  eventId: z.string().uuid(),
+  version: z.literal(1),
+  projectId: z.string().uuid(),
+  occurredAt: z.string().datetime(),
+  type: z.enum([
+    "file.created",
+    "file.moved",
+    "file.deleted",
+    "project.settings_changed",
+    "permissions.changed",
+    "compile.status_changed",
+    "comment.changed",
+    "suggestion.changed",
+    "chat.created",
+  ]),
+  payload: z.record(z.string(), z.unknown()),
+});
+export type EventEnvelope = z.infer<typeof eventEnvelopeSchema>;
+
 export const createCheckpointSchema = z.strictObject({
   label: z.string().max(255).optional(),
   source: z.string().max(100).default("manual"),
 });
 export type CreateCheckpointInput = z.infer<typeof createCheckpointSchema>;
 
+export const compileStatusSchema = z.enum([
+  "queued",
+  "running",
+  "succeeded",
+  "failed",
+  "timed_out",
+  "cancel_requested",
+  "cancelled",
+]);
+
+export const diagnosticSchema = z.strictObject({
+  severity: z.enum(["error", "warning", "info"]),
+  filePath: z.string().min(1).max(10000).optional(),
+  line: z.number().int().min(1).optional(),
+  message: z.string().min(1).max(10000),
+});
+
+export const compilationRequestSchema = z.strictObject({
+  compiler: compilerSchema.optional(),
+  forceClean: z.boolean().default(false).optional(),
+  targetRevisionId: z.string().uuid().optional(),
+});
+export type CompilationRequest = z.infer<typeof compilationRequestSchema>;
+
+export const compilationViewSchema = z.strictObject({
+  id: z.string().uuid(),
+  projectId: z.string().uuid(),
+  sourceRevisionId: z.string().uuid(),
+  status: compileStatusSchema,
+  startedAt: z.string().datetime().nullable(),
+  finishedAt: z.string().datetime().nullable(),
+  pdfAvailable: z.boolean(),
+  diagnostics: z.array(diagnosticSchema).max(2000),
+});
+export type CompilationView = z.infer<typeof compilationViewSchema>;
+
+export const compilationViewPageSchema = z.strictObject({
+  items: z.array(compilationViewSchema),
+  nextCursor: z.string().nullable(),
+});
+export type CompilationViewPage = z.infer<typeof compilationViewPageSchema>;
+
+export const artifactItemViewSchema = z.strictObject({
+  name: z.string().min(1).max(10000),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/),
+  mime: z.string().min(1).max(10000),
+  sizeBytes: z.number().int().min(0),
+  url: z.string().url(),
+  expiresAt: z.string().datetime(),
+});
+export type ArtifactItemView = z.infer<typeof artifactItemViewSchema>;
+
+export const artifactViewSchema = z.strictObject({
+  jobId: z.string().uuid(),
+  sourceRevisionId: z.string().uuid(),
+  items: z.array(artifactItemViewSchema).max(2000),
+});
+export type ArtifactView = z.infer<typeof artifactViewSchema>;
+
 export * from "./storage.js";
+export * from "./executor.js";
+

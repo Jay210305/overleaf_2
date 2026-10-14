@@ -56,6 +56,12 @@ export default defineConfig({
         ),
       },
       {
+        find: "@latex-collab/db/repositories/compilations",
+        replacement: fileURLToPath(
+          new URL("./packages/db/src/repositories/compilations.ts", import.meta.url),
+        ),
+      },
+      {
         find: "@latex-collab/db/seeds/development",
         replacement: fileURLToPath(new URL("./packages/db/seeds/development.ts", import.meta.url)),
       },
@@ -94,6 +100,14 @@ export default defineConfig({
       {
         find: "@latex-collab/editor",
         replacement: fileURLToPath(new URL("./packages/editor/src/index.ts", import.meta.url)),
+      },
+      {
+        find: "@latex-collab/latex/parse-log",
+        replacement: fileURLToPath(new URL("./packages/latex/src/parse-log.ts", import.meta.url)),
+      },
+      {
+        find: "@latex-collab/latex",
+        replacement: fileURLToPath(new URL("./packages/latex/src/index.ts", import.meta.url)),
       },
     ],
   },

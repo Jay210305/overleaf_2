@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T15]
 requirements: [NFR-09, PL-04]
 source_task: S15-T06
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T16 — Verify trusted-release backup and rollback
 

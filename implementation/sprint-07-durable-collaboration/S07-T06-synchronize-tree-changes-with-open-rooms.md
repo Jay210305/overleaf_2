@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S07-T05]
 requirements: [PRO-04, COL-12]
 source_task: S07-T06
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S07-T06 — Synchronize tree changes with open rooms
 

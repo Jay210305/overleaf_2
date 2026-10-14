@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S07-T11]
 requirements: [NFR-01, COL-01]
 source_task: S07-T04
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S07-T12 — Compact verified CRDT snapshots safely
 

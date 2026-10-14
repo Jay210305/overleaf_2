@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T08]
 requirements: [CMP-04, NFR-07]
 source_task: S06-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T01 — Create durable compile queue jobs
 

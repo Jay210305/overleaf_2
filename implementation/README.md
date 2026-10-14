@@ -73,35 +73,35 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S05-T11 | [Create template preview and instantiate UI](sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | Project Co-owner (proposed) | 6 | todo |
 | S05-T07 | [Verify imported paths and custom styles](sprint-05-assets-import-export/S05-T07-verify-imported-paths-and-custom-styles.md) | Project Co-owner (proposed) | 6 | todo |
 | S05-T08 | [Verify hostile ZIP and round-trip journeys](sprint-05-assets-import-export/S05-T08-verify-hostile-zip-and-round-trip-journeys.md) | Project Co-owner (proposed) | 6 | todo |
-| S06-T01 | [Create durable compile queue jobs](sprint-06-trusted-compilation/S06-T01-create-durable-compile-queue-jobs.md) | Julio (proposed) | 8 | todo |
-| S06-T02 | [Freeze compilation source revision](sprint-06-trusted-compilation/S06-T02-freeze-compilation-source-revision.md) | Julio (proposed) | 8 | todo |
-| S06-T12 | [Research trusted TeX runtime and image limits](sprint-06-trusted-compilation/S06-T12-research-trusted-tex-runtime-and-image-limits.md) | Julio (proposed) | 4 | todo |
-| S06-T03 | [Build pinned TeX Live image](sprint-06-trusted-compilation/S06-T03-build-pinned-tex-live-image.md) | Julio (proposed) | 8 | todo |
-| S06-T04 | [Define compiler executor boundary](sprint-06-trusted-compilation/S06-T04-define-compiler-executor-boundary.md) | Julio (proposed) | 6 | todo |
-| S06-T13 | [Implement trusted worker executor adapter](sprint-06-trusted-compilation/S06-T13-implement-trusted-worker-executor-adapter.md) | Julio (proposed) | 8 | todo |
-| S06-T05 | [Enforce trusted compiler execution limits](sprint-06-trusted-compilation/S06-T05-enforce-trusted-compiler-execution-limits.md) | Julio (proposed) | 8 | todo |
-| S06-T14 | [Implement timeout cancellation and job recovery](sprint-06-trusted-compilation/S06-T14-implement-timeout-cancellation-and-job-recovery.md) | Julio (proposed) | 8 | todo |
-| S06-T06 | [Persist verified artifacts and job result](sprint-06-trusted-compilation/S06-T06-persist-verified-artifacts-and-job-result.md) | Julio (proposed) | 8 | todo |
-| S06-T07 | [Parse diagnostics and compile failures](sprint-06-trusted-compilation/S06-T07-parse-diagnostics-and-compile-failures.md) | Julio (proposed) | 8 | todo |
-| S06-T08 | [Create real PDF viewer](sprint-06-trusted-compilation/S06-T08-create-real-pdf-viewer.md) | Julio (proposed) | 8 | todo |
-| S06-T09 | [Connect compile controls and status fallback](sprint-06-trusted-compilation/S06-T09-connect-compile-controls-and-status-fallback.md) | Julio (proposed) | 6 | todo |
-| S06-T10 | [Verify genuine compiler fixtures](sprint-06-trusted-compilation/S06-T10-verify-genuine-compiler-fixtures.md) | Julio (proposed) | 8 | todo |
-| S06-T11 | [Document trusted execution and closed public mode](sprint-06-trusted-compilation/S06-T11-document-trusted-execution-and-closed-public-mode.md) | Julio (proposed) | 4 | todo |
-| S06-T15 | [Deploy trusted staging slice and smoke](sprint-06-trusted-compilation/S06-T15-deploy-trusted-staging-slice-and-smoke.md) | Julio (proposed) | 8 | todo |
-| S06-T16 | [Verify trusted-release backup and rollback](sprint-06-trusted-compilation/S06-T16-verify-trusted-release-backup-and-rollback.md) | Julio (proposed) | 8 | todo |
-| S06-T17 | [Stabilize and review G1 release](sprint-06-trusted-compilation/S06-T17-stabilize-and-review-g1-release.md) | Julio (proposed) | 8 | todo |
-| S07-T01 | [Create authenticated Hocuspocus file rooms](sprint-07-durable-collaboration/S07-T01-create-authenticated-hocuspocus-file-rooms.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T02 | [Implement single-use WSS tickets](sprint-07-durable-collaboration/S07-T02-implement-single-use-wss-tickets.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T03 | [Connect collaborative editor presence and undo](sprint-07-durable-collaboration/S07-T03-connect-collaborative-editor-presence-and-undo.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T04 | [Append durable CRDT updates](sprint-07-durable-collaboration/S07-T04-append-durable-crdt-updates.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T11 | [Implement commit-covered durable acknowledgements](sprint-07-durable-collaboration/S07-T11-implement-commit-covered-durable-acknowledgements.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T12 | [Compact verified CRDT snapshots safely](sprint-07-durable-collaboration/S07-T12-compact-verified-crdt-snapshots-safely.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T05 | [Implement offline persistence and reconnect](sprint-07-durable-collaboration/S07-T05-implement-offline-persistence-and-reconnect.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T06 | [Synchronize tree changes with open rooms](sprint-07-durable-collaboration/S07-T06-synchronize-tree-changes-with-open-rooms.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T07 | [Coordinate two collaboration replicas](sprint-07-durable-collaboration/S07-T07-coordinate-two-collaboration-replicas.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T08 | [Apply live role and session revocation](sprint-07-durable-collaboration/S07-T08-apply-live-role-and-session-revocation.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T09 | [Instrument collaborative durability metrics](sprint-07-durable-collaboration/S07-T09-instrument-collaborative-durability-metrics.md) | Project Co-owner (proposed) | 6 | todo |
-| S07-T10 | [Verify convergence failures and recovery](sprint-07-durable-collaboration/S07-T10-verify-convergence-failures-and-recovery.md) | Project Co-owner (proposed) | 8 | todo |
+| S06-T01 | [Create durable compile queue jobs](sprint-06-trusted-compilation/S06-T01-create-durable-compile-queue-jobs.md) | Julio (proposed) | 8 | done |
+| S06-T02 | [Freeze compilation source revision](sprint-06-trusted-compilation/S06-T02-freeze-compilation-source-revision.md) | Julio (proposed) | 8 | done |
+| S06-T12 | [Research trusted TeX runtime and image limits](sprint-06-trusted-compilation/S06-T12-research-trusted-tex-runtime-and-image-limits.md) | Julio (proposed) | 4 | done |
+| S06-T03 | [Build pinned TeX Live image](sprint-06-trusted-compilation/S06-T03-build-pinned-tex-live-image.md) | Julio (proposed) | 8 | done |
+| S06-T04 | [Define compiler executor boundary](sprint-06-trusted-compilation/S06-T04-define-compiler-executor-boundary.md) | Julio (proposed) | 6 | done |
+| S06-T13 | [Implement trusted worker executor adapter](sprint-06-trusted-compilation/S06-T13-implement-trusted-worker-executor-adapter.md) | Julio (proposed) | 8 | done |
+| S06-T05 | [Enforce trusted compiler execution limits](sprint-06-trusted-compilation/S06-T05-enforce-trusted-compiler-execution-limits.md) | Julio (proposed) | 8 | done |
+| S06-T14 | [Implement timeout cancellation and job recovery](sprint-06-trusted-compilation/S06-T14-implement-timeout-cancellation-and-job-recovery.md) | Julio (proposed) | 8 | done |
+| S06-T06 | [Persist verified artifacts and job result](sprint-06-trusted-compilation/S06-T06-persist-verified-artifacts-and-job-result.md) | Julio (proposed) | 8 | done |
+| S06-T07 | [Parse diagnostics and compile failures](sprint-06-trusted-compilation/S06-T07-parse-diagnostics-and-compile-failures.md) | Julio (proposed) | 8 | done |
+| S06-T08 | [Create real PDF viewer](sprint-06-trusted-compilation/S06-T08-create-real-pdf-viewer.md) | Julio (proposed) | 8 | done |
+| S06-T09 | [Connect compile controls and status fallback](sprint-06-trusted-compilation/S06-T09-connect-compile-controls-and-status-fallback.md) | Julio (proposed) | 6 | done |
+| S06-T10 | [Verify genuine compiler fixtures](sprint-06-trusted-compilation/S06-T10-verify-genuine-compiler-fixtures.md) | Julio (proposed) | 8 | done |
+| S06-T11 | [Document trusted execution and closed public mode](sprint-06-trusted-compilation/S06-T11-document-trusted-execution-and-closed-public-mode.md) | Julio (proposed) | 4 | done |
+| S06-T15 | [Deploy trusted staging slice and smoke](sprint-06-trusted-compilation/S06-T15-deploy-trusted-staging-slice-and-smoke.md) | Julio (proposed) | 8 | done |
+| S06-T16 | [Verify trusted-release backup and rollback](sprint-06-trusted-compilation/S06-T16-verify-trusted-release-backup-and-rollback.md) | Julio (proposed) | 8 | done |
+| S06-T17 | [Stabilize and review G1 release](sprint-06-trusted-compilation/S06-T17-stabilize-and-review-g1-release.md) | Julio (proposed) | 8 | done |
+| S07-T01 | [Create authenticated Hocuspocus file rooms](sprint-07-durable-collaboration/S07-T01-create-authenticated-hocuspocus-file-rooms.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T02 | [Implement single-use WSS tickets](sprint-07-durable-collaboration/S07-T02-implement-single-use-wss-tickets.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T03 | [Connect collaborative editor presence and undo](sprint-07-durable-collaboration/S07-T03-connect-collaborative-editor-presence-and-undo.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T04 | [Append durable CRDT updates](sprint-07-durable-collaboration/S07-T04-append-durable-crdt-updates.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T11 | [Implement commit-covered durable acknowledgements](sprint-07-durable-collaboration/S07-T11-implement-commit-covered-durable-acknowledgements.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T12 | [Compact verified CRDT snapshots safely](sprint-07-durable-collaboration/S07-T12-compact-verified-crdt-snapshots-safely.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T05 | [Implement offline persistence and reconnect](sprint-07-durable-collaboration/S07-T05-implement-offline-persistence-and-reconnect.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T06 | [Synchronize tree changes with open rooms](sprint-07-durable-collaboration/S07-T06-synchronize-tree-changes-with-open-rooms.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T07 | [Coordinate two collaboration replicas](sprint-07-durable-collaboration/S07-T07-coordinate-two-collaboration-replicas.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T08 | [Apply live role and session revocation](sprint-07-durable-collaboration/S07-T08-apply-live-role-and-session-revocation.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T09 | [Instrument collaborative durability metrics](sprint-07-durable-collaboration/S07-T09-instrument-collaborative-durability-metrics.md) | Project Co-owner (proposed) | 6 | done |
+| S07-T10 | [Verify convergence failures and recovery](sprint-07-durable-collaboration/S07-T10-verify-convergence-failures-and-recovery.md) | Project Co-owner (proposed) | 8 | done |
 | S08-T01 | [Implement expiring email invitations](sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md) | Julio (proposed) | 8 | todo |
 | S08-T02 | [Implement bounded hashed share links](sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md) | Julio (proposed) | 8 | todo |
 | S08-T03 | [Create sharing and role management UI](sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md) | Julio (proposed) | 8 | todo |

@@ -5,3 +5,4 @@ export * from "./client.js";
 export * from "./repositories/projects.js";
 export * from "./repositories/audit.js";
 export * from "./repositories/revisions.js";
+export * from "./repositories/compilations.js";
