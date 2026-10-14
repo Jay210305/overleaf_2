@@ -36,7 +36,7 @@
 
 ## Validation
 
-- Comprehensive test suite covering all 12 tasks: 40 test files, 71 tests PASS.
+- Comprehensive test suite covering all 12 tasks: 40 test files, 77 tests PASS (including heartbeat termination, strict origin validation, cross-replica awareness with user attribution, and offline reconnect error recovery).
 - Monorepo quality gates:
   - `pnpm typecheck`: PASS (0 errors across all apps and packages).
   - `pnpm lint`: PASS (0 errors).

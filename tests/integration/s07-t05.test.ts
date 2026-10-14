@@ -139,4 +139,39 @@ describe("S07-T05 Offline persistence and reconnect integration", () => {
 
     await activeClient.close();
   });
+
+  it("reverts status to offline and maintains pending updates if sendUpdate fails during reconnect", async () => {
+    const storage = new MemoryOfflineStorageProvider();
+    let shouldFailSend = false;
+
+    const manager = new OfflineReconnectManager({
+      fileId: "file-fail-reconnect",
+      projectId: "proj-123",
+      storage,
+      fetchTicket: async () => "mock-fresh-ticket",
+      sendUpdate: async () => {
+        if (shouldFailSend) {
+          throw new Error("Network connection dropped during flush");
+        }
+      },
+    });
+
+    manager.setOffline();
+    const doc = new Y.Doc();
+    doc.getText("content").insert(0, "Pending offline text");
+    await manager.recordEdit(doc, Y.encodeStateAsUpdate(doc));
+
+    expect(manager.getStatus()).toBe("offline");
+    expect(manager.getPendingCount()).toBe(1);
+
+    // Simulate failure during update send in reconnect
+    shouldFailSend = true;
+    await expect(manager.reconnect()).rejects.toThrow(/Network connection dropped/);
+
+    // Status MUST revert to offline and pending edits preserved
+    expect(manager.getStatus()).toBe("offline");
+    expect(manager.getPendingCount()).toBe(1);
+    const stored = await storage.getPendingUpdates("file-fail-reconnect");
+    expect(stored.length).toBe(1);
+  });
 });

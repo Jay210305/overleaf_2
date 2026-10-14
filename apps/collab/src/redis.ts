@@ -11,6 +11,7 @@ export interface RedisMessage {
 export interface AwarenessMessage {
   replicaId: string;
   roomId: string;
+  userId?: string | undefined;
   awareness: unknown;
   timestamp: number;
 }
@@ -22,7 +23,7 @@ export class CollabRedisCoordinator {
   private pubClient: RedisClientType | undefined;
   private subClient: RedisClientType | undefined;
   private updateHandlers = new Map<string, (updateBytes: Uint8Array, originReplicaId: string) => void>();
-  private awarenessHandlers = new Map<string, (awareness: unknown, originReplicaId: string) => void>();
+  private awarenessHandlers = new Map<string, (awareness: unknown, userId?: string, originReplicaId?: string) => void>();
   private invalidationHandlers: Array<(data: unknown) => void> = [];
 
   constructor(options?: { pubClient?: RedisClientType | undefined; subClient?: RedisClientType | undefined } | undefined) {
@@ -56,7 +57,7 @@ export class CollabRedisCoordinator {
           if (parsed.replicaId === this.replicaId) return;
           const handler = this.awarenessHandlers.get(parsed.roomId);
           if (handler) {
-            handler(parsed.awareness, parsed.replicaId);
+            handler(parsed.awareness, parsed.userId, parsed.replicaId);
           }
         } catch {
           // ignore corrupted frame
@@ -79,7 +80,7 @@ export class CollabRedisCoordinator {
   registerRoom(
     roomId: string,
     onUpdate: (updateBytes: Uint8Array, originReplicaId: string) => void,
-    onAwareness?: (awareness: unknown, originReplicaId: string) => void,
+    onAwareness?: (awareness: unknown, userId?: string, originReplicaId?: string) => void,
   ): void {
     this.updateHandlers.set(roomId, onUpdate);
     if (onAwareness) {
@@ -109,10 +110,11 @@ export class CollabRedisCoordinator {
     }
   }
 
-  async broadcastAwareness(roomId: string, awareness: unknown): Promise<void> {
+  async broadcastAwareness(roomId: string, awareness: unknown, userId?: string): Promise<void> {
     const msg: AwarenessMessage = {
       replicaId: this.replicaId,
       roomId,
+      userId,
       awareness,
       timestamp: Date.now(),
     };
@@ -134,6 +136,10 @@ export class CollabRedisCoordinator {
   static linkInProcess(coordA: CollabRedisCoordinator, coordB: CollabRedisCoordinator): () => void {
     const origBroadcastA = coordA.broadcastUpdate.bind(coordA);
     const origBroadcastB = coordB.broadcastUpdate.bind(coordB);
+    const origAwarenessA = coordA.broadcastAwareness.bind(coordA);
+    const origAwarenessB = coordB.broadcastAwareness.bind(coordB);
+    const origInvalidateA = coordA.publishInvalidation.bind(coordA);
+    const origInvalidateB = coordB.publishInvalidation.bind(coordB);
 
     coordA.broadcastUpdate = async (roomId, update) => {
       await origBroadcastA(roomId, update);
@@ -147,9 +153,39 @@ export class CollabRedisCoordinator {
       if (handlerA) handlerA(update, coordB.replicaId);
     };
 
+    coordA.broadcastAwareness = async (roomId, awareness, userId) => {
+      await origAwarenessA(roomId, awareness, userId);
+      const handlerB = coordB.awarenessHandlers.get(roomId);
+      if (handlerB) handlerB(awareness, userId, coordA.replicaId);
+    };
+
+    coordB.broadcastAwareness = async (roomId, awareness, userId) => {
+      await origAwarenessB(roomId, awareness, userId);
+      const handlerA = coordA.awarenessHandlers.get(roomId);
+      if (handlerA) handlerA(awareness, userId, coordB.replicaId);
+    };
+
+    coordA.publishInvalidation = async (data) => {
+      await origInvalidateA(data);
+      for (const handler of coordB.invalidationHandlers) {
+        handler(data);
+      }
+    };
+
+    coordB.publishInvalidation = async (data) => {
+      await origInvalidateB(data);
+      for (const handler of coordA.invalidationHandlers) {
+        handler(data);
+      }
+    };
+
     return () => {
       coordA.broadcastUpdate = origBroadcastA;
       coordB.broadcastUpdate = origBroadcastB;
+      coordA.broadcastAwareness = origAwarenessA;
+      coordB.broadcastAwareness = origAwarenessB;
+      coordA.publishInvalidation = origInvalidateA;
+      coordB.publishInvalidation = origInvalidateB;
     };
   }
 }

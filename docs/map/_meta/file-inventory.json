@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "6a56e8c9ccc7332d7d76697e19c7fbb8d68e74bb",
+  "git_baseline": "f8c1e7572e175d60eb4138fd8bd4f015da71f12e",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -303,7 +303,7 @@
     {
       "path": "apps/collab/src/auth/ticket.ts",
       "role": "factory",
-      "sha256": "5f78cb11254dccbcabc6acdc903f3c7b3a1101c19f6bf4c954687fa6bdc2c54b"
+      "sha256": "38a1c68b136ac2aeb42b69e099223500c728e9ee58494ae5fb4fa817140779c7"
     },
     {
       "path": "apps/collab/src/index.ts",
@@ -318,7 +318,7 @@
     {
       "path": "apps/collab/src/persistence/durable-ack.ts",
       "role": "factory",
-      "sha256": "8e949f44445d5ad4fd9d26728349c6a3e3dfa56b6c0470edc8beb1bab45d5795"
+      "sha256": "94459cb443bd324e74f71de369287cdc486209eeadcc00d15946efde3a9c2ce4"
     },
     {
       "path": "apps/collab/src/persistence/snapshots.ts",
@@ -333,12 +333,12 @@
     {
       "path": "apps/collab/src/redis.ts",
       "role": "factory",
-      "sha256": "19b717abe2588f73d5cb9f3c6c9121ceb5665d99f3ac755258043c42cff10c8d"
+      "sha256": "74513e12104993984e6357eb893a3f0e52d9fe564cb1b70d9f548cad446a6754"
     },
     {
       "path": "apps/collab/src/server.ts",
       "role": "factory",
-      "sha256": "427a8c5dd878ce613343216d9e265ecc927dbff94cb8348218a6c89c81d50b6b"
+      "sha256": "cf32b18446d5d1cc6fd270c9cf338599c14252cabb4916ed5d3bd08c4c7e50c9"
     },
     {
       "path": "apps/collab/src/tree-events.ts",
@@ -468,7 +468,7 @@
     {
       "path": "apps/web/src/features/collab/offline.ts",
       "role": "factory",
-      "sha256": "04c8bae3dd76b7e770b244f97c28f541affa0eed7c424e8f8f58f934c52f1ead"
+      "sha256": "c60e6764b4a34b146fa1a92c8ae1b72ceb736d15a2ab37f54997d2b64d327d27"
     },
     {
       "path": "apps/web/src/features/collab/presence.tsx",
@@ -983,7 +983,7 @@
     {
       "path": "docs/progress/sprint-07.md",
       "role": "product",
-      "sha256": "e77978751bc246f215f0de6a150e116bfa0e2dff8407e0e69e4ea47e2ee10c8b"
+      "sha256": "3efd95096723b9f2d4d54eae6395587a30152408ae2389847255e33c67c923b1"
     },
     {
       "path": "docs/progress/sprint-08.md",
@@ -1453,7 +1453,7 @@
     {
       "path": "docs/test-reports/s07-t01.md",
       "role": "factory",
-      "sha256": "dee4e704e8bb9552a3867bf739a4af01b3a433491c60ff1409ccda4612289b8f"
+      "sha256": "4faa513dbe90c943915fbd9f4641fd394c20a012f02c6e460f15afff637ef2bf"
     },
     {
       "path": "docs/test-reports/s07-t02.md",
@@ -1473,7 +1473,7 @@
     {
       "path": "docs/test-reports/s07-t05.md",
       "role": "factory",
-      "sha256": "c643e94980a8750ee263a10e1feae2be6347f83eaf36e6a9245355e032bc4fe1"
+      "sha256": "ab82aa14c438f2b801de179439e40188b6f33a79b5afcc502d3155761b32b850"
     },
     {
       "path": "docs/test-reports/s07-t06.md",
@@ -1483,7 +1483,7 @@
     {
       "path": "docs/test-reports/s07-t07.md",
       "role": "factory",
-      "sha256": "c52b10b55937b47cfbd83412a90f428072b23a0c85bb7273f1072e63ae757c78"
+      "sha256": "8b5183ac75f0e75e6e568ef3c3b7d895c6ef2f88dc8330c252b27f7938cf6efa"
     },
     {
       "path": "docs/test-reports/s07-t08.md",
@@ -1503,7 +1503,7 @@
     {
       "path": "docs/test-reports/s07-t11.md",
       "role": "factory",
-      "sha256": "098b745ebb4feabcc99c3baea96a618581d412a2fac3cc4b192f391071866e76"
+      "sha256": "c7674dff9771b3700cd824163f9677be99c6202d87a7059930ad3f77ff57af62"
     },
     {
       "path": "docs/test-reports/s07-t12.md",
@@ -3293,7 +3293,7 @@
     {
       "path": "tests/integration/s07-t01.test.ts",
       "role": "factory",
-      "sha256": "00bbdc3dc2f4d1e49d2261f86601bf81ba982e7febc6e2676568ad967f32cdee"
+      "sha256": "c3822f8451e96b6fb257824dfa57e9baee2aa0fd7bd6b55a4fb9bc66836443aa"
     },
     {
       "path": "tests/integration/s07-t02.test.ts",
@@ -3313,7 +3313,7 @@
     {
       "path": "tests/integration/s07-t05.test.ts",
       "role": "factory",
-      "sha256": "86056d4346a0c34d0ebab696ae6e0064b04188123786bf8fb2262b72421eb30f"
+      "sha256": "aae29b36dce3c858e2b6cc740bd4dac27d343c3aef9df830641b227a6cdfd6a4"
     },
     {
       "path": "tests/integration/s07-t06.test.ts",
@@ -3323,7 +3323,7 @@
     {
       "path": "tests/integration/s07-t07.test.ts",
       "role": "factory",
-      "sha256": "1bbe1b8cd631370d32257bdd89815b2dd3767a358cb11263e10fa49384428460"
+      "sha256": "2240b9c494080220101539d54d4a101ecdbdec9472afa7dfb304d199f09f747b"
     },
     {
       "path": "tests/integration/s07-t08.test.ts",
@@ -3343,7 +3343,7 @@
     {
       "path": "tests/integration/s07-t11.test.ts",
       "role": "factory",
-      "sha256": "c044b463fde5ffb6cc46b31b95b5fec77e0540213645ce59bbe0ddf48ee7a51c"
+      "sha256": "d023a0c36fa0a6b4f7824ea0496ff0c45e0eb001b252de742c5d9801b46d2e9e"
     },
     {
       "path": "tests/integration/s07-t12.test.ts",

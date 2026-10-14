@@ -141,4 +141,38 @@ describe("S07-T01 Authenticated Hocuspocus file rooms integration", () => {
 
     await client.close();
   });
+
+  it("denies missing Origin header with 4003 ORIGIN_NOT_ALLOWED when allowedOrigin is configured", async () => {
+    const ticket = await fixture.getTicket(fixture.editor.email, fixture.fileId, "write");
+
+    await expect(
+      fixture.createClient(ticket, { origin: "" }),
+    ).rejects.toThrow(/ORIGIN_NOT_ALLOWED/);
+  });
+
+  it("terminates unresponsive socket during checkHeartbeats if client goes dead", async () => {
+    const ticket = await fixture.getTicket(fixture.owner.email, fixture.fileId, "read");
+    const client = await fixture.createClient(ticket);
+
+    // Initial state: client is alive
+    const room = fixture.collabServer.getRoom(`project:${fixture.projectId}:file:${fixture.fileId}`);
+    expect(room).toBeDefined();
+    expect(room!.clients.size).toBeGreaterThanOrEqual(1);
+
+    // Mock client not responding to ping
+    const collabClient = Array.from(room!.clients).find((c) => c.auth?.userId === fixture.owner.id);
+    expect(collabClient).toBeDefined();
+    collabClient!.isAlive = false;
+
+    const closePromise = new Promise<void>((resolve) => {
+      client.ws.once("close", () => resolve());
+    });
+
+    // Run checkHeartbeats
+    fixture.collabServer.checkHeartbeats();
+
+    // Socket should be terminated by server
+    await closePromise;
+    expect(room!.clients.has(collabClient!)).toBe(false);
+  });
 });

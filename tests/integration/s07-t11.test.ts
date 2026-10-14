@@ -116,4 +116,30 @@ describe("S07-T11 Commit-covered durable acknowledgements integration", () => {
 
     await client.close();
   });
+
+  it("ignores durable acks for foreign files when tracker is scoped to a fileId", () => {
+    const targetFile = "file-tracked-1";
+    const foreignFile = "file-foreign-2";
+
+    const tracker = new ClientSaveTracker(undefined, targetFile);
+    const clientDoc = new Y.Doc();
+    clientDoc.getText("content").insert(0, "Local text");
+    tracker.recordLocalEdit(clientDoc);
+    expect(tracker.getStatus()).toBe("saving");
+    expect(tracker.getPendingCount()).toBe(1);
+
+    // Foreign ACK with covered state vector arrives
+    const foreignAck = createDurableAck(foreignFile, 1, clientDoc);
+    const handled = tracker.handleDurableAck(foreignAck);
+    expect(handled).toBe(false);
+    expect(tracker.getStatus()).toBe("saving");
+    expect(tracker.getPendingCount()).toBe(1);
+
+    // Matching ACK arrives
+    const matchingAck = createDurableAck(targetFile, 1, clientDoc);
+    const matchHandled = tracker.handleDurableAck(matchingAck);
+    expect(matchHandled).toBe(true);
+    expect(tracker.getStatus()).toBe("saved");
+    expect(tracker.getPendingCount()).toBe(0);
+  });
 });

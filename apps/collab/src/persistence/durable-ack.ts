@@ -63,7 +63,10 @@ export class ClientSaveTracker {
   private currentStatus: SaveStatus = "saved";
   private isOnline = true;
 
-  constructor(private readonly onStatusChange?: (status: SaveStatus) => void) {}
+  constructor(
+    private readonly onStatusChange?: (status: SaveStatus) => void,
+    readonly fileId?: string | undefined,
+  ) {}
 
   /**
    * Called whenever the local user edits the document.
@@ -111,6 +114,10 @@ export class ClientSaveTracker {
     }
 
     const typedAck = ack as DurableAck;
+    if (this.fileId && typedAck.fileId !== this.fileId) {
+      return false;
+    }
+
     this.lastPersistedSeq = Math.max(this.lastPersistedSeq, typedAck.persistedSeq);
     const serverVectorBytes = Buffer.from(typedAck.stateVectorBase64, "base64");
 

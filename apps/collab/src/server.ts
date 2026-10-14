@@ -20,6 +20,7 @@ export interface CollabServerOptions {
   db?: DatabaseClient | undefined;
   ticketStore: TicketStore;
   redisCoordinator?: CollabRedisCoordinator | undefined;
+  heartbeatIntervalMs?: number | undefined;
 }
 
 export interface CollabClient {
@@ -60,6 +61,7 @@ export class CollabServer {
   private treeSynchronizer: TreeEventSynchronizer;
   private metrics = new CollabDurabilityMetrics();
   private redisCoordinator?: CollabRedisCoordinator | undefined;
+  private heartbeatInterval?: NodeJS.Timeout | undefined;
 
   constructor(private readonly options: CollabServerOptions) {
     if (options.db) {
@@ -108,9 +110,35 @@ export class CollabServer {
     this.wss.on("connection", (ws, req) => {
       this.handleConnection(ws, req);
     });
+
+    const intervalMs = this.options.heartbeatIntervalMs ?? 30_000;
+    if (intervalMs > 0) {
+      this.heartbeatInterval = setInterval(() => {
+        this.checkHeartbeats();
+      }, intervalMs);
+    }
+  }
+
+  checkHeartbeats(): void {
+    for (const room of this.rooms.values()) {
+      for (const client of Array.from(room.clients)) {
+        if (!client.isAlive) {
+          client.ws.terminate();
+          room.clients.delete(client);
+          continue;
+        }
+        client.isAlive = false;
+        client.ws.ping();
+      }
+    }
   }
 
   async stop(): Promise<void> {
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = undefined;
+    }
+
     for (const room of this.rooms.values()) {
       for (const client of room.clients) {
         client.ws.close(1001, "Server shutting down");
@@ -165,10 +193,11 @@ export class CollabServer {
               }),
             );
           },
-          (remoteAwareness) => {
+          (remoteAwareness, remoteUserId) => {
             room!.broadcast(
               JSON.stringify({
                 type: "awareness",
+                userId: remoteUserId,
                 awareness: remoteAwareness,
               }),
             );
@@ -218,6 +247,10 @@ export class CollabServer {
       isAlive: true,
     };
 
+    ws.on("pong", () => {
+      client.isAlive = true;
+    });
+
     let cleanupRevocation: (() => void) | undefined;
     let joinedRoom: CollabRoom | null = null;
     let authCompleted = false;
@@ -244,7 +277,7 @@ export class CollabServer {
 
           clearTimeout(authTimeout);
 
-          const originHeader = (req.headers.origin as string) || (req.headers.host as string);
+          const originHeader = req.headers.origin as string | undefined;
 
           try {
             const authContext = await authenticateConnection(
@@ -338,11 +371,13 @@ export class CollabServer {
         if (!joinedRoom || !client.auth) return;
 
         if (msg.type === "ping") {
+          client.isAlive = true;
           ws.send(JSON.stringify({ type: "pong" }));
           return;
         }
 
         if (msg.type === "awareness") {
+          client.isAlive = true;
           // Broadcast awareness to peers and Redis
           joinedRoom.broadcast(
             JSON.stringify({
@@ -353,7 +388,11 @@ export class CollabServer {
             ws,
           );
           if (this.redisCoordinator) {
-            void this.redisCoordinator.broadcastAwareness(joinedRoom.roomId, msg.awareness);
+            void this.redisCoordinator.broadcastAwareness(
+              joinedRoom.roomId,
+              msg.awareness,
+              client.auth.userId,
+            );
           }
           return;
         }

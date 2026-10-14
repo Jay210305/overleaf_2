@@ -156,7 +156,10 @@ export async function validateAndConsumeTicket(
   }
 
   // 1. Origin check
-  if (allowedOrigin && origin) {
+  if (allowedOrigin) {
+    if (!origin) {
+      return { ok: false, error: "ORIGIN_NOT_ALLOWED" };
+    }
     const normOrigin = origin.replace(/\/+$/, "");
     const normAllowed = allowedOrigin.replace(/\/+$/, "");
     if (normOrigin !== normAllowed) {

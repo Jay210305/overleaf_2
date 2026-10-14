@@ -144,17 +144,29 @@ export class OfflineReconnectManager {
     // Bounded backoff
     await new Promise((resolve) => setTimeout(resolve, Math.min(delay, 50)));
 
-    // Request new ticket for reconnect
-    const freshTicket = await this.options.fetchTicket();
+    let freshTicket: string;
+    try {
+      // Request new ticket for reconnect
+      freshTicket = await this.options.fetchTicket();
+    } catch (err) {
+      this.setOffline();
+      throw err;
+    }
+
     this.isOnline = true;
 
     // Flush pending offline updates
     const pendingUpdates = await this.storage.getPendingUpdates(this.options.fileId);
     let flushedCount = 0;
 
-    for (const update of pendingUpdates) {
-      await this.options.sendUpdate(update);
-      flushedCount++;
+    try {
+      for (const update of pendingUpdates) {
+        await this.options.sendUpdate(update);
+        flushedCount++;
+      }
+    } catch (err) {
+      this.setOffline();
+      throw err;
     }
 
     if (this.pendingLocalVectors.length > 0) {

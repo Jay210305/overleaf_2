@@ -81,4 +81,66 @@ describe("S07-T07 Coordinate two collaboration replicas integration", () => {
 
     await clientReplica2.close();
   });
+
+  it("propagates collaborator awareness and userId across separate server replicas", async () => {
+    const fileId = fixture.fileId;
+
+    // Client 1 on Replica 1
+    const ticket1 = await fixture.getTicket(fixture.owner.email, fileId, "write");
+    const client1 = await fixture.createClient(ticket1);
+
+    // Client 2 on Replica 2
+    const ticket2 = await fixture.getTicket(fixture.editor.email, fileId, "write");
+    const client2 = await fixture.createClient(ticket2, {
+      serverUrl: server2Url,
+    });
+
+    const awarenessPromise = client2.waitForMessage(
+      (m) => m.type === "awareness" && m.userId === fixture.owner.id,
+    );
+
+    // Client 1 sends awareness
+    client1.send({
+      type: "awareness",
+      awareness: {
+        cursor: { line: 12, col: 4 },
+        user: { name: "Alice Owner", color: "#10b981" },
+      },
+    });
+
+    const received = await awarenessPromise;
+    expect(received.type).toBe("awareness");
+    expect(received.userId).toBe(fixture.owner.id);
+    expect(received.awareness.cursor.line).toBe(12);
+
+    await client1.close();
+    await client2.close();
+  });
+
+  it("propagates revocation events across replicas via Redis coordinator", async () => {
+    const fileId = fixture.fileId;
+
+    // Client on Replica 2
+    const ticket = await fixture.getTicket(fixture.editor.email, fileId, "write");
+    const clientReplica2 = await fixture.createClient(ticket, {
+      serverUrl: server2Url,
+    });
+
+    const closePromise = new Promise<{ code: number; reason: string }>((resolve) => {
+      clientReplica2.ws.once("close", (code, reason) => {
+        resolve({ code, reason: reason.toString() });
+      });
+    });
+
+    // Revocation event published through Coordinator 1
+    await coord1.publishInvalidation({
+      type: "member_removed",
+      userId: fixture.editor.id,
+      projectId: fixture.projectId,
+    });
+
+    const closeEvent = await closePromise;
+    expect(closeEvent.code).toBe(4403);
+    expect(closeEvent.reason).toBe("MEMBER_REMOVED");
+  });
 });
