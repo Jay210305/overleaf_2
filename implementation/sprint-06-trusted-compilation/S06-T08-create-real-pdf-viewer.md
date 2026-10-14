@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T07]
 requirements: [CMP-03, NFR-06]
 source_task: S06-T08
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T08 — Create real PDF viewer
 

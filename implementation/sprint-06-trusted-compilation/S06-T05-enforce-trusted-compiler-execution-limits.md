@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T13]
 requirements: [CMP-04, NFR-07, PL-07]
 source_task: S06-T05
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T05 — Enforce trusted compiler execution limits
 

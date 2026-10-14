@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T11]
 requirements: [PL-04, PL-05]
 source_task: S06-T11
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T15 — Deploy trusted staging slice and smoke
 

@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T06]
 requirements: [CMP-02, EDT-07, NFR-10]
 source_task: S06-T07
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S06-T07 — Parse diagnostics and compile failures
 

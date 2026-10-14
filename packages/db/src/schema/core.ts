@@ -429,24 +429,59 @@ export const revisionItems = pgTable(
   (table) => [primaryKey({ columns: [table.revisionId, table.path] })],
 );
 
-export const compileJobs = pgTable("compile_jobs", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  projectId: uuid("project_id")
-    .notNull()
-    .references(() => projects.id, { onDelete: "cascade" }),
-  requestedBy: text("requested_by").notNull(),
-  sourceRevisionId: uuid("source_revision_id")
-    .notNull()
-    .references(() => projectRevisions.id, { onDelete: "restrict" }),
-  engine: text("engine").notNull(),
-  optionsHash: text("options_hash").notNull(),
-  status: text("status").notNull(),
-  queueId: uuid("queue_id"),
-  startedAt: timestamp("started_at", { withTimezone: true, mode: "date" }),
-  finishedAt: timestamp("finished_at", { withTimezone: true, mode: "date" }),
-  errorCode: text("error_code"),
-  artifactSetId: uuid("artifact_set_id"),
-});
+export const compileJobs = pgTable(
+  "compile_jobs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    projectId: uuid("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    requestedBy: text("requested_by").notNull(),
+    sourceRevisionId: uuid("source_revision_id")
+      .notNull()
+      .references(() => projectRevisions.id, { onDelete: "restrict" }),
+    targetRevisionId: uuid("target_revision_id").references(() => projectRevisions.id, {
+      onDelete: "set null",
+    }),
+    engine: text("engine").notNull(),
+    optionsHash: text("options_hash").notNull(),
+    status: text("status").notNull(),
+    queueId: uuid("queue_id"),
+    startedAt: timestamp("started_at", { withTimezone: true, mode: "date" }),
+    finishedAt: timestamp("finished_at", { withTimezone: true, mode: "date" }),
+    errorCode: text("error_code"),
+    artifactSetId: uuid("artifact_set_id"),
+    idempotencyKeyHash: text("idempotency_key_hash"),
+    forceClean: boolean("force_clean").notNull().default(false),
+    diagnostics: jsonb("diagnostics").notNull().default([]),
+    pdfAvailable: boolean("pdf_available").notNull().default(false),
+    leaseExpiresAt: timestamp("lease_expires_at", { withTimezone: true, mode: "date" }),
+    attempts: integer("attempts").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("compile_jobs_actor_key_uidx")
+      .on(table.requestedBy, table.projectId, table.idempotencyKeyHash)
+      .where(sql`${table.idempotencyKeyHash} IS NOT NULL`),
+    index("compile_jobs_project_time_idx").on(table.projectId, table.startedAt),
+    index("compile_jobs_project_created_idx").on(table.projectId, table.createdAt),
+    index("compile_jobs_active_quota_idx")
+      .on(table.projectId, table.requestedBy, table.status)
+      .where(sql`${table.status} IN ('queued', 'running', 'cancel_requested')`),
+    index("compile_jobs_claim_idx")
+      .on(table.status, table.leaseExpiresAt, table.createdAt)
+      .where(sql`${table.status} IN ('queued', 'running')`),
+    check(
+      "compile_jobs_engine_check",
+      sql`${table.engine} IN ('pdflatex', 'xelatex', 'lualatex', 'latex')`,
+    ),
+    check(
+      "compile_jobs_status_check",
+      sql`${table.status} IN ('queued', 'running', 'succeeded', 'failed', 'timed_out', 'cancel_requested', 'cancelled')`,
+    ),
+  ],
+);
 
 export const artifactSets = pgTable(
   "artifact_sets",

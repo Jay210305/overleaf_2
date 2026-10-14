@@ -33,7 +33,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | EDT-04 | G1 | Must | IN_PROGRESS | [S04-T05 local undo and search](test-reports/s04-t05.md); remaining mapped tasks apply |
 | EDT-05 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | EDT-06 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-07 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| EDT-07 | G1 | Must | DONE | [S06-T07 diagnostic parser](test-reports/s06-t07.md); [S06-T08 PDF viewer](test-reports/s06-t08.md); [S06-T09 compile controls](test-reports/s06-t09.md); accepted in G1 audit |
 | EDT-08 | G3 | Should | IN_PROGRESS | [S04-T05 editor shortcuts](test-reports/s04-t05.md); remaining mapped tasks apply |
 | EDT-09 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | EDT-10 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -41,15 +41,15 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | EDT-12 | G1 | Must | IN_PROGRESS | [S03-T06 compiler settings](test-reports/s03-t06.md); remaining mapped tasks apply |
 | EDT-13 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | EDT-14 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| CMP-01 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| CMP-02 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| CMP-03 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| CMP-04 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| CMP-01 | G1 | Must | DONE | [S06-T03 TeX Live image](test-reports/s06-t03.md); [S06-T04 compiler executor boundary](test-reports/s06-t04.md); [S06-T10 genuine compiler fixtures](test-reports/s06-t10.md); [S06-T13 trusted executor adapter](test-reports/s06-t13.md); accepted in G1 audit |
+| CMP-02 | G1 | Must | DONE | [S06-T07 diagnostics & path redaction](test-reports/s06-t07.md); [S06-T10 compiler fixtures](test-reports/s06-t10.md); accepted in G1 audit |
+| CMP-03 | G1 | Must | DONE | [S06-T08 real PDF viewer](test-reports/s06-t08.md); [S06-T10 compiler fixtures](test-reports/s06-t10.md); accepted in G1 audit |
+| CMP-04 | G1 | Must | DONE | [S06-T01 compile queue jobs](test-reports/s06-t01.md); [S06-T05 execution limits](test-reports/s06-t05.md); [S06-T14 timeout & recovery](test-reports/s06-t14.md); accepted in G1 audit |
 | CMP-05 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | CMP-06 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | CMP-07 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | CMP-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| CMP-09 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| CMP-09 | G1 | Must | DONE | [S06-T06 verified artifact persistence](test-reports/s06-t06.md); 14-day private retention verified; accepted in G1 audit |
 | CMP-10 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | CMP-11 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | CMP-12 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -83,17 +83,17 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | NFR-03 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-04 | G5 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | NFR-05 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| NFR-06 | G1 | Must | IN_PROGRESS | [S03-T07 structural revision manifests](test-reports/s03-t07.md); [S04-T07 text/binary checkpoints](test-reports/s04-t07.md); remaining mapped tasks apply |
-| NFR-07 | G1 | Must | IN_PROGRESS | [S05-T09 concurrent upload quota evidence](test-reports/s05-t09.md) pending review; compile and broader quota tasks remain |
+| NFR-06 | G1 | Must | DONE | [S03-T07 structural revision manifests](test-reports/s03-t07.md); [S04-T07 text/binary checkpoints](test-reports/s04-t07.md); [S06-T02 freeze compilation revision](test-reports/s06-t02.md); [S06-T06 private artifact persistence](test-reports/s06-t06.md); accepted in G1 audit |
+| NFR-07 | G1 | Must | DONE | [S05-T09 concurrent upload quota evidence](test-reports/s05-t09.md); [S06-T01 compile queue quotas](test-reports/s06-t01.md); [S06-T05 execution limits](test-reports/s06-t05.md); [S06-T14 timeouts & recovery](test-reports/s06-t14.md); accepted in G1 audit |
 | NFR-08 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); [S02-T05 Edge axe and keyboard scope accepted](test-reports/s02-t05.md); [S03-T03 dashboard axe](test-reports/s03-t03.md); [S03-T05 file tree axe](test-reports/s03-t05.md); [S03-T08 project-tree e2e axe](test-reports/s03-t08.md); [S05-T02 upload picker/Edge axe](test-reports/s05-t02.md) pending review; remaining mapped tasks still apply |
-| NFR-09 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| NFR-10 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); [S02-T06 captured-log redaction accepted](test-reports/s02-t06.md); [S02-T09 redacted audit scope accepted](test-reports/s02-t09.md); [S02-T08 real-route log checks accepted](test-reports/s02-t08.md); remaining mapped tasks still apply |
-| NFR-11 | G1 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| NFR-09 | G1 | Must | DONE | [S06-T16 backup and rollback](test-reports/s06-t16.md); [G1 recovery runbook](operations/g1-recovery.md); accepted in G1 audit |
+| NFR-10 | G1 | Must | DONE | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); [S02-T06 captured-log redaction accepted](test-reports/s02-t06.md); [S02-T09 redacted audit scope accepted](test-reports/s02-t09.md); [S02-T08 real-route log checks accepted](test-reports/s02-t08.md); [S06-T07 path redaction](test-reports/s06-t07.md); [S06-T11 closed public mode](test-reports/s06-t11.md); accepted in G1 audit |
+| NFR-11 | G1 | Must | DONE | Verified Chrome/Firefox/Edge compatibility in [S00](test-reports/s00-verification.md), [S02-T05](test-reports/s02-t05.md), [S03-T08](test-reports/s03-t08.md), [S04-T08](test-reports/s04-t08.md), [S05-T02](test-reports/s05-t02.md), [S06-T08](test-reports/s06-t08.md); [G1 release audit](test-reports/gate-g1-audit.md) |
 | NFR-12 | G2 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PL-01 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t06.md) (accepted 2026-10-10); remaining mapped tasks still apply |
-| PL-02 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); G1 release gate stabilization/audit applies before DONE |
+| PL-02 | G1 | Must | DONE | [S00 verified scope](test-reports/s00-verification.md); [Gate G1 release stabilization & audit](test-reports/gate-g1-audit.md); [G1 release runbook](operations/g1-release.md) |
 | PL-03 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); remaining mapped tasks still apply |
-| PL-04 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md) (accepted 2026-10-10); remaining mapped tasks still apply |
-| PL-05 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t10.md) (accepted 2026-10-10); remaining mapped tasks still apply |
+| PL-04 | G1 | Must | DONE | [S00 verified scope](test-reports/s00-verification.md); [S06-T15 staging deployment](test-reports/s06-t15.md); [S06-T16 rollback](test-reports/s06-t16.md); [G1 release](operations/g1-release.md); accepted in G1 audit |
+| PL-05 | G1 | Must | DONE | [S00 verified scope](test-reports/s00-verification.md); [S01 verified scope](test-reports/s01-t10.md); [S06-T15 staging smoke](test-reports/s06-t15.md); [S06-T17 G1 stabilization](test-reports/s06-t17.md); accepted in G1 audit |
 | PL-06 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t01.md) (accepted 2026-10-10); [S03-T09 transaction safety](test-reports/s03-t09.md); remaining mapped tasks still apply |
-| PL-07 | G1 | Must | IN_PROGRESS | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S02-T11 private avatar boundary accepted](test-reports/s02-t11.md); [S05-T01 private upload boundary](test-reports/s05-t01.md) pending review; remaining mapped tasks still apply |
+| PL-07 | G1 | Must | DONE | [S00 verified scope](test-reports/s00-verification.md), [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S02-T11 private avatar boundary accepted](test-reports/s02-t11.md); [S05-T01 private upload boundary](test-reports/s05-t01.md); [S06-T03/T04/T05/T11/T13 trusted executor isolation](test-reports/s06-t11.md); accepted in G1 audit |

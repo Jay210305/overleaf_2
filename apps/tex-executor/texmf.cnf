@@ -1,0 +1,13 @@
+% TeX security configuration for Collaborative LaTeX Editor (S06-T03, PL-07)
+% Enforces fails-closed execution boundaries and disallows arbitrary subprocess execution
+
+% Strictly disable shell escape (\write18)
+shell_escape = f
+shell_escape_commands =
+
+% Restrict file opening to parent directory downwards (no absolute traversal)
+openin_any = p
+openout_any = p
+
+% Prohibit first-line options from enabling shell escape
+parsefirstline = f

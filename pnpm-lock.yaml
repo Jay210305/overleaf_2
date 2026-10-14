@@ -171,9 +171,15 @@ importers:
       '@latex-collab/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@latex-collab/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
       '@latex-collab/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@latex-collab/latex':
+        specifier: workspace:*
+        version: link:../../packages/latex
       '@latex-collab/storage':
         specifier: workspace:*
         version: link:../../packages/storage
@@ -285,6 +291,12 @@ importers:
       typescript:
         specifier: 6.0.3
         version: 6.0.3
+
+  packages/latex:
+    dependencies:
+      '@latex-collab/contracts':
+        specifier: workspace:*
+        version: link:../contracts
 
   packages/storage:
     dependencies:

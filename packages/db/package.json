@@ -43,6 +43,14 @@
       "types": "./src/repositories/import-jobs.ts",
       "default": "./dist/repositories/import-jobs.js"
     },
+    "./repositories/compilations": {
+      "types": "./src/repositories/compilations.ts",
+      "default": "./dist/repositories/compilations.js"
+    },
+    "./repositories/revisions": {
+      "types": "./src/repositories/revisions.ts",
+      "default": "./dist/repositories/revisions.js"
+    },
     "./seeds/development": {
       "types": "./seeds/development.ts",
       "default": "./seeds/development.js"
