@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S07-T08]
 requirements: [NFR-05, NFR-10]
 source_task: S07-T09
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S07-T09 — Instrument collaborative durability metrics
 

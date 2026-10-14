@@ -389,7 +389,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S07: Durable collaboration (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 94 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Project Co-owner (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 94 h (ASSUMPTION A-03) | **Status:** ✅ DONE | **Owner:** Project Co-owner (proposed A-02)
 **Goal:** Durable collaboration for G2, using independently verified slices.
 
 ### Deliverables
@@ -413,26 +413,26 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S07-T01](../../implementation/sprint-07-durable-collaboration/S07-T01-create-authenticated-hocuspocus-file-rooms.md) | Create authenticated Hocuspocus file rooms | 8 | Project Co-owner | ⬜ todo | Stable project/file ID room loads canonical Y.Doc and denies missing/foreign/expired identity before reading source |
-| [S07-T02](../../implementation/sprint-07-durable-collaboration/S07-T02-implement-single-use-wss-tickets.md) | Implement single-use WSS tickets | 8 | Project Co-owner | ⬜ todo | 30s hashed ticket scopes session/project/file/action; reuse/wrong Origin/revoked membership fail atomically |
-| [S07-T03](../../implementation/sprint-07-durable-collaboration/S07-T03-connect-collaborative-editor-presence-and-undo.md) | Connect collaborative editor presence and undo | 8 | Project Co-owner | ⬜ todo | Two clients see cursors/selections; user A undo leaves B edits intact; binding uses compatible pinned versions |
-| [S07-T04](../../implementation/sprint-07-durable-collaboration/S07-T04-append-durable-crdt-updates.md) | Append durable CRDT updates | 8 | Project Co-owner | ⬜ todo | Postgres allocates per-file monotonic sequence under lock; duplicate/out-of-order Yjs updates converge after replay |
-| [S07-T11](../../implementation/sprint-07-durable-collaboration/S07-T11-implement-commit-covered-durable-acknowledgements.md) | Implement commit-covered durable acknowledgements | 8 | Project Co-owner | ⬜ todo | ACK fileId/persistedSeq/stateVector covers committed changes only; frontend saved status waits for all pending local clocks |
-| [S07-T12](../../implementation/sprint-07-durable-collaboration/S07-T12-compact-verified-crdt-snapshots-safely.md) | Compact verified CRDT snapshots safely | 8 | Project Co-owner | ⬜ todo | Snapshot upto_seq/hash verifies before update deletion; crash before/after compaction and multi-replica replay retain identical acknowledged content |
-| [S07-T05](../../implementation/sprint-07-durable-collaboration/S07-T05-implement-offline-persistence-and-reconnect.md) | Implement offline persistence and reconnect | 8 | Project Co-owner | ⬜ todo | IndexedDB retains pending updates, new ticket used at reconnect, backoff avoids loop and saved label waits for durable coverage |
-| [S07-T06](../../implementation/sprint-07-durable-collaboration/S07-T06-synchronize-tree-changes-with-open-rooms.md) | Synchronize tree changes with open rooms | 8 | Project Co-owner | ⬜ todo | Open-file rename retains room ID; delete rejects later writes and informs clients; missing event triggers REST tree refresh |
-| [S07-T07](../../implementation/sprint-07-durable-collaboration/S07-T07-coordinate-two-collaboration-replicas.md) | Coordinate two collaboration replicas | 8 | Project Co-owner | ⬜ todo | Two servers with Redis/PG converge with clients crossing replicas; no sticky-session or local-volume assumption |
-| [S07-T08](../../implementation/sprint-07-durable-collaboration/S07-T08-apply-live-role-and-session-revocation.md) | Apply live role and session revocation | 8 | Project Co-owner | ⬜ todo | Permissions invalidation prevents subsequent unauthorized mutation and new source delivery on open sockets; ticket identity cannot override current ACL |
-| [S07-T09](../../implementation/sprint-07-durable-collaboration/S07-T09-instrument-collaborative-durability-metrics.md) | Instrument collaborative durability metrics | 6 | Project Co-owner | ⬜ todo | Connections and persistence lag measure separately from broadcast lag without logging manuscript content |
-| [S07-T10](../../implementation/sprint-07-durable-collaboration/S07-T10-verify-convergence-failures-and-recovery.md) | Verify convergence failures and recovery | 8 | Project Co-owner | ⬜ todo | Five clients with 1000 edits each converge through reorder/disconnect/restart; zero durable-ACK loss; DB outage never reports saved |
+| [S07-T01](../../implementation/sprint-07-durable-collaboration/S07-T01-create-authenticated-hocuspocus-file-rooms.md) | Create authenticated Hocuspocus file rooms | 8 | Project Co-owner | ✅ done | Stable project/file ID room loads canonical Y.Doc and denies missing/foreign/expired identity before reading source |
+| [S07-T02](../../implementation/sprint-07-durable-collaboration/S07-T02-implement-single-use-wss-tickets.md) | Implement single-use WSS tickets | 8 | Project Co-owner | ✅ done | 30s hashed ticket scopes session/project/file/action; reuse/wrong Origin/revoked membership fail atomically |
+| [S07-T03](../../implementation/sprint-07-durable-collaboration/S07-T03-connect-collaborative-editor-presence-and-undo.md) | Connect collaborative editor presence and undo | 8 | Project Co-owner | ✅ done | Two clients see cursors/selections; user A undo leaves B edits intact; binding uses compatible pinned versions |
+| [S07-T04](../../implementation/sprint-07-durable-collaboration/S07-T04-append-durable-crdt-updates.md) | Append durable CRDT updates | 8 | Project Co-owner | ✅ done | Postgres allocates per-file monotonic sequence under lock; duplicate/out-of-order Yjs updates converge after replay |
+| [S07-T11](../../implementation/sprint-07-durable-collaboration/S07-T11-implement-commit-covered-durable-acknowledgements.md) | Implement commit-covered durable acknowledgements | 8 | Project Co-owner | ✅ done | ACK fileId/persistedSeq/stateVector covers committed changes only; frontend saved status waits for all pending local clocks |
+| [S07-T12](../../implementation/sprint-07-durable-collaboration/S07-T12-compact-verified-crdt-snapshots-safely.md) | Compact verified CRDT snapshots safely | 8 | Project Co-owner | ✅ done | Snapshot upto_seq/hash verifies before update deletion; crash before/after compaction and multi-replica replay retain identical acknowledged content |
+| [S07-T05](../../implementation/sprint-07-durable-collaboration/S07-T05-implement-offline-persistence-and-reconnect.md) | Implement offline persistence and reconnect | 8 | Project Co-owner | ✅ done | IndexedDB retains pending updates, new ticket used at reconnect, backoff avoids loop and saved label waits for durable coverage |
+| [S07-T06](../../implementation/sprint-07-durable-collaboration/S07-T06-synchronize-tree-changes-with-open-rooms.md) | Synchronize tree changes with open rooms | 8 | Project Co-owner | ✅ done | Open-file rename retains room ID; delete rejects later writes and informs clients; missing event triggers REST tree refresh |
+| [S07-T07](../../implementation/sprint-07-durable-collaboration/S07-T07-coordinate-two-collaboration-replicas.md) | Coordinate two collaboration replicas | 8 | Project Co-owner | ✅ done | Two servers with Redis/PG converge with clients crossing replicas; no sticky-session or local-volume assumption |
+| [S07-T08](../../implementation/sprint-07-durable-collaboration/S07-T08-apply-live-role-and-session-revocation.md) | Apply live role and session revocation | 8 | Project Co-owner | ✅ done | Permissions invalidation prevents subsequent unauthorized mutation and new source delivery on open sockets; ticket identity cannot override current ACL |
+| [S07-T09](../../implementation/sprint-07-durable-collaboration/S07-T09-instrument-collaborative-durability-metrics.md) | Instrument collaborative durability metrics | 6 | Project Co-owner | ✅ done | Connections and persistence lag measure separately from broadcast lag without logging manuscript content |
+| [S07-T10](../../implementation/sprint-07-durable-collaboration/S07-T10-verify-convergence-failures-and-recovery.md) | Verify convergence failures and recovery | 8 | Project Co-owner | ✅ done | Five clients with 1000 edits each converge through reorder/disconnect/restart; zero durable-ACK loss; DB outage never reports saved |
 
 ### DoD
 
-- [ ] Every task's acceptance and declared scope has actual evidence.
-- [ ] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
-- [ ] Permissions, persistence, privacy and real outputs are verified.
-- [ ] Contracts, progress, feature matrix and actual effort are updated.
-- [ ] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
+- [x] Every task's acceptance and declared scope has actual evidence.
+- [x] QG-01–QG-10 from [Quality Gates](06-ci-cd-and-environments.md) pass where applicable; critical coverage >=80%.
+- [x] Permissions, persistence, privacy and real outputs are verified.
+- [x] Contracts, progress, feature matrix and actual effort are updated.
+- [x] The corresponding release-gate stabilization/audit is complete before declaring that gate passed.
 
 ### Mitigations
 

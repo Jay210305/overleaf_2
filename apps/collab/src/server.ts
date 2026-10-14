@@ -1,0 +1,493 @@
+import http from "node:http";
+import { WebSocketServer, WebSocket } from "ws";
+import * as Y from "yjs";
+import type { DatabaseClient } from "@latex-collab/db";
+import type { DurableAck } from "@latex-collab/contracts";
+import type { TicketStore } from "./auth/ticket.js";
+import { authenticateConnection, AuthenticationError, type AuthenticatedUserContext } from "./auth/authenticate.js";
+import { UpdateLog } from "./persistence/update-log.js";
+import { createDurableAck } from "./persistence/durable-ack.js";
+import { SnapshotService } from "./persistence/snapshots.js";
+import { TreeEventSynchronizer } from "./tree-events.js";
+import { CollabRedisCoordinator } from "./redis.js";
+import { LiveRevocationManager, type ActiveCollabSocket, type RevocationEvent } from "./auth/revocation.js";
+import { CollabDurabilityMetrics } from "./metrics.js";
+
+export interface CollabServerOptions {
+  port?: number | undefined;
+  server?: http.Server | undefined;
+  allowedOrigin?: string | undefined;
+  db?: DatabaseClient | undefined;
+  ticketStore: TicketStore;
+  redisCoordinator?: CollabRedisCoordinator | undefined;
+  heartbeatIntervalMs?: number | undefined;
+}
+
+export interface CollabClient {
+  ws: WebSocket;
+  auth?: AuthenticatedUserContext;
+  isAlive: boolean;
+}
+
+export class CollabRoom {
+  readonly clients = new Set<CollabClient>();
+  readonly doc = new Y.Doc();
+  lastPersistedSeq = 0;
+  isLoaded = false;
+  isDeleted = false;
+
+  constructor(
+    readonly roomId: string,
+    readonly projectId: string,
+    readonly fileId: string,
+  ) {}
+
+  broadcast(message: string, excludeWs?: WebSocket): void {
+    for (const client of this.clients) {
+      if (client.ws !== excludeWs && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(message);
+      }
+    }
+  }
+}
+
+export class CollabServer {
+  private wss?: WebSocketServer | undefined;
+  private httpServer?: http.Server | undefined;
+  private rooms = new Map<string, CollabRoom>();
+  private updateLog?: UpdateLog | undefined;
+  private snapshotService?: SnapshotService | undefined;
+  private revocationManager: LiveRevocationManager;
+  private treeSynchronizer: TreeEventSynchronizer;
+  private metrics = new CollabDurabilityMetrics();
+  private redisCoordinator?: CollabRedisCoordinator | undefined;
+  private heartbeatInterval?: NodeJS.Timeout | undefined;
+
+  constructor(private readonly options: CollabServerOptions) {
+    if (options.db) {
+      this.updateLog = new UpdateLog(options.db);
+      this.snapshotService = new SnapshotService(options.db);
+    }
+    this.redisCoordinator = options.redisCoordinator;
+    this.revocationManager = new LiveRevocationManager(options.ticketStore);
+
+    this.treeSynchronizer = new TreeEventSynchronizer({
+      notifyRoomClosed: (fileId, reason) => {
+        this.closeRoomsForFile(fileId, reason);
+      },
+      markFileDeleted: (fileId) => {
+        for (const room of this.rooms.values()) {
+          if (room.fileId === fileId) {
+            room.isDeleted = true;
+          }
+        }
+      },
+      isFileDeleted: (fileId) => this.treeSynchronizer.isFileDeleted(fileId),
+    });
+
+    if (this.redisCoordinator) {
+      this.redisCoordinator.onInvalidation((data) => {
+        if (typeof data === "object" && data !== null) {
+          void this.revocationManager.handleRevocation(data as RevocationEvent);
+        }
+      });
+    }
+  }
+
+  async start(): Promise<void> {
+    if (this.options.server) {
+      this.httpServer = this.options.server;
+      this.wss = new WebSocketServer({ server: this.httpServer });
+    } else {
+      const port = this.options.port ?? 0;
+      this.httpServer = http.createServer();
+      this.wss = new WebSocketServer({ server: this.httpServer });
+      await new Promise<void>((resolve) => {
+        this.httpServer!.listen(port, () => resolve());
+      });
+    }
+
+    this.wss.on("connection", (ws, req) => {
+      this.handleConnection(ws, req);
+    });
+
+    const intervalMs = this.options.heartbeatIntervalMs ?? 30_000;
+    if (intervalMs > 0) {
+      this.heartbeatInterval = setInterval(() => {
+        this.checkHeartbeats();
+      }, intervalMs);
+    }
+  }
+
+  checkHeartbeats(): void {
+    for (const room of this.rooms.values()) {
+      for (const client of Array.from(room.clients)) {
+        if (!client.isAlive) {
+          client.ws.terminate();
+          room.clients.delete(client);
+          continue;
+        }
+        client.isAlive = false;
+        client.ws.ping();
+      }
+    }
+  }
+
+  async stop(): Promise<void> {
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = undefined;
+    }
+
+    for (const room of this.rooms.values()) {
+      for (const client of room.clients) {
+        client.ws.close(1001, "Server shutting down");
+      }
+    }
+    this.rooms.clear();
+
+    if (this.wss) {
+      await new Promise<void>((resolve) => this.wss!.close(() => resolve()));
+    }
+    if (this.httpServer && !this.options.server) {
+      await new Promise<void>((resolve) => this.httpServer!.close(() => resolve()));
+    }
+  }
+
+  getMetrics(): CollabDurabilityMetrics {
+    return this.metrics;
+  }
+
+  getTreeSynchronizer(): TreeEventSynchronizer {
+    return this.treeSynchronizer;
+  }
+
+  getRevocationManager(): LiveRevocationManager {
+    return this.revocationManager;
+  }
+
+  getRoom(roomId: string): CollabRoom | undefined {
+    return this.rooms.get(roomId);
+  }
+
+  private async getOrCreateRoom(projectId: string, fileId: string): Promise<CollabRoom> {
+    const roomId = `project:${projectId}:file:${fileId}`;
+    let room = this.rooms.get(roomId);
+    if (!room) {
+      room = new CollabRoom(roomId, projectId, fileId);
+      this.rooms.set(roomId, room);
+      this.metrics.setRoomCount(this.rooms.size);
+
+      // Register with Redis Coordinator
+      if (this.redisCoordinator) {
+        this.redisCoordinator.registerRoom(
+          roomId,
+          (remoteUpdateBytes) => {
+            // Apply update from another replica
+            Y.applyUpdate(room!.doc, remoteUpdateBytes);
+            // Broadcast to local room clients
+            room!.broadcast(
+              JSON.stringify({
+                type: "sync.update",
+                updateBase64: Buffer.from(remoteUpdateBytes).toString("base64"),
+              }),
+            );
+          },
+          (remoteAwareness, remoteUserId) => {
+            room!.broadcast(
+              JSON.stringify({
+                type: "awareness",
+                userId: remoteUserId,
+                awareness: remoteAwareness,
+              }),
+            );
+          },
+        );
+      }
+    }
+
+    // Load initial canonical doc from database if not loaded
+    if (!room.isLoaded && this.updateLog) {
+      const replayResult = await this.updateLog.replay(fileId);
+      // Copy state from replayed doc
+      const stateUpdate = Y.encodeStateAsUpdate(replayResult.doc);
+      if (stateUpdate.length > 0) {
+        Y.applyUpdate(room.doc, stateUpdate);
+      }
+      room.lastPersistedSeq = replayResult.lastPersistedSeq;
+      room.isLoaded = true;
+    }
+
+    return room;
+  }
+
+  private closeRoomsForFile(fileId: string, reason: string): void {
+    for (const [roomId, room] of Array.from(this.rooms.entries())) {
+      if (room.fileId === fileId) {
+        room.isDeleted = true;
+        room.broadcast(JSON.stringify({ type: "room.closed", fileId, reason }));
+        for (const client of room.clients) {
+          client.ws.close(4404, reason);
+        }
+        room.clients.clear();
+        this.rooms.delete(roomId);
+        if (this.redisCoordinator) {
+          this.redisCoordinator.unregisterRoom(roomId);
+        }
+      }
+    }
+    this.metrics.setRoomCount(this.rooms.size);
+  }
+
+  private handleConnection(ws: WebSocket, req: http.IncomingMessage): void {
+    this.metrics.recordConnectionOpened();
+
+    const client: CollabClient = {
+      ws,
+      isAlive: true,
+    };
+
+    ws.on("pong", () => {
+      client.isAlive = true;
+    });
+
+    let cleanupRevocation: (() => void) | undefined;
+    let joinedRoom: CollabRoom | null = null;
+    let authCompleted = false;
+
+    // Timeout unauthenticated sockets after 10 seconds
+    const authTimeout = setTimeout(() => {
+      if (!authCompleted && ws.readyState === WebSocket.OPEN) {
+        ws.close(4401, "AUTHENTICATION_TIMEOUT");
+      }
+    }, 10_000);
+
+    ws.on("message", async (rawMessage) => {
+      try {
+        const text = rawMessage.toString();
+        const msg = JSON.parse(text);
+
+        // 1. Initial Handshake / Authentication Message
+        if (!authCompleted) {
+          if (msg.type !== "auth" || !msg.ticket) {
+            ws.send(JSON.stringify({ type: "error", code: "AUTHENTICATION_REQUIRED" }));
+            ws.close(4401, "AUTHENTICATION_REQUIRED");
+            return;
+          }
+
+          clearTimeout(authTimeout);
+
+          const originHeader = req.headers.origin as string | undefined;
+
+          try {
+            const authContext = await authenticateConnection(
+              {
+                ticket: msg.ticket,
+                origin: originHeader,
+                allowedOrigin: this.options.allowedOrigin,
+                expectedProjectId: msg.projectId,
+                expectedFileId: msg.fileId,
+              },
+              this.options.ticketStore,
+              this.options.db,
+            );
+
+            client.auth = authContext;
+            authCompleted = true;
+
+            // Check if file was deleted
+            if (this.treeSynchronizer.isFileDeleted(authContext.fileId)) {
+              ws.send(JSON.stringify({ type: "error", code: "RESOURCE_NOT_FOUND" }));
+              ws.close(4404, "RESOURCE_NOT_FOUND");
+              return;
+            }
+
+            // Join or create room
+            const room = await this.getOrCreateRoom(authContext.projectId, authContext.fileId);
+            if (room.isDeleted) {
+              ws.send(JSON.stringify({ type: "error", code: "RESOURCE_NOT_FOUND" }));
+              ws.close(4404, "RESOURCE_NOT_FOUND");
+              return;
+            }
+
+            room.clients.add(client);
+            joinedRoom = room;
+
+            // Register with live revocation manager
+            const activeSocket: ActiveCollabSocket = {
+              userId: authContext.userId,
+              projectId: authContext.projectId,
+              sessionId: authContext.sessionId,
+              get action() {
+                return client.auth?.action ?? "read";
+              },
+              set action(val: "read" | "write") {
+                if (client.auth) {
+                  client.auth.action = val;
+                }
+              },
+              setRole(newRole: string) {
+                if (client.auth) {
+                  client.auth.role = newRole;
+                }
+              },
+              close: (code, reason) => ws.close(code, reason),
+              send: (m) => ws.send(m),
+            };
+            cleanupRevocation = this.revocationManager.registerSocket(activeSocket);
+
+            // Send initial document state and auth confirmation
+            const docState = Y.encodeStateAsUpdate(room.doc);
+            const stateVector = Y.encodeStateVector(room.doc);
+
+            ws.send(
+              JSON.stringify({
+                type: "auth.ok",
+                roomId: room.roomId,
+                fileId: authContext.fileId,
+                role: authContext.role,
+                action: authContext.action,
+                lastPersistedSeq: room.lastPersistedSeq,
+                stateVectorBase64: Buffer.from(stateVector).toString("base64"),
+                updateBase64: Buffer.from(docState).toString("base64"),
+              }),
+            );
+          } catch (err) {
+            const authErr = err as AuthenticationError;
+            ws.send(
+              JSON.stringify({
+                type: "error",
+                code: authErr.code || "AUTHENTICATION_FAILED",
+                message: authErr.message,
+              }),
+            );
+            ws.close(authErr.code === "ORIGIN_NOT_ALLOWED" ? 4003 : 4401, authErr.code);
+            return;
+          }
+          return;
+        }
+
+        // 2. Authenticated Message Processing
+        if (!joinedRoom || !client.auth) return;
+
+        if (msg.type === "ping") {
+          client.isAlive = true;
+          ws.send(JSON.stringify({ type: "pong" }));
+          return;
+        }
+
+        if (msg.type === "awareness") {
+          client.isAlive = true;
+          // Broadcast awareness to peers and Redis
+          joinedRoom.broadcast(
+            JSON.stringify({
+              type: "awareness",
+              userId: client.auth.userId,
+              awareness: msg.awareness,
+            }),
+            ws,
+          );
+          if (this.redisCoordinator) {
+            void this.redisCoordinator.broadcastAwareness(
+              joinedRoom.roomId,
+              msg.awareness,
+              client.auth.userId,
+            );
+          }
+          return;
+        }
+
+        if (msg.type === "sync.update") {
+          // Reject write if connection is read-only
+          if (client.auth.action === "read" || client.auth.role === "VIEWER") {
+            ws.send(JSON.stringify({ type: "error", code: "PERMISSION_DENIED" }));
+            return;
+          }
+
+          if (joinedRoom.isDeleted) {
+            ws.send(JSON.stringify({ type: "error", code: "RESOURCE_NOT_FOUND" }));
+            ws.close(4404, "RESOURCE_NOT_FOUND");
+            return;
+          }
+
+          const updateBase64 = String(msg.updateBase64 ?? "");
+          const updateBytes = Buffer.from(updateBase64, "base64");
+          if (updateBytes.length === 0 || updateBytes.length > 1024 * 1024) {
+            ws.send(JSON.stringify({ type: "error", code: "VALIDATION_ERROR" }));
+            return;
+          }
+
+          const startTime = Date.now();
+
+          // 1. Apply to in-memory room doc
+          Y.applyUpdate(joinedRoom.doc, new Uint8Array(updateBytes));
+
+          // 2. Broadcast immediately to peers in room
+          joinedRoom.broadcast(
+            JSON.stringify({
+              type: "sync.update",
+              updateBase64,
+            }),
+            ws,
+          );
+
+          if (this.redisCoordinator) {
+            void this.redisCoordinator.broadcastUpdate(joinedRoom.roomId, updateBytes);
+          }
+
+          const broadcastLag = Date.now() - startTime;
+          this.metrics.recordBroadcastLag(broadcastLag);
+
+          // 3. Commit to PostgreSQL under per-file lock
+          if (this.updateLog) {
+            try {
+              const { seq } = await this.updateLog.appendUpdate(
+                client.auth.fileId,
+                client.auth.userId,
+                new Uint8Array(updateBytes),
+              );
+
+              joinedRoom.lastPersistedSeq = seq;
+              const persistenceLag = Date.now() - startTime;
+              this.metrics.recordPersistenceLag(persistenceLag);
+
+              // 4. Send DurableAck ONLY AFTER successful DB commit
+              const ack: DurableAck = createDurableAck(
+                client.auth.fileId,
+                seq,
+                joinedRoom.doc,
+              );
+              ws.send(JSON.stringify(ack));
+            } catch {
+              // DB outage: DO NOT send DurableAck!
+              // Broadcast was sent, but edit is NOT yet durable.
+              ws.send(
+                JSON.stringify({
+                  type: "error",
+                  code: "DATABASE_UNAVAILABLE",
+                  message: "Update pending durability commit",
+                }),
+              );
+            }
+          }
+          return;
+        }
+      } catch {
+        ws.send(JSON.stringify({ type: "error", code: "BAD_REQUEST" }));
+      }
+    });
+
+    ws.on("close", () => {
+      clearTimeout(authTimeout);
+      this.metrics.recordConnectionClosed();
+      cleanupRevocation?.();
+
+      if (joinedRoom) {
+        joinedRoom.clients.delete(client);
+        if (joinedRoom.clients.size === 0) {
+          // Retain room in cache or cleanup
+        }
+      }
+    });
+  }
+}

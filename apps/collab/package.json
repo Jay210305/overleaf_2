@@ -1,0 +1,22 @@
+{
+  "name": "@latex-collab/collab",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@latex-collab/config": "workspace:*",
+    "@latex-collab/contracts": "workspace:*",
+    "@latex-collab/db": "workspace:*",
+    "redis": "6.3.0",
+    "ws": "^8.22.0",
+    "yjs": "13.6.27"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.2",
+    "typescript": "6.0.3"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js"
+  }
+}
