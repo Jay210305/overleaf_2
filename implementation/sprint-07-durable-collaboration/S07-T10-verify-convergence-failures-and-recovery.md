@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S07-T09]
 requirements: [NFR-01, NFR-02, NFR-12]
 source_task: S07-T10
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S07-T10 — Verify convergence failures and recovery
 

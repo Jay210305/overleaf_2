@@ -90,18 +90,18 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S06-T15 | [Deploy trusted staging slice and smoke](sprint-06-trusted-compilation/S06-T15-deploy-trusted-staging-slice-and-smoke.md) | Julio (proposed) | 8 | done |
 | S06-T16 | [Verify trusted-release backup and rollback](sprint-06-trusted-compilation/S06-T16-verify-trusted-release-backup-and-rollback.md) | Julio (proposed) | 8 | done |
 | S06-T17 | [Stabilize and review G1 release](sprint-06-trusted-compilation/S06-T17-stabilize-and-review-g1-release.md) | Julio (proposed) | 8 | done |
-| S07-T01 | [Create authenticated Hocuspocus file rooms](sprint-07-durable-collaboration/S07-T01-create-authenticated-hocuspocus-file-rooms.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T02 | [Implement single-use WSS tickets](sprint-07-durable-collaboration/S07-T02-implement-single-use-wss-tickets.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T03 | [Connect collaborative editor presence and undo](sprint-07-durable-collaboration/S07-T03-connect-collaborative-editor-presence-and-undo.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T04 | [Append durable CRDT updates](sprint-07-durable-collaboration/S07-T04-append-durable-crdt-updates.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T11 | [Implement commit-covered durable acknowledgements](sprint-07-durable-collaboration/S07-T11-implement-commit-covered-durable-acknowledgements.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T12 | [Compact verified CRDT snapshots safely](sprint-07-durable-collaboration/S07-T12-compact-verified-crdt-snapshots-safely.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T05 | [Implement offline persistence and reconnect](sprint-07-durable-collaboration/S07-T05-implement-offline-persistence-and-reconnect.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T06 | [Synchronize tree changes with open rooms](sprint-07-durable-collaboration/S07-T06-synchronize-tree-changes-with-open-rooms.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T07 | [Coordinate two collaboration replicas](sprint-07-durable-collaboration/S07-T07-coordinate-two-collaboration-replicas.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T08 | [Apply live role and session revocation](sprint-07-durable-collaboration/S07-T08-apply-live-role-and-session-revocation.md) | Project Co-owner (proposed) | 8 | todo |
-| S07-T09 | [Instrument collaborative durability metrics](sprint-07-durable-collaboration/S07-T09-instrument-collaborative-durability-metrics.md) | Project Co-owner (proposed) | 6 | todo |
-| S07-T10 | [Verify convergence failures and recovery](sprint-07-durable-collaboration/S07-T10-verify-convergence-failures-and-recovery.md) | Project Co-owner (proposed) | 8 | todo |
+| S07-T01 | [Create authenticated Hocuspocus file rooms](sprint-07-durable-collaboration/S07-T01-create-authenticated-hocuspocus-file-rooms.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T02 | [Implement single-use WSS tickets](sprint-07-durable-collaboration/S07-T02-implement-single-use-wss-tickets.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T03 | [Connect collaborative editor presence and undo](sprint-07-durable-collaboration/S07-T03-connect-collaborative-editor-presence-and-undo.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T04 | [Append durable CRDT updates](sprint-07-durable-collaboration/S07-T04-append-durable-crdt-updates.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T11 | [Implement commit-covered durable acknowledgements](sprint-07-durable-collaboration/S07-T11-implement-commit-covered-durable-acknowledgements.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T12 | [Compact verified CRDT snapshots safely](sprint-07-durable-collaboration/S07-T12-compact-verified-crdt-snapshots-safely.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T05 | [Implement offline persistence and reconnect](sprint-07-durable-collaboration/S07-T05-implement-offline-persistence-and-reconnect.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T06 | [Synchronize tree changes with open rooms](sprint-07-durable-collaboration/S07-T06-synchronize-tree-changes-with-open-rooms.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T07 | [Coordinate two collaboration replicas](sprint-07-durable-collaboration/S07-T07-coordinate-two-collaboration-replicas.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T08 | [Apply live role and session revocation](sprint-07-durable-collaboration/S07-T08-apply-live-role-and-session-revocation.md) | Project Co-owner (proposed) | 8 | done |
+| S07-T09 | [Instrument collaborative durability metrics](sprint-07-durable-collaboration/S07-T09-instrument-collaborative-durability-metrics.md) | Project Co-owner (proposed) | 6 | done |
+| S07-T10 | [Verify convergence failures and recovery](sprint-07-durable-collaboration/S07-T10-verify-convergence-failures-and-recovery.md) | Project Co-owner (proposed) | 8 | done |
 | S08-T01 | [Implement expiring email invitations](sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md) | Julio (proposed) | 8 | todo |
 | S08-T02 | [Implement bounded hashed share links](sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md) | Julio (proposed) | 8 | todo |
 | S08-T03 | [Create sharing and role management UI](sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md) | Julio (proposed) | 8 | todo |

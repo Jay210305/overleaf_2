@@ -23,6 +23,7 @@ import { registerCheckpointRoutes } from "./modules/history/checkpoint.js";
 import { registerUploadRoutes } from "./modules/uploads/routes.js";
 import { registerImportRoutes } from "./modules/imports/routes.js";
 import { registerCompilationRoutes } from "./modules/compilations/routes.js";
+import { registerCollabTicketRoutes, type TicketStore } from "./modules/collab/ticket.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -56,6 +57,7 @@ export interface ServerOptions {
   sendPasswordReset?: SendPasswordReset | undefined;
   secureCookies?: boolean | undefined;
   rateLimiter?: AuthRateLimiter | undefined;
+  ticketStore?: TicketStore | undefined;
 }
 export function createServer(options: ServerOptions) {
   const app = Fastify({
@@ -181,6 +183,10 @@ export function createServer(options: ServerOptions) {
       storage: options.storage,
       origin: options.origin,
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+    registerCollabTicketRoutes(app, {
+      db: options.db,
+      ticketStore: options.ticketStore,
     });
   }
   return app;

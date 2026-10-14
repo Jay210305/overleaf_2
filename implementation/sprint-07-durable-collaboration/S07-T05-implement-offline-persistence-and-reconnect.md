@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S07-T12]
 requirements: [COL-12, NFR-12]
 source_task: S07-T05
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S07-T05 — Implement offline persistence and reconnect
 

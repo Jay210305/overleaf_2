@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S07-T02]
 requirements: [COL-01, COL-02]
 source_task: S07-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S07-T03 — Connect collaborative editor presence and undo
 

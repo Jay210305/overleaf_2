@@ -368,6 +368,38 @@ export const durableAckSchema = z.strictObject({
 });
 export type DurableAck = z.infer<typeof durableAckSchema>;
 
+export const ticketRequestSchema = z.strictObject({
+  fileId: z.string().uuid(),
+  action: z.enum(["read", "write"]),
+});
+export type TicketRequest = z.infer<typeof ticketRequestSchema>;
+
+export const ticketViewSchema = z.strictObject({
+  ticket: z.string().min(16).max(2048),
+  expiresAt: z.string().datetime(),
+});
+export type TicketView = z.infer<typeof ticketViewSchema>;
+
+export const eventEnvelopeSchema = z.strictObject({
+  eventId: z.string().uuid(),
+  version: z.literal(1),
+  projectId: z.string().uuid(),
+  occurredAt: z.string().datetime(),
+  type: z.enum([
+    "file.created",
+    "file.moved",
+    "file.deleted",
+    "project.settings_changed",
+    "permissions.changed",
+    "compile.status_changed",
+    "comment.changed",
+    "suggestion.changed",
+    "chat.created",
+  ]),
+  payload: z.record(z.string(), z.unknown()),
+});
+export type EventEnvelope = z.infer<typeof eventEnvelopeSchema>;
+
 export const createCheckpointSchema = z.strictObject({
   label: z.string().max(255).optional(),
   source: z.string().max(100).default("manual"),

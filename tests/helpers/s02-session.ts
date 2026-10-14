@@ -7,6 +7,7 @@ import { parseServerConfig } from "@latex-collab/config/server";
 import { DatabaseClient } from "../../packages/db/src/client.js";
 import { createServer } from "../../apps/api/src/server.js";
 import type { SendPasswordReset } from "../../apps/api/src/modules/auth/password-reset.js";
+import type { TicketStore } from "../../apps/api/src/modules/collab/ticket.js";
 
 loadEnvFile(".env");
 export const origin = "http://127.0.0.1:5173";
@@ -15,6 +16,7 @@ export async function createSessionFixture(
   customOrigin = origin,
   secureCookies = false,
   sendPasswordReset?: SendPasswordReset,
+  ticketStore?: TicketStore,
 ) {
   const db = new DatabaseClient(parseServerConfig(process.env).DATABASE_URL);
   const core = readFileSync(
@@ -40,6 +42,7 @@ export async function createSessionFixture(
     secureCookies,
     logger: false,
     sendPasswordReset,
+    ticketStore,
   });
   const password = "correct-password-123";
   async function seed(verified = true, disabled = false) {
