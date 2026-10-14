@@ -47,6 +47,8 @@ S05-T02 focused tests pass (3 files, 8 tests), and a real Edge journey passed wi
 
 S05-T09 cleanup is conservative around revisions because the current schema can erase historical item references. S05-T02's hosted-storage CORS and cross-browser coverage remain unverified. Two LOW review nits recorded 2026-10-13 without touching accepted code: the browser `.bst` MIME allowlist is narrower than the server policy (server stays authoritative), and a row hung in `completing` has no cancel affordance (network failure still yields error plus retry). Migration deployment, historical references and inherited gate failures are tracked in [Open Gaps](open-gaps.md). S05-T01, S05-T09 and S05-T02 were accepted 2026-10-13; do not mark later tasks done without their own review.
 
+The [2026-10-13 origin/main integration review](../test-reports/integration-review-2026-10-13.md) confirmed no new merge was needed and reran the local gates. It found a post-Redis-restart auth recovery defect (GAP-23), a Firefox host/browser gate blocker (GAP-24) and the existing formatting gap (GAP-16). S05-T10 status and co-maintainer review requirement are unchanged.
+
 ## Next Task
 
 S05-T10 implementation awaits final shared gates and independent review. S05-T04 immutable source ZIP export is the next unstarted slice after acceptance. GAP-17 still guards GC reclamation.

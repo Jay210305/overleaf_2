@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "32b7f0444cc37771afc480c1ebfa69bc0800e39c",
+  "git_baseline": "bf293c7f2e706e95941c733cb232d20293ab8236",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -78,7 +78,12 @@
     {
       "path": ".superpowers/sdd/2026-10-13-s05-import-project-apply/progress.md",
       "role": "factory",
-      "sha256": "feab5475ad2c3545a85fae72bcab175f35346194e2eeb48934a0cca6225bbd16"
+      "sha256": "c1aa6e16f4254f57a823bfce8387df9bced4157b6a5e29a28c290c94dc00d39e"
+    },
+    {
+      "path": ".superpowers/sdd/2026-10-13-s05-import-project-apply/review-35a9d57..36ac70e.diff",
+      "role": "factory",
+      "sha256": "19eeb8cbcd5d8fa4c298c8c83e7153c47e6d29b4d6336609206842044b5c1f20"
     },
     {
       "path": "AGENTS.md",
@@ -628,7 +633,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "dc42a7387be5ca8aa65b394bfe3f1cc7b718d4dc9dd37b85be654f283bfa497f"
+      "sha256": "00725eec6bf12d3fcc71aff5dce7aa207808d96ddbb8fe9559d31d9472fd3c35"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -768,7 +773,7 @@
     {
       "path": "docs/progress/open-gaps.md",
       "role": "product",
-      "sha256": "42a6af6fa67cfb52cc49d2ce0f90a5a1715379c0fffc6f0b9113cc01d3a8bc46"
+      "sha256": "9a503d5e87c63040b4eb9f242147727df79045873a28e40f705314f6129d58ff"
     },
     {
       "path": "docs/progress/progress-log.md",
@@ -808,7 +813,7 @@
     {
       "path": "docs/progress/sprint-05.md",
       "role": "product",
-      "sha256": "d3c604195c3002fe25eec2bb10f3cf00f96d78bdfddca1a3dcdc348a2fa7ce37"
+      "sha256": "630fef06be47c9c148db5cfc17c89c68342074a765ecb5084dc286572633b8aa"
     },
     {
       "path": "docs/progress/sprint-06.md",
@@ -899,6 +904,11 @@
       "path": "docs/superpowers/specs/2026-10-12-s05-multi-file-upload-design.md",
       "role": "factory",
       "sha256": "ff5ded54e4dfb78c0945ababc27fdab5aed3cac0470bf44489fc2f78c8468a68"
+    },
+    {
+      "path": "docs/test-reports/integration-review-2026-10-13.md",
+      "role": "factory",
+      "sha256": "669d6d8adf7391a0ce6e26fa1a967430478026609a20c3151bd7e8e56eea29dc"
     },
     {
       "path": "docs/test-reports/s00-t01.md",
