@@ -138,6 +138,14 @@ export type ValidateTicketResult =
       detail?: string;
     };
 
+function trimTrailingSlashes(value: string): string {
+  let normalized = value;
+  while (normalized.endsWith("/")) {
+    normalized = normalized.slice(0, -1);
+  }
+  return normalized;
+}
+
 /**
  * Validates and atomically consumes a single-use WSS collaboration ticket.
  * Enforces:
@@ -160,8 +168,8 @@ export async function validateAndConsumeTicket(
     if (!origin) {
       return { ok: false, error: "ORIGIN_NOT_ALLOWED" };
     }
-    const normOrigin = origin.replace(/\/+$/, "");
-    const normAllowed = allowedOrigin.replace(/\/+$/, "");
+    const normOrigin = trimTrailingSlashes(origin);
+    const normAllowed = trimTrailingSlashes(allowedOrigin);
     if (normOrigin !== normAllowed) {
       return { ok: false, error: "ORIGIN_NOT_ALLOWED" };
     }
