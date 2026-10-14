@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "LatexWorkspace Planned API",
-    "version": "1.0.0",
-    "description": "Planning baseline with S02-T01 interim G1 route annotations. This artifact alone is not runtime evidence; see task reports and x-status. Draft examples use reserved example.test data."
+    "version": "2.0.0",
+    "description": "Planning and partial runtime API contract; invitation tokens move in JSON bodies under ADR-010. This artifact alone is not runtime evidence; see task reports and x-status."
   },
   "servers": [
     {
@@ -5576,7 +5576,8 @@
                   "email": "developer@example.test",
                   "role": "EDITOR",
                   "expiresAt": "2026-10-09T17:00:00Z",
-                  "status": "pending"
+                  "status": "pending",
+                  "createdAt": "2026-10-14T17:00:00Z"
                 }
               }
             }
@@ -5891,7 +5892,7 @@
                 },
                 "example": {
                   "items": [],
-                  "nextCursor": "x"
+                  "nextCursor": null
                 }
               }
             }
@@ -5931,7 +5932,7 @@
           }
         },
         "x-permission": "owner",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -5973,7 +5974,8 @@
                   "email": "developer@example.test",
                   "role": "EDITOR",
                   "expiresAt": "2026-10-09T17:00:00Z",
-                  "status": "pending"
+                  "status": "pending",
+                  "createdAt": "2026-10-14T17:00:00Z"
                 }
               }
             }
@@ -6013,7 +6015,7 @@
           }
         },
         "x-permission": "owner",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -6040,169 +6042,6 @@
         },
         "x-invalid-example": {
           "case": "Invalid requestBody example",
-          "expectedStatus": 400
-        }
-      }
-    },
-    "/api/v1/invitations/{token}/accept": {
-      "post": {
-        "operationId": "post__invitations_token_accept",
-        "summary": "POST /invitations/{token}/accept",
-        "description": "Permission: session. Current session and authoritative resource permission required. Unknown input fields are rejected. All errors use Problem.",
-        "security": [
-          {
-            "sessionCookie": [],
-            "csrfToken": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 16,
-              "maxLength": 2048
-            },
-            "example": "example-opaque-token-at-least-16"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MemberView"
-                },
-                "example": {
-                  "userId": "11111111-1111-4111-8111-111111111111",
-                  "role": "OWNER",
-                  "displayName": "x",
-                  "revokedAt": "2026-10-09T17:00:00Z"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/Error400"
-          },
-          "401": {
-            "$ref": "#/components/responses/Error401"
-          },
-          "403": {
-            "$ref": "#/components/responses/Error403"
-          },
-          "404": {
-            "$ref": "#/components/responses/Error404"
-          },
-          "409": {
-            "$ref": "#/components/responses/Error409"
-          },
-          "412": {
-            "$ref": "#/components/responses/Error412"
-          },
-          "413": {
-            "$ref": "#/components/responses/Error413"
-          },
-          "422": {
-            "$ref": "#/components/responses/Error422"
-          },
-          "429": {
-            "$ref": "#/components/responses/Error429"
-          },
-          "502": {
-            "$ref": "#/components/responses/Error502"
-          },
-          "503": {
-            "$ref": "#/components/responses/Error503"
-          }
-        },
-        "x-permission": "session",
-        "x-status": "NOT_STARTED",
-        "x-invalid-example": {
-          "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
-          "expectedStatus": 400
-        }
-      }
-    },
-    "/api/v1/invitations/{token}/reject": {
-      "post": {
-        "operationId": "post__invitations_token_reject",
-        "summary": "POST /invitations/{token}/reject",
-        "description": "Permission: session. Current session and authoritative resource permission required. Unknown input fields are rejected. All errors use Problem.",
-        "security": [
-          {
-            "sessionCookie": [],
-            "csrfToken": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 16,
-              "maxLength": 2048
-            },
-            "example": "example-opaque-token-at-least-16"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Accepted"
-                },
-                "example": {
-                  "accepted": true
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/Error400"
-          },
-          "401": {
-            "$ref": "#/components/responses/Error401"
-          },
-          "403": {
-            "$ref": "#/components/responses/Error403"
-          },
-          "404": {
-            "$ref": "#/components/responses/Error404"
-          },
-          "409": {
-            "$ref": "#/components/responses/Error409"
-          },
-          "412": {
-            "$ref": "#/components/responses/Error412"
-          },
-          "413": {
-            "$ref": "#/components/responses/Error413"
-          },
-          "422": {
-            "$ref": "#/components/responses/Error422"
-          },
-          "429": {
-            "$ref": "#/components/responses/Error429"
-          },
-          "502": {
-            "$ref": "#/components/responses/Error502"
-          },
-          "503": {
-            "$ref": "#/components/responses/Error503"
-          }
-        },
-        "x-permission": "session",
-        "x-status": "NOT_STARTED",
-        "x-invalid-example": {
-          "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
         }
       }
@@ -6279,7 +6118,7 @@
           }
         },
         "x-permission": "owner",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -11882,6 +11721,197 @@
           "expectedStatus": 400
         }
       }
+    },
+    "/api/v1/invitations/accept": {
+      "post": {
+        "operationId": "post__invitations_accept",
+        "summary": "POST /invitations/accept",
+        "description": "Authenticated, CSRF-protected, one-use invitation redemption. The 32-byte secret is carried in a JSON body; only its SHA-256 hash is stored. The signed-in verified email must match the invitation.",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationAcceptanceView"
+                },
+                "example": {
+                  "projectId": "11111111-1111-4111-8111-111111111111",
+                  "role": "EDITOR"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "412": {
+            "$ref": "#/components/responses/Error412"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error422"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "502": {
+            "$ref": "#/components/responses/Error502"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          },
+          "410": {
+            "description": "The invitation has expired.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "x-permission": "session",
+        "x-status": "IN_PROGRESS",
+        "x-invalid-example": {
+          "case": "Malformed invitation token body",
+          "expectedStatus": 400
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvitationTokenRequest"
+              },
+              "examples": {
+                "valid": {
+                  "value": {
+                    "token": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                  }
+                },
+                "invalid": {
+                  "value": {
+                    "token": "short"
+                  },
+                  "description": "Malformed token returns 400 VALIDATION_ERROR."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/invitations/reject": {
+      "post": {
+        "operationId": "post__invitations_reject",
+        "summary": "POST /invitations/reject",
+        "description": "Authenticated, CSRF-protected, one-use invitation redemption. The 32-byte secret is carried in a JSON body; only its SHA-256 hash is stored. The signed-in verified email must match the invitation.",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfToken": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "412": {
+            "$ref": "#/components/responses/Error412"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error422"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "502": {
+            "$ref": "#/components/responses/Error502"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          },
+          "410": {
+            "description": "The invitation has expired.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Invitation rejected."
+          }
+        },
+        "x-permission": "session",
+        "x-status": "IN_PROGRESS",
+        "x-invalid-example": {
+          "case": "Malformed invitation token body",
+          "expectedStatus": 400
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvitationTokenRequest"
+              },
+              "examples": {
+                "valid": {
+                  "value": {
+                    "token": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                  }
+                },
+                "invalid": {
+                  "value": {
+                    "token": "short"
+                  },
+                  "description": "Malformed token returns 400 VALIDATION_ERROR."
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -13404,6 +13434,10 @@
               "revoked",
               "expired"
             ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "required": [
@@ -13412,7 +13446,8 @@
           "email",
           "role",
           "expiresAt",
-          "status"
+          "status",
+          "createdAt"
         ],
         "additionalProperties": false
       },
@@ -15723,6 +15758,41 @@
         "required": [
           "items",
           "nextCursor"
+        ],
+        "additionalProperties": false
+      },
+      "InvitationTokenRequest": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43}$"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "additionalProperties": false
+      },
+      "InvitationAcceptanceView": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "EDITOR",
+              "REVIEWER",
+              "VIEWER"
+            ]
+          }
+        },
+        "required": [
+          "projectId",
+          "role"
         ],
         "additionalProperties": false
       }

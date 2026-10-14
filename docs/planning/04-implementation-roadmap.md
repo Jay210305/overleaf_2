@@ -440,7 +440,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S08: Sharing comments chat and G2 release (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 72 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Julio (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 72 h (ASSUMPTION A-03) | **Status:** 🟡 IN_PROGRESS | **Owner:** Julio (proposed A-02)
 **Goal:** Sharing comments chat and G2 release for G2, using independently verified slices.
 
 ### Deliverables
@@ -463,7 +463,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S08-T01](../../implementation/sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md) | Implement expiring email invitations | 8 | Julio | ⬜ todo | OWNER invites allowed role; one-use accept/reject/revoke/expiry stay project-scoped and Mailpit captures local mail |
+| [S08-T01](../../implementation/sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md) | Implement expiring email invitations | 8 | Julio | 🟡 in_progress | OWNER invites allowed role; one-use accept/reject/revoke/expiry stay project-scoped and Mailpit captures local mail |
 | [S08-T02](../../implementation/sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md) | Implement bounded hashed share links | 8 | Julio | ⬜ todo | Create reveals token once; allowed role/expiry/maxUses/revocation validated server-side; revoked link denies next request |
 | [S08-T03](../../implementation/sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md) | Create sharing and role management UI | 8 | Julio | ⬜ todo | Owner sees pending invite/member/role/link state; non-owner cannot mutate rights via handcrafted requests |
 | [S08-T04](../../implementation/sprint-08-sharing-comments-chat/S08-T04-implement-anchored-comments-and-replies.md) | Implement anchored comments and replies | 8 | Julio | ⬜ todo | Relative anchors plus context retain replies/resolve/reopen/mentions; deleted ranges become detached rather than move to unrelated text |

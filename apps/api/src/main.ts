@@ -8,6 +8,7 @@ import { processAvatarCleanup } from "./modules/account/avatar.js";
 import {
   createSmtpVerificationSender,
   createSmtpPasswordResetSender,
+  createSmtpProjectInvitationSender,
 } from "./modules/auth/mail.js";
 async function main() {
   const config = parseServerConfig(process.env);
@@ -35,6 +36,10 @@ async function main() {
     sendPasswordReset:
       config.SMTP_URL && config.EMAIL_FROM
         ? createSmtpPasswordResetSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
+        : undefined,
+    sendProjectInvitation:
+      config.SMTP_URL && config.EMAIL_FROM
+        ? createSmtpProjectInvitationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
         : undefined,
     secureCookies: config.NODE_ENV === "production" || config.APP_ORIGIN.startsWith("https://"),
   });

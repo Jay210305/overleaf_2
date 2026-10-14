@@ -29,6 +29,7 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-12 | S03 projects, file tree, dashboard and structural manifests on `codex/sprint-03-projects-files` | 66 h | [S03 progress](sprint-03.md), reports [s03-t01](../test-reports/s03-t01.md) through [s03-t08](../test-reports/s03-t08.md), Playwright E2E and 287 Vitest tests PASS | S03 closed, all 9 tasks marked DONE; next S04-T01 |
 | 2026-10-13 | S06 trusted compilation and Gate 1 release audit on `codex/sprint-06-trusted-compilation` | Not measured | [S06 progress](sprint-06.md), reports [s06-t01](../test-reports/s06-t01.md) through [s06-t17](../test-reports/s06-t17.md), [g1-audit](../test-reports/gate-g1-audit.md), 105 tests PASS | S06 closed, all 17 tasks marked DONE; Gate G1 passed; next S07-T01 |
 | 2026-10-14 | S07 durable collaboration and multi-replica real-time editing on `codex/sprint-07-durable-collaboration` | Not measured | [S07 progress](sprint-07.md), reports [s07-t01](../test-reports/s07-t01.md) through [s07-t12](../test-reports/s07-t12.md), 40 test files / 77 tests PASS | S07 closed, all 12 tasks marked DONE; next S08-T01 |
+| 2026-10-14 | Published `codex/sprint-08-sharing-comments-chat` from `a568117`; implemented S08-T01 email invitations | Not measured | [S08-T01 report](../test-reports/s08-t01.md): real PostgreSQL/Mailpit, 11 focused tests PASS; contract 2.0.0 and ADR-010 | Independent co-maintainer review pending; GAP-15 migration deployment ordering remains |
 
 
 ## Session Record

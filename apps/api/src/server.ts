@@ -24,6 +24,10 @@ import { registerUploadRoutes } from "./modules/uploads/routes.js";
 import { registerImportRoutes } from "./modules/imports/routes.js";
 import { registerCompilationRoutes } from "./modules/compilations/routes.js";
 import { registerCollabTicketRoutes, type TicketStore } from "./modules/collab/ticket.js";
+import {
+  registerProjectInvitationRoutes,
+  type SendProjectInvitation,
+} from "./modules/sharing/invitations.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -45,6 +49,9 @@ const authScopes = new Set([
   "POST /api/v1/me/password",
   "POST /api/v1/me/avatar",
   "GET /api/v1/me/avatar/content",
+  "POST /api/v1/projects/:projectId/invitations",
+  "POST /api/v1/invitations/accept",
+  "POST /api/v1/invitations/reject",
 ]);
 
 export interface ServerOptions {
@@ -55,6 +62,7 @@ export interface ServerOptions {
   storage?: StorageAdapter | undefined;
   sendVerification?: SendVerification | undefined;
   sendPasswordReset?: SendPasswordReset | undefined;
+  sendProjectInvitation?: SendProjectInvitation | undefined;
   secureCookies?: boolean | undefined;
   rateLimiter?: AuthRateLimiter | undefined;
   ticketStore?: TicketStore | undefined;
@@ -187,6 +195,12 @@ export function createServer(options: ServerOptions) {
     registerCollabTicketRoutes(app, {
       db: options.db,
       ticketStore: options.ticketStore,
+    });
+    registerProjectInvitationRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      sendProjectInvitation: options.sendProjectInvitation,
     });
   }
   return app;

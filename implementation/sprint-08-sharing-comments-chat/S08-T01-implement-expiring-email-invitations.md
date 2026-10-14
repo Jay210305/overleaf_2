@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S07-T10, S02-T08]
 requirements: [COL-04]
 source_task: S08-T01
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: ready
 ---
 # S08-T01 — Implement expiring email invitations
 
@@ -67,9 +67,9 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] OWNER invites allowed role; one-use accept/reject/revoke/expiry stay project-scoped and Mailpit captures local mail
+- [x] OWNER invites allowed role; one-use accept/reject/revoke/expiry stay project-scoped and Mailpit captures local mail
 - [ ] COL-04: Email invitations can be accepted/rejected/revoked, expire and remain project-scoped. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 

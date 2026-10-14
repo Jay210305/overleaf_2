@@ -21,6 +21,36 @@ export type ProblemView = z.infer<typeof problemSchema>;
 export const roleSchema = z.enum(["OWNER", "EDITOR", "REVIEWER", "VIEWER"]);
 export type Role = z.infer<typeof roleSchema>;
 
+export const projectInvitationRoleSchema = z.enum(["EDITOR", "REVIEWER", "VIEWER"]);
+export const createProjectInvitationSchema = z.strictObject({
+  email: z.email().max(254),
+  role: projectInvitationRoleSchema,
+});
+export const redeemProjectInvitationSchema = z.strictObject({
+  token: z.string().regex(/^[A-Za-z0-9_-]{43}$/),
+});
+export const projectInvitationViewSchema = z.strictObject({
+  id: z.uuid(),
+  projectId: z.uuid(),
+  email: z.email(),
+  role: projectInvitationRoleSchema,
+  status: z.enum(["pending", "accepted", "rejected", "revoked", "expired"]),
+  expiresAt: z.iso.datetime(),
+  createdAt: z.iso.datetime(),
+});
+export type ProjectInvitationView = z.infer<typeof projectInvitationViewSchema>;
+export const listProjectInvitationsSchema = z.strictObject({
+  cursor: z
+    .string()
+    .regex(/^[A-Za-z0-9_-]{1,2048}$/)
+    .optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+export const projectInvitationPageSchema = z.strictObject({
+  items: z.array(projectInvitationViewSchema).max(100),
+  nextCursor: z.string().nullable(),
+});
+
 export const compilerSchema = z.enum(["pdflatex", "xelatex", "lualatex", "latex"]);
 export type Compiler = z.infer<typeof compilerSchema>;
 
@@ -467,4 +497,3 @@ export type ArtifactView = z.infer<typeof artifactViewSchema>;
 
 export * from "./storage.js";
 export * from "./executor.js";
-

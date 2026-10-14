@@ -165,14 +165,20 @@ export const projectInvitations = pgTable(
     tokenHash: text("token_hash").notNull(),
     expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
     acceptedAt: timestamp("accepted_at", { withTimezone: true, mode: "date" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+    deliveredAt: timestamp("delivered_at", { withTimezone: true, mode: "date" }),
+    rejectedAt: timestamp("rejected_at", { withTimezone: true, mode: "date" }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
     invitedBy: text("invited_by").notNull(),
   },
   (table) => [
     uniqueIndex("project_invitations_token_hash_idx").on(table.tokenHash),
-    check(
-      "project_invitations_role_check",
-      sql`${table.role} IN ('OWNER', 'EDITOR', 'REVIEWER', 'VIEWER')`,
-    ),
+    uniqueIndex("project_invitations_pending_email_uidx")
+      .on(table.projectId, table.emailNormalized)
+      .where(
+        sql`${table.acceptedAt} IS NULL AND ${table.rejectedAt} IS NULL AND ${table.revokedAt} IS NULL`,
+      ),
+    check("project_invitations_role_check", sql`${table.role} IN ('EDITOR', 'REVIEWER', 'VIEWER')`),
   ],
 );
 

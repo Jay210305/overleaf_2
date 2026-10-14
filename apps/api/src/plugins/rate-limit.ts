@@ -34,6 +34,9 @@ const limits: Record<string, number> = {
   "POST /api/v1/me/password": 10,
   "POST /api/v1/me/avatar": 10,
   "GET /api/v1/me/avatar/content": 60,
+  "POST /api/v1/projects/:projectId/invitations": 10,
+  "POST /api/v1/invitations/accept": 20,
+  "POST /api/v1/invitations/reject": 20,
 };
 
 export async function createRedisAuthRateLimiter(

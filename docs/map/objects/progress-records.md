@@ -4,9 +4,9 @@ cluster: execution
 universe: live
 status: verified
 entity: docs/progress/progress-log.md
-sources: ["docs/progress/progress-log.md", "docs/progress/open-gaps.md", "docs/progress/technical-debt.md", "docs/progress/sprint-00.md", "docs/progress/sprint-01.md", "docs/progress/sprint-02.md", "docs/progress/sprint-05.md", "docs/test-reports/s00-verification.md", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md", "docs/test-reports/s02-t05.md", "docs/test-reports/s02-t06.md", "docs/test-reports/s02-t09.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t10.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s02-t08.md", "docs/test-reports/integration-review-2026-10-13.md", "docs/feature-parity.md"]
+sources: ["docs/progress/progress-log.md", "docs/progress/open-gaps.md", "docs/progress/technical-debt.md", "docs/progress/sprint-00.md", "docs/progress/sprint-01.md", "docs/progress/sprint-02.md", "docs/progress/sprint-05.md", "docs/test-reports/s00-verification.md", "docs/test-reports/s01-t10.md", "docs/test-reports/s02-t01.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t03.md", "docs/test-reports/s02-t04.md", "docs/test-reports/s02-t05.md", "docs/test-reports/s02-t06.md", "docs/test-reports/s02-t09.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t10.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s02-t08.md", "docs/test-reports/integration-review-2026-10-13.md", "docs/feature-parity.md", "docs/progress/sprint-08.md", "docs/test-reports/s08-t01.md"]
 runtime: not-applicable
-verified_on: 2026-10-13
+verified_on: 2026-10-14
 snapshot: _meta/file-inventory.json
 ---
 
@@ -27,6 +27,8 @@ A global log, per-stage task matrices, gap/debt files, feature-parity evidence a
 The [S05-T10 report](../../test-reports/s05-t10.md) records transactional ZIP application evidence while the sprint matrix keeps the task in progress until independent review.
 
 The [origin/main integration review](../../test-reports/integration-review-2026-10-13.md) records the no-op pull, fresh local gates and the Redis recovery/browser blockers. GAP-23 and GAP-24 keep the complete browser gate open without changing S05-T10 acceptance.
+
+The [S08-T01 report](../../test-reports/s08-t01.md) records invitation delivery and PostgreSQL denial evidence. [Sprint 8 progress](../../progress/sprint-08.md) keeps the task in progress pending independent review and keeps COL-04 and G2 incomplete.
 
 ## Connected to
 
@@ -62,3 +64,5 @@ Maintainers and executing agents write observed evidence; reviewers inspect comm
 - [S02-T11 evidence](../../test-reports/s02-t11.md)
 - [S02-T08 evidence](../../test-reports/s02-t08.md)
 - [docs/feature-parity.md](../../feature-parity.md)
+- [S08 progress](../../progress/sprint-08.md)
+- [S08-T01 evidence](../../test-reports/s08-t01.md)

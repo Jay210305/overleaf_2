@@ -4,9 +4,9 @@ cluster: runtime-design
 universe: live
 status: verified
 entity: packages/db/src/client.ts
-sources: ["packages/db/src/client.ts", "packages/db/src/repositories/projects.ts", "packages/db/src/repositories/audit.ts", "packages/db/src/schema/core.ts", "packages/db/src/schema/collaboration.ts", "packages/db/src/schema/integrations.ts", "packages/db/migrations/0001-core.sql", "packages/db/migrations/0002-support.sql", "packages/db/migrations/0003-session-security.sql", "packages/db/migrations/0004-avatar-cleanup.sql", "packages/db/migrations/0005-upload-intents.sql", "packages/db/seeds/development.ts", "docs/progress/sprint-01.md", "docs/test-reports/s01-t07.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t09.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s05-t01.md", "docs/test-reports/s05-t09.md"]
+sources: ["packages/db/src/client.ts", "packages/db/src/repositories/projects.ts", "packages/db/src/repositories/audit.ts", "packages/db/src/schema/core.ts", "packages/db/src/schema/collaboration.ts", "packages/db/src/schema/integrations.ts", "packages/db/migrations/0001-core.sql", "packages/db/migrations/0002-support.sql", "packages/db/migrations/0003-session-security.sql", "packages/db/migrations/0004-avatar-cleanup.sql", "packages/db/migrations/0005-upload-intents.sql", "packages/db/seeds/development.ts", "docs/progress/sprint-01.md", "docs/test-reports/s01-t07.md", "docs/test-reports/s02-t02.md", "docs/test-reports/s02-t09.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s05-t01.md", "docs/test-reports/s05-t09.md", "packages/db/migrations/0009-project-invitations.sql", "docs/test-reports/s08-t01.md"]
 runtime: implemented
-verified_on: 2026-10-13
+verified_on: 2026-10-14
 snapshot: _meta/file-inventory.json
 ---
 
@@ -27,6 +27,8 @@ Database constraints and transactions establish durable boundaries for later ide
 `revision_items.node_id` currently cascades on physical node deletion, which can erase a surviving revision's blob reference. S05-T09 proves this with a regression and retains all blobs in any project with a revision; [GAP-17](../../progress/open-gaps.md) tracks a durable schema correction.
 
 S05-T10 adds `0008-import-project-reservation.sql`: a unique pending project ID on a validated import job, an auditable manifest after success, and apply/retention indexes. The private apply worker commits project metadata, parent-first nodes, text documents with one Yjs update each, and the successful job transition under one PostgreSQL transaction. Its reservation survives a failed pre-commit object write, so retry uses the same project ID; see [S05-T10 evidence](../../test-reports/s05-t10.md).
+
+S08-T01 adds `0009-project-invitations.sql` for lifecycle timestamps, role restrictions and a unique pending invitation per project/email. The invitation API holds project and invitation row locks during redemption and stores only the token hash. Local integration tests apply this migration; production migration ordering remains GAP-15.
 
 ## Connected to
 
@@ -55,3 +57,5 @@ API and future services read/write PostgreSQL; maintainers run migrations, seeds
 - [Upload intent migration](../../../packages/db/migrations/0005-upload-intents.sql)
 - [S05-T01 evidence](../../test-reports/s05-t01.md)
 - [S01 progress](../../progress/sprint-01.md)
+- [Invitation migration](../../../packages/db/migrations/0009-project-invitations.sql)
+- [S08-T01 evidence](../../test-reports/s08-t01.md)
