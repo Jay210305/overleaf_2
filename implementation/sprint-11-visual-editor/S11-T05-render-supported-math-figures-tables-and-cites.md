@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S11-T04]
 requirements: [EDT-13]
 source_task: S11-T05
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S11-T05 — Render supported math figures tables and cites
 

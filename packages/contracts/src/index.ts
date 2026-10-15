@@ -592,6 +592,41 @@ export const replaceResultSchema = z.strictObject({
 });
 export type ReplaceResult = z.infer<typeof replaceResultSchema>;
 
+export const visualNodeKindSchema = z.enum([
+  "paragraph",
+  "heading",
+  "list",
+  "listItem",
+  "bold",
+  "italic",
+  "mathInline",
+  "mathDisplay",
+  "figure",
+  "table",
+  "citation",
+  "reference",
+  "literalFallback",
+]);
+export type VisualNodeKind = z.infer<typeof visualNodeKindSchema>;
+
+export const visualPatchSchema = z.strictObject({
+  fileId: z.string().uuid(),
+  start: z.number().int().min(0),
+  end: z.number().int().min(0),
+  expectedTextHash: z.string().min(1),
+  replacement: z.string(),
+  baseStateVectorBase64: z.string(),
+});
+export type VisualPatch = z.infer<typeof visualPatchSchema>;
+
+export const visualPatchResultSchema = z.strictObject({
+  success: z.boolean(),
+  conflict: z.boolean(),
+  reason: z.string().optional(),
+  newTextHash: z.string().optional(),
+});
+export type VisualPatchResult = z.infer<typeof visualPatchResultSchema>;
+
 export * from "./storage.js";
 export * from "./executor.js";
 

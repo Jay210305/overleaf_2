@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S07-T10, S10-T14]
 requirements: [EDT-13]
 source_task: S11-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S11-T01 — Research conservative visual parser
 

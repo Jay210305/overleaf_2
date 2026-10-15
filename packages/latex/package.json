@@ -18,6 +18,10 @@
       "types": "./src/parse-log.ts",
       "default": "./dist/parse-log.js"
     },
+    "./visual-ast": {
+      "types": "./src/visual-ast.ts",
+      "default": "./dist/visual-ast.js"
+    },
     "./package.json": "./package.json"
   }
 }

@@ -39,7 +39,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | EDT-10 | G3 | Should | DONE | [S10-T09 mathematical symbols catalog and palette](test-reports/s10-t09.md) |
 | EDT-11 | G3 | Could | DONE | [S10-T11 local spell checking leaving commands unchanged](test-reports/s10-t11.md) |
 | EDT-12 | G1 | Must | DONE | [S03-T06 compiler settings](test-reports/s03-t06.md); [S10-T12 debounced auto-compilation and queue coalescing](test-reports/s10-t12.md) |
-| EDT-13 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| EDT-13 | G3 | Should | DONE | [S11-T01 visual parser ADR](test-reports/s11-t01.md); [S11-T02 AST projection](test-reports/s11-t02.md); [S11-T03 basic nodes](test-reports/s11-t03.md); [S11-T04 source patches](test-reports/s11-t04.md); [S11-T05 academic nodes](test-reports/s11-t05.md); [S11-T10 table & math editing](test-reports/s11-t10.md); [S11-T06 literal fallback](test-reports/s11-t06.md); [S11-T07 read-only switching](test-reports/s11-t07.md); [S11-T08 100 round-trip fixtures](test-reports/s11-t08.md); [S11-T09 mixed coediting](test-reports/s11-t09.md); accepted in [Gate 3 audit](test-reports/gate-g3-audit.md) |
 | EDT-14 | G4 | Could | DONE | [S10-T11 offline static command and error help](test-reports/s10-t11.md) |
 | CMP-01 | G1 | Must | DONE | [S06-T03 TeX Live image](test-reports/s06-t03.md); [S06-T04 compiler executor boundary](test-reports/s06-t04.md); [S06-T10 genuine compiler fixtures](test-reports/s06-t10.md); [S06-T13 trusted executor adapter](test-reports/s06-t13.md); accepted in G1 audit |
 | CMP-02 | G1 | Must | DONE | [S06-T07 diagnostics & path redaction](test-reports/s06-t07.md); [S06-T10 compiler fixtures](test-reports/s06-t10.md); accepted in G1 audit |

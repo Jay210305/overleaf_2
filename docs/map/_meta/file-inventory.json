@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "d45ee67736fc73a911b9acc65d86d14c9044f9e6",
+  "git_baseline": "c2c210505dff7a3fab2a318f44d0dac5cca76a50",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -711,6 +711,26 @@
       "sha256": "adfadb80e3e0e80818779473f7d2862dbeb663efd4f37c5b8757c41e808fb79a"
     },
     {
+      "path": "apps/web/src/features/visual/academic-nodes.tsx",
+      "role": "factory",
+      "sha256": "aa5f17e5d2d18e1c7fd4b1637f45ac6afead90087e355ed966e57c2ae1784670"
+    },
+    {
+      "path": "apps/web/src/features/visual/basic-nodes.tsx",
+      "role": "factory",
+      "sha256": "19b14fe5166ff8c6b476a6e76f67d9f50c5e05443cc50b9bcea704445ea4db32"
+    },
+    {
+      "path": "apps/web/src/features/visual/fallback-node.tsx",
+      "role": "factory",
+      "sha256": "b1d61253c7fe74fc20524234fd7fea5d70d4951c2dd8c033aa1e171e14dcb557"
+    },
+    {
+      "path": "apps/web/src/features/visual/mode-switch.tsx",
+      "role": "factory",
+      "sha256": "002df5c24e5536982761aa8483cbf0494c59d91d7e5f2fe97f1c9a51445d3376"
+    },
+    {
       "path": "apps/web/src/main.tsx",
       "role": "factory",
       "sha256": "e9a77ff9f6db3179bdb585dd661f9f67ac65c69750b1cec89bf9038079d18294"
@@ -764,6 +784,11 @@
       "path": "docs/adr/005-tenancy.md",
       "role": "factory",
       "sha256": "a770ae8012c2bce134f56e7c3b1f3619fd85c33da7a1751daa352720a42ef888"
+    },
+    {
+      "path": "docs/adr/008-visual-parser.md",
+      "role": "factory",
+      "sha256": "a6672cb3671b3c4f775addcd2f0c3afa47c929d34ab5c83b07d3f96b0fb1717a"
     },
     {
       "path": "docs/adr/CONTEXT.md",
@@ -853,7 +878,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "fdb619262c7758b4f791a561c559494bd534074fded61a404b32582ee06caf0d"
+      "sha256": "4d37e52a61aed3ed25dd1503cf94e7d46849bc97f218b462b4b6c43d108d0c83"
     },
     {
       "path": "docs/map/CLAUDE.md",
@@ -1023,7 +1048,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "0e58059905744ad79febcf578d9f13c2e761786458da5e3bbc7e146066d3942e"
+      "sha256": "049a3ed9f4523a6f9fe561235e9626d0e38f5b76012b98d871ef43339c73a2a3"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -1113,7 +1138,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "fed991b1a40cdcb9d4c0a2d0f1d483b327725885c2e4652cf7fedb0380ca455f"
+      "sha256": "dfbbca15a5aacb9c4be482244db5c9eb5487a364108a21bfb0afb810e2f07676"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -1178,7 +1203,7 @@
     {
       "path": "docs/progress/sprint-11.md",
       "role": "product",
-      "sha256": "9304b55f3ac1be94b1fb7ef1315a5e8bf7ecee88c38558aad93203f7683d4726"
+      "sha256": "e607da61ac9a2888e15b51b5d1c8559c08a48771742f76df719718be137c0dc2"
     },
     {
       "path": "docs/progress/sprint-12.md",
@@ -1249,6 +1274,11 @@
       "path": "docs/test-reports/gate-g1-audit.md",
       "role": "factory",
       "sha256": "9dbb691d7bfd776e7fe993e06776727bc6a1a2f572e45d2ebd0843e708d7afae"
+    },
+    {
+      "path": "docs/test-reports/gate-g3-audit.md",
+      "role": "factory",
+      "sha256": "6159c14d1e1e0120bf259b692f50668e4f0ff43cf3121f8817038f95a1ae64fc"
     },
     {
       "path": "docs/test-reports/s00-t01.md",
@@ -1826,6 +1856,61 @@
       "sha256": "4dbe948eaca5ecbe1a0a1a83cf8d7c5be427c63c2c3719c035075aef4bec3fc8"
     },
     {
+      "path": "docs/test-reports/s11-t01.md",
+      "role": "factory",
+      "sha256": "4b08866509cbd2d940f57392fce83a41f3010ff673d15b56981dd73d3e221e34"
+    },
+    {
+      "path": "docs/test-reports/s11-t02.md",
+      "role": "factory",
+      "sha256": "88859f1032731ba90c71793171d104ac9f305336f081daf66713510914edc417"
+    },
+    {
+      "path": "docs/test-reports/s11-t03.md",
+      "role": "factory",
+      "sha256": "9831c55b7ef0bc6e19dd479decef19a05400c43995951414dd2f785a60552752"
+    },
+    {
+      "path": "docs/test-reports/s11-t04.md",
+      "role": "factory",
+      "sha256": "1c03dede9c6c49f9c35366bebd44e1c0b223bb6cf0f641e1e8375845cf9d028a"
+    },
+    {
+      "path": "docs/test-reports/s11-t05.md",
+      "role": "factory",
+      "sha256": "41e800670638a85ce22905946cd441b336a63eca98d480afcd69ece0efe7125b"
+    },
+    {
+      "path": "docs/test-reports/s11-t06.md",
+      "role": "factory",
+      "sha256": "6d7e216470f55e9dca65dae6157bea95694b8b5098b216dae711d4d854b5365e"
+    },
+    {
+      "path": "docs/test-reports/s11-t07.md",
+      "role": "factory",
+      "sha256": "5ddab7dea1d0440ca59947f63a098d969f13e696c939471a9fbf3261bdacd7e3"
+    },
+    {
+      "path": "docs/test-reports/s11-t08.md",
+      "role": "factory",
+      "sha256": "c5cd34e7f10e2c50652be5094a13938b77037060802e9b0f9eb92606a63f6839"
+    },
+    {
+      "path": "docs/test-reports/s11-t09.md",
+      "role": "factory",
+      "sha256": "ed05b14e6fc1371626403793f897d6fb2c3f7efe4b2000a2f8680d9b2f4cdad5"
+    },
+    {
+      "path": "docs/test-reports/s11-t10.md",
+      "role": "factory",
+      "sha256": "e9994b237de7762bd87e56220eff1be07822967ed29b8208a3df1bcdd1abf6a7"
+    },
+    {
+      "path": "docs/test-reports/s11-t11.md",
+      "role": "factory",
+      "sha256": "72395d69bc59837461c86b707ce35158435e29055d37c54e5663771dcdaca5d5"
+    },
+    {
       "path": "eslint.config.js",
       "role": "factory",
       "sha256": "f259d21a7ef0efe32df87f94ef650f1df2a7226c91cdf3220f3b5c681193a5a0"
@@ -1838,7 +1923,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "57a84ce042165bf026c29468c54fcff695f0227e0afbb0fcf5f51c49caf8a7ef"
+      "sha256": "fab703b6b012c090afa627cbfc8d49f31b24cdde644b4149276e00dc4d20dba7"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -2558,57 +2643,57 @@
     {
       "path": "implementation/sprint-11-visual-editor/S11-T01-research-conservative-visual-parser.md",
       "role": "contract",
-      "sha256": "1bf2032a33cdc8f438a6dfda9b0931c21e5d2560a69601ac6f5d85bd840a4ac4"
+      "sha256": "7a55dd75f0297b45c8d3ff5714774159c4e41c4d0a41fae2e55616a0b2f7589a"
     },
     {
       "path": "implementation/sprint-11-visual-editor/S11-T02-create-source-ast-projection-and-range-map.md",
       "role": "contract",
-      "sha256": "791475ce5cf24f50cdbd14c1437d648ab61a3af3f125241e6c739c6b254229da"
+      "sha256": "29707c995366444d2a32f242f7d18cc29dcdc6e0612104277f72f133575a85a2"
     },
     {
       "path": "implementation/sprint-11-visual-editor/S11-T03-render-basic-supported-visual-nodes.md",
       "role": "contract",
-      "sha256": "3aa01ac259c94eed68e88f92e1d4d20936d4495e01ecff8ffeb32cb898525112"
+      "sha256": "fd10c722c110e9b573c41a51a2154c74f7efc6f6f42b6f4b5e26a8ee950cf712"
     },
     {
       "path": "implementation/sprint-11-visual-editor/S11-T04-apply-minimal-version-checked-source-patches.md",
       "role": "contract",
-      "sha256": "4e26eab2d7fd34f33066284f826f4c53f9292570aedb21795120927441898d3a"
+      "sha256": "0149bf068811dce10725a47282ac4d4b029f6d0c198238b3cfd10e0e6e56fef6"
     },
     {
       "path": "implementation/sprint-11-visual-editor/S11-T05-render-supported-math-figures-tables-and-cites.md",
       "role": "contract",
-      "sha256": "bef2c7dabca46cf22160275a01627770c84928469099d9699fc00dce6f9cf057"
+      "sha256": "af716035d7ec2b1307a40c557dc6292a76c241acbbb1669cdde835f9145ed2cf"
     },
     {
       "path": "implementation/sprint-11-visual-editor/S11-T06-create-literal-fallback-for-unsupported-tex.md",
       "role": "contract",
-      "sha256": "e360b026b20d5cb16ae7a2e84bf922a95763118d73dcaae75f51d0cd9b54770f"
+      "sha256": "7e8c1cefff589555045f758aaabcf3ef4d4a07a3cb15e38d7f98069a7c9d9d03"
     },
     {
       "path": "implementation/sprint-11-visual-editor/S11-T07-make-code-visual-switching-read-only.md",
       "role": "contract",
-      "sha256": "35c6631b0a91b818bb922d1a59fa777c3fff9b965d3283a37570748b9c23a438"
+      "sha256": "04c2e6eed9468fcb60ee6aec07fcf02de01556c3444bc3711ee5571c7c6c3fff"
     },
     {
       "path": "implementation/sprint-11-visual-editor/S11-T08-verify-100-non-destructive-round-trip-fixtures.md",
       "role": "contract",
-      "sha256": "5804cf6375c92efc2780afb9b961f0174204ae2ef239c82f3c21dff15272ca23"
+      "sha256": "5abab8cb6a6a4dc9fc3dfe84c27068ec9d5465375e64cede0a622c703b10329d"
     },
     {
       "path": "implementation/sprint-11-visual-editor/S11-T09-verify-mixed-code-visual-coediting.md",
       "role": "contract",
-      "sha256": "353675f625a78b20e2eef17b1030c8cbdc22b3f8a89bfaaf02c7b60c2b6456a8"
+      "sha256": "8ad726e79a5a1fdfd8cf78cdbc67d988019c795dc4c76c3fef7e2bf8081795d1"
     },
     {
       "path": "implementation/sprint-11-visual-editor/S11-T10-complete-simple-table-and-formula-editing-slices.md",
       "role": "contract",
-      "sha256": "a8728560cd8067657f2d45b3a316827864a83ef2cf9fb29250855fcc7c33e767"
+      "sha256": "38b920b90b4147a97f60a831cfe12405ce57986ab071b43fa80ffed98720ba19"
     },
     {
       "path": "implementation/sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md",
       "role": "contract",
-      "sha256": "2cef3e268fc408f3bdae65c1b15df063fb14156a92b173cdd169be05b7243b1e"
+      "sha256": "b358695e3c3dee5ec7540d4b6c784e2d691047efae2b5385e35a561cd36118c5"
     },
     {
       "path": "implementation/sprint-12-github-sync/CONTEXT.md",
@@ -2928,7 +3013,7 @@
     {
       "path": "packages/contracts/src/index.ts",
       "role": "factory",
-      "sha256": "90098d85e7c0333d7539f50acf56f5cec0691cd5f1ad39b5c232f21298818121"
+      "sha256": "ef8bb40b17d4db21d3699b395069291a4beaa0c81e9ccf5d111bc432080c5508"
     },
     {
       "path": "packages/contracts/src/storage.ts",
@@ -3048,7 +3133,7 @@
     {
       "path": "packages/editor/package.json",
       "role": "factory",
-      "sha256": "f105934f08a9e0a5b030e97443a5da4762ed5e6b11fadb95da82143260705123"
+      "sha256": "55d6b751913545d01cf51bcd6511ce08d65d827a007b937e7135bd7573f90021"
     },
     {
       "path": "packages/editor/src/citations.ts",
@@ -3063,7 +3148,7 @@
     {
       "path": "packages/editor/src/index.ts",
       "role": "factory",
-      "sha256": "d7431b3db02a638f06c0a51608be6e11aa41f5c804e70e0e310ceb926dca471f"
+      "sha256": "5dfe04e1da826d93945f7d6deec5105db6492504796f2230fc78861399e9e9a0"
     },
     {
       "path": "packages/editor/src/keymap.ts",
@@ -3091,6 +3176,16 @@
       "sha256": "30a26e0e5e541b2024b6abcc3643b266e2e06043d51344e4ed6c6a455b17a5ba"
     },
     {
+      "path": "packages/editor/src/visual-academic-patch.ts",
+      "role": "factory",
+      "sha256": "4bce0d188a5002e8ed18f9ff3f1b9fbada9f9f63719b10ccb5cd86ca4cb655fd"
+    },
+    {
+      "path": "packages/editor/src/visual-patch.ts",
+      "role": "factory",
+      "sha256": "d87035c56a1a79b7fa344da638d529396935d6bd80665d0c0dec19ab760a5b9a"
+    },
+    {
       "path": "packages/editor/tsconfig.json",
       "role": "factory",
       "sha256": "e730427f31195ca4b071ff456465a6a36be4cc74b50ed9f361a27a2b7dab7ecc"
@@ -3098,7 +3193,7 @@
     {
       "path": "packages/latex/package.json",
       "role": "factory",
-      "sha256": "62b6788aa01f9024064841a48017213b0f3aeb92a83ed586a17c4fcb15defcff"
+      "sha256": "6b7eda95b90b8ffe765a1774c69f15639c51660d4e3f3240d4fbaf555074537a"
     },
     {
       "path": "packages/latex/src/bib.ts",
@@ -3113,12 +3208,17 @@
     {
       "path": "packages/latex/src/index.ts",
       "role": "factory",
-      "sha256": "65271fa1a460b7e8824a4b9dfc9d2049c9db7343d2e475657d8199ce7436dfda"
+      "sha256": "58503190c22400edf12d4b7e254b1c10de36c8299b4741164b530ae9c7a36a5a"
     },
     {
       "path": "packages/latex/src/parse-log.ts",
       "role": "factory",
       "sha256": "fd2639c44585b98f5a77633c3ab5aefefca1bf8f326f4e3488c1b24596f96bd2"
+    },
+    {
+      "path": "packages/latex/src/visual-ast.ts",
+      "role": "factory",
+      "sha256": "399c6390da27e98ae8e5af3b132ad04180dd635b85a7d4a38bd097539de384a0"
     },
     {
       "path": "packages/latex/src/word-count.ts",
@@ -3183,7 +3283,7 @@
     {
       "path": "pnpm-lock.yaml",
       "role": "factory",
-      "sha256": "2a71ea500864c5210af94b515ce0d04bdb743bef7813ecdcd33ab8892be49c91"
+      "sha256": "308a91bdb45392bf23fb4f7e58f26b64a0c57cba588807699ab5f64fceeb0b74"
     },
     {
       "path": "pnpm-workspace.yaml",
@@ -3249,6 +3349,11 @@
       "path": "tests/e2e/editor-persistence.spec.ts",
       "role": "factory",
       "sha256": "fb71ab68abe55aede18f2713047a548ce4d969ac91d3450852fb45c20db77d32"
+    },
+    {
+      "path": "tests/e2e/mixed-editing.spec.ts",
+      "role": "factory",
+      "sha256": "db94761fb9dae1e29ee632f2292a2b5cdf804812f534cd46f8ad735558fff4ab"
     },
     {
       "path": "tests/e2e/profile.spec.ts",
@@ -3856,9 +3961,59 @@
       "sha256": "84f5d94c10a5beaf0de6db0a6d0aa11a97af74f4bb2b2fe77770eab86941eb45"
     },
     {
+      "path": "tests/integration/s11-t02.test.ts",
+      "role": "factory",
+      "sha256": "ec90698593f3c49a4cbf2df586029e1915d278d0dcbb01222c46bd33854df25d"
+    },
+    {
+      "path": "tests/integration/s11-t03.test.ts",
+      "role": "factory",
+      "sha256": "6582b8ce2de4876365063db7daa867309168873cdb44ebefeafc66f753169a64"
+    },
+    {
+      "path": "tests/integration/s11-t04.test.ts",
+      "role": "factory",
+      "sha256": "77e73e7077226944b545ceab9c3f73781b6914c74cdb2a60e7ad33bea688d952"
+    },
+    {
+      "path": "tests/integration/s11-t05.test.ts",
+      "role": "factory",
+      "sha256": "74e7596e15874d44b14e7c7e7fa353c611861392a97ef36d16c86c779d341c03"
+    },
+    {
+      "path": "tests/integration/s11-t06.test.ts",
+      "role": "factory",
+      "sha256": "0ba88d42dc7e780ff55f6a29390a7971419237921873f44ffe990280a0248285"
+    },
+    {
+      "path": "tests/integration/s11-t07.test.ts",
+      "role": "factory",
+      "sha256": "77c9ea2f652ddfacfad02c084d9fb05977a0e5f361e3c90900c923edf7282da7"
+    },
+    {
+      "path": "tests/integration/s11-t08.test.ts",
+      "role": "factory",
+      "sha256": "37d9096414dac54d2762c15b2216401fd2ba5f48f76437416ff4b6ec1abd3537"
+    },
+    {
+      "path": "tests/integration/s11-t09.test.ts",
+      "role": "factory",
+      "sha256": "b7178f3157fdda6c0af7e71fe4109e3b6caedcb66b2726cf7c381157307a201d"
+    },
+    {
+      "path": "tests/integration/s11-t10.test.ts",
+      "role": "factory",
+      "sha256": "9a0c3e78fd883d95e752f0a1fba0a97c76198a50e13c269f4ff25f5422314a94"
+    },
+    {
       "path": "tests/integration/tree-races.test.ts",
       "role": "factory",
       "sha256": "85f38c14b652667f74f3fe0131ff235bc3eb1256cdb6f72a94132b63ff882226"
+    },
+    {
+      "path": "tests/integration/visual-round-trip.test.ts",
+      "role": "factory",
+      "sha256": "baa4358baa8c3dbdd9ab416cacd11683cd6d66013676bbe2a98581d70fcc4176"
     },
     {
       "path": "tests/regression/acc-01/s02-t01.test.ts",
@@ -4109,6 +4264,11 @@
       "path": "tests/regression/col-01/s07-t12.test.ts",
       "role": "factory",
       "sha256": "6f420bf64d6b3922240c2bd0f4532c144d41e6b61c42dde94aa01c9b4df75dde"
+    },
+    {
+      "path": "tests/regression/col-01/s11-t04.test.ts",
+      "role": "factory",
+      "sha256": "1d37d0d169d5b9b161b04f38fc1a8abd79011fb1067f30003fe72a6514e93c76"
     },
     {
       "path": "tests/regression/col-02/s07-t03.test.ts",
@@ -4376,6 +4536,51 @@
       "sha256": "a80b5a51ce33023b52d41501e900bb63db2db6eea96d4c98bdeae81c01672aa1"
     },
     {
+      "path": "tests/regression/edt-13/s11-t02.test.ts",
+      "role": "factory",
+      "sha256": "71e9df82e182a33dcff73968db25c27b0f3a56bcc1eb0de69829fe9b66d1753a"
+    },
+    {
+      "path": "tests/regression/edt-13/s11-t03.test.ts",
+      "role": "factory",
+      "sha256": "6095aae9b2825eec42c5b129036f2855d1285e5a59b4c184e533725f6234012c"
+    },
+    {
+      "path": "tests/regression/edt-13/s11-t04.test.ts",
+      "role": "factory",
+      "sha256": "0b09fc7a42f28b2fb4e17c0247bc15a48ef8c00ede425b0d9f32e7cae1097cfb"
+    },
+    {
+      "path": "tests/regression/edt-13/s11-t05.test.ts",
+      "role": "factory",
+      "sha256": "8216f0a43e161eda85af0b37f392f0445777f62145de8f735f435bf8f8701c61"
+    },
+    {
+      "path": "tests/regression/edt-13/s11-t06.test.ts",
+      "role": "factory",
+      "sha256": "27b10982d335dfd3d2beecfe815e0374a63b049794e95877768fb21774c1f21c"
+    },
+    {
+      "path": "tests/regression/edt-13/s11-t07.test.ts",
+      "role": "factory",
+      "sha256": "e1da52b1219d5a4af8050d5014285a81c6a688f17a72daf060f1c9cda6a33b63"
+    },
+    {
+      "path": "tests/regression/edt-13/s11-t08.test.ts",
+      "role": "factory",
+      "sha256": "64c90473b04f07634b31ac00e5e88b279fd03184b340ec087021dd73cee12dfb"
+    },
+    {
+      "path": "tests/regression/edt-13/s11-t09.test.ts",
+      "role": "factory",
+      "sha256": "ca99bffb223c2bdd39870d8914a4854f3303ccbb81ee660fac6c766f302ba1e4"
+    },
+    {
+      "path": "tests/regression/edt-13/s11-t10.test.ts",
+      "role": "factory",
+      "sha256": "565c5ca56ecd97bf1014da2687bcbbcb42382ea715c8ec9e221ed555c3aaf6e6"
+    },
+    {
       "path": "tests/regression/edt-14/s10-t11.test.ts",
       "role": "factory",
       "sha256": "1a472a524a9a96290f8e9b60269783fb6872cabf9d6b4c8e786196a0c7949dba"
@@ -4449,6 +4654,11 @@
       "path": "tests/regression/nfr-02/s07-t10.test.ts",
       "role": "factory",
       "sha256": "ca653b2d713337fb3c36322329a723187fb80a821451a695677a6222ae40d2c0"
+    },
+    {
+      "path": "tests/regression/nfr-02/s11-t09.test.ts",
+      "role": "factory",
+      "sha256": "539bb90112ee856bab7e9a60eeedde3ae0613a36f0a962604dec66cd5664d82f"
     },
     {
       "path": "tests/regression/nfr-03/s07-t08.test.ts",

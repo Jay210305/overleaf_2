@@ -318,6 +318,9 @@ importers:
       '@latex-collab/contracts':
         specifier: workspace:*
         version: link:../contracts
+      '@latex-collab/latex':
+        specifier: workspace:*
+        version: link:../latex
       '@lezer/highlight':
         specifier: ^1.2.5
         version: 1.2.5

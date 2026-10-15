@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S11-T03]
 requirements: [EDT-13, COL-01]
 source_task: S11-T04
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S11-T04 — Apply minimal version-checked source patches
 
