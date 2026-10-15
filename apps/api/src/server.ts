@@ -19,7 +19,9 @@ import { registerAvatarRoutes } from "./modules/account/avatar.js";
 import { registerProjectRoutes } from "./modules/projects/routes.js";
 import { registerProjectLifecycleRoutes } from "./modules/projects/lifecycle.js";
 import { registerProjectSettingsRoutes } from "./modules/projects/settings.js";
+import { registerProjectStatisticsRoutes } from "./modules/projects/statistics.js";
 import { registerBulkProjectRoutes } from "./modules/projects/bulk.js";
+
 import { registerOwnershipRoutes } from "./modules/projects/ownership.js";
 import { registerTagRoutes } from "./modules/tags/routes.js";
 import { registerTreeRoutes } from "./modules/files/tree.js";
@@ -33,6 +35,10 @@ import { registerUploadRoutes } from "./modules/uploads/routes.js";
 import { registerImportRoutes } from "./modules/imports/routes.js";
 import { registerCompilationRoutes } from "./modules/compilations/routes.js";
 import { registerCollabTicketRoutes, type TicketStore } from "./modules/collab/ticket.js";
+import { registerSynctexRoutes } from "./modules/synctex/routes.js";
+import { registerSearchRoutes } from "./modules/search/routes.js";
+
+
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -188,6 +194,10 @@ export function createServer(options: ServerOptions) {
       origin: options.origin,
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
     });
+    registerProjectStatisticsRoutes(app, {
+      db: options.db,
+    });
+
     registerTagRoutes(app, {
       db: options.db,
       origin: options.origin,
@@ -229,6 +239,14 @@ export function createServer(options: ServerOptions) {
     registerCollabTicketRoutes(app, {
       db: options.db,
       ticketStore: options.ticketStore,
+    });
+    registerSynctexRoutes(app, {
+      db: options.db,
+      storage: options.storage,
+    });
+    registerSearchRoutes(app, {
+      db: options.db,
+      storage: options.storage,
     });
   }
   return app;

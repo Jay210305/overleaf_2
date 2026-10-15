@@ -8,7 +8,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | ACC-02 | G1 | Must | IN_PROGRESS | [S02-T02 opaque session, CSRF, expiry and revocation accepted](test-reports/s02-t02.md); [S02-T06 auth limits accepted](test-reports/s02-t06.md); [S02-T07 session inventory/revocation accepted](test-reports/s02-t07.md); [S02-T10 other-session revocation accepted](test-reports/s02-t10.md); [S02-T08 rotation/revocation checks accepted](test-reports/s02-t08.md); remaining gate checks apply |
 | ACC-03 | G1 | Must | IN_PROGRESS | [S02-T07 profile/preferences scope accepted](test-reports/s02-t07.md); [S02-T11 private avatar scope accepted](test-reports/s02-t11.md); G1 gate still open |
 | ACC-04 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| ACC-05 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| ACC-05 | G3 | Should | DONE | [S10-T09 editor preferences persistence](test-reports/s10-t09.md); survives reload with layout/accessibility settings |
 | ACC-06 | G1 | Must | IN_PROGRESS | [S02-T03 recovery reset revokes sessions, accepted](test-reports/s02-t03.md); [S02-T10 authenticated change accepted](test-reports/s02-t10.md); remaining gate checks apply |
 | ACC-07 | G3 | Should | DONE | [S09-T13 export data](test-reports/s09-t13.md); [S09-T14 account deletion](test-reports/s09-t14.md) |
 | ACC-08 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
@@ -26,32 +26,32 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | PRO-12 | G3 | Could | DONE | [S09-T11 permission-aware bulk project actions](test-reports/s09-t11.md) |
 | PRO-13 | G3 | Should | DONE | [S09-T12 explicit ownership transfer](test-reports/s09-t12.md) |
 | PRO-14 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PRO-15 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| PRO-15 | G3 | Should | DONE | [S10-T07 documented project statistics](test-reports/s10-t07.md); approximate words, bytes, file count and last compile |
 | EDT-01 | G1 | Must | IN_PROGRESS | [S04-T01 CodeMirror extensions](test-reports/s04-t01.md); [S04-T08 Unicode editing](test-reports/s04-t08.md); G1 gate stabilization applies |
 | EDT-02 | G1 | Must | IN_PROGRESS | [S04-T02 canonical text](test-reports/s04-t02.md); [S04-T03 save status/retry](test-reports/s04-t03.md); [S04-T06 read-only concurrency](test-reports/s04-t06.md); [S04-T08 Unicode journey](test-reports/s04-t08.md); [S04-T09 update persistence](test-reports/s04-t09.md); [S04-T10 REST state version](test-reports/s04-t10.md); [S07-T11 durable collab accepted](test-reports/s07-t11.md) |
 | EDT-03 | G1 | Must | IN_PROGRESS | [S04-T04 tabs and navigation](test-reports/s04-t04.md); G1 gate stabilization applies |
-| EDT-04 | G1 | Must | IN_PROGRESS | [S04-T05 local undo and search](test-reports/s04-t05.md); remaining mapped tasks apply |
-| EDT-05 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-06 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| EDT-04 | G1 | Must | DONE | [S04-T05 local undo and search](test-reports/s04-t05.md); [S10-T10 keymaps and shortcuts verified](test-reports/s10-t10.md) |
+| EDT-05 | G3 | Should | DONE | [S10-T06 environment auto-closing and folding](test-reports/s10-t06.md) |
+| EDT-06 | G3 | Should | DONE | [S10-T06 labels, citations and file path autocompletion](test-reports/s10-t06.md) |
 | EDT-07 | G1 | Must | DONE | [S06-T07 diagnostic parser](test-reports/s06-t07.md); [S06-T08 PDF viewer](test-reports/s06-t08.md); [S06-T09 compile controls](test-reports/s06-t09.md); accepted in G1 audit |
-| EDT-08 | G3 | Should | IN_PROGRESS | [S04-T05 editor shortcuts](test-reports/s04-t05.md); remaining mapped tasks apply |
-| EDT-09 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-10 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-11 | G3 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-12 | G1 | Must | IN_PROGRESS | [S03-T06 compiler settings](test-reports/s03-t06.md); remaining mapped tasks apply |
+| EDT-08 | G3 | Should | DONE | [S04-T05 editor shortcuts](test-reports/s04-t05.md); [S10-T08 project search and replacement](test-reports/s10-t08.md) |
+| EDT-09 | G3 | Should | DONE | [S10-T05 valid academic insertion snippets](test-reports/s10-t05.md) |
+| EDT-10 | G3 | Should | DONE | [S10-T09 mathematical symbols catalog and palette](test-reports/s10-t09.md) |
+| EDT-11 | G3 | Could | DONE | [S10-T11 local spell checking leaving commands unchanged](test-reports/s10-t11.md) |
+| EDT-12 | G1 | Must | DONE | [S03-T06 compiler settings](test-reports/s03-t06.md); [S10-T12 debounced auto-compilation and queue coalescing](test-reports/s10-t12.md) |
 | EDT-13 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| EDT-14 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| EDT-14 | G4 | Could | DONE | [S10-T11 offline static command and error help](test-reports/s10-t11.md) |
 | CMP-01 | G1 | Must | DONE | [S06-T03 TeX Live image](test-reports/s06-t03.md); [S06-T04 compiler executor boundary](test-reports/s06-t04.md); [S06-T10 genuine compiler fixtures](test-reports/s06-t10.md); [S06-T13 trusted executor adapter](test-reports/s06-t13.md); accepted in G1 audit |
 | CMP-02 | G1 | Must | DONE | [S06-T07 diagnostics & path redaction](test-reports/s06-t07.md); [S06-T10 compiler fixtures](test-reports/s06-t10.md); accepted in G1 audit |
 | CMP-03 | G1 | Must | DONE | [S06-T08 real PDF viewer](test-reports/s06-t08.md); [S06-T10 compiler fixtures](test-reports/s06-t10.md); accepted in G1 audit |
 | CMP-04 | G1 | Must | DONE | [S06-T01 compile queue jobs](test-reports/s06-t01.md); [S06-T05 execution limits](test-reports/s06-t05.md); [S06-T14 timeout & recovery](test-reports/s06-t14.md); accepted in G1 audit |
-| CMP-05 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| CMP-06 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| CMP-07 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| CMP-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| CMP-09 | G1 | Must | DONE | [S06-T06 verified artifact persistence](test-reports/s06-t06.md); 14-day private retention verified; accepted in G1 audit |
-| CMP-10 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| CMP-11 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| CMP-05 | G3 | Should | DONE | [S10-T01 alternative TeX profiles](test-reports/s10-t01.md); [S10-T10 profile execution flags](test-reports/s10-t10.md) |
+| CMP-06 | G3 | Should | DONE | [S10-T02 bibliography compilation](test-reports/s10-t02.md); [S10-T10 multi-pass citations](test-reports/s10-t10.md) |
+| CMP-07 | G3 | Should | DONE | [S10-T04 forward inverse synctex](test-reports/s10-t04.md); [S10-T10 coordinate transformations](test-reports/s10-t10.md) |
+| CMP-08 | G3 | Should | DONE | [S10-T12 debounced automatic compilation and coalescing](test-reports/s10-t12.md) |
+| CMP-09 | G1 | Must | DONE | [S06-T06 verified artifact persistence](test-reports/s06-t06.md); [S10-T14 artifact retention cleanup](test-reports/s10-t14.md); 14-day private retention verified; accepted in G1 audit |
+| CMP-10 | G3 | Should | DONE | [S10-T14 clean rebuild and auxiliary invalidation](test-reports/s10-t14.md) |
+| CMP-11 | G3 | Should | DONE | [S10-T13 authorized content-aware compiler cache](test-reports/s10-t13.md) |
 | CMP-12 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-01 | G2 | Must | DONE | [S00-T11 compatibility research](test-reports/s00-t11.md#acceptance-review); [S07-T01 file rooms](test-reports/s07-t01.md); [S07-T03 editor binding](test-reports/s07-t03.md); [S07-T04 durable updates](test-reports/s07-t04.md); [S07-T07 dual replica sync](test-reports/s07-t07.md); [S07-T11 durable acknowledgements](test-reports/s07-t11.md); [S07-T12 snapshot compaction](test-reports/s07-t12.md) |
 | COL-02 | G2 | Must | DONE | [S07-T03 presence, color, remote cursors, selections, and isolated undo accepted](test-reports/s07-t03.md) |
@@ -67,14 +67,14 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | COL-12 | G2 | Must | DONE | [S07-T05 offline persistence & reconnect](test-reports/s07-t05.md); [S07-T06 open room sync on tree rename/delete](test-reports/s07-t06.md) |
 | COL-13 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-14 | G1 | Must | IN_PROGRESS | [S02-T09 account/session audit scope accepted](test-reports/s02-t09.md); invitation/download/restore actions remain later work |
-| INT-01 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| INT-02 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| INT-01 | G3 | Should | DONE | [S10-T02 bibliography compilation and citation extraction](test-reports/s10-t02.md); [S10-T03 BibTeX parsing and duplicate key detection](test-reports/s10-t03.md) |
+| INT-02 | G3 | Should | DONE | [S10-T03 BibTeX reference search by key, title, author, DOI, year](test-reports/s10-t03.md) |
 | INT-03 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-04 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-05 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-06 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-07 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| INT-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| INT-08 | G3 | Should | DONE | [S10-T03 safe BibTeX normalization preserving raw source by default](test-reports/s10-t03.md) |
 | INT-09 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-10 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-11 | G5 | Must | NOT_STARTED | [Planned trace](planning/traceability.md) |

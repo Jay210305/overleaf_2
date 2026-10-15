@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S10-T07]
 requirements: [EDT-08]
 source_task: S10-T08
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T08 — Implement project search and previewed replacement
 

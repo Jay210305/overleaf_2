@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S10-T11]
 requirements: [CMP-05, CMP-06, CMP-07, EDT-04]
 source_task: S10-T10
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T10 — Verify bibliography PDF SyncTeX and keymaps
 

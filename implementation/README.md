@@ -126,20 +126,20 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S09-T12 | [Implement explicit ownership transfer](sprint-09-history-review/S09-T12-implement-explicit-ownership-transfer.md) | Project Co-owner (proposed) | 8 | done |
 | S09-T13 | [Export authorized user data](sprint-09-history-review/S09-T13-export-authorized-user-data.md) | Project Co-owner (proposed) | 8 | done |
 | S09-T14 | [Delete account under shared ownership rules](sprint-09-history-review/S09-T14-delete-account-under-shared-ownership-rules.md) | Project Co-owner (proposed) | 8 | done |
-| S10-T01 | [Add tested alternative TeX profiles](sprint-10-academic-editing/S10-T01-add-tested-alternative-tex-profiles.md) | Julio (proposed) | 8 | todo |
-| S10-T02 | [Compile bibliography and complete citations](sprint-10-academic-editing/S10-T02-compile-bibliography-and-complete-citations.md) | Julio (proposed) | 8 | todo |
-| S10-T03 | [Index BibTeX and search local references](sprint-10-academic-editing/S10-T03-index-bibtex-and-search-local-references.md) | Julio (proposed) | 8 | todo |
-| S10-T04 | [Implement forward inverse SyncTeX](sprint-10-academic-editing/S10-T04-implement-forward-inverse-synctex.md) | Julio (proposed) | 8 | todo |
-| S10-T05 | [Create valid academic insertion snippets](sprint-10-academic-editing/S10-T05-create-valid-academic-insertion-snippets.md) | Julio (proposed) | 6 | todo |
-| S10-T06 | [Complete environments labels and file paths](sprint-10-academic-editing/S10-T06-complete-environments-labels-and-file-paths.md) | Julio (proposed) | 8 | todo |
-| S10-T07 | [Report documented project statistics](sprint-10-academic-editing/S10-T07-report-documented-project-statistics.md) | Julio (proposed) | 6 | todo |
-| S10-T08 | [Implement project search and previewed replacement](sprint-10-academic-editing/S10-T08-implement-project-search-and-previewed-replacement.md) | Julio (proposed) | 8 | todo |
-| S10-T09 | [Persist editor preferences symbols and layout](sprint-10-academic-editing/S10-T09-persist-editor-preferences-symbols-and-layout.md) | Julio (proposed) | 8 | todo |
-| S10-T11 | [Add local spell checking and static error help](sprint-10-academic-editing/S10-T11-add-local-spell-checking-and-static-error-help.md) | Julio (proposed) | 6 | todo |
-| S10-T10 | [Verify bibliography PDF SyncTeX and keymaps](sprint-10-academic-editing/S10-T10-verify-bibliography-pdf-synctex-and-keymaps.md) | Julio (proposed) | 8 | todo |
-| S10-T12 | [Add debounced automatic compilation](sprint-10-academic-editing/S10-T12-add-debounced-automatic-compilation.md) | Julio (proposed) | 8 | todo |
-| S10-T13 | [Implement authorized content-aware compiler cache](sprint-10-academic-editing/S10-T13-implement-authorized-content-aware-compiler-cache.md) | Julio (proposed) | 8 | todo |
-| S10-T14 | [Implement clean rebuild and retention cleanup](sprint-10-academic-editing/S10-T14-implement-clean-rebuild-and-retention-cleanup.md) | Julio (proposed) | 6 | todo |
+| S10-T01 | [Add tested alternative TeX profiles](sprint-10-academic-editing/S10-T01-add-tested-alternative-tex-profiles.md) | Julio (proposed) | 8 | done |
+| S10-T02 | [Compile bibliography and complete citations](sprint-10-academic-editing/S10-T02-compile-bibliography-and-complete-citations.md) | Julio (proposed) | 8 | done |
+| S10-T03 | [Index BibTeX and search local references](sprint-10-academic-editing/S10-T03-index-bibtex-and-search-local-references.md) | Julio (proposed) | 8 | done |
+| S10-T04 | [Implement forward inverse SyncTeX](sprint-10-academic-editing/S10-T04-implement-forward-inverse-synctex.md) | Julio (proposed) | 8 | done |
+| S10-T05 | [Create valid academic insertion snippets](sprint-10-academic-editing/S10-T05-create-valid-academic-insertion-snippets.md) | Julio (proposed) | 6 | done |
+| S10-T06 | [Complete environments labels and file paths](sprint-10-academic-editing/S10-T06-complete-environments-labels-and-file-paths.md) | Julio (proposed) | 8 | done |
+| S10-T07 | [Report documented project statistics](sprint-10-academic-editing/S10-T07-report-documented-project-statistics.md) | Julio (proposed) | 6 | done |
+| S10-T08 | [Implement project search and previewed replacement](sprint-10-academic-editing/S10-T08-implement-project-search-and-previewed-replacement.md) | Julio (proposed) | 8 | done |
+| S10-T09 | [Persist editor preferences symbols and layout](sprint-10-academic-editing/S10-T09-persist-editor-preferences-symbols-and-layout.md) | Julio (proposed) | 8 | done |
+| S10-T11 | [Add local spell checking and static error help](sprint-10-academic-editing/S10-T11-add-local-spell-checking-and-static-error-help.md) | Julio (proposed) | 6 | done |
+| S10-T10 | [Verify bibliography PDF SyncTeX and keymaps](sprint-10-academic-editing/S10-T10-verify-bibliography-pdf-synctex-and-keymaps.md) | Julio (proposed) | 8 | done |
+| S10-T12 | [Add debounced automatic compilation](sprint-10-academic-editing/S10-T12-add-debounced-automatic-compilation.md) | Julio (proposed) | 8 | done |
+| S10-T13 | [Implement authorized content-aware compiler cache](sprint-10-academic-editing/S10-T13-implement-authorized-content-aware-compiler-cache.md) | Julio (proposed) | 8 | done |
+| S10-T14 | [Implement clean rebuild and retention cleanup](sprint-10-academic-editing/S10-T14-implement-clean-rebuild-and-retention-cleanup.md) | Julio (proposed) | 6 | done |
 | S11-T01 | [Research conservative visual parser](sprint-11-visual-editor/S11-T01-research-conservative-visual-parser.md) | Project Co-owner (proposed) | 4 | todo |
 | S11-T02 | [Create source AST projection and range map](sprint-11-visual-editor/S11-T02-create-source-ast-projection-and-range-map.md) | Project Co-owner (proposed) | 8 | todo |
 | S11-T03 | [Render basic supported visual nodes](sprint-11-visual-editor/S11-T03-render-basic-supported-visual-nodes.md) | Project Co-owner (proposed) | 8 | todo |

@@ -139,7 +139,14 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
       const sanitizedEnv = sanitizeEnv();
 
       // Arguments for hardened TeX compilation
-      const engineFlag = input.compiler === "xelatex" ? "-xelatex" : "-pdf";
+      let engineFlag = "-pdf";
+      if (input.compiler === "xelatex") {
+        engineFlag = "-xelatex";
+      } else if (input.compiler === "lualatex") {
+        engineFlag = "-lualatex";
+      } else if (input.compiler === "latex") {
+        engineFlag = "-pdfdvi";
+      }
       const args = [
         engineFlag,
         "-interaction=nonstopmode",

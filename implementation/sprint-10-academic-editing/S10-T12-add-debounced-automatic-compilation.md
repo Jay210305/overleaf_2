@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S10-T10]
 requirements: [CMP-08, EDT-12]
 source_task: S06-T09
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T12 — Add debounced automatic compilation
 

@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S10-T06]
 requirements: [PRO-15]
 source_task: S10-T07
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T07 — Report documented project statistics
 
