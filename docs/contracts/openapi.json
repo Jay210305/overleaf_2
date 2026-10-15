@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "LatexWorkspace Planned API",
-    "version": "2.0.0",
-    "description": "Planning and partial runtime API contract; invitation tokens move in JSON bodies under ADR-010. This artifact alone is not runtime evidence; see task reports and x-status."
+    "version": "3.0.0",
+    "description": "Planning and partial runtime API contract; invitation and share-link tokens use JSON bodies under ADR-010/011. This artifact alone is not runtime evidence; see task reports and x-status."
   },
   "servers": [
     {
@@ -5446,7 +5446,7 @@
       "get": {
         "operationId": "get__projects_projectId_members",
         "summary": "GET /projects/{projectId}/members",
-        "description": "Permission: read. Current session and authoritative resource permission required. Unknown input fields are rejected. All errors use Problem.",
+        "description": "Current project members may list active members and roles with a bounded cursor. Only display names, IDs and roles are returned; expired or revoked link grants are excluded.",
         "security": [
           {
             "sessionCookie": []
@@ -5534,7 +5534,7 @@
           }
         },
         "x-permission": "read",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -5652,7 +5652,7 @@
       "patch": {
         "operationId": "patch__projects_projectId_members_userId",
         "summary": "PATCH /projects/{projectId}/members/{userId}",
-        "description": "Permission: owner. Current session and authoritative resource permission required. Unknown input fields are rejected. All errors use Problem.",
+        "description": "OWNER changes an active member to EDITOR, REVIEWER or VIEWER with current session and CSRF. An explicit owner role change makes a link-derived membership independent and records an audit event.",
         "security": [
           {
             "sessionCookie": [],
@@ -5733,7 +5733,7 @@
           }
         },
         "x-permission": "owner",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -5765,7 +5765,7 @@
       "delete": {
         "operationId": "delete__projects_projectId_members_userId",
         "summary": "DELETE /projects/{projectId}/members/{userId}",
-        "description": "Permission: owner. Current session and authoritative resource permission required. Unknown input fields are rejected. All errors use Problem.",
+        "description": "OWNER revokes an active non-owner member with current session and CSRF and records an audit event. Later REST and new WSS access is denied.",
         "security": [
           {
             "sessionCookie": [],
@@ -5833,7 +5833,7 @@
           }
         },
         "x-permission": "owner",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -6217,7 +6217,7 @@
           }
         },
         "x-permission": "owner",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
@@ -6257,13 +6257,13 @@
                   "link": {
                     "id": "11111111-1111-4111-8111-111111111111",
                     "projectId": "11111111-1111-4111-8111-111111111111",
-                    "role": "EDITOR",
-                    "expiresAt": "2026-10-09T17:00:00Z",
-                    "maxUses": 0,
+                    "role": "VIEWER",
+                    "expiresAt": "2026-11-01T17:00:00Z",
+                    "maxUses": 1,
                     "useCount": 0,
-                    "revokedAt": "2026-10-09T17:00:00Z"
+                    "revokedAt": null
                   },
-                  "token": "xxxxxxxxxxxxxxxx"
+                  "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                 }
               }
             }
@@ -6303,7 +6303,7 @@
           }
         },
         "x-permission": "owner",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "requestBody": {
           "required": true,
           "content": {
@@ -6314,8 +6314,9 @@
               "examples": {
                 "valid": {
                   "value": {
-                    "role": "EDITOR",
-                    "expiresAt": "2026-10-09T17:00:00Z"
+                    "role": "VIEWER",
+                    "expiresAt": "2026-11-01T17:00:00Z",
+                    "maxUses": 1
                   }
                 },
                 "invalid": {
@@ -6406,56 +6407,36 @@
           }
         },
         "x-permission": "owner",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
           "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
           "expectedStatus": 400
         }
       }
     },
-    "/api/v1/share/{token}/redeem": {
+    "/api/v1/share-links/redeem": {
       "post": {
-        "operationId": "post__share_token_redeem",
-        "summary": "POST /share/{token}/redeem",
-        "description": "Requires an authenticated session. Atomically validate role/expiry/uses and bind a scoped share capability to that session. Every later HTTP/WSS access rechecks revocation and project policy; no administrative rights or unknown-user compilation is added.",
+        "operationId": "post__share_links_redeem",
+        "summary": "POST /share-links/redeem",
+        "description": "A verified account redeems a bounded link token in the JSON body. The committed membership stays tied to link role, expiry and revocation; later REST and new WSS checks use active_project_members.",
         "security": [
           {
             "sessionCookie": [],
             "csrfToken": []
           }
         ],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 16,
-              "maxLength": 2048
-            },
-            "example": "example-opaque-token-at-least-16"
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Successful 200",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectView"
+                  "$ref": "#/components/schemas/ShareRedemptionView"
                 },
                 "example": {
-                  "id": "11111111-1111-4111-8111-111111111111",
-                  "title": "x",
-                  "description": "x",
-                  "ownerId": "11111111-1111-4111-8111-111111111111",
-                  "mainFileId": "11111111-1111-4111-8111-111111111111",
-                  "compiler": "pdflatex",
-                  "status": "active",
-                  "currentRevision": 0,
-                  "createdAt": "2026-10-09T17:00:00Z",
-                  "updatedAt": "2026-10-09T17:00:00Z"
+                  "projectId": "11111111-1111-4111-8111-111111111111",
+                  "role": "VIEWER"
                 }
               }
             }
@@ -6474,6 +6455,16 @@
           },
           "409": {
             "$ref": "#/components/responses/Error409"
+          },
+          "410": {
+            "description": "Expired or exhausted link",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           },
           "412": {
             "$ref": "#/components/responses/Error412"
@@ -6495,10 +6486,33 @@
           }
         },
         "x-permission": "session",
-        "x-status": "NOT_STARTED",
+        "x-status": "IN_PROGRESS",
         "x-invalid-example": {
-          "case": "Malformed UUID/cursor/token or unsupported query value; for health use failed readiness dependency",
+          "case": "Malformed body token",
           "expectedStatus": 400
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShareRedeemRequest"
+              },
+              "examples": {
+                "valid": {
+                  "value": {
+                    "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                  }
+                },
+                "invalid": {
+                  "value": {
+                    "token": "short"
+                  },
+                  "description": "Reject malformed token with 400 VALIDATION_ERROR."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -11763,6 +11777,16 @@
           "409": {
             "$ref": "#/components/responses/Error409"
           },
+          "410": {
+            "description": "The invitation has expired.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
           "412": {
             "$ref": "#/components/responses/Error412"
           },
@@ -11780,16 +11804,6 @@
           },
           "503": {
             "$ref": "#/components/responses/Error503"
-          },
-          "410": {
-            "description": "The invitation has expired.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            }
           }
         },
         "x-permission": "session",
@@ -11835,6 +11849,9 @@
           }
         ],
         "responses": {
+          "204": {
+            "description": "Invitation rejected."
+          },
           "400": {
             "$ref": "#/components/responses/Error400"
           },
@@ -11849,6 +11866,16 @@
           },
           "409": {
             "$ref": "#/components/responses/Error409"
+          },
+          "410": {
+            "description": "The invitation has expired.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
           },
           "412": {
             "$ref": "#/components/responses/Error412"
@@ -11867,19 +11894,6 @@
           },
           "503": {
             "$ref": "#/components/responses/Error503"
-          },
-          "410": {
-            "description": "The invitation has expired.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "Invitation rejected."
           }
         },
         "x-permission": "session",
@@ -13505,8 +13519,8 @@
             "anyOf": [
               {
                 "type": "integer",
-                "minimum": 0,
-                "maximum": 9007199254740991
+                "minimum": 1,
+                "maximum": 10000
               },
               {
                 "type": "null"
@@ -13549,8 +13563,7 @@
           },
           "token": {
             "type": "string",
-            "minLength": 16,
-            "maxLength": 2048
+            "pattern": "^[A-Za-z0-9_-]{43}$"
           }
         },
         "required": [
@@ -15775,6 +15788,41 @@
         "additionalProperties": false
       },
       "InvitationAcceptanceView": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "EDITOR",
+              "REVIEWER",
+              "VIEWER"
+            ]
+          }
+        },
+        "required": [
+          "projectId",
+          "role"
+        ],
+        "additionalProperties": false
+      },
+      "ShareRedeemRequest": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43}$"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "additionalProperties": false
+      },
+      "ShareRedemptionView": {
         "type": "object",
         "properties": {
           "projectId": {

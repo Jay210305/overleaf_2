@@ -1,8 +1,5 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import {
-  createCheckpointSchema,
-  type CreateCheckpointInput,
-} from "@latex-collab/contracts";
+import { createCheckpointSchema, type CreateCheckpointInput } from "@latex-collab/contracts";
 import {
   DatabaseClient,
   RevisionsRepository,
@@ -38,7 +35,7 @@ export class CheckpointService {
     }
 
     const memberRes = await this.db.query<{ role: string }>(
-      `SELECT role FROM project_members WHERE project_id = $1 AND user_id = $2`,
+      `SELECT role FROM active_project_members WHERE project_id = $1 AND user_id = $2`,
       [projectId, actorId],
     );
     const member = memberRes.rows[0];

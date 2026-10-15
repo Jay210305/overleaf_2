@@ -143,12 +143,19 @@ export const projectMembers = pgTable(
     role: text("role").notNull(),
     joinedAt: timestamp("joined_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
     revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+    sourceShareLinkId: uuid("source_share_link_id").references(() => shareLinks.id, {
+      onDelete: "cascade",
+    }),
   },
   (table) => [
     primaryKey({ columns: [table.projectId, table.userId] }),
     check(
       "project_members_role_check",
       sql`${table.role} IN ('OWNER', 'EDITOR', 'REVIEWER', 'VIEWER')`,
+    ),
+    check(
+      "project_members_link_role_check",
+      sql`${table.sourceShareLinkId} IS NULL OR ${table.role} IN ('EDITOR', 'REVIEWER', 'VIEWER')`,
     ),
   ],
 );
@@ -195,15 +202,20 @@ export const shareLinks = pgTable(
     maxUses: bigint("max_uses", { mode: "number" }),
     useCount: bigint("use_count", { mode: "number" }).notNull().default(0),
     revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
   },
   (table) => [
     uniqueIndex("share_links_token_hash_idx").on(table.tokenHash),
-    check(
-      "share_links_role_check",
-      sql`${table.role} IN ('OWNER', 'EDITOR', 'REVIEWER', 'VIEWER')`,
-    ),
+    check("share_links_role_check", sql`${table.role} IN ('EDITOR', 'REVIEWER', 'VIEWER')`),
     check("share_links_use_count_check", sql`${table.useCount} >= 0`),
-    check("share_links_max_uses_check", sql`${table.maxUses} IS NULL OR ${table.maxUses} >= 0`),
+    check(
+      "share_links_max_uses_check",
+      sql`${table.maxUses} IS NULL OR (${table.maxUses} BETWEEN 1 AND 10000 AND ${table.useCount} <= ${table.maxUses})`,
+    ),
+    check(
+      "share_links_expiry_check",
+      sql`${table.expiresAt} IS NOT NULL AND ${table.expiresAt} > ${table.createdAt}`,
+    ),
   ],
 );
 

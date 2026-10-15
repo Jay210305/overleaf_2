@@ -190,7 +190,7 @@ export function registerProjectInvitationRoutes(
         }>(
           `SELECT u.id, u.disabled_at, u.email_verified_at,
                   pm.user_id AS member_user_id, pm.revoked_at FROM users u
-           LEFT JOIN project_members pm ON pm.project_id = $1 AND pm.user_id = u.id
+           LEFT JOIN active_project_members pm ON pm.project_id = $1 AND pm.user_id = u.id
            WHERE u.email_normalized = $2`,
           [auth.projectId, parsed.data.email],
         );
@@ -332,9 +332,14 @@ export function registerProjectInvitationRoutes(
             `INSERT INTO project_members (project_id, user_id, role)
              VALUES ($1, $2, $3)
              ON CONFLICT (project_id, user_id) DO UPDATE
-               SET role = EXCLUDED.role, revoked_at = NULL, joined_at = NOW()
-             WHERE project_members.revoked_at IS NOT NULL
-               AND project_members.revoked_at < $4
+               SET role = EXCLUDED.role, source_share_link_id = NULL,
+                   revoked_at = NULL, joined_at = NOW()
+             WHERE (project_members.revoked_at IS NOT NULL AND project_members.revoked_at < $4)
+                OR (project_members.source_share_link_id IS NOT NULL AND EXISTS (
+                  SELECT 1 FROM share_links previous
+                  WHERE previous.id = project_members.source_share_link_id
+                    AND (previous.revoked_at IS NOT NULL OR previous.expires_at <= NOW())
+                ))
              RETURNING role`,
             [projectId, identity.userId, invitation.role, invitation.created_at],
           );

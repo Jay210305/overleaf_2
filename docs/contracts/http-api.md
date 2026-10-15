@@ -22,6 +22,18 @@ The OWNER can list invitations with a bounded project-scoped cursor and revoke a
 
 ADR-010 moves token redemption out of the planned URL path and into the JSON body to keep bearer secrets out of route paths and proxy access logs. The static OpenAPI copies describe this contract; runtime coverage and remaining review are in [S08-T01 evidence](../test-reports/s08-t01.md).
 
+## G2 Bounded Share-Link Slice (S08-T02)
+
+An authenticated OWNER creates a link with `POST /projects/{projectId}/share-links`, choosing `EDITOR`, `REVIEWER` or `VIEWER`, an expiry no more than 30 days ahead, and optional `maxUses` from 1 to 10,000. Creation returns a random 32-byte token once; only its SHA-256 hash is persisted. Owner list pagination returns metadata without token or hash. Owner `DELETE /projects/{projectId}/share-links/{linkId}` revokes the link and its derived memberships transactionally. An existing verified account redeems with `POST /share-links/redeem` and strict JSON `{ "token": "..." }`, exact Origin, session and CSRF. Redemption locks the project and link, checks expiry/use limit, increments the use count and binds a membership to the link. Existing independent active membership cannot be replaced by a link. Unknown/revoked links return 404, expired/exhausted links 410, and conflicting membership 409.
+
+Every REST and new WSS authorization read consults `active_project_members`: a derived membership is usable only while the source link is unrevoked, unexpired, within the same project, and still grants the recorded role. Link exhaustion limits new redemptions; it does not revoke already redeemed grants. A later accepted owner email invitation can replace an expired/revoked link grant as an independent membership. Active socket closure on link expiry or revocation remains part of S08-T08. ADR-011 records the token-in-body change from the planned URL route; contract version 3.0.0 reflects that changed path and response shape.
+
+## G2 Sharing and Member UI Slice (S08-T03)
+
+`GET /projects/{projectId}/members` lists the project owner and active members for any current project role, with bounded UUID-cursor pagination. It returns display names, IDs and roles without email addresses or bearer tokens. `PATCH /projects/{projectId}/members/{userId}` and `DELETE` at that path require OWNER, exact Origin, current session and CSRF; they reject owner targets, foreign project IDs, invalid roles and inactive memberships. The patch changes a link-derived grant into an independent owner-managed membership. Both mutations record scoped audit events. Revocation denies later REST requests and new WSS handshakes; closure of an already-open socket remains for S08-T08.
+
+The workspace sharing dialog reads member, invitation and link state from these APIs. OWNER may invite, change roles, remove members and create/revoke links; other members see a read-only active member list. Invitation and share-link browser routes take one-use tokens from URL fragments, immediately clear the fragment, and redeem through JSON bodies with a current session and CSRF. The raw share token is shown only when created and stays in component memory until the dialog closes; it is never persisted in browser storage.
+
 ## Security and Permission Matrix
 
 API-host-only opaque session cookie; HttpOnly, Secure under TLS, SameSite=Lax, 7-day idle and 30-day absolute expiry as configurable starting proposals. Hash stored session/token values. Use CSRF token header plus exact Origin validation on mutations. Test local/staging domain behavior; never weaken production cookie policy to fix development.

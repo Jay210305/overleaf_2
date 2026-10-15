@@ -51,6 +51,135 @@ export const projectInvitationPageSchema = z.strictObject({
   nextCursor: z.string().nullable(),
 });
 
+export const shareLinkRoleSchema = z.enum(["EDITOR", "REVIEWER", "VIEWER"]);
+export const createShareLinkSchema = z.strictObject({
+  role: shareLinkRoleSchema,
+  expiresAt: z.iso.datetime(),
+  maxUses: z.number().int().min(1).max(10000).optional(),
+});
+export const redeemShareLinkSchema = z.strictObject({
+  token: z.string().regex(/^[A-Za-z0-9_-]{43}$/),
+});
+export const shareLinkViewSchema = z.strictObject({
+  id: z.uuid(),
+  projectId: z.uuid(),
+  role: shareLinkRoleSchema,
+  expiresAt: z.iso.datetime(),
+  maxUses: z.number().int().min(1).max(10000).nullable(),
+  useCount: z.number().int().nonnegative(),
+  revokedAt: z.iso.datetime().nullable(),
+});
+export type ShareLinkView = z.infer<typeof shareLinkViewSchema>;
+export const createdShareLinkSchema = z.strictObject({
+  link: shareLinkViewSchema,
+  token: z.string().regex(/^[A-Za-z0-9_-]{43}$/),
+});
+export const shareLinkPageSchema = z.strictObject({
+  items: z.array(shareLinkViewSchema).max(100),
+  nextCursor: z.string().nullable(),
+});
+export const listShareLinksSchema = z.strictObject({
+  cursor: z
+    .string()
+    .regex(/^[A-Za-z0-9_-]{1,2048}$/)
+    .optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+export const shareLinkRedemptionViewSchema = z.strictObject({
+  projectId: z.uuid(),
+  role: shareLinkRoleSchema,
+});
+
+export const sharingMemberViewSchema = z.strictObject({
+  userId: z.uuid(),
+  displayName: z.string().min(1).max(200),
+  role: roleSchema,
+  revokedAt: z.iso.datetime().nullable(),
+});
+export type SharingMemberView = z.infer<typeof sharingMemberViewSchema>;
+export const sharingMemberPageSchema = z.strictObject({
+  items: z.array(sharingMemberViewSchema).max(100),
+  nextCursor: z.uuid().nullable(),
+});
+export const sharingMemberListQuerySchema = z.strictObject({
+  cursor: z.uuid().optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+export const sharingMemberRolePatchSchema = z.strictObject({
+  role: shareLinkRoleSchema,
+});
+
+const yjsIdSchema = z.strictObject({
+  client: z.number().int().nonnegative().safe(),
+  clock: z.number().int().nonnegative().safe(),
+});
+export const relativeAnchorSchema = z
+  .strictObject({
+    type: yjsIdSchema.nullish(),
+    tname: z.literal("content").nullish(),
+    item: yjsIdSchema.nullish(),
+    assoc: z.number().int().safe(),
+  })
+  .refine((value) => value.type != null || value.tname === "content");
+const commentBodySchema = z
+  .string()
+  .min(1)
+  .max(10000)
+  .refine(
+    (value) =>
+      value.trim().length > 0 &&
+      !/[<>\u0000-\u001f]/u.test(value) &&
+      !/\b(?:javascript|data):/iu.test(value),
+  );
+export const createCommentSchema = z.strictObject({
+  fileId: z.uuid(),
+  anchorStart: relativeAnchorSchema,
+  anchorEnd: relativeAnchorSchema,
+  selectedText: z.string().min(1).max(10000),
+  body: commentBodySchema,
+  mentions: z.array(z.uuid()).max(20).default([]),
+});
+export const replyRequestSchema = z.strictObject({
+  body: commentBodySchema,
+  mentions: z.array(z.uuid()).max(20).default([]),
+});
+export const commentPatchSchema = z.strictObject({ status: z.enum(["open", "resolved"]) });
+export const commentListQuerySchema = z.strictObject({
+  cursor: z.uuid().optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+export const replyViewSchema = z.strictObject({
+  id: z.uuid(),
+  commentId: z.uuid(),
+  authorId: z.uuid(),
+  body: z.string(),
+  mentions: z.array(z.uuid()),
+  createdAt: z.iso.datetime(),
+});
+export const commentViewSchema = z.strictObject({
+  id: z.uuid(),
+  projectId: z.uuid(),
+  fileId: z.uuid(),
+  createdBy: z.uuid(),
+  body: z.string(),
+  status: z.enum(["open", "resolved"]),
+  createdAt: z.iso.datetime(),
+  anchorStart: relativeAnchorSchema,
+  anchorEnd: relativeAnchorSchema,
+  selectedText: z.string(),
+  mentions: z.array(z.uuid()),
+  replies: z.array(replyViewSchema),
+  detached: z.boolean(),
+  detachedReason: z.enum(["range_changed"]).nullable(),
+  start: z.number().int().nonnegative().nullable(),
+  end: z.number().int().nonnegative().nullable(),
+});
+export type CommentView = z.infer<typeof commentViewSchema>;
+export const commentPageSchema = z.strictObject({
+  items: z.array(commentViewSchema).max(100),
+  nextCursor: z.uuid().nullable(),
+});
+
 export const compilerSchema = z.enum(["pdflatex", "xelatex", "lualatex", "latex"]);
 export type Compiler = z.infer<typeof compilerSchema>;
 

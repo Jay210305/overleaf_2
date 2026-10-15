@@ -28,6 +28,9 @@ import {
   registerProjectInvitationRoutes,
   type SendProjectInvitation,
 } from "./modules/sharing/invitations.js";
+import { registerShareLinkRoutes } from "./modules/sharing/share-links.js";
+import { registerProjectMemberRoutes } from "./modules/sharing/members.js";
+import { registerCommentRoutes } from "./modules/comments/routes.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -52,6 +55,8 @@ const authScopes = new Set([
   "POST /api/v1/projects/:projectId/invitations",
   "POST /api/v1/invitations/accept",
   "POST /api/v1/invitations/reject",
+  "POST /api/v1/projects/:projectId/share-links",
+  "POST /api/v1/share-links/redeem",
 ]);
 
 export interface ServerOptions {
@@ -202,6 +207,13 @@ export function createServer(options: ServerOptions) {
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
       sendProjectInvitation: options.sendProjectInvitation,
     });
+    registerShareLinkRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+    registerProjectMemberRoutes(app, options.db);
+    registerCommentRoutes(app, options.db);
   }
   return app;
 }

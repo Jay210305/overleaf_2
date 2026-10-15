@@ -74,7 +74,7 @@ async function ensureTarget(
   if (!row || row.status !== "active") throw new AuthError(404, "RESOURCE_NOT_FOUND");
   if (row.owner_id !== actorId) {
     const membership = await tx.query<{ role: string }>(
-      "SELECT role FROM project_members WHERE project_id = $1 AND user_id = $2 AND revoked_at IS NULL",
+      "SELECT role FROM active_project_members WHERE project_id = $1 AND user_id = $2",
       [projectId, actorId],
     );
     if (!membership.rows[0]) throw new AuthError(404, "RESOURCE_NOT_FOUND");

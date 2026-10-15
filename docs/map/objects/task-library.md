@@ -4,9 +4,9 @@ cluster: execution
 universe: live
 status: verified
 entity: implementation/README.md
-sources: ["implementation/README.md", "docs/planning/04-implementation-roadmap.md", "docs/planning/traceability.md", "implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md", "implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md", "implementation/sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md"]
+sources: ["implementation/README.md","docs/planning/04-implementation-roadmap.md","docs/planning/traceability.md","implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md","implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md","implementation/sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md","implementation/sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md","implementation/sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md","docs/test-reports/s08-t03.md"]
 runtime: not-applicable
-verified_on: 2026-10-14
+verified_on: 2026-10-15
 snapshot: _meta/file-inventory.json
 ---
 
@@ -26,7 +26,7 @@ S00–S15 directories contain Sxx-Tyy task files. ID, status, effort, dependenci
 
 S05-T10 is the in-progress bounded ZIP project-application slice after accepted S05-T03 validation and S05-T12 intake. Its approved plan and [scoped report](../../test-reports/s05-t10.md) separate implementation evidence from independent acceptance.
 
-S08-T01 is the first Sprint 8 slice on a published dedicated branch. Its invitation API has scoped test evidence and remains in progress until independent co-maintainer review; later sharing, comments and chat tasks are separate slices.
+S08-T01 is the first Sprint 8 slice on a published dedicated branch. Its task metadata currently says done while its report still says review pending; GAP-25 tracks reconciliation. S08-T02 share-link API has scoped test evidence and remains in progress until independent co-maintainer review. Later sharing UI, comments and chat tasks are separate slices.
 
 ## Connected to
 
@@ -49,3 +49,5 @@ Maintainers/agents select and edit tasks; the validator checks structural consis
 - [implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md](../../../implementation/sprint-00-bootstrap/S00-T02-write-permanent-agent-execution-rules.md)
 - [S02-T08 task](../../../implementation/sprint-02-identity-permissions/S02-T08-verify-tenancy-revocation-suspension-and-csrf.md)
 - [S08-T01 task](../../../implementation/sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md)
+- [S08-T02 task](../../../implementation/sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md)
+- [S08-T03 task](../../../implementation/sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md)

@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S08-T02]
 requirements: [COL-03, COL-04, COL-05]
 source_task: S08-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: ready
 ---
 # S08-T03 — Create sharing and role management UI
 
@@ -60,20 +60,20 @@ Each code slice starts with the specified failing assertion; documentation/resea
 
 - `apps/web/src/features/sharing/share-dialog.tsx`
 - `tests/integration/s08-t03.test.ts`
-- `tests/regression/col-03/s08-t03.test.ts`
-- `tests/regression/col-04/s08-t03.test.ts`
-- `tests/regression/col-05/s08-t03.test.ts`
+- `tests/regression/col-03/s08-t03.test.tsx`
+- `tests/regression/col-04/s08-t03.test.tsx`
+- `tests/regression/col-05/s08-t03.test.tsx`
 - `docs/test-reports/s08-t03.md`
 
 Update existing feature evidence and sprint progress entries for the IDs listed below. These are future implementation paths; no application code/test is created by this planning task file.
 
 ## Acceptance Criteria
 
-- [ ] Owner sees pending invite/member/role/link state; non-owner cannot mutate rights via handcrafted requests
-- [ ] COL-03: OWNER/EDITOR/REVIEWER/VIEWER are enforced on REST; WSS enforcement lands in G2. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] COL-04: Email invitations can be accepted/rejected/revoked, expire and remain project-scoped. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] COL-05: High-entropy hashed share links restrict roles, expiry, uses and revocation. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Owner sees pending invite/member/role/link state; non-owner cannot mutate rights via handcrafted requests
+- [x] COL-03: OWNER/EDITOR/REVIEWER/VIEWER are enforced on REST; WSS enforcement lands in G2. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] COL-04: Email invitations can be accepted/rejected/revoked, expire and remain project-scoped. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] COL-05: High-entropy hashed share links restrict roles, expiry, uses and revocation. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -81,7 +81,7 @@ The following commands are target runtime checks available after S00 setup. Expe
 
 ```text
 python scripts/plan_lint.py
-pnpm exec vitest run tests/integration/s08-t03.test.ts tests/regression/col-03/s08-t03.test.ts tests/regression/col-04/s08-t03.test.ts tests/regression/col-05/s08-t03.test.ts
+pnpm exec vitest run tests/integration/s08-t03.test.ts tests/regression/col-03/s08-t03.test.tsx tests/regression/col-04/s08-t03.test.tsx tests/regression/col-05/s08-t03.test.tsx
 pnpm lint
 pnpm typecheck
 pnpm build
@@ -99,9 +99,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

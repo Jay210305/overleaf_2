@@ -4,6 +4,8 @@ import { parsePublicConfig } from "@latex-collab/config";
 import type { ProjectNodeView, ProjectView } from "@latex-collab/contracts";
 import { FileTree } from "../files/file-tree.js";
 import { FileUploader } from "../files/file-uploader.js";
+import { ShareDialog } from "../sharing/share-dialog.js";
+import { CommentAnchors } from "../review/comment-anchors.js";
 import { ProjectSettings } from "./settings.js";
 
 const config = parsePublicConfig(import.meta.env);
@@ -28,6 +30,7 @@ export function ProjectWorkspace({
   const [error, setError] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<ProjectNodeView | null>(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
   const [uploadVersion, setUploadVersion] = useState(0);
 
   const fetchProject = useCallback(async () => {
@@ -81,6 +84,15 @@ export function ProjectWorkspace({
           <span>{project ? project.title : "Loading…"}</span>
         </nav>
         <div className="workspace-actions">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowShareDialog(true)}
+            aria-haspopup="dialog"
+            aria-label="Share project"
+          >
+            Share
+          </button>
           <button
             type="button"
             className="btn btn-secondary"
@@ -139,6 +151,14 @@ export function ProjectWorkspace({
                   <dt>Size</dt>
                   <dd>{selectedNode.sizeBytes} bytes</dd>
                 </dl>
+                {selectedNode.kind === "FILE" && selectedNode.contentKind === "TEXT" && (
+                  <CommentAnchors
+                    projectId={projectId}
+                    fileId={selectedNode.id}
+                    apiUrl={apiUrl}
+                    csrfToken={csrfToken}
+                  />
+                )}
               </div>
             ) : (
               <div className="empty-selection">
@@ -204,6 +224,14 @@ export function ProjectWorkspace({
             />
           </div>
         </div>
+      )}
+      {showShareDialog && (
+        <ShareDialog
+          projectId={projectId}
+          apiUrl={apiUrl}
+          csrfToken={csrfToken}
+          onClose={() => setShowShareDialog(false)}
+        />
       )}
     </div>
   );

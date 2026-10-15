@@ -21,6 +21,8 @@ Base64 is allowed here only for a bounded Yjs protocol frame, not uploaded files
 
 Project invitations do not authorize WSS access until an email-matched verified account accepts a delivered, unexpired token and a current project membership is committed. A later membership revocation still takes effect through the live S07 permission path. See the [HTTP invitation boundary](http-api.md) and ADR-010.
 
+Share-link redemption binds a verified account membership to its source link. Authorization reads use `active_project_members`, which excludes revoked or expired links, so a new ticket or WSS handshake cannot revive an old grant. A link's `maxUses` limits redemptions, while already redeemed members retain access until expiry or revocation. Closing sockets that were already authenticated when a link expires or is revoked is still required by S08-T08.
+
 API `POST /projects/{id}/collab-ticket` receives fileId and action (`read` or `write`). It checks current session/role/project, returns opaque ticket plus expiresAt, and stores hash-scoped user/project/file/action/session identity in Redis with proposed 30 s TTL. Collab authenticates by Hocuspocus initial protocol message, never a logged query token. Atomically consume once; require allowed Origin and live membership; load verified snapshot/update log before joining. Reconnections require new tickets with bounded exponential backoff.
 
 ## Durable Updates and ACK

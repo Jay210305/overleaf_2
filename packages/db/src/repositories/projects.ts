@@ -74,17 +74,17 @@ export class ProjectRepository {
       filterSql = "p.owner_id = $1 AND p.status = 'active'";
     } else if (filter === "shared") {
       filterSql = `p.id IN (
-        SELECT pm.project_id FROM project_members pm
+        SELECT pm.project_id FROM active_project_members pm
         WHERE pm.user_id = $1 AND pm.revoked_at IS NULL AND pm.role != 'OWNER'
       ) AND p.owner_id != $1 AND p.status = 'active'`;
     } else if (filter === "recent") {
       filterSql = `(p.owner_id = $1 OR p.id IN (
-        SELECT pm.project_id FROM project_members pm
+        SELECT pm.project_id FROM active_project_members pm
         WHERE pm.user_id = $1 AND pm.revoked_at IS NULL
       )) AND p.status = 'active'`;
     } else if (filter === "archived") {
       filterSql = `(p.owner_id = $1 OR p.id IN (
-        SELECT pm.project_id FROM project_members pm
+        SELECT pm.project_id FROM active_project_members pm
         WHERE pm.user_id = $1 AND pm.revoked_at IS NULL
       )) AND p.status = 'archived'`;
     } else if (filter === "trashed") {
