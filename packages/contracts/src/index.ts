@@ -256,6 +256,16 @@ export const passwordChangeRequestSchema = z.strictObject({
 });
 export type PasswordChangeRequest = z.infer<typeof passwordChangeRequestSchema>;
 
+export const deleteAccountRequestSchema = z
+  .strictObject({
+    password: z.string().min(1).max(128).optional(),
+    currentPassword: z.string().min(1).max(128).optional(),
+  })
+  .refine((data) => Boolean(data.password || data.currentPassword), {
+    message: "password or currentPassword is required",
+  });
+export type DeleteAccountRequest = z.infer<typeof deleteAccountRequestSchema>;
+
 export const profilePatchSchema = z
   .strictObject({
     displayName: z.string().trim().min(1).max(100).optional(),
@@ -464,6 +474,49 @@ export const artifactViewSchema = z.strictObject({
   items: z.array(artifactItemViewSchema).max(2000),
 });
 export type ArtifactView = z.infer<typeof artifactViewSchema>;
+
+export const tagViewSchema = z.strictObject({
+  id: z.string().uuid(),
+  name: z.string().min(1).max(50),
+  color: z.string().min(1).max(30),
+});
+export type TagView = z.infer<typeof tagViewSchema>;
+
+export const tagViewPageSchema = z.strictObject({
+  items: z.array(tagViewSchema),
+  nextCursor: z.string().nullable(),
+});
+export type TagViewPage = z.infer<typeof tagViewPageSchema>;
+
+export const createTagSchema = z.strictObject({
+  name: z.string().trim().min(1).max(50),
+  color: z.string().trim().min(1).max(30),
+});
+export type CreateTagInput = z.infer<typeof createTagSchema>;
+
+export const updateTagSchema = z
+  .strictObject({
+    name: z.string().trim().min(1).max(50).optional(),
+    color: z.string().trim().min(1).max(30).optional(),
+  })
+  .refine((val) => Object.keys(val).length > 0, {
+    message: "At least one field must be provided for update",
+  });
+export type UpdateTagInput = z.infer<typeof updateTagSchema>;
+
+export const ownershipRequestSchema = z.strictObject({
+  recipientUserId: z.string().uuid(),
+});
+export type OwnershipRequest = z.infer<typeof ownershipRequestSchema>;
+
+export const ownershipViewSchema = z.strictObject({
+  id: z.string().uuid(),
+  projectId: z.string().uuid(),
+  recipientUserId: z.string().uuid(),
+  expiresAt: z.string().datetime(),
+  status: z.enum(["pending", "accepted", "rejected", "cancelled"]),
+});
+export type OwnershipView = z.infer<typeof ownershipViewSchema>;
 
 export * from "./storage.js";
 export * from "./executor.js";

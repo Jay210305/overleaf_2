@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S09-T05]
 requirements: [COL-11, COL-06, COL-03]
 source_task: S09-T06
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T06 — Preserve current ACL and historical anchors on restore
 

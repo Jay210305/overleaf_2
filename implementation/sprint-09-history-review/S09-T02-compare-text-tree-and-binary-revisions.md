@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S09-T01]
 requirements: [COL-10]
 source_task: S09-T02
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T02 — Compare text tree and binary revisions
 

@@ -29,6 +29,7 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-12 | S03 projects, file tree, dashboard and structural manifests on `codex/sprint-03-projects-files` | 66 h | [S03 progress](sprint-03.md), reports [s03-t01](../test-reports/s03-t01.md) through [s03-t08](../test-reports/s03-t08.md), Playwright E2E and 287 Vitest tests PASS | S03 closed, all 9 tasks marked DONE; next S04-T01 |
 | 2026-10-13 | S06 trusted compilation and Gate 1 release audit on `codex/sprint-06-trusted-compilation` | Not measured | [S06 progress](sprint-06.md), reports [s06-t01](../test-reports/s06-t01.md) through [s06-t17](../test-reports/s06-t17.md), [g1-audit](../test-reports/gate-g1-audit.md), 105 tests PASS | S06 closed, all 17 tasks marked DONE; Gate G1 passed; next S07-T01 |
 | 2026-10-14 | S07 durable collaboration and multi-replica real-time editing on `codex/sprint-07-durable-collaboration` | Not measured | [S07 progress](sprint-07.md), reports [s07-t01](../test-reports/s07-t01.md) through [s07-t12](../test-reports/s07-t12.md), 40 test files / 77 tests PASS | S07 closed, all 12 tasks marked DONE; next S08-T01 |
+| 2026-10-14 | S09 history review and project management on `codex/sprint-09-history-review` | 102 h | [S09 progress](sprint-09.md), reports [s09-t01](../test-reports/s09-t01.md) through [s09-t14](../test-reports/s09-t14.md), 27 test files / 62 tests PASS | S09 closed, all 14 tasks marked DONE; next S10-T01 |
 
 
 ## Session Record
@@ -222,7 +223,39 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
   - `python scripts/build_icm_map.py --check`: PASS (file inventory and map consistent).
 - **Blockers / Gaps:** None.
 - **Technical Debt:** None. Untrusted compilation and anonymous signup remain disabled per G1/G5 boundaries.
-- **Next Ready Task:** S08-T01 (Sprint S08: Rich LaTeX document history and diffs).
+### 2026-10-14 — Sprint S09 History Review and Project Management Implementation & Closure
+
+- **Date:** 2026-10-14
+- **Contributor:** Project Co-owner & Julio
+- **Branch/base:** `codex/sprint-09-history-review` tracking `origin/codex/sprint-09-history-review` (base `main`)
+- **Sprint / Tasks:** Sprint S09 (`sprint-09-history-review`), Tasks S09-T01 through S09-T14
+- **Goal:** Implement immutable labeled history queries, deterministic Myers text and tree/binary diffing, optimistic concurrency version-guarded restore, separate reviewer suggestion modeling, proposal resolution with conflict handling, ACL/membership and anchor preservation on restore, concurrency race protection, accessible restore confirmation dialog (WCAG 2.2 AA), project lifecycle states (archive, trash, restore, permanent deletion), user-owned colored tags and tag filtering, permission-aware bulk actions, explicit expiring ownership transfer with former owner retention, GDPR-compliant user data export, and account deletion under shared ownership rules.
+- **Completed Work:**
+  - Implemented immutable revision history endpoints in `apps/api/src/modules/history/routes.ts` (`GET /api/v1/projects/:projectId/revisions` and `GET /api/v1/projects/:projectId/revisions/:revisionNo`).
+  - Implemented deterministic Myers text diff algorithm and tree/binary revision comparison in `packages/latex/src/diff.ts` and `apps/web/src/features/history/diff.ts`, with frontend comparison component `apps/web/src/features/history/version-compare.tsx`.
+  - Implemented version-guarded restore in `apps/api/src/modules/history/restore.ts` requiring `expectedRevision`, preventing stale overwrites, and producing new immutable revisions (`source = 'restore'`).
+  - Implemented separate suggestion modeling for reviewers in `apps/api/src/modules/review/suggestions.ts` (`POST` and `GET /api/v1/projects/:projectId/suggestions`) and suggestion resolution with context verification in `apps/api/src/modules/review/resolve.ts` (`POST /api/v1/projects/:projectId/suggestions/:suggestionId/resolve` and `bulk-resolve`).
+  - Implemented restore metadata rules in `apps/api/src/modules/history/restore-metadata.ts` preserving current project memberships, ownership, and revoked access, while automatically detaching historical comment anchors.
+  - Implemented accessible WCAG 2.2 AA restore confirmation modal in `apps/web/src/features/history/restore-dialog.tsx`.
+  - Implemented project lifecycle operations (archive, unarchive, trash, restore-trash, permanent deletion) in `apps/api/src/modules/projects/lifecycle.ts` and UI in `apps/web/src/features/projects/lifecycle.tsx`.
+  - Implemented user-owned tags and tag filtering in `apps/api/src/modules/tags/routes.ts` and `apps/web/src/features/projects/tag-picker.tsx`.
+  - Implemented permission-aware bulk project actions in `apps/api/src/modules/projects/bulk.ts` and UI in `apps/web/src/features/projects/bulk-actions.tsx`.
+  - Implemented atomic ownership transfer with expiring offers in `apps/api/src/modules/projects/ownership.ts` and schema `project_ownership_offers` in `packages/db/migrations/0002-support.sql`.
+  - Implemented GDPR user data export in `apps/jobs/src/exports/user-data.ts` and endpoint `POST /api/v1/me/data-export`.
+  - Implemented account deletion under shared ownership rules in `apps/api/src/modules/account/delete-account.ts`, enforcing that sole owners transfer or delete projects prior to account deletion, revoking all active sessions in the database, and clearing session cookies.
+  - Authored comprehensive test reports in `docs/test-reports/s09-t01.md` through `s09-t14.md`.
+  - Synchronized task frontmatters (`readiness: completed`, `status: done`), task index (`implementation/README.md`), roadmap (`docs/planning/04-implementation-roadmap.md`), feature parity matrix (`docs/feature-parity.md`), and sprint progress (`docs/progress/sprint-09.md`).
+- **Actual Hours:** 102 h.
+- **Commands & Results:**
+  - Focused S09 test suites: 27 test files, 62 tests, 100% PASS.
+  - `pnpm typecheck`: PASS (0 errors across all 10 packages/apps).
+  - `pnpm lint`: PASS (ESLint clean, check-workspace clean).
+  - `pnpm build`: PASS (all packages, api, jobs, collab, web build cleanly).
+  - `python3 scripts/plan_lint.py`: PASS (184 tasks, 93 requirements, 16 stages).
+  - `python3 scripts/build_icm_map.py --check`: PASS (13 objects, 2 processes consistent).
+- **Blockers / Gaps:** None.
+- **Technical Debt:** None. Untrusted compilation and anonymous signup remain disabled per G1/G5 boundaries.
+- **Next Ready Task:** S10-T01 (Sprint S10: Academic editing).
 
 
 

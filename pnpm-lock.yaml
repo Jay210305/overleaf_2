@@ -57,6 +57,9 @@ importers:
       '@latex-collab/editor':
         specifier: workspace:*
         version: link:packages/editor
+      '@latex-collab/latex':
+        specifier: workspace:*
+        version: link:packages/latex
       '@latex-collab/storage':
         specifier: workspace:*
         version: link:packages/storage

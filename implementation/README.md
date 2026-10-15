@@ -112,20 +112,20 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S08-T07 | [Enforce comment chat safety and limits](sprint-08-sharing-comments-chat/S08-T07-enforce-comment-chat-safety-and-limits.md) | Julio (proposed) | 6 | todo |
 | S08-T08 | [Verify sharing revocation and detached anchors](sprint-08-sharing-comments-chat/S08-T08-verify-sharing-revocation-and-detached-anchors.md) | Julio (proposed) | 6 | todo |
 | S08-T10 | [Stabilize and review G2 collaboration](sprint-08-sharing-comments-chat/S08-T10-stabilize-and-review-g2-collaboration.md) | Julio (proposed) | 8 | todo |
-| S09-T01 | [Create immutable labeled history queries](sprint-09-history-review/S09-T01-create-immutable-labeled-history-queries.md) | Project Co-owner (proposed) | 8 | todo |
-| S09-T02 | [Compare text tree and binary revisions](sprint-09-history-review/S09-T02-compare-text-tree-and-binary-revisions.md) | Project Co-owner (proposed) | 8 | todo |
-| S09-T03 | [Restore file or project with version guard](sprint-09-history-review/S09-T03-restore-file-or-project-with-version-guard.md) | Project Co-owner (proposed) | 8 | todo |
-| S09-T04 | [Model reviewer suggestions separately](sprint-09-history-review/S09-T04-model-reviewer-suggestions-separately.md) | Project Co-owner (proposed) | 8 | todo |
-| S09-T05 | [Resolve proposals with explicit conflicts](sprint-09-history-review/S09-T05-resolve-proposals-with-explicit-conflicts.md) | Project Co-owner (proposed) | 8 | todo |
-| S09-T06 | [Preserve current ACL and historical anchors on restore](sprint-09-history-review/S09-T06-preserve-current-acl-and-historical-anchors-on-restore.md) | Project Co-owner (proposed) | 6 | todo |
-| S09-T07 | [Verify concurrent review and file changes](sprint-09-history-review/S09-T07-verify-concurrent-review-and-file-changes.md) | Project Co-owner (proposed) | 6 | todo |
-| S09-T08 | [Create explicit restore confirmation UI](sprint-09-history-review/S09-T08-create-explicit-restore-confirmation-ui.md) | Project Co-owner (proposed) | 6 | todo |
-| S09-T09 | [Implement archive trash and permanent deletion](sprint-09-history-review/S09-T09-implement-archive-trash-and-permanent-deletion.md) | Project Co-owner (proposed) | 8 | todo |
-| S09-T10 | [Implement owned project tags](sprint-09-history-review/S09-T10-implement-owned-project-tags.md) | Project Co-owner (proposed) | 6 | todo |
-| S09-T11 | [Implement permission-aware bulk project actions](sprint-09-history-review/S09-T11-implement-permission-aware-bulk-project-actions.md) | Project Co-owner (proposed) | 6 | todo |
-| S09-T12 | [Implement explicit ownership transfer](sprint-09-history-review/S09-T12-implement-explicit-ownership-transfer.md) | Project Co-owner (proposed) | 8 | todo |
-| S09-T13 | [Export authorized user data](sprint-09-history-review/S09-T13-export-authorized-user-data.md) | Project Co-owner (proposed) | 8 | todo |
-| S09-T14 | [Delete account under shared ownership rules](sprint-09-history-review/S09-T14-delete-account-under-shared-ownership-rules.md) | Project Co-owner (proposed) | 8 | todo |
+| S09-T01 | [Create immutable labeled history queries](sprint-09-history-review/S09-T01-create-immutable-labeled-history-queries.md) | Project Co-owner (proposed) | 8 | done |
+| S09-T02 | [Compare text tree and binary revisions](sprint-09-history-review/S09-T02-compare-text-tree-and-binary-revisions.md) | Project Co-owner (proposed) | 8 | done |
+| S09-T03 | [Restore file or project with version guard](sprint-09-history-review/S09-T03-restore-file-or-project-with-version-guard.md) | Project Co-owner (proposed) | 8 | done |
+| S09-T04 | [Model reviewer suggestions separately](sprint-09-history-review/S09-T04-model-reviewer-suggestions-separately.md) | Project Co-owner (proposed) | 8 | done |
+| S09-T05 | [Resolve proposals with explicit conflicts](sprint-09-history-review/S09-T05-resolve-proposals-with-explicit-conflicts.md) | Project Co-owner (proposed) | 8 | done |
+| S09-T06 | [Preserve current ACL and historical anchors on restore](sprint-09-history-review/S09-T06-preserve-current-acl-and-historical-anchors-on-restore.md) | Project Co-owner (proposed) | 6 | done |
+| S09-T07 | [Verify concurrent review and file changes](sprint-09-history-review/S09-T07-verify-concurrent-review-and-file-changes.md) | Project Co-owner (proposed) | 6 | done |
+| S09-T08 | [Create explicit restore confirmation UI](sprint-09-history-review/S09-T08-create-explicit-restore-confirmation-ui.md) | Project Co-owner (proposed) | 6 | done |
+| S09-T09 | [Implement archive trash and permanent deletion](sprint-09-history-review/S09-T09-implement-archive-trash-and-permanent-deletion.md) | Project Co-owner (proposed) | 8 | done |
+| S09-T10 | [Implement owned project tags](sprint-09-history-review/S09-T10-implement-owned-project-tags.md) | Project Co-owner (proposed) | 6 | done |
+| S09-T11 | [Implement permission-aware bulk project actions](sprint-09-history-review/S09-T11-implement-permission-aware-bulk-project-actions.md) | Project Co-owner (proposed) | 6 | done |
+| S09-T12 | [Implement explicit ownership transfer](sprint-09-history-review/S09-T12-implement-explicit-ownership-transfer.md) | Project Co-owner (proposed) | 8 | done |
+| S09-T13 | [Export authorized user data](sprint-09-history-review/S09-T13-export-authorized-user-data.md) | Project Co-owner (proposed) | 8 | done |
+| S09-T14 | [Delete account under shared ownership rules](sprint-09-history-review/S09-T14-delete-account-under-shared-ownership-rules.md) | Project Co-owner (proposed) | 8 | done |
 | S10-T01 | [Add tested alternative TeX profiles](sprint-10-academic-editing/S10-T01-add-tested-alternative-tex-profiles.md) | Julio (proposed) | 8 | todo |
 | S10-T02 | [Compile bibliography and complete citations](sprint-10-academic-editing/S10-T02-compile-bibliography-and-complete-citations.md) | Julio (proposed) | 8 | todo |
 | S10-T03 | [Index BibTeX and search local references](sprint-10-academic-editing/S10-T03-index-bibtex-and-search-local-references.md) | Julio (proposed) | 8 | todo |

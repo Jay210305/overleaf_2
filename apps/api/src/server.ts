@@ -14,12 +14,21 @@ import { safeLoggerOptions } from "./plugins/logging.js";
 import type { AuthRateLimiter } from "./plugins/rate-limit.js";
 import { registerProfileRoutes } from "./modules/account/profile.js";
 import { registerPasswordChangeRoute } from "./modules/account/password-change.js";
+import { registerDeleteAccountRoute } from "./modules/account/delete-account.js";
 import { registerAvatarRoutes } from "./modules/account/avatar.js";
 import { registerProjectRoutes } from "./modules/projects/routes.js";
+import { registerProjectLifecycleRoutes } from "./modules/projects/lifecycle.js";
 import { registerProjectSettingsRoutes } from "./modules/projects/settings.js";
+import { registerBulkProjectRoutes } from "./modules/projects/bulk.js";
+import { registerOwnershipRoutes } from "./modules/projects/ownership.js";
+import { registerTagRoutes } from "./modules/tags/routes.js";
 import { registerTreeRoutes } from "./modules/files/tree.js";
 import { registerTextRoutes } from "./modules/text/routes.js";
 import { registerCheckpointRoutes } from "./modules/history/checkpoint.js";
+import { registerHistoryRoutes } from "./modules/history/routes.js";
+import { registerRestoreRoutes } from "./modules/history/restore.js";
+import { registerSuggestionRoutes } from "./modules/review/suggestions.js";
+import { registerResolveRoutes } from "./modules/review/resolve.js";
 import { registerUploadRoutes } from "./modules/uploads/routes.js";
 import { registerImportRoutes } from "./modules/imports/routes.js";
 import { registerCompilationRoutes } from "./modules/compilations/routes.js";
@@ -146,6 +155,11 @@ export function createServer(options: ServerOptions) {
     origin: options.origin,
     secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
   });
+  registerDeleteAccountRoute(app, {
+    db: options.db,
+    origin: options.origin,
+    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+  });
   registerAvatarRoutes(app, {
     db: options.db,
     storage: options.storage,
@@ -158,7 +172,23 @@ export function createServer(options: ServerOptions) {
       origin: options.origin,
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
     });
+    registerProjectLifecycleRoutes(app, {
+      db: options.db,
+    });
+    registerBulkProjectRoutes(app, {
+      db: options.db,
+    });
+    registerOwnershipRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
     registerProjectSettingsRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+    registerTagRoutes(app, {
       db: options.db,
       origin: options.origin,
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
@@ -174,6 +204,18 @@ export function createServer(options: ServerOptions) {
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
     });
     registerCheckpointRoutes(app, {
+      db: options.db,
+    });
+    registerHistoryRoutes(app, {
+      db: options.db,
+    });
+    registerRestoreRoutes(app, {
+      db: options.db,
+    });
+    registerSuggestionRoutes(app, {
+      db: options.db,
+    });
+    registerResolveRoutes(app, {
       db: options.db,
     });
     registerUploadRoutes(app, { db: options.db, storage: options.storage });

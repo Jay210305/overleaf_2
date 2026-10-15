@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S09-T12]
 requirements: [ACC-07, PRO-06]
 source_task: S02-T07
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T13 — Export authorized user data
 

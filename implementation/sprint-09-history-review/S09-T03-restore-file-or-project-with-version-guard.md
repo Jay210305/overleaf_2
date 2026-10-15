@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S09-T02]
 requirements: [COL-11, NFR-06]
 source_task: S09-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T03 — Restore file or project with version guard
 
