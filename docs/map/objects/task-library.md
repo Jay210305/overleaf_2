@@ -26,7 +26,7 @@ S00–S15 directories contain Sxx-Tyy task files. ID, status, effort, dependenci
 
 S05-T10 is the in-progress bounded ZIP project-application slice after accepted S05-T03 validation and S05-T12 intake. Its approved plan and [scoped report](../../test-reports/s05-t10.md) separate implementation evidence from independent acceptance.
 
-S08-T01 is the first Sprint 8 slice on a published dedicated branch. Its task metadata currently says done while its report still says review pending; GAP-25 tracks reconciliation. S08-T02 share-link API has scoped test evidence and remains in progress until independent co-maintainer review. Later sharing UI, comments and chat tasks are separate slices.
+Sprint 8 is on its published dedicated branch. S08-T01–T05 and T09 are accepted. S08-T06–T08 and T10 remain unstarted. [Sprint progress](../../progress/sprint-08.md) owns the current matrix.
 
 ## Connected to
 
@@ -51,3 +51,6 @@ Maintainers/agents select and edit tasks; the validator checks structural consis
 - [S08-T01 task](../../../implementation/sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md)
 - [S08-T02 task](../../../implementation/sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md)
 - [S08-T03 task](../../../implementation/sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md)
+- [S08-T04 task](../../../implementation/sprint-08-sharing-comments-chat/S08-T04-implement-anchored-comments-and-replies.md)
+- [S08-T09 task](../../../implementation/sprint-08-sharing-comments-chat/S08-T09-render-comment-anchor-and-reply-interactions.md)
+- [S08-T05 task](../../../implementation/sprint-08-sharing-comments-chat/S08-T05-create-authorized-durable-project-chat.md)

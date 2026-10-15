@@ -28,9 +28,9 @@ The [S05-T10 report](../../test-reports/s05-t10.md) records transactional ZIP ap
 
 The [origin/main integration review](../../test-reports/integration-review-2026-10-13.md) records the no-op pull, fresh local gates and the Redis recovery/browser blockers. GAP-23 and GAP-24 keep the complete browser gate open without changing S05-T10 acceptance.
 
-The [S08-T01 report](../../test-reports/s08-t01.md) records invitation delivery and PostgreSQL denial evidence. [Sprint 8 progress](../../progress/sprint-08.md) keeps the task in progress pending independent review and keeps COL-04 and G2 incomplete.
+The [S08-T01 report](../../test-reports/s08-t01.md) records invitation delivery and PostgreSQL denial evidence. [Sprint 8 progress](../../progress/sprint-08.md) records acceptance of S08-T01–T04; G2 remains incomplete.
 
-The [S08-T02 report](../../test-reports/s08-t02.md) records hashed links, expiry/revocation denial and new WSS ticket checks. S08-T02 and COL-05 remain in progress pending independent review, sharing UI and live socket revocation. GAP-25 records conflicting S08-T01 status sources.
+The [S08-T02 report](../../test-reports/s08-t02.md) records hashed links, expiry/revocation denial and new WSS ticket checks. The [S08-T04 report](../../test-reports/s08-t04.md) covers anchored comments; [S08-T09](../../test-reports/s08-t09.md) is accepted. [S08-T05](../../test-reports/s08-t05.md) records accepted durable chat and live browser evidence while S08-T07 rate limits remain open. COL-06, COL-07 and G2 remain incomplete.
 
 ## Connected to
 
@@ -63,6 +63,10 @@ Maintainers and executing agents write observed evidence; reviewers inspect comm
 - [S02-T09 evidence](../../test-reports/s02-t09.md)
 - [S02-T07 evidence](../../test-reports/s02-t07.md)
 - [S02-T10 evidence](../../test-reports/s02-t10.md)
+- [S08 progress](../../progress/sprint-08.md)
+- [S08-T04 evidence](../../test-reports/s08-t04.md)
+- [S08-T09 evidence](../../test-reports/s08-t09.md)
+- [S08-T05 evidence](../../test-reports/s08-t05.md)
 - [S02-T11 evidence](../../test-reports/s02-t11.md)
 - [S02-T08 evidence](../../test-reports/s02-t08.md)
 - [docs/feature-parity.md](../../feature-parity.md)

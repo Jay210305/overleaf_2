@@ -20,7 +20,7 @@ function textUpdateBase64(source: string) {
   return update;
 }
 
-function stubApi(comments: unknown[]) {
+function stubApi(comments: unknown[], source = "A target Z") {
   const requests: Array<{ url: string; method?: string; body: unknown }> = [];
   vi.stubGlobal(
     "fetch",
@@ -28,7 +28,7 @@ function stubApi(comments: unknown[]) {
       if (url.includes("/files/"))
         return {
           ok: true,
-          json: async () => ({ updateBase64: textUpdateBase64("A target Z") }),
+          json: async () => ({ updateBase64: textUpdateBase64(source) }),
         };
       if (url.includes("/members"))
         return {
@@ -151,5 +151,34 @@ describe("S08-T09 comment anchors", () => {
     expect(await screen.findByText("Anchor unavailable: selected range changed.")).toBeTruthy();
     expect(screen.queryByText("target", { selector: "mark" })).toBeNull();
     expect(screen.getByText("Review this range")).toBeTruthy();
+  });
+
+  it("highlights the current source at shifted offsets and hides stale offsets", async () => {
+    const shifted = { ...attachedComment(), start: 6, end: 12 };
+    stubApi([shifted], "new A target Z");
+    const rendered = render(
+      <CommentAnchors
+        projectId="project-id"
+        fileId={fileId}
+        apiUrl="http://api.test"
+        csrfToken="csrf"
+      />,
+    );
+    const mark = await screen.findByText("target", { selector: "mark" });
+    expect(mark.parentElement?.textContent).toContain("new A target Z");
+    rendered.unmount();
+    vi.unstubAllGlobals();
+
+    stubApi([{ ...attachedComment(), start: 0, end: 6 }]);
+    render(
+      <CommentAnchors
+        projectId="project-id"
+        fileId={fileId}
+        apiUrl="http://api.test"
+        csrfToken="csrf"
+      />,
+    );
+    expect(await screen.findByText(/Anchor unavailable in loaded source/)).toBeTruthy();
+    expect(screen.queryByText("target", { selector: "mark" })).toBeNull();
   });
 });

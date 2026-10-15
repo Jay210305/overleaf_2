@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "98be18b0b8f2423acd58d07f25f1c21bd81f5bfe",
+  "git_baseline": "cfcfecc0366716ab15b67b380f40fba6d3fd9392",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -98,7 +98,7 @@
     {
       "path": "apps/api/package.json",
       "role": "factory",
-      "sha256": "adeaa3f22bb888a99db37fd67e3b30467e9dcc93abc778a0889148b7fabbac2c"
+      "sha256": "47ece638bcabf685d197ade2b00f24d106a5c6ee72aa3fa3584bd77be7a19e5b"
     },
     {
       "path": "apps/api/src/init-storage.ts",
@@ -161,9 +161,29 @@
       "sha256": "659912624f0808d5bb0c6709c4e8f7f0a9a0789325b8a760c1d92543c4a0ae01"
     },
     {
+      "path": "apps/api/src/modules/chat/events.ts",
+      "role": "factory",
+      "sha256": "070e78f907524dea0a16f9241c65ed012d76b460280e2c05047b70ad55de5d93"
+    },
+    {
+      "path": "apps/api/src/modules/chat/routes.ts",
+      "role": "factory",
+      "sha256": "03e6dd72073b6a824fe12e360b0b557d1fd2ff514e91ef00921e9b6e23d82c2a"
+    },
+    {
       "path": "apps/api/src/modules/collab/ticket.ts",
       "role": "factory",
       "sha256": "e88503c501d86006804ba36e2c8e6177397bce1a38a042e0fcda9e32a38306b0"
+    },
+    {
+      "path": "apps/api/src/modules/comments/anchors.ts",
+      "role": "factory",
+      "sha256": "db5f9db8c99737f588b9a3deb23662b3b4181affb281a191ed7dd613c5346439"
+    },
+    {
+      "path": "apps/api/src/modules/comments/routes.ts",
+      "role": "factory",
+      "sha256": "02610296392eac4f004b86454ef688309456adab6e62a4919754a5867c10790a"
     },
     {
       "path": "apps/api/src/modules/compilations/routes.ts",
@@ -293,7 +313,7 @@
     {
       "path": "apps/api/src/server.ts",
       "role": "factory",
-      "sha256": "bb7d28b45492855481f3a284c8966997919719904a17f7c3c9b70a9e61a94476"
+      "sha256": "b266e203edd27c4e2ab0e69f3b06a1c53c81ecfedfa4924d2e774d11f981bdbd"
     },
     {
       "path": "apps/api/tsconfig.json",
@@ -481,6 +501,11 @@
       "sha256": "667ff484195baceaebdb424a9db65451f842606c1d274057277ec9cbc2caa41f"
     },
     {
+      "path": "apps/web/src/features/chat/project-chat.tsx",
+      "role": "factory",
+      "sha256": "87c2c29f4065266f4a1e07c69f16ac0cabcf6c187a4972a26bdab046f9ca8f1f"
+    },
+    {
       "path": "apps/web/src/features/collab/binding.ts",
       "role": "factory",
       "sha256": "a8ef1857d2593640d5a50a0a3c9fc4a641cdfc295303d1b8471f8635ba63fd4a"
@@ -553,7 +578,17 @@
     {
       "path": "apps/web/src/features/projects/workspace.tsx",
       "role": "factory",
-      "sha256": "04c9e6a53f87e1318b9af4bf7ba78ffc7007a506e180932821083c3fb167c354"
+      "sha256": "61d2b554f1514f7bb059548c3915104288de1d074c75f30879a0ad5a6a6f9c9e"
+    },
+    {
+      "path": "apps/web/src/features/review/comment-anchors.tsx",
+      "role": "factory",
+      "sha256": "d9850da758e8bc30ec515c3701376a61b0490583595b12865776820c265dc8bb"
+    },
+    {
+      "path": "apps/web/src/features/review/comment-thread.tsx",
+      "role": "factory",
+      "sha256": "ee7013ca04cd7018658614cf88e9bc574a9618ea7d70fe4e14e230dc41176e0b"
     },
     {
       "path": "apps/web/src/features/sharing/share-dialog.tsx",
@@ -688,7 +723,7 @@
     {
       "path": "docs/contracts/http-api.md",
       "role": "contract",
-      "sha256": "2b55b9d53ebe8d155aa62dd769151083a15825c26833c611ef632793f2b3e6b1"
+      "sha256": "3693fdadf50526f4430ce3e864879a00c444c5e6b49b0bbc233bc454017b684f"
     },
     {
       "path": "docs/contracts/http-operations.md",
@@ -718,7 +753,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "1437b6e6479ba6505a6a8b0a256e4a71695d374db6796fd44c3715549f7e0a4e"
+      "sha256": "dd61ee615ab002b85ea80301a0d46bd0e3ee8e4b1b40899cae6e2004cb97c8f1"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -773,12 +808,12 @@
     {
       "path": "docs/map/objects/api-and-durable-data.md",
       "role": "factory",
-      "sha256": "1746540a9c130f5843a660b09e0a7f8124e0ce35281a076b4f4006876c2f2166"
+      "sha256": "3a605e898c712edcc9f9eb01e4c4e43e6d2f220ac61b67caf1c37bdbdc554433"
     },
     {
       "path": "docs/map/objects/browser-and-editing.md",
       "role": "factory",
-      "sha256": "a114f4f6edb068d6d67ac3249665f81381dd451a23fb8d9e59b5ac63c5e0534f"
+      "sha256": "7691c2ed7bc3e0451ef5d36b744b528878cd7d9d97e0117d0e6907e09fb5f33a"
     },
     {
       "path": "docs/map/objects/compilation-and-artifacts.md",
@@ -818,7 +853,7 @@
     {
       "path": "docs/map/objects/progress-records.md",
       "role": "factory",
-      "sha256": "94e98a86a73d11b375a7a94a26e24d3026a74be20d5d670ebb3ee910cbb0f65d"
+      "sha256": "d3d624a5b30446d348c4d388b7479a33073911e25eb71953e8462e436568f751"
     },
     {
       "path": "docs/map/objects/provider-and-git-adapters.md",
@@ -828,7 +863,7 @@
     {
       "path": "docs/map/objects/task-library.md",
       "role": "factory",
-      "sha256": "aac30c59b0ef42b56df2ee01d4d5a500cefbb0d1379e90a6941c2427870a730d"
+      "sha256": "4a12a0f5454f1c0e62e8a007162b1881e6fd8306ffa334054b9d26a03b8eca8e"
     },
     {
       "path": "docs/map/objects/workspace-tooling.md",
@@ -888,7 +923,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "3d4c4e3ba119bd657970dd228d920f74afd1fcef706fec82e69f13b6fdee87dc"
+      "sha256": "18ebebf75f99bfb2ce208e7fd5a517d52f3cb235b3bd7fbb29ec97e0c2de3e42"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -973,12 +1008,12 @@
     {
       "path": "docs/progress/open-gaps.md",
       "role": "product",
-      "sha256": "51826f1f011a11eb747feda805b533134e862debfc1e433f08507ba2bfae6a7c"
+      "sha256": "0eb65226d9a1b40f1bc642589350fc43a32ee71ea215ead79ee13aaa50db2872"
     },
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "1371a0859e6b10f6084ac4bf48fcdc4bb72a1d41a6891c5039f77547c567b26e"
+      "sha256": "554f1a1faddef8fbc936afea15f619cad1c051ed6d7269a9dc583417fac86085"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -1028,7 +1063,7 @@
     {
       "path": "docs/progress/sprint-08.md",
       "role": "product",
-      "sha256": "9bf6e5ed43f1b6bb8d403e44c633766c62ae8cc713dc94a933e8c86e1b8d0877"
+      "sha256": "e8533e3c4c77c7659de3330b2590e44a076f396d0287d2800e1f5eae547cc954"
     },
     {
       "path": "docs/progress/sprint-09.md",
@@ -1573,7 +1608,22 @@
     {
       "path": "docs/test-reports/s08-t03.md",
       "role": "factory",
-      "sha256": "b0c554049e79f926f743ac5ea9725e075d666b2295c11ea3c2302b2bf240c3d3"
+      "sha256": "82756d7322651aa8b26b3fc5b6714b0cabfc8ca04e117064a4442ccc00ab2f83"
+    },
+    {
+      "path": "docs/test-reports/s08-t04.md",
+      "role": "factory",
+      "sha256": "6a84a08dcdbe3050cadf824ec4893245c6bd15321b284468ae3ac24202059058"
+    },
+    {
+      "path": "docs/test-reports/s08-t05.md",
+      "role": "factory",
+      "sha256": "27194fd7f7025074b4e09ff33cf61b1ad3bd8bf94f17aa1ad98d0cd832217cec"
+    },
+    {
+      "path": "docs/test-reports/s08-t09.md",
+      "role": "factory",
+      "sha256": "c9245ae95b7901f1b4103711cb8b4b10eb3eb64f49434513d87ec7fc461386d2"
     },
     {
       "path": "eslint.config.js",
@@ -1588,7 +1638,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "db144eca7bf02c2011d4cf1b3e8940c3abe5dab1cbad7abba4c5ebc02c86cec4"
+      "sha256": "9d0af0e6feb6cea73de348ab88b945c0d95b1c25f83562425dc2144735250f86"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -2113,17 +2163,17 @@
     {
       "path": "implementation/sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md",
       "role": "contract",
-      "sha256": "071d93af60f32e95e72cf54abe66148e2e18851f41fee68a684995a9ff664742"
+      "sha256": "4037d9005b39952d72cd3703928c2b52c4f68927c25e478e88cc01a718684455"
     },
     {
       "path": "implementation/sprint-08-sharing-comments-chat/S08-T04-implement-anchored-comments-and-replies.md",
       "role": "contract",
-      "sha256": "a54663a4ee5be8a4cc00547bf8df6528485afa736a125df691e0c7554c2e75fe"
+      "sha256": "f095d96c36d1e2fa825fa2673076a937e66a5f5fba72cb025cf295956a525614"
     },
     {
       "path": "implementation/sprint-08-sharing-comments-chat/S08-T05-create-authorized-durable-project-chat.md",
       "role": "contract",
-      "sha256": "f2dcd232f652376f27298ee9d9a597f07741a56c56084b844f18d4763ff63f44"
+      "sha256": "4e7c59a3b01dc626f55fff90f4b201abf173b035c6e0217babc3d08d1216c3fc"
     },
     {
       "path": "implementation/sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md",
@@ -2143,7 +2193,7 @@
     {
       "path": "implementation/sprint-08-sharing-comments-chat/S08-T09-render-comment-anchor-and-reply-interactions.md",
       "role": "contract",
-      "sha256": "2909210741fee401955d45d1ae24669a4ee07ba1bb166301e4e791e50554fa61"
+      "sha256": "a1d37ddf6a5fdb536d2e92bdd97fbe2d6ee3ac273df241e711554882f6c2c50a"
     },
     {
       "path": "implementation/sprint-08-sharing-comments-chat/S08-T10-stabilize-and-review-g2-collaboration.md",
@@ -2678,7 +2728,7 @@
     {
       "path": "packages/contracts/src/index.ts",
       "role": "factory",
-      "sha256": "4e9edb3203ada50a3b14ed0dbc0f3098ff29a01a82d8269f04510a3c3d1c243d"
+      "sha256": "dad5275c0d0b812e14f14210fff460814e4ba402a8e4b62821296801125a8020"
     },
     {
       "path": "packages/contracts/src/storage.ts",
@@ -2746,6 +2796,11 @@
       "sha256": "ee7535863e34e3988c0de61ae4422a4689a69a89e3fbefd762e8d2be87d5bb00"
     },
     {
+      "path": "packages/db/migrations/0011-comment-context.sql",
+      "role": "factory",
+      "sha256": "1a3f874a699b388ff7007a5650561aa6f8adf9bcaf6bd06abb9be64b76770a06"
+    },
+    {
       "path": "packages/db/package.json",
       "role": "factory",
       "sha256": "e790701ab8acf207d8c60452946b0246344e45fe49ff468c162d74edbff93a57"
@@ -2793,7 +2848,7 @@
     {
       "path": "packages/db/src/schema/collaboration.ts",
       "role": "factory",
-      "sha256": "a38a0b7ed2f9f74e6f6b7b1205b42918c55985b548772c070441704267bb2996"
+      "sha256": "3936d89ed6fa6dc53179a735bcfe0bddc3be25b99d966632e02345ab33840d04"
     },
     {
       "path": "packages/db/src/schema/core.ts",
@@ -2918,7 +2973,7 @@
     {
       "path": "pnpm-lock.yaml",
       "role": "factory",
-      "sha256": "6c1218a8e4854c2a255fc555eff32dfa017eec873da686d4bd30eabb2470c682"
+      "sha256": "da507a9797c24ee81a6c939308df106d9038ae608344c02ab2e1ffc5fecbf257"
     },
     {
       "path": "pnpm-workspace.yaml",
@@ -2979,6 +3034,16 @@
       "path": "tests/e2e/auth-forms.spec.ts",
       "role": "factory",
       "sha256": "4721220d2bbaace60bf08c5d8baef73c26810dcb5112fda6d06749e4fa471cbc"
+    },
+    {
+      "path": "tests/e2e/chat.spec.ts",
+      "role": "factory",
+      "sha256": "001e902d44cf777116672361f4c43255afc191ed492177a023fd8a2c155c09bc"
+    },
+    {
+      "path": "tests/e2e/comments.spec.ts",
+      "role": "factory",
+      "sha256": "ab219947216eab7e8fb396a8c63dc9ecdf179362286d142adca7a0acdba207c7"
     },
     {
       "path": "tests/e2e/editor-persistence.spec.ts",
@@ -3471,6 +3536,21 @@
       "sha256": "cfa82e9fbbfcfa2ac30a906a263e884b757e88a118fe02753a1e535710d0095b"
     },
     {
+      "path": "tests/integration/s08-t04.test.ts",
+      "role": "factory",
+      "sha256": "890461ee622aee403723a5ec19447fa308380e6512a838efa6fbf0cacf5dcdae"
+    },
+    {
+      "path": "tests/integration/s08-t05.test.ts",
+      "role": "factory",
+      "sha256": "103beafa0df22ca3cccc372b16533b9194e7f8ad872185005801a5b47f977c5d"
+    },
+    {
+      "path": "tests/integration/s08-t09.test.ts",
+      "role": "factory",
+      "sha256": "e27b5cdab34dd66b4fd4329328ccd02c703cd905a16d6078f54ecdcdeda2a84b"
+    },
+    {
       "path": "tests/integration/tree-races.test.ts",
       "role": "factory",
       "sha256": "85f38c14b652667f74f3fe0131ff235bc3eb1256cdb6f72a94132b63ff882226"
@@ -3736,6 +3816,26 @@
       "sha256": "fa0996f781dc31c70dd669aaeace86428b486744c4379513c3176746e8cda45e"
     },
     {
+      "path": "tests/regression/col-06/s08-t04-ui.test.tsx",
+      "role": "factory",
+      "sha256": "c234538fd68c2ad8bb01b73b3118d522c31ea57fa2531fc450e543169c3b7b60"
+    },
+    {
+      "path": "tests/regression/col-06/s08-t04.test.ts",
+      "role": "factory",
+      "sha256": "31a0b2c3c173f9cc4bda19ec15978f09a5f917197c098665b55a110dbae13409"
+    },
+    {
+      "path": "tests/regression/col-06/s08-t09.test.tsx",
+      "role": "factory",
+      "sha256": "39dab93a94689f06dcd3850592d87d15ed985cce7ef89765787647721dd0cea4"
+    },
+    {
+      "path": "tests/regression/col-07/s08-t05.test.tsx",
+      "role": "factory",
+      "sha256": "9f9808d22eed433fa3db1391fd5b4ecef5d695db344280a664ca77e9046ff70e"
+    },
+    {
       "path": "tests/regression/col-10/s03-t07.test.ts",
       "role": "factory",
       "sha256": "a6495209ed4701cafa60eef0d7a15db6fd4c118074a9cac4a1a1a33cf1ff1b9e"
@@ -3959,6 +4059,11 @@
       "path": "tests/regression/nfr-08/s05-t02.test.ts",
       "role": "factory",
       "sha256": "99c34944f4b3ce0e721588c50991937926c80519073343c793c87d4aaf2cbc4d"
+    },
+    {
+      "path": "tests/regression/nfr-08/s08-t09.test.tsx",
+      "role": "factory",
+      "sha256": "5876be2f0f38d67df9ed586f0bbb3c6a5ab7152ec633e09b5f4c2111a9e1b316"
     },
     {
       "path": "tests/regression/nfr-09/s06-t16.test.ts",

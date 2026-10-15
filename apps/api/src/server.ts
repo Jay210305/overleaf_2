@@ -31,6 +31,9 @@ import {
 import { registerShareLinkRoutes } from "./modules/sharing/share-links.js";
 import { registerProjectMemberRoutes } from "./modules/sharing/members.js";
 import { registerCommentRoutes } from "./modules/comments/routes.js";
+import { registerChatRoutes } from "./modules/chat/routes.js";
+import { registerChatEvents } from "./modules/chat/events.js";
+import { registerNotificationRoutes } from "./modules/notifications/mentions.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -214,6 +217,19 @@ export function createServer(options: ServerOptions) {
     });
     registerProjectMemberRoutes(app, options.db);
     registerCommentRoutes(app, options.db);
+    registerChatRoutes(app, options.db);
+    registerNotificationRoutes(
+      app,
+      options.db,
+      options.origin,
+      options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    );
+    registerChatEvents(
+      app,
+      options.db,
+      options.origin,
+      options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    );
   }
   return app;
 }

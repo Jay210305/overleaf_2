@@ -6,6 +6,7 @@ import { FileTree } from "../files/file-tree.js";
 import { FileUploader } from "../files/file-uploader.js";
 import { ShareDialog } from "../sharing/share-dialog.js";
 import { CommentAnchors } from "../review/comment-anchors.js";
+import { ProjectChat } from "../chat/project-chat.js";
 import { ProjectSettings } from "./settings.js";
 
 const config = parsePublicConfig(import.meta.env);
@@ -165,6 +166,12 @@ export function ProjectWorkspace({
                 <p>Select a file in the tree to view details.</p>
               </div>
             )}
+            <ProjectChat
+              key={projectId}
+              projectId={projectId}
+              apiUrl={apiUrl}
+              csrfToken={csrfToken}
+            />
           </section>
         </div>
       )}

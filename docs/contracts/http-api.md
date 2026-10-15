@@ -34,6 +34,12 @@ Every REST and new WSS authorization read consults `active_project_members`: a d
 
 The workspace sharing dialog reads member, invitation and link state from these APIs. OWNER may invite, change roles, remove members and create/revoke links; other members see a read-only active member list. Invitation and share-link browser routes take one-use tokens from URL fragments, immediately clear the fragment, and redeem through JSON bodies with a current session and CSRF. The raw share token is shown only when created and stays in component memory until the dialog closes; it is never persisted in browser storage.
 
+## G2 Project Chat Slice (S08-T05)
+
+`GET /projects/{projectId}/chat/messages` returns `{items,nextCursor}` with a project-scoped UUID cursor, newest first by creation time and UUID, and `limit` 1–100 (default 20). `POST` at the same path accepts strict JSON `{body}` up to 10,000 characters and returns the committed message with author display name. Both routes require current OWNER, EDITOR or REVIEWER membership; VIEWER is denied. POST also requires exact Origin and session CSRF, and rechecks session, project and role in the insert transaction. Invalid body/cursor returns 400, denied role 403 and foreign project 404.
+
+`WSS /projects/{projectId}/chat/events` is read-only. The handshake requires exact Origin, a current session cookie and COMMENT permission; an open socket rechecks access and closes after revocation. Each `chat.created` frame carries only an event envelope and message ID. Hints are derived from committed chat rows, so the browser revalidates REST after each hint, on reconnection or focus, and periodically to recover missing frames. Rate limits are S08-T07 work; this slice does not complete COL-07.
+
 ## Security and Permission Matrix
 
 API-host-only opaque session cookie; HttpOnly, Secure under TLS, SameSite=Lax, 7-day idle and 30-day absolute expiry as configurable starting proposals. Hash stored session/token values. Use CSRF token header plus exact Origin validation on mutations. Test local/staging domain behavior; never weaken production cookie policy to fix development.

@@ -241,4 +241,11 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Technical Debt:** None. Untrusted compilation and anonymous signup remain disabled per G1/G5 boundaries.
 - **Next Ready Task:** S08-T01 (Sprint S08: Rich LaTeX document history and diffs).
 
+### 2026-10-15 — Sprint S08 project chat continuation
+
+- **Branch/base:** `codex/sprint-08-sharing-comments-chat`, published with upstream; base `a568117` (`origin/main`, after S07).
+- **Review:** Project Co-owner independently accepted S08-T09 and S08-T05 on 2026-10-15.
+- **S08-T05:** Added project-scoped durable chat REST pages and writes, read-only WSS invalidation from committed rows, and a mounted browser panel with reconciliation after missed hints. Local PostgreSQL denial tests and a real two-user Edge journey passed; see [the scoped report](../test-reports/s08-t05.md) for commands, full-suite result and limits.
+- **Actual hours:** Not measured. **Next:** S08-T06; S08-T07 still owns rate limits and COL-07 remains IN_PROGRESS.
+
 

@@ -16,6 +16,7 @@ import { problem } from "../../plugins/errors.js";
 import type { ProjectAuthorization } from "../../plugins/require-session.js";
 import { DefaultTextDocumentService } from "../text/text-document-service.js";
 import { resolveCommentAnchor, type ResolvedCommentAnchor } from "./anchors.js";
+import { createMentionNotifications } from "../notifications/mentions.js";
 
 type CommentRow = {
   id: string;
@@ -229,6 +230,13 @@ export function registerCommentRoutes(app: FastifyInstance, db: DatabaseClient):
             JSON.stringify(input.mentions),
           ],
         );
+        await createMentionNotifications(
+          tx,
+          auth.projectId,
+          created.rows[0]!.id,
+          auth.userId,
+          input.mentions,
+        );
         return created.rows[0]!;
       });
       return reply.code(201).send(await view(row, auth.userId));
@@ -250,8 +258,8 @@ export function registerCommentRoutes(app: FastifyInstance, db: DatabaseClient):
         if (!parsed.success) throw new AuthError(400, "VALIDATION_ERROR");
         const row = await db.transaction(async (tx) => {
           await currentWriter(tx, auth, request.headers["x-csrf-token"]);
-          const comment = await tx.query<{ id: string }>(
-            "SELECT id FROM comments WHERE project_id = $1 AND id = $2 FOR UPDATE",
+          const comment = await tx.query<{ id: string; created_by: string }>(
+            "SELECT id, created_by FROM comments WHERE project_id = $1 AND id = $2 FOR UPDATE",
             [auth.projectId, commentId],
           );
           if (!comment.rows[0]) throw new AuthError(404, "RESOURCE_NOT_FOUND");
@@ -261,6 +269,22 @@ export function registerCommentRoutes(app: FastifyInstance, db: DatabaseClient):
            VALUES ($1, $2, $3, $4) RETURNING *`,
             [commentId, auth.userId, parsed.data.body, JSON.stringify(parsed.data.mentions)],
           );
+          await createMentionNotifications(
+            tx,
+            auth.projectId,
+            inserted.rows[0]!.id,
+            auth.userId,
+            parsed.data.mentions,
+          );
+          if (!parsed.data.mentions.includes(comment.rows[0]!.created_by))
+            await createMentionNotifications(
+              tx,
+              auth.projectId,
+              inserted.rows[0]!.id,
+              auth.userId,
+              [comment.rows[0]!.created_by],
+              "reply",
+            );
           return inserted.rows[0]!;
         });
         return reply.code(201).send(

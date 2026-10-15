@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-Fastify serves health, development sample, identity/account, project, file and text routes. S05-T01 adds presign and completion routes for verified uploads. Accepted S08-T01/T02 slices add project invitations, bounded share links and `active_project_members` guards for later REST and new WSS access after link expiry or revocation. S08-T03 adds member listing and owner-only role/removal routes; scoped tests pass and independent review is pending. S02-T08 accepted tests verify REST tenancy, revocation, suspension and CSRF behavior.
+Fastify serves health, development sample, identity/account, project, file and text routes. S05-T01 adds presign and completion routes for verified uploads. Accepted S08-T01–T04 slices add project invitations, bounded share links, member management and anchored comment routes. `active_project_members` guards later REST and new WSS access after link expiry or revocation; closing already-open sockets remains S08-T08. S02-T08 accepted tests verify REST tenancy, revocation, suspension and CSRF behavior.
 
 ## Why this shape
 
@@ -35,6 +35,8 @@ The sample checks the API-to-PostgreSQL-to-object-store path before user-facing 
 `modules/sharing/share-links.ts` keeps raw link tokens only in the one-time creation response and JSON redemption body. It checks owner rights and current session in transactions, locks the link while counting uses and revokes derived memberships with the link. Existing authenticated sockets still need immediate closure on link expiry/revocation in S08-T08.
 
 `modules/sharing/members.ts` lists owner and active members for current project members. Role changes and removals recheck owner/session/CSRF under a project lock, audit the mutation and deny owner/foreign/inactive targets. Owner role changes detach link-derived grants. S08-T08 still owns immediate closure of already-open sockets after access changes.
+
+`modules/chat/routes.ts` stores and pages authorized project chat in `chat_messages`, with transaction-time writer/CSRF rechecks. `modules/chat/events.ts` gives authorized members committed-row WSS invalidation hints and closes a chat socket when its session or membership is revoked. The browser reconciles history through REST; S08-T07 owns rate limits.
 
 ## Connected to
 
@@ -86,3 +88,8 @@ Node 24 API, Compose services, injected API tests and persisted sample restart t
 - [S08-T02 evidence](../../test-reports/s08-t02.md)
 - [Member management routes](../../../apps/api/src/modules/sharing/members.ts)
 - [S08-T03 evidence](../../test-reports/s08-t03.md)
+- [Comment routes](../../../apps/api/src/modules/comments/routes.ts)
+- [S08-T04 evidence](../../test-reports/s08-t04.md)
+- [Chat routes](../../../apps/api/src/modules/chat/routes.ts)
+- [Chat events](../../../apps/api/src/modules/chat/events.ts)
+- [S08-T05 evidence](../../test-reports/s08-t05.md)

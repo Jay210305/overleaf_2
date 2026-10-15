@@ -121,7 +121,7 @@ export const relativeAnchorSchema = z
     assoc: z.number().int().safe(),
   })
   .refine((value) => value.type != null || value.tname === "content");
-const commentBodySchema = z
+export const commentBodySchema = z
   .string()
   .min(1)
   .max(10000)
@@ -177,6 +177,44 @@ export const commentViewSchema = z.strictObject({
 export type CommentView = z.infer<typeof commentViewSchema>;
 export const commentPageSchema = z.strictObject({
   items: z.array(commentViewSchema).max(100),
+  nextCursor: z.uuid().nullable(),
+});
+
+export const createChatMessageSchema = z.strictObject({ body: commentBodySchema });
+export const chatListQuerySchema = z.strictObject({
+  cursor: z.uuid().optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+export const chatMessageViewSchema = z.strictObject({
+  id: z.uuid(),
+  projectId: z.uuid(),
+  authorId: z.uuid(),
+  authorName: z.string().min(1),
+  body: z.string(),
+  createdAt: z.iso.datetime(),
+});
+export type ChatMessageView = z.infer<typeof chatMessageViewSchema>;
+export const chatMessagePageSchema = z.strictObject({
+  items: z.array(chatMessageViewSchema).max(100),
+  nextCursor: z.uuid().nullable(),
+});
+
+export const notificationListQuerySchema = z.strictObject({
+  cursor: z.uuid().optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+export const notificationViewSchema = z.strictObject({
+  id: z.uuid(),
+  type: z.enum(["mention", "reply"]),
+  projectId: z.uuid(),
+  sourceId: z.uuid(),
+  projectTitle: z.string().min(1),
+  readAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+});
+export type NotificationView = z.infer<typeof notificationViewSchema>;
+export const notificationPageSchema = z.strictObject({
+  items: z.array(notificationViewSchema).max(100),
   nextCursor: z.uuid().nullable(),
 });
 

@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type SyntheticEvent,
+} from "react";
 import * as Y from "yjs";
 import {
   commentPageSchema,
@@ -147,6 +154,29 @@ export function CommentAnchors({ projectId, fileId, apiUrl, csrfToken }: Comment
     return ids.map((id) => members.find((member) => member.userId === id)?.displayName ?? id);
   }
 
+  function updateSelection(event: SyntheticEvent<HTMLTextAreaElement>) {
+    setSelection({
+      start: event.currentTarget.selectionStart,
+      end: event.currentTarget.selectionEnd,
+    });
+  }
+
+  function anchorExcerpt(comment: CommentView) {
+    if (comment.detached || comment.start === null || comment.end === null)
+      return <p>Anchor unavailable: selected range changed.</p>;
+    if (source.slice(comment.start, comment.end) !== comment.selectedText)
+      return <p>Anchor unavailable in loaded source. Refresh comments.</p>;
+    return (
+      <p>
+        Anchored range: {source.slice(Math.max(0, comment.start - 20), comment.start)}
+        <mark aria-label={`Comment anchor: ${comment.selectedText}`}>
+          {source.slice(comment.start, comment.end)}
+        </mark>
+        {source.slice(comment.end, comment.end + 20)}
+      </p>
+    );
+  }
+
   return (
     <section aria-label="Comment anchors" className="comment-anchors">
       <h2>Comments</h2>
@@ -155,12 +185,9 @@ export function CommentAnchors({ projectId, fileId, apiUrl, csrfToken }: Comment
         aria-label="Source text for comment selection"
         readOnly
         value={source}
-        onSelect={(event) =>
-          setSelection({
-            start: event.currentTarget.selectionStart,
-            end: event.currentTarget.selectionEnd,
-          })
-        }
+        onSelect={updateSelection}
+        onKeyUp={updateSelection}
+        onMouseUp={updateSelection}
       />
       <form
         onSubmit={(event) => {
@@ -201,16 +228,7 @@ export function CommentAnchors({ projectId, fileId, apiUrl, csrfToken }: Comment
       <ol>
         {comments.map((comment) => (
           <li key={comment.id}>
-            {comment.detached || comment.start === null || comment.end === null ? (
-              <p>Anchor unavailable: selected range changed.</p>
-            ) : (
-              <p>
-                Anchored range:{" "}
-                <mark aria-label={`Comment anchor: ${comment.selectedText}`}>
-                  {comment.selectedText}
-                </mark>
-              </p>
-            )}
+            {anchorExcerpt(comment)}
             <p>{comment.body}</p>
             <p>Status: {comment.status}</p>
             {comment.mentions.length > 0 && (

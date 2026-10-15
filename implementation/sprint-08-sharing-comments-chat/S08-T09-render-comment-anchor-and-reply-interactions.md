@@ -8,7 +8,7 @@ estimate_basis: assumption-a-03
 depends_on: [S08-T04]
 requirements: [COL-06, NFR-08]
 source_task: S08-T04
-status: in_progress
+status: done
 readiness: ready
 ---
 # S08-T09 — Render comment anchor and reply interactions
@@ -97,8 +97,8 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 ## Definition of Done
 
 - [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
 - [x] Runtime behavior is real, permission-checked and persistent when applicable.
 - [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
 - [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.
