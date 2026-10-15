@@ -1,5 +1,10 @@
 import * as Y from "yjs";
-import { computeTextHash } from "@latex-collab/latex";
+import {
+  computeTextHash,
+  type HeadingNode,
+  type ParagraphNode,
+  type ListNode,
+} from "@latex-collab/latex";
 import type { VisualPatch, VisualPatchResult } from "@latex-collab/contracts";
 
 export interface ReanchorDelta {
@@ -124,3 +129,135 @@ export function reanchorRange(
 
   return { start, end, shifted };
 }
+
+export interface HeadingPatchOptions {
+  fileId: string;
+  headingNode: HeadingNode;
+  newTitle: string;
+  expectedTitleHash?: string | undefined;
+  baseDoc?: Y.Doc | undefined;
+}
+
+/**
+ * Applies a minimal version-checked patch to a heading title.
+ * Mutates only the title text, preserving the command and surrounding braces/whitespace.
+ */
+export function applyHeadingPatch(
+  yText: Y.Text,
+  options: HeadingPatchOptions
+): VisualPatchResult {
+  const patch = createVisualPatch(
+    options.fileId,
+    options.headingNode.titleRange.start,
+    options.headingNode.titleRange.end,
+    options.headingNode.title,
+    options.newTitle,
+    options.baseDoc
+  );
+
+  if (
+    options.expectedTitleHash &&
+    options.expectedTitleHash !== options.headingNode.hash &&
+    options.expectedTitleHash !== computeTextHash(options.headingNode.title)
+  ) {
+    return {
+      success: false,
+      conflict: true,
+      reason: "STALE_FRAGMENT_HASH",
+    };
+  }
+
+  return applyVisualPatch(yText, patch);
+}
+
+export interface ParagraphPatchOptions {
+  fileId: string;
+  paragraphNode: ParagraphNode;
+  newText: string;
+  expectedParagraphHash?: string | undefined;
+  baseDoc?: Y.Doc | undefined;
+}
+
+/**
+ * Applies a minimal version-checked patch to a paragraph.
+ * Mutates only the paragraph range, preserving surrounding blocks.
+ */
+export function applyParagraphPatch(
+  yText: Y.Text,
+  options: ParagraphPatchOptions
+): VisualPatchResult {
+  const patch = createVisualPatch(
+    options.fileId,
+    options.paragraphNode.range.start,
+    options.paragraphNode.range.end,
+    options.paragraphNode.raw,
+    options.newText,
+    options.baseDoc
+  );
+
+  if (
+    options.expectedParagraphHash &&
+    options.expectedParagraphHash !== options.paragraphNode.hash &&
+    options.expectedParagraphHash !== computeTextHash(options.paragraphNode.text)
+  ) {
+    return {
+      success: false,
+      conflict: true,
+      reason: "STALE_FRAGMENT_HASH",
+    };
+  }
+
+  return applyVisualPatch(yText, patch);
+}
+
+export interface ListItemPatchOptions {
+  fileId: string;
+  listNode: ListNode;
+  itemIndex: number;
+  newContent: string;
+  expectedItemHash?: string | undefined;
+  baseDoc?: Y.Doc | undefined;
+}
+
+/**
+ * Applies a minimal version-checked patch to a list item's content.
+ * Mutates only the item content, preserving \item marker and other items.
+ */
+export function applyListItemPatch(
+  yText: Y.Text,
+  options: ListItemPatchOptions
+): VisualPatchResult {
+  const item = options.listNode.items[options.itemIndex];
+  if (!item) {
+    return {
+      success: false,
+      conflict: true,
+      reason: "ITEM_NOT_FOUND",
+    };
+  }
+
+  const patch = createVisualPatch(
+    options.fileId,
+    item.contentRange.start,
+    item.contentRange.end,
+    item.content,
+    options.newContent,
+    options.baseDoc
+  );
+
+  if (
+    options.expectedItemHash &&
+    options.expectedItemHash !== item.hash &&
+    options.expectedItemHash !== computeTextHash(item.content) &&
+    options.expectedItemHash !== options.listNode.hash
+  ) {
+    return {
+      success: false,
+      conflict: true,
+      reason: "STALE_FRAGMENT_HASH",
+    };
+  }
+
+  return applyVisualPatch(yText, patch);
+}
+

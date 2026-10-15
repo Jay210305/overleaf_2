@@ -182,4 +182,109 @@ broken content`;
     // Non-destructive preservation even with malformed input
     expect(serializeVisualAst(doc)).toBe(malformed);
   });
+
+  it("projects indented blocks (itemize, section, math, table, figure) with exact types and ranges", () => {
+    const source = `  \\section{Indented Section}
+  Intro paragraph.
+
+  \\begin{itemize}
+    \\item Indented bullet one
+    \\item Indented bullet two
+  \\end{itemize}
+
+  \\[
+    E = mc^2
+  \\]
+
+  \\begin{tabular}{cc}
+    A & B \\\\
+  \\end{tabular}
+
+  \\begin{figure}
+    \\includegraphics{test.png}
+    \\caption{Indented figure}
+  \\end{figure}`;
+
+    const doc = parseVisualAst(source);
+    expect(doc.hasErrors).toBe(false);
+
+    const heading = doc.nodes.find((n) => n.kind === "heading") as HeadingNode;
+    expect(heading).toBeDefined();
+    expect(heading.title).toBe("Indented Section");
+    expect(source.slice(heading.titleRange.start, heading.titleRange.end)).toBe("Indented Section");
+
+    const list = doc.nodes.find((n) => n.kind === "list") as ListNode;
+    expect(list).toBeDefined();
+    expect(list.items.length).toBe(2);
+    expect(list.items[0]?.content).toBe("Indented bullet one");
+    expect(source.slice(list.items[0]!.contentRange.start, list.items[0]!.contentRange.end)).toBe("Indented bullet one");
+
+    const math = doc.nodes.find((n) => n.kind === "mathDisplay") as MathDisplayNode;
+    expect(math).toBeDefined();
+    expect(math.formula).toBe("E = mc^2");
+    expect(source.slice(math.formulaRange.start, math.formulaRange.end)).toBe("E = mc^2");
+
+    const table = doc.nodes.find((n) => n.kind === "table") as TableNode;
+    expect(table).toBeDefined();
+    expect(table.rows.length).toBe(1);
+
+    const figure = doc.nodes.find((n) => n.kind === "figure") as FigureNode;
+    expect(figure).toBeDefined();
+    expect(figure.caption).toBe("Indented figure");
+
+    expect(serializeVisualAst(doc)).toBe(source);
+  });
+
+  it("correctly parses section headings with optional short title arguments", () => {
+    const source = `\\section[Short Toc Title]{Full Detailed Section Title}
+Paragraph content follows.`;
+
+    const doc = parseVisualAst(source);
+    const heading = doc.nodes[0] as HeadingNode;
+    expect(heading.kind).toBe("heading");
+    expect(heading.title).toBe("Full Detailed Section Title");
+    expect(source.slice(heading.titleRange.start, heading.titleRange.end)).toBe("Full Detailed Section Title");
+    expect(serializeVisualAst(doc)).toBe(source);
+  });
+
+  it("avoids phantom empty paragraphs between multiple blank lines", () => {
+    const source = `\\section{First}
+
+
+
+\\section{Second}`;
+
+    const doc = parseVisualAst(source);
+    // Should have only 2 heading nodes, no empty paragraph nodes
+    expect(doc.nodes.length).toBe(2);
+    expect(doc.nodes[0]?.kind).toBe("heading");
+    expect(doc.nodes[1]?.kind).toBe("heading");
+    expect(serializeVisualAst(doc)).toBe(source);
+  });
+
+  it("parses tables with trailing rules and row height spacing without phantom rows", () => {
+    const source = `\\begin{tabular}{llr}
+  \\hline
+  Item & Qty & Price \\\\[1ex]
+  \\hline
+  Apple & 5 & 2.50 \\\\
+  \\hline
+\\end{tabular}`;
+
+    const doc = parseVisualAst(source);
+    const table = doc.nodes[0] as TableNode;
+    expect(table.kind).toBe("table");
+    expect(table.rows.length).toBe(2); // Exactly 2 data rows, not 3!
+
+    // Verify cell ranges match content exactly
+    for (const r of table.rows) {
+      for (const c of r.cells) {
+        expect(source.slice(c.range.start, c.range.end)).toBe(c.content);
+      }
+    }
+
+    // Row 1 item is "Apple", not "[1ex] Apple"
+    expect(table.rows[1]?.cells[0]?.content).toBe("Apple");
+    expect(serializeVisualAst(doc)).toBe(source);
+  });
 });

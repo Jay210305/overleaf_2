@@ -125,12 +125,12 @@ Concluding remark.`;
     const figureNode = docAst.nodes.find((n) => n.kind === "figure") as FigureNode;
     expect(figureNode).toBeDefined();
 
-    // Patch caption
+    // Patch caption using figureNode.hash (as emitted by VisualFigure React component)
     const captionRes = applyFigureCaptionPatch(yText, {
       fileId: "test.tex",
       figureNode,
       newCaption: "Revised workflow architecture",
-      expectedCaptionHash: "",
+      expectedCaptionHash: figureNode.hash,
       baseDoc: yDoc,
     });
     expect(captionRes.success).toBe(true);
@@ -140,15 +140,27 @@ Concluding remark.`;
     const updatedAst = parseVisualAst(yText.toString());
     const updatedFig = updatedAst.nodes.find((n) => n.kind === "figure") as FigureNode;
 
+    // Patch label using node hash
     const labelRes = applyFigureLabelPatch(yText, {
       fileId: "test.tex",
       figureNode: updatedFig,
       newLabel: "fig:workflow-revised",
-      expectedLabelHash: "",
+      expectedLabelHash: updatedFig.hash,
       baseDoc: yDoc,
     });
     expect(labelRes.success).toBe(true);
     expect(yText.toString()).toContain("\\label{fig:workflow-revised}");
+
+    // Verify rejection on stale caption hash
+    const staleCaptionRes = applyFigureCaptionPatch(yText, {
+      fileId: "test.tex",
+      figureNode,
+      newCaption: "Should fail",
+      expectedCaptionHash: "stale_caption_hash",
+      baseDoc: yDoc,
+    });
+    expect(staleCaptionRes.conflict).toBe(true);
+    expect(staleCaptionRes.reason).toBe("STALE_FRAGMENT_HASH");
   });
 
   it("returns CELL_NOT_FOUND when targeting out of range row or column", () => {

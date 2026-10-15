@@ -610,7 +610,7 @@ export const visualNodeKindSchema = z.enum([
 export type VisualNodeKind = z.infer<typeof visualNodeKindSchema>;
 
 export const visualPatchSchema = z.strictObject({
-  fileId: z.string().uuid(),
+  fileId: z.string().min(1),
   start: z.number().int().min(0),
   end: z.number().int().min(0),
   expectedTextHash: z.string().min(1),

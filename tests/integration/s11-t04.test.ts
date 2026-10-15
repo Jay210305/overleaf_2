@@ -4,8 +4,18 @@ import {
   applyVisualPatch,
   createVisualPatch,
   reanchorRange,
+  applyHeadingPatch,
+  applyParagraphPatch,
+  applyListItemPatch,
 } from "../../packages/editor/src/visual-patch.js";
-import { computeTextHash } from "../../packages/latex/src/visual-ast.js";
+import {
+  computeTextHash,
+  parseVisualAst,
+  type HeadingNode,
+  type ParagraphNode,
+  type ListNode,
+} from "../../packages/latex/src/visual-ast.js";
+import { visualPatchSchema } from "@latex-collab/contracts";
 
 describe("S11-T04 Integration: Apply Minimal Version-Checked Source Patches", () => {
   const fileId = "11111111-2222-3333-4444-555555555555";
@@ -94,5 +104,92 @@ describe("S11-T04 Integration: Apply Minimal Version-Checked Source Patches", ()
     const overlapping = [{ index: 25, deleteLength: 2, insertLength: 2 }];
     const failedReanchor = reanchorRange(20, 30, overlapping);
     expect(failedReanchor.shifted).toBe(false);
+  });
+
+  it("validates visualPatchSchema with both UUID and string fileId identifiers", () => {
+    const uuidPatch = createVisualPatch(
+      "123e4567-e89b-12d3-a456-426614174000",
+      0,
+      10,
+      "Old Title",
+      "New Title"
+    );
+    expect(visualPatchSchema.safeParse(uuidPatch).success).toBe(true);
+
+    const docPatch = createVisualPatch("main.tex", 5, 15, "Original", "Updated");
+    expect(visualPatchSchema.safeParse(docPatch).success).toBe(true);
+  });
+
+  it("patches heading title cleanly and rejects stale hash", () => {
+    const raw = "\\section{Original Section Title}\nParagraph text.";
+    const yDoc = new Y.Doc();
+    const yText = yDoc.getText("content");
+    yText.insert(0, raw);
+
+    const doc = parseVisualAst(raw);
+    const heading = doc.nodes[0] as HeadingNode;
+
+    // Successful heading patch
+    const res = applyHeadingPatch(yText, {
+      fileId: "doc.tex",
+      headingNode: heading,
+      newTitle: "Updated Section Title",
+      expectedTitleHash: heading.hash,
+      baseDoc: yDoc,
+    });
+    expect(res.success).toBe(true);
+    expect(yText.toString()).toBe("\\section{Updated Section Title}\nParagraph text.");
+
+    // Conflict on stale hash
+    const staleRes = applyHeadingPatch(yText, {
+      fileId: "doc.tex",
+      headingNode: heading,
+      newTitle: "Failed Title",
+      expectedTitleHash: "stale_hash_value",
+      baseDoc: yDoc,
+    });
+    expect(staleRes.conflict).toBe(true);
+  });
+
+  it("patches paragraph content and list item content cleanly", () => {
+    const raw = `\\begin{itemize}
+  \\item First bullet item
+  \\item Second bullet item
+\\end{itemize}
+
+A standalone paragraph for testing.`;
+
+    const yDoc = new Y.Doc();
+    const yText = yDoc.getText("content");
+    yText.insert(0, raw);
+
+    const doc = parseVisualAst(raw);
+    const list = doc.nodes.find((n) => n.kind === "list") as ListNode;
+
+    // Patch list item 1
+    const listRes = applyListItemPatch(yText, {
+      fileId: "doc.tex",
+      listNode: list,
+      itemIndex: 1,
+      newContent: "Modified second bullet item",
+      expectedItemHash: list.items[1]?.hash,
+      baseDoc: yDoc,
+    });
+    expect(listRes.success).toBe(true);
+    expect(yText.toString()).toContain("\\item Modified second bullet item");
+
+    // Patch paragraph
+    const updatedDoc = parseVisualAst(yText.toString());
+    const updatedPara = updatedDoc.nodes.find((n) => n.kind === "paragraph") as ParagraphNode;
+
+    const paraRes = applyParagraphPatch(yText, {
+      fileId: "doc.tex",
+      paragraphNode: updatedPara,
+      newText: "A revised paragraph for testing.",
+      expectedParagraphHash: updatedPara.hash,
+      baseDoc: yDoc,
+    });
+    expect(paraRes.success).toBe(true);
+    expect(yText.toString()).toContain("A revised paragraph for testing.");
   });
 });

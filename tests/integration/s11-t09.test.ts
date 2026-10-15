@@ -153,4 +153,76 @@ $ echo 'literal block'
     expect(result).toContain("\\begin{verbatim}\n$ echo 'literal block'\n\\end{verbatim}");
     expect(result.endsWith("% Author note: checked")).toBe(true);
   });
+
+  it("handles simultaneous section deletion in Code mode during Visual table edit with conflict guard and reparse", () => {
+    const raw = `\\section{Introductory Section}
+Some text before the table.
+
+\\begin{tabular}{|l|c|}
+  Item & Score \\\\
+  Alpha & 88 \\\\
+\\end{tabular}`;
+
+    const docA = new Y.Doc();
+    const docB = new Y.Doc();
+    const textA = docA.getText("content");
+    const textB = docB.getText("content");
+
+    textA.insert(0, raw);
+    Y.applyUpdate(docB, Y.encodeStateAsUpdate(docA));
+
+    // Client A (Visual) reads AST snapshot of the table
+    const astA = parseVisualAst(textA.toString());
+    const tableA = astA.nodes.find((n) => n.kind === "table") as TableNode;
+    expect(tableA).toBeDefined();
+    const targetCell = tableA.rows[1]?.cells[1];
+    expect(targetCell?.content).toBe("88");
+
+    // Client B (Code) deletes the entire section preceding the table
+    const sectionEnd = raw.indexOf("\\begin{tabular}");
+    textB.delete(0, sectionEnd);
+
+    // Sync Client B's deletion to Client A
+    Y.applyUpdate(docA, Y.encodeStateAsUpdate(docB, Y.encodeStateVector(docA)));
+
+    // Client A attempts to apply the visual patch with stale offsets
+    const staleResult = applyTableCellPatch(textA, {
+      fileId: "paper.tex",
+      tableNode: tableA,
+      rowIndex: 1,
+      colIndex: 1,
+      newContent: "99",
+      expectedCellHash: targetCell?.hash ?? "",
+      baseDoc: docA,
+    });
+
+    // Guard MUST reject the stale patch and NOT corrupt the table
+    expect(staleResult.success).toBe(false);
+    expect(staleResult.conflict).toBe(true);
+    expect(["STALE_FRAGMENT_HASH", "RANGE_OUT_OF_BOUNDS"]).toContain(staleResult.reason);
+
+    // Client A re-parses after conflict and successfully patches the re-anchored cell
+    const freshAstA = parseVisualAst(textA.toString());
+    const freshTableA = freshAstA.nodes.find((n) => n.kind === "table") as TableNode;
+    expect(freshTableA).toBeDefined();
+
+    const freshResult = applyTableCellPatch(textA, {
+      fileId: "paper.tex",
+      tableNode: freshTableA,
+      rowIndex: 1,
+      colIndex: 1,
+      newContent: "99",
+      expectedCellHash: freshTableA.rows[1]?.cells[1]?.hash ?? "",
+      baseDoc: docA,
+    });
+    expect(freshResult.success).toBe(true);
+
+    // Sync back to Client B
+    syncDocs(docA, docB);
+    expect(textA.toString()).toBe(textB.toString());
+    expect(textA.toString()).toBe(`\\begin{tabular}{|l|c|}
+  Item & Score \\\\
+  Alpha & 99 \\\\
+\\end{tabular}`);
+  });
 });

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "c2c210505dff7a3fab2a318f44d0dac5cca76a50",
+  "git_baseline": "0fbd8f84f4014d4bc3f9a1e5165722249ef89de8",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -3013,7 +3013,7 @@
     {
       "path": "packages/contracts/src/index.ts",
       "role": "factory",
-      "sha256": "ef8bb40b17d4db21d3699b395069291a4beaa0c81e9ccf5d111bc432080c5508"
+      "sha256": "f8a4ac97288f485d720f15f71e36665db821fc9d7d65c0ac909c4cac8b8aaed5"
     },
     {
       "path": "packages/contracts/src/storage.ts",
@@ -3178,12 +3178,12 @@
     {
       "path": "packages/editor/src/visual-academic-patch.ts",
       "role": "factory",
-      "sha256": "4bce0d188a5002e8ed18f9ff3f1b9fbada9f9f63719b10ccb5cd86ca4cb655fd"
+      "sha256": "be856bcb5c5716ac5d2f0d55b30fdaefcd6dda725f88f9174951f95ab0de0903"
     },
     {
       "path": "packages/editor/src/visual-patch.ts",
       "role": "factory",
-      "sha256": "d87035c56a1a79b7fa344da638d529396935d6bd80665d0c0dec19ab760a5b9a"
+      "sha256": "b3c4dde9eb9f0e3089351221b7adca21289d1a503bfb3a227283ff52cdcb2bff"
     },
     {
       "path": "packages/editor/tsconfig.json",
@@ -3218,7 +3218,7 @@
     {
       "path": "packages/latex/src/visual-ast.ts",
       "role": "factory",
-      "sha256": "399c6390da27e98ae8e5af3b132ad04180dd635b85a7d4a38bd097539de384a0"
+      "sha256": "02f60363b21c70d6f443025d41cec3233a87cce2171a6737e1154ec58db8b752"
     },
     {
       "path": "packages/latex/src/word-count.ts",
@@ -3963,7 +3963,7 @@
     {
       "path": "tests/integration/s11-t02.test.ts",
       "role": "factory",
-      "sha256": "ec90698593f3c49a4cbf2df586029e1915d278d0dcbb01222c46bd33854df25d"
+      "sha256": "0e101bfa076e6c22450dcde77052ff855812fcd922a55619c90e0ac5ed8b7ce2"
     },
     {
       "path": "tests/integration/s11-t03.test.ts",
@@ -3973,7 +3973,7 @@
     {
       "path": "tests/integration/s11-t04.test.ts",
       "role": "factory",
-      "sha256": "77e73e7077226944b545ceab9c3f73781b6914c74cdb2a60e7ad33bea688d952"
+      "sha256": "92a33ebb5ea8d86658796dc5ba50db2251f0cab1e9ab6c9e9dc4b764bd9adf2f"
     },
     {
       "path": "tests/integration/s11-t05.test.ts",
@@ -3998,12 +3998,12 @@
     {
       "path": "tests/integration/s11-t09.test.ts",
       "role": "factory",
-      "sha256": "b7178f3157fdda6c0af7e71fe4109e3b6caedcb66b2726cf7c381157307a201d"
+      "sha256": "5309556dc7cd83c3be6e4fabe50e8063d98d4263ac118b631d6a854ddf0d9660"
     },
     {
       "path": "tests/integration/s11-t10.test.ts",
       "role": "factory",
-      "sha256": "9a0c3e78fd883d95e752f0a1fba0a97c76198a50e13c269f4ff25f5422314a94"
+      "sha256": "e9d1b228bbc15739dfdbf835807e30cc5a1574234eace2062fc7f777b5cdd034"
     },
     {
       "path": "tests/integration/tree-races.test.ts",

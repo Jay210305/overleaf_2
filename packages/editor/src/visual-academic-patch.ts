@@ -15,7 +15,7 @@ export interface TableCellPatchOptions {
   colIndex: number;
   newContent: string;
   expectedCellHash: string;
-  baseDoc?: Y.Doc;
+  baseDoc?: Y.Doc | undefined;
 }
 
 export interface FormulaPatchOptions {
@@ -23,7 +23,7 @@ export interface FormulaPatchOptions {
   mathNode: MathDisplayNode;
   newFormula: string;
   expectedFormulaHash: string;
-  baseDoc?: Y.Doc;
+  baseDoc?: Y.Doc | undefined;
 }
 
 export interface FigureCaptionPatchOptions {
@@ -31,7 +31,7 @@ export interface FigureCaptionPatchOptions {
   figureNode: FigureNode;
   newCaption: string;
   expectedCaptionHash: string;
-  baseDoc?: Y.Doc;
+  baseDoc?: Y.Doc | undefined;
 }
 
 export interface FigureLabelPatchOptions {
@@ -39,7 +39,7 @@ export interface FigureLabelPatchOptions {
   figureNode: FigureNode;
   newLabel: string;
   expectedLabelHash: string;
-  baseDoc?: Y.Doc;
+  baseDoc?: Y.Doc | undefined;
 }
 
 /**
@@ -148,7 +148,11 @@ export function applyFigureCaptionPatch(
     options.baseDoc
   );
 
-  if (options.expectedCaptionHash && options.expectedCaptionHash !== computeTextHash(options.figureNode.caption)) {
+  if (
+    options.expectedCaptionHash &&
+    options.expectedCaptionHash !== options.figureNode.hash &&
+    options.expectedCaptionHash !== computeTextHash(options.figureNode.caption)
+  ) {
     return {
       success: false,
       conflict: true,
@@ -184,7 +188,11 @@ export function applyFigureLabelPatch(
     options.baseDoc
   );
 
-  if (options.expectedLabelHash && options.expectedLabelHash !== computeTextHash(options.figureNode.label)) {
+  if (
+    options.expectedLabelHash &&
+    options.expectedLabelHash !== options.figureNode.hash &&
+    options.expectedLabelHash !== computeTextHash(options.figureNode.label)
+  ) {
     return {
       success: false,
       conflict: true,
