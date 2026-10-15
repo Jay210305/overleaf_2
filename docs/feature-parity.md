@@ -58,14 +58,14 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | COL-03 | G1 | Must | DONE | [S01 verified scope](test-reports/s01-t06.md) (accepted 2026-10-10); [S02-T02 identity boundary accepted](test-reports/s02-t02.md); [S02-T04 REST guard accepted](test-reports/s02-t04.md); [S02-T08 role/revocation checks accepted](test-reports/s02-t08.md); [S03-T01 project role guards accepted](test-reports/s03-t01.md); [S04-T06 viewer edit rejection](test-reports/s04-t06.md); [S04-T10 REST role enforcement](test-reports/s04-t10.md); [S07-T01 WSS room authorization](test-reports/s07-t01.md); [S07-T02 single-use WSS tickets](test-reports/s07-t02.md); [S07-T08 live role and session revocation](test-reports/s07-t08.md); [S08-T03 current sharing member rights](test-reports/s08-t03.md) |
 | COL-04 | G2 | Must | IN_PROGRESS | [S08-T01 invitation API and Mailpit evidence](test-reports/s08-t01.md); [S08-T03 invitation UI and Edge journey](test-reports/s08-t03.md); revocation journey remains S08-T08 |
 | COL-05 | G2 | Should | IN_PROGRESS | [S08-T02 hashed link REST/new WSS evidence](test-reports/s08-t02.md); [S08-T03 link UI and Edge redemption](test-reports/s08-t03.md); live socket revocation remains S08-T08 |
-| COL-06 | G2 | Must | IN_PROGRESS | [S08-T04 anchored comment threads, detached ranges and UI](test-reports/s08-t04.md) and [S08-T09 source-verified anchor excerpts, reply flow and Edge journey](test-reports/s08-t09.md) accepted; mention delivery and safety hardening remain later S08 tasks |
+| COL-06 | G2 | Must | IN_PROGRESS | [S08-T04 anchored comment threads, detached ranges and UI](test-reports/s08-t04.md) and [S08-T09 source-verified anchor excerpts, reply flow and Edge journey](test-reports/s08-t09.md) accepted; [S08-T06 mention/reply delivery, idempotency and in-app UI](test-reports/s08-t06.md) implemented with review pending; safety hardening remains S08-T07 |
 | COL-07 | G2 | Should | IN_PROGRESS | [S08-T05 durable chat REST, WSS, UI and Edge evidence](test-reports/s08-t05.md) accepted; rate limits and safety hardening remain S08-T07 |
 | COL-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-09 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-10 | G3 | Should | IN_PROGRESS | [S03-T07 structural revision manifests](test-reports/s03-t07.md); [S04-T07 text/binary checkpoints](test-reports/s04-t07.md); remaining collaboration manifests apply |
 | COL-11 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-12 | G2 | Must | DONE | [S07-T05 offline persistence & reconnect](test-reports/s07-t05.md); [S07-T06 open room sync on tree rename/delete](test-reports/s07-t06.md) |
-| COL-13 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| COL-13 | G4 | Could | IN_PROGRESS | [S08-T06 preference-aware mention/reply in-app notifications](test-reports/s08-t06.md) implemented with review pending; remaining preference-controlled activity scope stays planned |
 | COL-14 | G1 | Must | IN_PROGRESS | [S02-T09 account/session audit scope accepted](test-reports/s02-t09.md); invitation/download/restore actions remain later work |
 | INT-01 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-02 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |

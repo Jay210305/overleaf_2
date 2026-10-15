@@ -14,7 +14,7 @@
 | [S08-T04](../../implementation/sprint-08-sharing-comments-chat/S08-T04-implement-anchored-comments-and-replies.md) | DONE; user review confirmed 2026-10-15 | Not measured | [Anchored comment API, thread UI and regression report](../test-reports/s08-t04.md) |
 | [S08-T09](../../implementation/sprint-08-sharing-comments-chat/S08-T09-render-comment-anchor-and-reply-interactions.md) | DONE; user review confirmed 2026-10-15 | Not measured | [Mounted anchor highlights, reply flow and Edge report](../test-reports/s08-t09.md) |
 | [S08-T05](../../implementation/sprint-08-sharing-comments-chat/S08-T05-create-authorized-durable-project-chat.md) | DONE; user review confirmed 2026-10-15 | Not measured | [Durable chat API, WSS, browser and denial report](../test-reports/s08-t05.md) |
-| [S08-T06](../../implementation/sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md) | NOT_STARTED | Not recorded | No implementation evidence |
+| [S08-T06](../../implementation/sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md) | IN_PROGRESS; implementation complete, review pending | Not recorded | [Mention/notification API, idempotency and UI report](../test-reports/s08-t06.md) |
 | [S08-T07](../../implementation/sprint-08-sharing-comments-chat/S08-T07-enforce-comment-chat-safety-and-limits.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S08-T08](../../implementation/sprint-08-sharing-comments-chat/S08-T08-verify-sharing-revocation-and-detached-anchors.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S08-T10](../../implementation/sprint-08-sharing-comments-chat/S08-T10-stabilize-and-review-g2-collaboration.md) | NOT_STARTED | Not recorded | No implementation evidence |
@@ -39,10 +39,12 @@ S08-T09 mounted the anchor interaction surface in the workspace with source-veri
 
 S08-T05 adds authorized persistent chat messages with cursor pagination and read-only WSS invalidation derived from committed rows. The browser reconciles via REST after hints, reconnect, focus and polling while retaining loaded older pages. Focused PostgreSQL/UI checks passed (2 files, 6 tests), full Vitest passed (251 files, 663 tests), and the real Edge two-user journey and scoped axe passed with zero serious/critical findings; typecheck, lint, build, plan lint and secret scan passed. Project Co-owner review was accepted 2026-10-15. [S08-T05 evidence](../test-reports/s08-t05.md) records the initial red older-page regression and limits. S08-T07 still owns chat rate limits; COL-07 and G2 remain IN_PROGRESS.
 
+S08-T06 adds transactional mention/reply notifications with preference checks, idempotent redelivery via `0012-notification-idempotency.sql`, project-scoped private listing, one-time mark-read and a dashboard UI region. Focused PostgreSQL and UI checks passed (3 files, 5 tests); typecheck, lint, build, plan lint and secret scan passed. The Playwright Edge journey exists but was NOT RUN in this session (stack not running). [S08-T06 evidence](../test-reports/s08-t06.md) records commands and limits; review is pending and COL-06, COL-13 and G2 remain IN_PROGRESS.
+
 ## Risks and Debt
 
 The production migration runner/ordering gap (GAP-15) affects the S08 migrations. Full browser matrix GAP-23/GAP-24 remains separate, and the inherited empty file-tree accessibility finding is GAP-26. Independent review of S08-T01–T05 and T09 was confirmed 2026-10-15. Existing collaboration sockets still need S08-T08 link expiry/revocation closure. S08-T06–T08 and T10 remain unstarted.
 
 ## Next Task
 
-Proceed to S08-T06 mention and in-app notifications. S08-T08 must verify closure of already-open collaboration sockets after expiry/revocation.
+S08-T06 mention and in-app notifications are implemented with focused PASS evidence (3 files, 5 tests) and pending independent review. Proceed to S08-T07 safety and limits after S08-T06 review. S08-T08 must verify closure of already-open collaboration sockets after expiry/revocation.

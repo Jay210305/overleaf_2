@@ -40,6 +40,12 @@ The workspace sharing dialog reads member, invitation and link state from these 
 
 `WSS /projects/{projectId}/chat/events` is read-only. The handshake requires exact Origin, a current session cookie and COMMENT permission; an open socket rechecks access and closes after revocation. Each `chat.created` frame carries only an event envelope and message ID. Hints are derived from committed chat rows, so the browser revalidates REST after each hint, on reconnection or focus, and periodically to recover missing frames. Rate limits are S08-T07 work; this slice does not complete COL-07.
 
+## G2 Mention and In-App Notification Slice (S08-T06)
+
+Comment creation and reply creation call `createMentionNotifications` inside the same PostgreSQL transaction. Only current project members (owner or active member) with verified, enabled accounts and opt-in `user_preferences.notification_settings_json` (`inApp` plus `mentions`/`replies`) receive a row; the actor never notifies themselves. Foreign-user mentions are rejected with 400 before any write. A unique index on `(user_id, type, payload_json->>'sourceId')` for `mention`/`reply` types makes repeated publication of the same source idempotent (`ON CONFLICT DO NOTHING`). Reply creation additionally notifies the parent comment author with type `reply` unless they were already mentioned.
+
+`GET /api/v1/me/notifications` returns `{items,nextCursor}` newest-first with a project-scoped UUID cursor and `limit` 1–100 (default 20). It lists only `mention`/`reply` rows whose project is active and still grants the reader membership, so revoked members and outsiders see nothing foreign. `PATCH /api/v1/me/notifications/{notificationId}/read` requires exact Origin, session and CSRF, sets `read_at` once (repeat reads return the same timestamp), and returns 404 for foreign or post-revocation rows. Payloads carry only IDs and the project title, never comment bodies. The dashboard mounts the notification region with mark-read persistence. This slice does not complete COL-06 or COL-13; safety hardening remains S08-T07 and revocation verification S08-T08.
+
 ## Security and Permission Matrix
 
 API-host-only opaque session cookie; HttpOnly, Secure under TLS, SameSite=Lax, 7-day idle and 30-day absolute expiry as configurable starting proposals. Hash stored session/token values. Use CSRF token header plus exact Origin validation on mutations. Test local/staging domain behavior; never weaken production cookie policy to fix development.

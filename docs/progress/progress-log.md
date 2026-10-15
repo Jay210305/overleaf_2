@@ -34,6 +34,7 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-15 | Added shared rate limiting to S08-T02 link creation/redemption and refreshed verification | Not measured | Failing limiter assertion then 6 focused tests PASS; 239 files/634 full-suite tests, lint, typecheck and build PASS; [report](../test-reports/s08-t02.md) | Co-maintainer review pending; GAP-15 and GAP-25 remain, with active socket closure due in S08-T08 |
 | 2026-10-15 | User confirmed review of the Sprint 08 invitation/share-link slices and authorized S08-T03 | Not measured | [S08-T01](../test-reports/s08-t01.md) and [S08-T02](../test-reports/s08-t02.md) reports reconciled with task/index/roadmap status; GAP-25 closed | COL-04/05 and G2 remain in progress; GAP-15 and live socket closure remain |
 | 2026-10-15 | Implemented S08-T03 member rights and sharing UI | Not measured | [S08-T03 report](../test-reports/s08-t03.md): 644/644 isolated full-suite tests, 1/1 Edge sharing journey, lint/types/build/integration PASS | Independent review pending; GAP-15/GAP-26 and live socket closure remain |
+| 2026-10-15 | S08-T06 mention and in-app notifications on `codex/sprint-08-sharing-comments-chat` | Not measured | [S08-T06 report](../test-reports/s08-t06.md): 3 focused files/5 tests PASS (PostgreSQL idempotency, preference/revocation, UI mark-read); typecheck/lint/build/plan-lint/secret-scan PASS; Edge journey NOT RUN | Independent co-maintainer review pending before done; next S08-T07 |
 
 
 ## Session Record
