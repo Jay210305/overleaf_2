@@ -40,7 +40,6 @@ function handleReviewError(error: unknown, reply: FastifyReply, requestId: strin
       .type("application/problem+json")
       .send(problem(error.status, error.code, requestId));
   }
-  console.error("SUGGESTION ERROR:", error);
   const pgCode = (error as { code?: string }).code;
   if (pgCode === "23505") {
     return reply

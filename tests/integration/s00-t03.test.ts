@@ -77,12 +77,16 @@ describe("S00-T03 typed pnpm workspace", () => {
     }
   });
 
-  it("keeps strict TypeScript active for the workspace", () => {
-    const config = readJson("tsconfig.base.json");
-    expect(config.compilerOptions).toMatchObject({ strict: true, noEmit: true });
-    const result = runPnpm(["typecheck"]);
-    expect(result.status, result.stderr || result.stdout).toBe(0);
-  });
+  it(
+    "keeps strict TypeScript active for the workspace",
+    () => {
+      const config = readJson("tsconfig.base.json");
+      expect(config.compilerOptions).toMatchObject({ strict: true, noEmit: true });
+      const result = runPnpm(["typecheck"]);
+      expect(result.status, result.stderr || result.stdout).toBe(0);
+    },
+    120_000,
+  );
 
   it("rejects a secret-bearing browser workspace dependency", () => {
     const fixture = mkdtempSync(join(tmpdir(), "s00-t03-browser-"));

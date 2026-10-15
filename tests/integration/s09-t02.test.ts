@@ -4,6 +4,10 @@ import {
   compareRevisionManifests,
   type ManifestItemDiff,
 } from "@latex-collab/latex";
+import {
+  myersDiff as webMyersDiff,
+  compareRevisionManifests as webCompareRevisionManifests,
+} from "../../apps/web/src/features/history/diff.js";
 
 describe("S09-T02: Compare text tree and binary revisions", () => {
   describe("Deterministic Myers Diff algorithm", () => {
@@ -146,6 +150,41 @@ describe("S09-T02: Compare text tree and binary revisions", () => {
       expect(result.removed[0]!.path).toBe("delete_me.tex");
 
       expect(result.unchanged).toHaveLength(1);
+    });
+  });
+
+  describe("Browser-compatible client diff (apps/web/src/features/history/diff.ts)", () => {
+    it("mirrors server-side diff results on identical text and modifications", () => {
+      const oldText = "Line 1\nLine 2\nLine 3\nLine 4";
+      const newText = "Line 1\nLine 2 modified\nLine 4\nLine 5";
+
+      const serverDiff = myersDiff(oldText, newText);
+      const clientDiff = webMyersDiff(oldText, newText);
+
+      expect(clientDiff.insertions).toBe(serverDiff.insertions);
+      expect(clientDiff.deletions).toBe(serverDiff.deletions);
+      expect(clientDiff.equal).toBe(serverDiff.equal);
+      expect(clientDiff.lines.some((l) => l.type === "delete" && l.content === "Line 2")).toBe(true);
+      expect(clientDiff.lines.some((l) => l.type === "insert" && l.content === "Line 2 modified")).toBe(true);
+    });
+
+    it("mirrors tree and binary manifest comparison in client", () => {
+      const baseItems: ManifestItemDiff[] = [
+        { nodeId: "node-1", path: "keep.tex", kind: "TEXT", sha256: "h1" },
+        { nodeId: "node-2", path: "delete_me.tex", kind: "TEXT", sha256: "h2" },
+      ];
+
+      const targetItems: ManifestItemDiff[] = [
+        { nodeId: "node-1", path: "keep.tex", kind: "TEXT", sha256: "h1" },
+        { nodeId: "node-3", path: "new_file.tex", kind: "TEXT", sha256: "h3" },
+      ];
+
+      const clientResult = webCompareRevisionManifests(baseItems, targetItems);
+      expect(clientResult.added).toHaveLength(1);
+      expect(clientResult.added[0]!.path).toBe("new_file.tex");
+      expect(clientResult.removed).toHaveLength(1);
+      expect(clientResult.removed[0]!.path).toBe("delete_me.tex");
+      expect(clientResult.unchanged).toHaveLength(1);
     });
   });
 });

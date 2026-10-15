@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "9d852956978007c573f1d4ddc743fff8355f7af9",
+  "git_baseline": "b81a33c0965a929a61280f5a1e4ef3e7f59c9204",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -263,7 +263,7 @@
     {
       "path": "apps/api/src/modules/review/suggestions.ts",
       "role": "factory",
-      "sha256": "31ab8ba802ae794d8e811b5bf022aeac62f0e3161b6f2c74b626ec63179e3f3b"
+      "sha256": "757491e0de898b17d538190e19fd12ada452148ae68b537a4955b0f6429a6b9f"
     },
     {
       "path": "apps/api/src/modules/tags/routes.ts",
@@ -3148,7 +3148,7 @@
     {
       "path": "tests/integration/s00-t03.test.ts",
       "role": "factory",
-      "sha256": "302d8937efa494c6d490ae114414db3aae813eb419d62fd7edb6889ee9bce58f"
+      "sha256": "8ac478f2f0df1345cbe7a0d51cca3bbecd3a7337e787a5ab71839ac4e50914fe"
     },
     {
       "path": "tests/integration/s00-t04.test.tsx",
@@ -3388,7 +3388,7 @@
     {
       "path": "tests/integration/s05-t03.test.ts",
       "role": "factory",
-      "sha256": "f6c806a5fd3acb59bacb721baf88ccd6f26c94fb7d90b94095de910ce9170aab"
+      "sha256": "d2957498f46fdb0153cc0a05aff90bf161c11513b6dccd4b6bf2b81b4101b867"
     },
     {
       "path": "tests/integration/s05-t09.test.ts",
@@ -3538,7 +3538,7 @@
     {
       "path": "tests/integration/s09-t02.test.ts",
       "role": "factory",
-      "sha256": "9e1580643bcacd0fac11e6c0ae6ee1ce1da829cdad612fd3154bcb2fc1b1f536"
+      "sha256": "abd2fba577c9057306966e3350f51e1d454b75de0b7bf48106df252aa6af5f68"
     },
     {
       "path": "tests/integration/s09-t03.test.ts",
