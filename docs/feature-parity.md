@@ -59,7 +59,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | COL-04 | G2 | Must | IN_PROGRESS | [S08-T01 invitation API and Mailpit evidence](test-reports/s08-t01.md); [S08-T03 invitation UI and Edge journey](test-reports/s08-t03.md); revocation journey remains S08-T08 |
 | COL-05 | G2 | Should | IN_PROGRESS | [S08-T02 hashed link REST/new WSS evidence](test-reports/s08-t02.md); [S08-T03 link UI and Edge redemption](test-reports/s08-t03.md); live socket revocation remains S08-T08 |
 | COL-06 | G2 | Must | IN_PROGRESS | [S08-T04 anchored comment threads, detached ranges and UI](test-reports/s08-t04.md) and [S08-T09 source-verified anchor excerpts, reply flow and Edge journey](test-reports/s08-t09.md) accepted; [S08-T06 mention/reply delivery, idempotency and in-app UI](test-reports/s08-t06.md) implemented with review pending; safety hardening remains S08-T07 |
-| COL-07 | G2 | Should | IN_PROGRESS | [S08-T05 durable chat REST, WSS, UI and Edge evidence](test-reports/s08-t05.md) accepted; rate limits and safety hardening remain S08-T07 |
+| COL-07 | G2 | Should | IN_PROGRESS | [S08-T05 durable chat REST, WSS, UI and Edge evidence](test-reports/s08-t05.md) accepted; [S08-T07 PostgreSQL-backed rate limits and body policy](test-reports/s08-t07.md) implemented with review pending; open-socket closure remains S08-T08 |
 | COL-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-09 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | COL-10 | G3 | Should | IN_PROGRESS | [S03-T07 structural revision manifests](test-reports/s03-t07.md); [S04-T07 text/binary checkpoints](test-reports/s04-t07.md); remaining collaboration manifests apply |

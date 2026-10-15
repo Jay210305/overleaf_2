@@ -108,8 +108,8 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S08-T04 | [Implement anchored comments and replies](sprint-08-sharing-comments-chat/S08-T04-implement-anchored-comments-and-replies.md) | Julio (proposed) | 8 | done |
 | S08-T09 | [Render comment anchor and reply interactions](sprint-08-sharing-comments-chat/S08-T09-render-comment-anchor-and-reply-interactions.md) | Julio (proposed) | 6 | done |
 | S08-T05 | [Create authorized durable project chat](sprint-08-sharing-comments-chat/S08-T05-create-authorized-durable-project-chat.md) | Julio (proposed) | 8 | done |
-| S08-T06 | [Create mention and in-app notifications](sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md) | Julio (proposed) | 6 | in_progress |
-| S08-T07 | [Enforce comment chat safety and limits](sprint-08-sharing-comments-chat/S08-T07-enforce-comment-chat-safety-and-limits.md) | Julio (proposed) | 6 | todo |
+| S08-T06 | [Create mention and in-app notifications](sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md) | Julio (proposed) | 6 | done |
+| S08-T07 | [Enforce comment chat safety and limits](sprint-08-sharing-comments-chat/S08-T07-enforce-comment-chat-safety-and-limits.md) | Julio (proposed) | 6 | in_progress |
 | S08-T08 | [Verify sharing revocation and detached anchors](sprint-08-sharing-comments-chat/S08-T08-verify-sharing-revocation-and-detached-anchors.md) | Julio (proposed) | 6 | todo |
 | S08-T10 | [Stabilize and review G2 collaboration](sprint-08-sharing-comments-chat/S08-T10-stabilize-and-review-g2-collaboration.md) | Julio (proposed) | 8 | todo |
 | S09-T01 | [Create immutable labeled history queries](sprint-09-history-review/S09-T01-create-immutable-labeled-history-queries.md) | Project Co-owner (proposed) | 8 | todo |

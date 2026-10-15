@@ -16,6 +16,7 @@ import { problem } from "../../plugins/errors.js";
 import type { ProjectAuthorization } from "../../plugins/require-session.js";
 import { DefaultTextDocumentService } from "../text/text-document-service.js";
 import { resolveCommentAnchor, type ResolvedCommentAnchor } from "./anchors.js";
+import { assertSafeBody, assertWriterRole, checkCommentCreationRate } from "./safety.js";
 import { createMentionNotifications } from "../notifications/mentions.js";
 
 type CommentRow = {
@@ -83,9 +84,9 @@ async function currentWriter(tx: TransactionContext, auth: ProjectAuthorization,
   const row = project.rows[0];
   if (!row || row.status !== "active" || (row.owner_id !== auth.userId && !row.role))
     throw new AuthError(404, "RESOURCE_NOT_FOUND");
-  if (row.owner_id !== auth.userId && row.role === "VIEWER")
-    throw new AuthError(403, "PROJECT_PERMISSION_DENIED");
-  return row.owner_id === auth.userId;
+  const isOwner = row.owner_id === auth.userId;
+  assertWriterRole(row.role, isOwner);
+  return isOwner;
 }
 
 async function checkMentions(tx: TransactionContext, projectId: string, mentions: string[]) {
@@ -208,6 +209,8 @@ export function registerCommentRoutes(app: FastifyInstance, db: DatabaseClient):
       }
       const row = await db.transaction(async (tx) => {
         await currentWriter(tx, auth, request.headers["x-csrf-token"]);
+        assertSafeBody(input.body);
+        await checkCommentCreationRate(tx, { projectId: auth.projectId, userId: auth.userId });
         const file = await tx.query<{ id: string }>(
           `SELECT id FROM project_nodes WHERE id = $1 AND project_id = $2
            AND kind = 'FILE' AND content_kind = 'TEXT' AND deleted_at IS NULL`,
@@ -258,6 +261,8 @@ export function registerCommentRoutes(app: FastifyInstance, db: DatabaseClient):
         if (!parsed.success) throw new AuthError(400, "VALIDATION_ERROR");
         const row = await db.transaction(async (tx) => {
           await currentWriter(tx, auth, request.headers["x-csrf-token"]);
+          assertSafeBody(parsed.data.body);
+          await checkCommentCreationRate(tx, { projectId: auth.projectId, userId: auth.userId });
           const comment = await tx.query<{ id: string; created_by: string }>(
             "SELECT id, created_by FROM comments WHERE project_id = $1 AND id = $2 FOR UPDATE",
             [auth.projectId, commentId],

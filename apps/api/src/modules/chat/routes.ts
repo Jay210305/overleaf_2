@@ -10,6 +10,8 @@ import { AuthError } from "../auth/errors.js";
 import { requireSessionCsrf } from "../../plugins/csrf.js";
 import { problem } from "../../plugins/errors.js";
 import type { ProjectAuthorization } from "../../plugins/require-session.js";
+import { assertChatBody, checkChatRateLimit } from "./safety.js";
+import { assertWriterRole } from "../comments/safety.js";
 
 interface ChatRow {
   id: string;
@@ -71,8 +73,7 @@ async function currentWriter(tx: TransactionContext, auth: ProjectAuthorization,
   const row = project.rows[0];
   if (!row || row.status !== "active" || (row.owner_id !== auth.userId && !row.role))
     throw new AuthError(404, "RESOURCE_NOT_FOUND");
-  if (row.owner_id !== auth.userId && row.role === "VIEWER")
-    throw new AuthError(403, "PROJECT_PERMISSION_DENIED");
+  assertWriterRole(row.role, row.owner_id === auth.userId);
 }
 
 export function registerChatRoutes(app: FastifyInstance, db: DatabaseClient): void {
@@ -120,6 +121,8 @@ export function registerChatRoutes(app: FastifyInstance, db: DatabaseClient): vo
       if (!parsed.success) throw new AuthError(400, "VALIDATION_ERROR");
       const created = await db.transaction(async (tx) => {
         await currentWriter(tx, auth, request.headers["x-csrf-token"]);
+        assertChatBody(parsed.data.body);
+        await checkChatRateLimit(tx, { projectId: auth.projectId, userId: auth.userId });
         const inserted = await tx.query<ChatRow>(
           `WITH created AS (
              INSERT INTO chat_messages (project_id, author_id, body)
