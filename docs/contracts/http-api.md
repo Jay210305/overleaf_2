@@ -52,6 +52,10 @@ Comment, reply and chat writes pass `assertSafeBody`/`assertChatBody` (`apps/api
 
 Flood protection is PostgreSQL-backed sliding windows counted in the write transaction, so it holds across replicas: 30 chat messages per author per project per 60 seconds and 30 comment/reply creations per author per project per 300 seconds; excess writes return 429 `RATE_LIMITED` with no state change. VIEWER writes stay 403, foreign projects 404 and revoked members 404 through the pre-existing guards, now covered by S08-T07 role-matrix regression. This slice completes the COL-07 rate-limit requirement; open-socket closure on revocation remains S08-T08.
 
+## G2 Sharing Revocation and Detached Anchors Slice (S08-T08)
+
+Member removal, role change and share-link revocation publish to the `collab:invalidations` Redis channel (`apps/api/src/modules/collab/invalidation.ts`), the same JSON shape the collaboration service already consumes in its `LiveRevocationManager`: `member_removed` closes the affected project sockets with 4403, `role_changed` downgrades demoted sockets to read-only, and outstanding single-use WSS tickets are invalidated with them. Events publish after the revocation transaction commits; a publish failure is logged without secrets and never rolls back the already-enforced database denial, and the chat WSS independently rechecks membership on every poll. Expired invitations return 410 and grant nothing, revoked or consumed invitations and links return 404, exhausted links return 410, and redemption stays bound to the source project. Deleted comment ranges resolve to `detached` with reason `range_changed` and null offsets rather than moving to unrelated text; the browser shows the unavailable-anchor reason without a highlight mark.
+
 ## Security and Permission Matrix
 
 API-host-only opaque session cookie; HttpOnly, Secure under TLS, SameSite=Lax, 7-day idle and 30-day absolute expiry as configurable starting proposals. Hash stored session/token values. Use CSRF token header plus exact Origin validation on mutations. Test local/staging domain behavior; never weaken production cookie policy to fix development.

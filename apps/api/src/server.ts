@@ -12,6 +12,7 @@ import type { SendPasswordReset } from "./modules/auth/password-reset.js";
 import { installProjectGuard } from "./plugins/require-session.js";
 import { safeLoggerOptions } from "./plugins/logging.js";
 import type { AuthRateLimiter } from "./plugins/rate-limit.js";
+import type { CollabInvalidationPublisher } from "./modules/collab/invalidation.js";
 import { registerProfileRoutes } from "./modules/account/profile.js";
 import { registerPasswordChangeRoute } from "./modules/account/password-change.js";
 import { registerAvatarRoutes } from "./modules/account/avatar.js";
@@ -74,6 +75,7 @@ export interface ServerOptions {
   secureCookies?: boolean | undefined;
   rateLimiter?: AuthRateLimiter | undefined;
   ticketStore?: TicketStore | undefined;
+  collabInvalidation?: CollabInvalidationPublisher | undefined;
 }
 export function createServer(options: ServerOptions) {
   const app = Fastify({
@@ -214,8 +216,12 @@ export function createServer(options: ServerOptions) {
       db: options.db,
       origin: options.origin,
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      collabInvalidation: options.collabInvalidation,
     });
-    registerProjectMemberRoutes(app, options.db);
+    registerProjectMemberRoutes(app, {
+      db: options.db,
+      collabInvalidation: options.collabInvalidation,
+    });
     registerCommentRoutes(app, options.db);
     registerChatRoutes(app, options.db);
     registerNotificationRoutes(

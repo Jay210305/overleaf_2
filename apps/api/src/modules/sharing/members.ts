@@ -11,6 +11,10 @@ import { requireSessionCsrf } from "../../plugins/csrf.js";
 import { problem } from "../../plugins/errors.js";
 import { type ProjectAuthorization } from "../../plugins/require-session.js";
 import { AuthError } from "../auth/errors.js";
+import {
+  noopCollabInvalidationPublisher,
+  type CollabInvalidationPublisher,
+} from "../collab/invalidation.js";
 
 interface MemberRow {
   user_id: string;
@@ -108,7 +112,13 @@ async function lockActiveMember(tx: TransactionContext, projectId: string, userI
   return member;
 }
 
-export function registerProjectMemberRoutes(app: FastifyInstance, db: DatabaseClient): void {
+export function registerProjectMemberRoutes(
+  app: FastifyInstance,
+  options: { db: DatabaseClient; collabInvalidation?: CollabInvalidationPublisher | undefined },
+): void {
+  const { db } = options;
+  const publish =
+    options.collabInvalidation ?? noopCollabInvalidationPublisher();
   const path = "/api/v1/projects/:projectId/members";
   const ownerOnly = { config: { projectAction: "MANAGE_MEMBERS" } } as const;
 
@@ -168,6 +178,11 @@ export function registerProjectMemberRoutes(app: FastifyInstance, db: DatabaseCl
         );
         return view(updated.rows[0]!);
       });
+      await publish
+        .publish({ type: "role_changed", userId, projectId: auth.projectId, newRole: member.role })
+        .catch((error: unknown) => {
+          request.log.warn({ requestId: request.id, reason: error instanceof Error ? error.message : "unknown" }, "Collab role invalidation not delivered");
+        });
       return reply.send(member);
     } catch (error) {
       if (error instanceof AuthError) return reject(reply, request, error);
@@ -194,6 +209,11 @@ export function registerProjectMemberRoutes(app: FastifyInstance, db: DatabaseCl
           [auth.userId, auth.projectId, userId, request.id],
         );
       });
+      await publish
+        .publish({ type: "member_removed", userId, projectId: auth.projectId })
+        .catch((error: unknown) => {
+          request.log.warn({ requestId: request.id, reason: error instanceof Error ? error.message : "unknown" }, "Collab removal invalidation not delivered");
+        });
       return reply.code(204).send();
     } catch (error) {
       if (error instanceof AuthError) return reject(reply, request, error);

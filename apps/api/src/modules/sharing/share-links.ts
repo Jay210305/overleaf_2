@@ -16,6 +16,10 @@ import { requireSessionCsrf } from "../../plugins/csrf.js";
 import { problem } from "../../plugins/errors.js";
 import { requireSession, type SessionIdentity } from "../../plugins/require-session.js";
 import { AuthError, tokenHash } from "../auth/errors.js";
+import {
+  noopCollabInvalidationPublisher,
+  type CollabInvalidationPublisher,
+} from "../collab/invalidation.js";
 
 const maximumLifetimeMs = 30 * 24 * 60 * 60 * 1000;
 const sessionAbsoluteMs = 30 * 24 * 60 * 60 * 1000;
@@ -133,9 +137,15 @@ async function createShareLink(
 
 export function registerShareLinkRoutes(
   app: FastifyInstance,
-  options: { db: DatabaseClient; origin?: string | undefined; secureCookies: boolean },
+  options: {
+    db: DatabaseClient;
+    origin?: string | undefined;
+    secureCookies: boolean;
+    collabInvalidation?: CollabInvalidationPublisher | undefined;
+  },
 ): void {
   const { db } = options;
+  const publish = options.collabInvalidation ?? noopCollabInvalidationPublisher();
   const ownedPath = "/api/v1/projects/:projectId/share-links";
 
   app.post(ownedPath, { config: { projectAction: "MANAGE_MEMBERS" } }, async (request, reply) => {
@@ -227,6 +237,20 @@ export function registerShareLinkRoutes(
             [auth.projectId, linkId],
           );
         });
+        const affected = await db.query<{ user_id: string }>(
+          `SELECT user_id FROM project_members WHERE project_id = $1 AND source_share_link_id = $2`,
+          [auth.projectId, linkId],
+        );
+        for (const row of affected.rows) {
+          await publish
+            .publish({ type: "member_removed", userId: row.user_id, projectId: auth.projectId })
+            .catch((error: unknown) => {
+              request.log.warn(
+                { requestId: request.id, reason: error instanceof Error ? error.message : "unknown" },
+                "Collab link-revocation invalidation not delivered",
+              );
+            });
+        }
         return reply.code(204).send();
       } catch (error) {
         if (error instanceof AuthError) return reject(reply, request, error);
