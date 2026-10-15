@@ -29,6 +29,7 @@ export const DEFAULT_DICTIONARY: readonly string[] = [
   "science", "mechanics", "entanglement", "phenomenon", "classical", "function",
   "matrix", "vector", "distribution", "hypothesis", "introduction", "discussion",
   "document", "evaluation", "framework", "performance", "review", "summary",
+  "ignore", "ignored", "zero", "number", "value", "state", "point", "type", "form", "equal",
 ];
 
 const DICTIONARY_SET = new Set(DEFAULT_DICTIONARY);
@@ -82,8 +83,19 @@ export function checkSpelling(
   }
 
   // 2. Math environments
-  const mathDisplayRegex = /\\begin\{(equation\*?|align\*?|gather\*?|displaymath)\}[\s\S]*?\\end\{\1\}/g;
+  const mathDisplayRegex =
+    /\\begin\{(equation\*?|align\*?|gather\*?|multline\*?|displaymath|eqnarray\*?|alignat\*?)\}[\s\S]*?\\end\{\1\}/g;
   while ((match = mathDisplayRegex.exec(source)) !== null) {
+    maskRanges.push({ from: match.index, to: match.index + match[0].length });
+  }
+
+  const bracketMathRegex = /\\\[[\s\S]*?\\\]/g;
+  while ((match = bracketMathRegex.exec(source)) !== null) {
+    maskRanges.push({ from: match.index, to: match.index + match[0].length });
+  }
+
+  const doubleDollarMathRegex = /\$\$[\s\S]*?\$\$/g;
+  while ((match = doubleDollarMathRegex.exec(source)) !== null) {
     maskRanges.push({ from: match.index, to: match.index + match[0].length });
   }
 

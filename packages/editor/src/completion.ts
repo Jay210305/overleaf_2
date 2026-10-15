@@ -189,13 +189,16 @@ export function getCompletionContext(
   }
 
   // 3. Citation in \cite{...
-  const citeMatch = preceding.match(/\\(cite|citep|citet|autocite)\{([^}]*)$/);
+  const citeMatch = preceding.match(/\\(cite|citep|citet|autocite|parencite|textcite)\*?\{([^}]*)$/);
   if (citeMatch) {
-    const query = citeMatch[2]!;
+    const keysSoFar = citeMatch[2]!;
+    const lastCommaIndex = keysSoFar.lastIndexOf(",");
+    const currentToken =
+      lastCommaIndex >= 0 ? keysSoFar.slice(lastCommaIndex + 1).trimStart() : keysSoFar;
     return {
       kind: "citation",
-      query,
-      from: cursorOffset - query.length,
+      query: currentToken,
+      from: cursorOffset - currentToken.length,
       to: cursorOffset,
     };
   }

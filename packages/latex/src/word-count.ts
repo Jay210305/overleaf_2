@@ -80,9 +80,10 @@ export function countLatexWords(source: string): WordCountResult {
     .split(/\s+/)
     .filter((w) => /[a-zA-Z0-9\u00C0-\u024F]/.test(w));
 
+  const cleanProse = words.join(" ");
   const rawLines = source.split(/\r?\n/).length;
-  const chars = text.length;
-  const charsNoSpaces = text.replace(/\s/g, "").length;
+  const chars = cleanProse.length;
+  const charsNoSpaces = cleanProse.replace(/\s/g, "").length;
 
   return {
     words: words.length,

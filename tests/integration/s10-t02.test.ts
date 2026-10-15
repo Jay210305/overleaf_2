@@ -116,4 +116,37 @@ Warning--empty journal in knuth1984
     expect(() => insertCitation("text", 4, "bad key with spaces")).toThrow(/Invalid citation key/);
     expect(() => insertCitation("text", 4, "key,comma")).toThrow(/Invalid citation key/);
   });
+
+  it("detects duplicate keys in multiline entries where key is on a subsequent line", () => {
+    const bib = `@article{
+  multikey,
+  title = {First}
+}
+
+@article{
+  multikey,
+  title = {Second}
+}`;
+
+    const dups = findDuplicateBibKeys(bib);
+    expect(dups).toHaveLength(1);
+    expect(dups[0]?.key).toBe("multikey");
+    expect(dups[0]?.count).toBe(2);
+    expect(dups[0]?.lines).toEqual([1, 6]);
+  });
+
+  it("extracts summaries with nested braces preserved", () => {
+    const bib = `@book{companion,
+  title = {The {LaTeX} Companion},
+  author = {{Mittelbach}, Frank},
+  year = 2004
+}`;
+
+    const summaries = extractBibSummaries(bib);
+    expect(summaries).toHaveLength(1);
+    expect(summaries[0]?.title).toBe("The {LaTeX} Companion");
+    expect(summaries[0]?.author).toBe("{Mittelbach}, Frank");
+    expect(summaries[0]?.year).toBe("2004");
+  });
 });
+

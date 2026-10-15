@@ -117,5 +117,15 @@ And a duplicate \\label{sec:intro}.`;
     });
     expect(imgRes.items).toHaveLength(2);
     expect(imgRes.items.some((it) => it.insertText === "main.tex")).toBe(false);
+
+    // Multi-key citation completion
+    const multiCiteDoc = "See \\cite{knuth1984, eins";
+    const multiCiteRes = completeAtCursor(multiCiteDoc, multiCiteDoc.length, {
+      availableCitations: ["einstein1905", "other2020"],
+    });
+    expect(multiCiteRes.from).toBe(multiCiteDoc.length - "eins".length);
+    expect(multiCiteRes.items).toHaveLength(1);
+    expect(multiCiteRes.items[0]?.insertText).toBe("einstein1905");
   });
 });
+

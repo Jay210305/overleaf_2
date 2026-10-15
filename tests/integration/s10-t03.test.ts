@@ -106,4 +106,31 @@ describe("S10-T03 Integration: Index BibTeX and search local references", () => 
     const parsed = parseBibTeX(unnormalized);
     expect(parsed.entries[0]?.key).toBe("bKey"); // Original order preserved
   });
+
+  it("accurately parses fields with nested braces, multiline keys, and multiple entries on a single line", () => {
+    const bib = `@book{companion,
+  title = {The {LaTeX} Companion},
+  author = {{Mittelbach}, Frank and {Goossens}, Michel},
+  year = 2004
+} @article{
+  multilineKey,
+  author = {{World Health Organization}},
+  title = {Global Report}
+}`;
+
+    const res = parseBibTeX(bib);
+    expect(res.entries).toHaveLength(2);
+
+    const companion = res.entries.find((e) => e.key === "companion");
+    expect(companion).toBeDefined();
+    expect(companion?.title).toBe("The {LaTeX} Companion");
+    expect(companion?.author).toBe("{Mittelbach}, Frank and {Goossens}, Michel");
+    expect(companion?.year).toBe("2004");
+
+    const multi = res.entries.find((e) => e.key === "multilineKey");
+    expect(multi).toBeDefined();
+    expect(multi?.author).toBe("{World Health Organization}");
+    expect(multi?.title).toBe("Global Report");
+  });
 });
+

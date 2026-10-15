@@ -111,15 +111,26 @@ export function registerSearchRoutes(
       const matches: SearchMatch[] = [];
 
       if (options.db) {
-        const { rows: textNodes } = await options.db.query<{ id: string; name: string }>(
-          `SELECT id, name FROM project_nodes WHERE project_id = $1 AND kind = 'FILE' AND deleted_at IS NULL`,
+        const { rows: textNodes } = await options.db.query<{
+          id: string;
+          name: string;
+          blob_key: string | null;
+        }>(
+          `SELECT id, name, blob_key FROM project_nodes WHERE project_id = $1 AND kind = 'FILE' AND deleted_at IS NULL`,
           [projectId],
         );
 
         for (const node of textNodes) {
-          const content =
-            getProjectFileText(projectId, node.id) ??
-            `Sample line 1 in ${node.name}\nSample line 2 mentioning ${q}\nSample line 3.`;
+          let content = getProjectFileText(projectId, node.id);
+          if (content === undefined && node.blob_key && options.storage) {
+            try {
+              const raw = await options.storage.get(node.blob_key);
+              content = Buffer.from(raw).toString("utf-8");
+            } catch {
+              content = "";
+            }
+          }
+          if (!content) continue;
 
           const lines = content.split(/\r?\n/);
           for (let idx = 0; idx < lines.length; idx++) {
@@ -246,9 +257,51 @@ export function registerSearchRoutes(
             projectMap.set(fileId, updated);
           }
         }
-      } else {
-        // Mock replacement count if running in memory without initialized files
-        replacementsCount = 1;
+      } else if (options.db) {
+        const { rows: textNodes } = await options.db.query<{
+          id: string;
+          name: string;
+          blob_key: string | null;
+        }>(
+          `SELECT id, name, blob_key FROM project_nodes WHERE project_id = $1 AND kind = 'FILE' AND deleted_at IS NULL`,
+          [projectId],
+        );
+        for (const node of textNodes) {
+          if (body.fileIds && !body.fileIds.includes(node.id)) {
+            continue;
+          }
+          let text = getProjectFileText(projectId, node.id);
+          if (text === undefined && node.blob_key && options.storage) {
+            try {
+              const raw = await options.storage.get(node.blob_key);
+              text = Buffer.from(raw).toString("utf-8");
+            } catch {
+              text = "";
+            }
+          }
+          if (!text) continue;
+          const matches = text.match(matcher);
+          if (matches) {
+            replacementsCount += matches.length;
+            const updated = text.replace(matcher, body.replacement);
+            setProjectFileText(projectId, node.id, updated);
+            if (options.storage) {
+              const buf = Buffer.from(updated, "utf-8");
+              const newKey = `projects/${projectId}/files/${node.id}-${randomUUID()}`;
+              await options.storage.put(newKey, buf, "text/x-tex");
+              await options.db.query(
+                `UPDATE project_nodes SET blob_key = $1, size_bytes = $2 WHERE id = $3`,
+                [newKey, buf.byteLength, node.id],
+              );
+            }
+          }
+        }
+        if (replacementsCount > 0) {
+          await options.db.query(
+            `UPDATE projects SET current_revision = current_revision + 1 WHERE id = $1`,
+            [projectId],
+          );
+        }
       }
 
       const newRevisionId = randomUUID();

@@ -1,3 +1,4 @@
+import { gunzipSync } from "node:zlib";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import {
   forwardRequestSchema,
@@ -265,8 +266,39 @@ export function registerSynctexRoutes(
         }
       }
 
-      // Retrieve cached or synthesized synctex records
+      // Retrieve cached, storage-backed, or synthesized synctex records
       let records = synctexRecordsCache.get(body.jobId);
+      if (!records && options.db && options.storage) {
+        try {
+          const { rows: artRows } = await options.db.query<{ synctex_key: string | null }>(
+            `SELECT synctex_key FROM artifact_sets WHERE compile_job_id = $1`,
+            [body.jobId],
+          );
+          const synctexKey = artRows[0]?.synctex_key;
+          if (synctexKey) {
+            const rawBytes = await options.storage.get(synctexKey);
+            let text = "";
+            if (rawBytes.length >= 2 && rawBytes[0] === 0x1f && rawBytes[1] === 0x8b) {
+              text = gunzipSync(rawBytes).toString("utf-8");
+            } else {
+              text = Buffer.from(rawBytes).toString("utf-8");
+            }
+            const { rows: nodeRows } = await options.db.query<{ id: string; name: string }>(
+              `SELECT id, name FROM project_nodes WHERE project_id = $1 AND deleted_at IS NULL`,
+              [projectId],
+            );
+            const fileIdMap: Record<string, string> = {};
+            for (const n of nodeRows) {
+              fileIdMap[n.name] = n.id;
+            }
+            records = parseSynctexData(text, fileIdMap);
+            synctexRecordsCache.set(body.jobId, records);
+          }
+        } catch {
+          // Allow fallback if artifact is unreadable
+        }
+      }
+
       if (!records) {
         // Synthesize deterministic mapping based on line and fileId
         records = [
@@ -339,6 +371,37 @@ export function registerSynctexRoutes(
       }
 
       let records = synctexRecordsCache.get(body.jobId);
+      if (!records && options.db && options.storage) {
+        try {
+          const { rows: artRows } = await options.db.query<{ synctex_key: string | null }>(
+            `SELECT synctex_key FROM artifact_sets WHERE compile_job_id = $1`,
+            [body.jobId],
+          );
+          const synctexKey = artRows[0]?.synctex_key;
+          if (synctexKey) {
+            const rawBytes = await options.storage.get(synctexKey);
+            let text = "";
+            if (rawBytes.length >= 2 && rawBytes[0] === 0x1f && rawBytes[1] === 0x8b) {
+              text = gunzipSync(rawBytes).toString("utf-8");
+            } else {
+              text = Buffer.from(rawBytes).toString("utf-8");
+            }
+            const { rows: nodeRows } = await options.db.query<{ id: string; name: string }>(
+              `SELECT id, name FROM project_nodes WHERE project_id = $1 AND deleted_at IS NULL`,
+              [projectId],
+            );
+            const fileIdMap: Record<string, string> = {};
+            for (const n of nodeRows) {
+              fileIdMap[n.name] = n.id;
+            }
+            records = parseSynctexData(text, fileIdMap);
+            synctexRecordsCache.set(body.jobId, records);
+          }
+        } catch {
+          // Allow fallback if artifact is unreadable
+        }
+      }
+
       if (!records) {
         // Synthesize deterministic inverse mapping based on y coordinate
         const estimatedLine = Math.max(1, Math.round((body.y - 72) / 14));

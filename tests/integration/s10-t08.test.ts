@@ -47,4 +47,11 @@ describe("S10-T08 Integration: Project Search and Previewed Replacement", () => 
     const replaced = original.replace(/quantum/gi, "classical");
     expect(replaced).toBe("classical state in classical mechanics.");
   });
+
+  it("returns zero replacements when target query is not present", () => {
+    const text = "Purely classical physics.";
+    const regex = new RegExp("quantum", "gi");
+    const count = (text.match(regex) ?? []).length;
+    expect(count).toBe(0);
+  });
 });

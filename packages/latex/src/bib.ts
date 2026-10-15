@@ -50,76 +50,65 @@ export function parseBibTeX(source: string): BibParseResult {
   const errors: BibParseError[] = [];
   const lineNumbersByKey = new Map<string, number[]>();
 
-  const lines = source.split(/\r?\n/);
-  let currentEntry: {
-    type: string;
-    key: string;
-    startLine: number;
-    lines: string[];
-    braceDepth: number;
-  } | null = null;
-
-  for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
-    const line = lines[lineIdx]!;
-    const lineNum = lineIdx + 1;
-
-    let searchIndex = 0;
-    if (!currentEntry) {
-      const match = line.match(/@([a-zA-Z]+)\s*([\{\(])\s*([^,\s]+)?/);
-      if (match && match.index !== undefined) {
-        const type = match[1]!.toLowerCase();
-        if (!["comment", "string", "preamble"].includes(type)) {
-          const key = match[3]?.trim() ?? "";
-          currentEntry = {
-            type,
-            key,
-            startLine: lineNum,
-            lines: [line],
-            braceDepth: 1, // The opening brace after @type
-          };
-          searchIndex = match.index + match[0].length;
-        }
-      }
-    } else {
-      currentEntry.lines.push(line);
-      searchIndex = 0;
+  function getLineNumber(idx: number): number {
+    let line = 1;
+    for (let i = 0; i < idx; i++) {
+      if (source[i] === "\n") line++;
     }
-
-    if (currentEntry) {
-      for (let c = searchIndex; c < line.length; c++) {
-        const char = line[c];
-        if (char === "{" || char === "(") {
-          currentEntry.braceDepth++;
-        } else if (char === "}" || char === ")") {
-          currentEntry.braceDepth--;
-          if (currentEntry.braceDepth <= 0) {
-            const rawSource = currentEntry.lines.join("\n");
-            const entry = finishEntry(currentEntry, rawSource, currentEntry.startLine, lineNum);
-            if (entry.key) {
-              entries.push(entry);
-              const list = lineNumbersByKey.get(entry.key) ?? [];
-              list.push(currentEntry.startLine);
-              lineNumbersByKey.set(entry.key, list);
-            } else {
-              errors.push({ line: currentEntry.startLine, message: "Entry missing citation key" });
-            }
-            currentEntry = null;
-            break;
-          }
-        }
-      }
-    }
+    return line;
   }
 
-  // Handle unclosed entry at EOF
-  if (currentEntry && currentEntry.lines.length > 0) {
-    const rawSource = currentEntry.lines.join("\n");
-    const entry = finishEntry(currentEntry, rawSource, currentEntry.startLine, lines.length);
+  const entryHeaderRegex = /@([a-zA-Z]+)\s*([\{\(])/g;
+  let headerMatch: RegExpExecArray | null;
+
+  while ((headerMatch = entryHeaderRegex.exec(source)) !== null) {
+    const startIndex = headerMatch.index;
+    const type = headerMatch[1]!.toLowerCase();
+    const openDelim = headerMatch[2]!;
+    const closeDelim = openDelim === "{" ? "}" : ")";
+
+    if (["comment", "string", "preamble"].includes(type)) {
+      continue;
+    }
+
+    const startLine = getLineNumber(startIndex);
+    let depth = 1;
+    let idx = entryHeaderRegex.lastIndex;
+
+    // Skip whitespace to reach the citation key
+    while (idx < source.length && /\s/.test(source[idx]!)) idx++;
+    const keyStart = idx;
+    while (
+      idx < source.length &&
+      source[idx] !== "," &&
+      source[idx] !== closeDelim &&
+      !/\s/.test(source[idx]!)
+    ) {
+      idx++;
+    }
+    const key = source.slice(keyStart, idx).trim();
+
+    // Find end of entry by matching delimiters
+    while (idx < source.length && depth > 0) {
+      if (source[idx] === openDelim || (openDelim === "{" && source[idx] === "{")) depth++;
+      else if (source[idx] === closeDelim || (closeDelim === "}" && source[idx] === "}")) depth--;
+      idx++;
+    }
+
+    const endIndex = idx;
+    const endLine = getLineNumber(Math.max(0, endIndex - 1));
+    const rawSource = source.slice(startIndex, endIndex);
+
+    entryHeaderRegex.lastIndex = endIndex;
+
+    const entry = finishEntry(type, key, rawSource, startLine, endLine);
     if (entry.key) {
       entries.push(entry);
       const list = lineNumbersByKey.get(entry.key) ?? [];
-      list.push(currentEntry.startLine);
+      list.push(startLine);
       lineNumbersByKey.set(entry.key, list);
+    } else {
+      errors.push({ line: startLine, message: "Entry missing citation key" });
     }
   }
 
@@ -142,14 +131,14 @@ export function parseBibTeX(source: string): BibParseResult {
 }
 
 function finishEntry(
-  partial: { type: string; key?: string },
+  type: string,
+  key: string,
   rawSource: string,
   startLine: number,
   endLine: number,
 ): BibEntry {
   const fields: Record<string, string> = {};
 
-  let key = partial.key ?? "";
   if (!key) {
     const keyMatch = rawSource.match(/@\w+\s*[\{\(]\s*([^,\s]+)/);
     if (keyMatch && keyMatch[1]) {
@@ -157,17 +146,54 @@ function finishEntry(
     }
   }
 
-  const fieldRegex = /([a-zA-Z0-9_\-]+)\s*=\s*(?:\{([^}]*)\}|"([^"]*)"|([a-zA-Z0-9]+))/g;
+  const fieldNameRegex = /([a-zA-Z0-9_\-]+)\s*=\s*/g;
   let match: RegExpExecArray | null;
 
-  while ((match = fieldRegex.exec(rawSource)) !== null) {
+  while ((match = fieldNameRegex.exec(rawSource)) !== null) {
     const name = match[1]!.toLowerCase();
-    const val = (match[2] ?? match[3] ?? match[4] ?? "").trim();
-    fields[name] = val;
+    let idx = match.index + match[0].length;
+    while (idx < rawSource.length && /\s/.test(rawSource[idx]!)) idx++;
+    if (idx >= rawSource.length) break;
+
+    let val = "";
+    if (rawSource[idx] === "{") {
+      let depth = 1;
+      const start = idx + 1;
+      idx++;
+      while (idx < rawSource.length && depth > 0) {
+        if (rawSource[idx] === "{") depth++;
+        else if (rawSource[idx] === "}") depth--;
+        idx++;
+      }
+      val = rawSource.slice(start, idx - 1);
+    } else if (rawSource[idx] === '"') {
+      const start = idx + 1;
+      idx++;
+      while (idx < rawSource.length && rawSource[idx] !== '"') {
+        if (rawSource[idx] === "\\" && idx + 1 < rawSource.length) idx++;
+        idx++;
+      }
+      val = rawSource.slice(start, idx);
+      idx++;
+    } else {
+      const start = idx;
+      while (
+        idx < rawSource.length &&
+        rawSource[idx] !== "," &&
+        rawSource[idx] !== "}" &&
+        rawSource[idx] !== ")" &&
+        rawSource[idx] !== "\n"
+      ) {
+        idx++;
+      }
+      val = rawSource.slice(start, idx).trim();
+    }
+    fields[name] = val.trim();
+    fieldNameRegex.lastIndex = idx;
   }
 
   return {
-    type: partial.type ?? "article",
+    type: type || "article",
     key,
     title: fields.title,
     author: fields.author,

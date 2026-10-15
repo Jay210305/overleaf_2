@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "da8526efbe6bab8a05953003b56a8331a89c5fb3",
+  "git_baseline": "d45ee67736fc73a911b9acc65d86d14c9044f9e6",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -273,12 +273,12 @@
     {
       "path": "apps/api/src/modules/search/routes.ts",
       "role": "factory",
-      "sha256": "91617e56dd48c81d0978c634dda747a12dd0dbf6807bf268949fb023e9007ac9"
+      "sha256": "3a56eba09762b0a199317c7136ec2a5a5a839fde9d3ace82995deebe0a0b1cb5"
     },
     {
       "path": "apps/api/src/modules/synctex/routes.ts",
       "role": "factory",
-      "sha256": "9fa05e1acb7956cd08ad75d944005c97e30a14fa2daee4e8cf40cf57de7b3c1a"
+      "sha256": "46589016d593cf644c7303be2c49273fd26b6a357ae54b93bfae68075bd91a63"
     },
     {
       "path": "apps/api/src/modules/tags/routes.ts",
@@ -3053,12 +3053,12 @@
     {
       "path": "packages/editor/src/citations.ts",
       "role": "factory",
-      "sha256": "7c8b7b1e02023c1ba0eeecec6af156209c617c2c89fffe7a150250209cbd1c6d"
+      "sha256": "4355d09d69de003c70f4e10d822b0db2de285bb1aa190d25f661ddd0bbdbdd85"
     },
     {
       "path": "packages/editor/src/completion.ts",
       "role": "factory",
-      "sha256": "2adc87bbf06e30c634301575475a4eb0696c8d6c1dff30bc61a43667c1b91fbc"
+      "sha256": "bf0e5e183c1cb9f481d957832f098c5324cfbad36d534d55dec2a16d665bf3d2"
     },
     {
       "path": "packages/editor/src/index.ts",
@@ -3083,7 +3083,7 @@
     {
       "path": "packages/editor/src/spellcheck.ts",
       "role": "factory",
-      "sha256": "dc2d8dafca1439a56f942ae01703237f4d147768abdf7d2ad46ff2139792787b"
+      "sha256": "eebfdd5d838a54743b4d233fc3030afe8e7430b255b1dbcee20a229ebcf1ddc7"
     },
     {
       "path": "packages/editor/src/symbols.ts",
@@ -3103,7 +3103,7 @@
     {
       "path": "packages/latex/src/bib.ts",
       "role": "factory",
-      "sha256": "c2d5e678e29f6c584c22257f320d63376616d522b66e679d6495675d72057e24"
+      "sha256": "1d7ccf991a636fff1f74ce34520c70c79914eb5d6fe0ffa240553730f8908e7b"
     },
     {
       "path": "packages/latex/src/diff.ts",
@@ -3123,7 +3123,7 @@
     {
       "path": "packages/latex/src/word-count.ts",
       "role": "factory",
-      "sha256": "75b4f17511255005f141dad2c27923b39a2b360abc55589493c3571c3298c867"
+      "sha256": "50649ebf195c4470ffe19aabe5f2d79dc162b345b3678cfbb947f7243fb07ac9"
     },
     {
       "path": "packages/latex/tsconfig.json",
@@ -3793,12 +3793,12 @@
     {
       "path": "tests/integration/s10-t02.test.ts",
       "role": "factory",
-      "sha256": "50bde803442dca3e1bca9cccf162d63ce9efb536f63d64c794efaa7180d5c716"
+      "sha256": "e93e4b8ba0f3324c535e591a928bbd0ff8a7f2ad4cad47702ae1356739c2febc"
     },
     {
       "path": "tests/integration/s10-t03.test.ts",
       "role": "factory",
-      "sha256": "98051fc22c1a3ecddbd5234c9ae40f7d77630d5f98cae7984f97632f2d8cc5ed"
+      "sha256": "aa8ff0aee89163f335450a35aaf13ac08c744a6bdf6cbbf4a48f612a5d992716"
     },
     {
       "path": "tests/integration/s10-t04.test.ts",
@@ -3813,7 +3813,7 @@
     {
       "path": "tests/integration/s10-t06.test.ts",
       "role": "factory",
-      "sha256": "0239ba9a2cf7a9b689e64f2911e90169bbbe7a5696d604cadc052b758a6dcc9d"
+      "sha256": "bcfb190d18076c8565572e9b5554a35de741c6562727a2955d61b4f01370bb00"
     },
     {
       "path": "tests/integration/s10-t07.test.ts",
@@ -3823,7 +3823,7 @@
     {
       "path": "tests/integration/s10-t08.test.ts",
       "role": "factory",
-      "sha256": "5ea6a29e2979312c824211c80de14ed07da605840e3988e61a46f5bf1171c07e"
+      "sha256": "5f73ed726943e1fcbadfe8123514fe8156836e90f9557de2a6f3d24f6850ed67"
     },
     {
       "path": "tests/integration/s10-t09.test.ts",
@@ -3838,7 +3838,7 @@
     {
       "path": "tests/integration/s10-t11.test.ts",
       "role": "factory",
-      "sha256": "92bb8dc707eb25a5ee086bcffec6afd779fa7bae521b050b82b87477020c25f2"
+      "sha256": "09ceb93f3880fa5849eaeae5a7814728fd55729f96179bd5a37daeacbac0b8e5"
     },
     {
       "path": "tests/integration/s10-t12.test.ts",

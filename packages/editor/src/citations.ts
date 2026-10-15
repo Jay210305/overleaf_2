@@ -38,20 +38,26 @@ export function extractBibKeys(bibSource: string): string[] {
  */
 export function findDuplicateBibKeys(bibSource: string): DuplicateKeyReport[] {
   const lineNumbersByKey = new Map<string, number[]>();
-  const lines = bibSource.split(/\r?\n/);
-  const entryRegex = /@([a-zA-Z]+)\s*[\{\(]\s*([^,\s]+)/;
 
-  for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
-    const line = lines[lineIdx]!;
-    const match = line.match(entryRegex);
-    if (match) {
-      const type = match[1]?.toLowerCase();
-      const key = match[2]?.trim();
-      if (type && key && !["comment", "string", "preamble"].includes(type)) {
-        const existing = lineNumbersByKey.get(key) ?? [];
-        existing.push(lineIdx + 1);
-        lineNumbersByKey.set(key, existing);
-      }
+  function getLineNumber(idx: number): number {
+    let line = 1;
+    for (let i = 0; i < idx; i++) {
+      if (bibSource[i] === "\n") line++;
+    }
+    return line;
+  }
+
+  const entryRegex = /@([a-zA-Z]+)\s*[\{\(]\s*([^,\s\}]+)/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = entryRegex.exec(bibSource)) !== null) {
+    const type = match[1]?.toLowerCase();
+    const key = match[2]?.trim();
+    if (type && key && !["comment", "string", "preamble"].includes(type)) {
+      const lineNum = getLineNumber(match.index);
+      const existing = lineNumbersByKey.get(key) ?? [];
+      existing.push(lineNum);
+      lineNumbersByKey.set(key, existing);
     }
   }
 
@@ -74,28 +80,81 @@ export function findDuplicateBibKeys(bibSource: string): DuplicateKeyReport[] {
  */
 export function extractBibSummaries(bibSource: string): BibEntrySummary[] {
   const entries: BibEntrySummary[] = [];
-  const rawEntries = bibSource.split(/(?=@\w+\s*[\{\(])/);
+  const entryHeaderRegex = /@([a-zA-Z]+)\s*[\{\(]\s*([^,\s\}]+)/g;
+  let headerMatch: RegExpExecArray | null;
 
-  for (const raw of rawEntries) {
-    const headerMatch = raw.match(/@([a-zA-Z]+)\s*[\{\(]\s*([^,\s]+)/);
-    if (!headerMatch) continue;
-
+  while ((headerMatch = entryHeaderRegex.exec(bibSource)) !== null) {
     const type = headerMatch[1]?.toLowerCase() ?? "";
     const key = headerMatch[2]?.trim() ?? "";
     if (!type || !key || ["comment", "string", "preamble"].includes(type)) {
       continue;
     }
 
-    const titleMatch = raw.match(/title\s*=\s*[\{\"]([^\"\}]+)[\}\"]/i);
-    const authorMatch = raw.match(/author\s*=\s*[\{\"]([^\"\}]+)[\}\"]/i);
-    const yearMatch = raw.match(/year\s*=\s*[\{\"]?(\d{4})[\}\"]?/i);
+    // Find the end of this entry
+    let depth = 1;
+    let idx = entryHeaderRegex.lastIndex;
+    while (idx < bibSource.length && depth > 0) {
+      if (bibSource[idx] === "{") depth++;
+      else if (bibSource[idx] === "}") depth--;
+      idx++;
+    }
+    const raw = bibSource.slice(headerMatch.index, idx);
+
+    // Extract fields with brace matching
+    const fields: Record<string, string> = {};
+    const fieldNameRegex = /([a-zA-Z0-9_\-]+)\s*=\s*/g;
+    let fMatch: RegExpExecArray | null;
+    while ((fMatch = fieldNameRegex.exec(raw)) !== null) {
+      const fName = fMatch[1]!.toLowerCase();
+      let fIdx = fMatch.index + fMatch[0].length;
+      while (fIdx < raw.length && /\s/.test(raw[fIdx]!)) fIdx++;
+      if (fIdx >= raw.length) break;
+
+      let val = "";
+      if (raw[fIdx] === "{") {
+        let fDepth = 1;
+        const start = fIdx + 1;
+        fIdx++;
+        while (fIdx < raw.length && fDepth > 0) {
+          if (raw[fIdx] === "{") fDepth++;
+          else if (raw[fIdx] === "}") fDepth--;
+          fIdx++;
+        }
+        val = raw.slice(start, fIdx - 1);
+      } else if (raw[fIdx] === '"') {
+        const start = fIdx + 1;
+        fIdx++;
+        while (fIdx < raw.length && raw[fIdx] !== '"') {
+          if (raw[fIdx] === "\\" && fIdx + 1 < raw.length) fIdx++;
+          fIdx++;
+        }
+        val = raw.slice(start, fIdx);
+        fIdx++;
+      } else {
+        const start = fIdx;
+        while (
+          fIdx < raw.length &&
+          raw[fIdx] !== "," &&
+          raw[fIdx] !== "}" &&
+          raw[fIdx] !== ")" &&
+          raw[fIdx] !== "\n"
+        ) {
+          fIdx++;
+        }
+        val = raw.slice(start, fIdx).trim();
+      }
+      fields[fName] = val.trim();
+      fieldNameRegex.lastIndex = fIdx;
+    }
+
+    const yearVal = fields.year?.match(/\d{4}/)?.[0] ?? fields.year;
 
     entries.push({
       key,
       type,
-      title: titleMatch?.[1]?.trim(),
-      author: authorMatch?.[1]?.trim(),
-      year: yearMatch?.[1]?.trim(),
+      title: fields.title,
+      author: fields.author,
+      year: yearVal,
     });
   }
 

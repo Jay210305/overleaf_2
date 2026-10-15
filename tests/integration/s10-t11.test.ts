@@ -36,7 +36,8 @@ Here is an introduction with quantum mechanics.
   });
 
   it("strictly ignores inline math and display math environments", () => {
-    const text = "The equation $E = mc^2$ and \\begin{equation} x + y = z \\end{equation} are valid.";
+    const text =
+      "The equation $E = mc^2$ and \\begin{equation} x + y = z \\end{equation} are valid. Also \\[ unknownmathvar + complexsym = 0 \\] and $$ anothermathsym = 1 $$ are ignored.";
     const errors = checkSpelling(text);
     expect(errors).toEqual([]);
   });
