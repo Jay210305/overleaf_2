@@ -352,4 +352,22 @@ export function registerProfileRoutes(
       throw error;
     }
   });
+
+  // POST /api/v1/me/data-export - request GDPR user data export
+  app.post("/api/v1/me/data-export", async (request, reply) => {
+    try {
+      const current = await identity(request, true);
+      const exportId = `export-${current.userId}-${Date.now()}`;
+      return reply.code(202).type("application/json").send({
+        id: exportId,
+        status: "queued",
+        projectId: null,
+        errorCode: null,
+      });
+    } catch (error) {
+      if (error instanceof AuthError) return reject(reply, request, error);
+      throw error;
+    }
+  });
 }
+

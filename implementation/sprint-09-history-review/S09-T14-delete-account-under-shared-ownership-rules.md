@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S09-T13]
 requirements: [ACC-07, ACC-02]
 source_task: S02-T07
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T14 — Delete account under shared ownership rules
 

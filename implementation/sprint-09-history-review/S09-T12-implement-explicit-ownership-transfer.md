@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S09-T11]
 requirements: [PRO-13, COL-03]
 source_task: S03-T02
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T12 — Implement explicit ownership transfer
 

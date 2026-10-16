@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S09-T10]
 requirements: [PRO-12, PRO-09]
 source_task: S03-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T11 — Implement permission-aware bulk project actions
 

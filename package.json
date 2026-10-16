@@ -31,6 +31,7 @@
     "@latex-collab/contracts": "workspace:*",
     "@latex-collab/db": "workspace:*",
     "@latex-collab/editor": "workspace:*",
+    "@latex-collab/latex": "workspace:*",
     "@latex-collab/storage": "workspace:*",
     "@latex-collab/test-utils": "workspace:*",
     "@playwright/test": "1.64.0",
