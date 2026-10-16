@@ -11,14 +11,22 @@ import { AUTH_STATE_PATH, readSharedCsrf } from "./shared-auth.js";
 loadEnvFile(".env");
 const config = parseServerConfig(process.env);
 
-// Authenticated once per suite run (see auth.setup.ts) so browser journeys
-// share one login instead of consuming the Redis login rate-limit window.
-test.use({ storageState: AUTH_STATE_PATH });
+// The shared session is loaded explicitly per context below (see auth.setup.ts)
+// so browser journeys share one login instead of consuming the Redis
+// login rate-limit window.
 
-test("signed multi-file upload persists nodes and reports per-file errors", async ({ page }) => {
+test("signed multi-file upload persists nodes and reports per-file errors", async ({ browser }) => {
   test.setTimeout(90_000);
   const db = new DatabaseClient(config.DATABASE_URL);
-  const { userId } = readSharedCsrf();
+  const { userId, csrf } = readSharedCsrf();
+  // Shared session cookies plus the app's sessionStorage CSRF token, so UI
+  // mutations pass the CSRF guard without a per-spec login.
+  const context = await browser.newContext({ storageState: AUTH_STATE_PATH });
+  await context.addInitScript(
+    (value) => sessionStorage.setItem("csrf_token", value),
+    csrf,
+  );
+  const page = await context.newPage();
   try {
     await expect
       .poll(async () => {
