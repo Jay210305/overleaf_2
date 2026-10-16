@@ -46,7 +46,18 @@ export function registerTemplateRoutes(
         }
         const templates = listTemplates(
           typeof category === "string" && category.length > 0 ? category : undefined,
-        ).map((template) => templateViewSchema.parse(template));
+        ).map((template) =>
+          templateViewSchema.parse({
+            id: template.id,
+            title: template.title,
+            category: template.category,
+            description: template.description,
+            version: template.version,
+            manifestHash: template.manifestHash,
+            mainPath: template.mainPath,
+            files: template.files,
+          }),
+        );
         return reply.code(200).type("application/json").send({ templates });
       } catch (error) {
         return handleTemplateError(error, reply, request.id);

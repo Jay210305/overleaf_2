@@ -57,7 +57,8 @@ describe("S05-T06 template catalogue", () => {
     fireEvent.change(screen.getByTestId("template-filter"), { target: { value: "thesis" } });
     await waitFor(() => expect(screen.queryByText("Minimal article")).toBeNull());
     expect(screen.getByText("Thesis outline")).not.toBeNull();
-    expect(fetcher.mock.calls[0]![1]).toMatchObject({ credentials: "include" });
+    const [, init] = fetcher.mock.calls[0] as unknown as [string, RequestInit];
+    expect(init).toMatchObject({ credentials: "include" });
   });
 
   it("instantiates a template with a title and reports the project", async () => {
