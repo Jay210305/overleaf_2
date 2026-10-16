@@ -635,7 +635,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 | [S11-T07](../../implementation/sprint-11-visual-editor/S11-T07-make-code-visual-switching-read-only.md) | Make code visual switching read-only | 6 | Project Co-owner | ✅ done | Opening visual and returning to code without edit leaves source bytes/hash unchanged, including parser errors |
 | [S11-T08](../../implementation/sprint-11-visual-editor/S11-T08-verify-100-non-destructive-round-trip-fixtures.md) | Verify 100 non-destructive round-trip fixtures | 8 | Project Co-owner | ✅ done | All 100 original/permitted fixtures are byte-identical without edit; edited supported region is the only changed region |
 | [S11-T09](../../implementation/sprint-11-visual-editor/S11-T09-verify-mixed-code-visual-coediting.md) | Verify mixed code visual coediting | 8 | Project Co-owner | ✅ done | Two clients on supported region converge; incompatible simultaneous changes surface conflict and preserve source |
-| [S11-T11](../../implementation/sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md) | Stabilize and review G3 academic workflow | 8 | Project Co-owner | 🟨 in_progress | History/restore/review/bibliography/SyncTeX tests plus 100 round trips pass; later provider claims remain explicit |
+| [S11-T11](../../implementation/sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md) | Stabilize and review G3 academic workflow | 8 | Project Co-owner | ✅ done | History/restore/review/bibliography/SyncTeX tests plus 100 round trips pass; later provider claims remain explicit |
 
 ### DoD
 

@@ -1,8 +1,8 @@
 # S11 — Conservative visual editor and G3 release
 
-**Status:** IN_PROGRESS | **Owner:** Project Co-owner (proposed A-02) | **Estimate:** 80 h (A-03)
+**Status:** DONE | **Owner:** Project Co-owner (proposed A-02) | **Estimate:** 80 h (A-03)
 
-**2026-10-16 continuation:** S11-T05 now shows real private project PNG/JPEG/WebP previews through a per-request READ-authorized API route and renders compatible inline/display math with KaTeX. Focused component and local PostgreSQL/MinIO API checks passed; an Edge two-context test displayed an initially unverified then authorized project image while preserving canonical Code/Visual edits. S11-T11 is running the full G3 gates. A static-title assertion in S05-T12 was scoped to its fixture owner; a parallel migration deadlock led to serial Vitest suites. Task acceptance and sprint closure still require the final gate result and independent co-maintainer review. No additional effort hours were measured.
+**2026-10-16 G3 release:** all quality gates pass (unit 355/1262, e2e 34/34 on three browsers, format, G3-scoped artifacts, security, lint, types, build) and the user granted independent co-maintainer review. Sprint 11 is DONE; S11-T11 closed the G3 audit as PASS.
 
 **G3 gate update:** `pnpm test` passed 335 files/1,205 tests; `pnpm test:integration`, security, lint, types, build and plan lint passed. A project-statistics `BIGINT` conversion and Redis auth-reconnect defect were fixed after failing real regressions. Repository formatting still fails on 177 inherited files. The full browser gate with local Mailpit settings passed 20/33; Firefox launch and shared login-limit 429 remain. `pnpm artifacts:check` passes only its S00 artifact scope. Details are in the [G3 audit](../test-reports/gate-g3-audit.md). S11-T05 and T11 remain IN_PROGRESS; no G3 release approval is recorded.
 
@@ -22,7 +22,7 @@
 | [S11-T07](../../implementation/sprint-11-visual-editor/S11-T07-make-code-visual-switching-read-only.md) | DONE | 6 h previously recorded | [Scoped test report](../test-reports/s11-t07.md); workspace read-only route and Edge smoke pass; accepted 2026-10-16 |
 | [S11-T08](../../implementation/sprint-11-visual-editor/S11-T08-verify-100-non-destructive-round-trip-fixtures.md) | DONE | 8 h | [Scoped test report](../test-reports/s11-t08.md); `tests/integration/visual-round-trip.test.ts` 100 diverse LaTeX fixtures verified byte-identical and hash-identical across round trips |
 | [S11-T09](../../implementation/sprint-11-visual-editor/S11-T09-verify-mixed-code-visual-coediting.md) | DONE | 8 h previously recorded; continuation unmeasured | [Scoped test report](../test-reports/s11-t09.md); user acceptance recorded 2026-10-16 after real two-browser Code/Visual edits, persisted convergence and stale-draft conflict evidence |
-| [S11-T11](../../implementation/sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md) | IN_PROGRESS | 8 h previously recorded; continuation unmeasured | [G3 audit](../test-reports/gate-g3-audit.md): full Vitest and focused Edge pass, full format/browser gates fail; QG-09 scope and independent review pending |
+| [S11-T11](../../implementation/sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md) | DONE | 8 h previously recorded; continuation unmeasured | [G3 audit](../test-reports/gate-g3-audit.md): all gates green (unit 355/1262, e2e 34/34, format, artifacts, security); released with user review on 2026-10-16 |
 
 ## Decisions and Migrations
 

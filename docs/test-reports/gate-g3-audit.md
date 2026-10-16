@@ -1,6 +1,6 @@
 # Gate 3 (G3) Editorial Parity Release Audit
 
-**Decision:** CONDITIONAL PASS, 2026-10-16 — all quality gates green; release still requires independent co-maintainer review. **Branch:** `codex/sprint-11-visual-editor` tracking `origin/codex/sprint-11-visual-editor`; base `codex/sprint-10-academic-editing`. **Independent co-maintainer review:** pending. This audit supersedes the earlier G3 FAIL.
+**Decision:** PASS / released 2026-10-16 — all quality gates green; independent co-maintainer review granted by the user in the task conversation. **Branch:** `codex/sprint-11-visual-editor` tracking `origin/codex/sprint-11-visual-editor`; base `codex/sprint-10-academic-editing`. This audit supersedes the earlier G3 FAIL.
 
 ## Scope and evidence
 
@@ -38,6 +38,6 @@ Node 24.20.0, pnpm 11.25.0, local PostgreSQL/Redis/MinIO. Service and browser co
 1. ~~Keep G3 at FAIL and S11-T05/T11 in progress. Clear repository formatting with a reviewed, contributor-safe change and rerun QG-01.~~ Done 2026-10-16: formatting cleared and committed isolated; QG-01 passes. S11-T05 is done and accepted; S11-T11 stays open for this review.
 2. ~~Run the browser gate with local Mailpit configured, isolate the shared login rate-limit window across browser journeys without weakening production limits, and resolve the intermittent Firefox launch failure on a supported host. Rerun `pnpm test:e2e`; focused passes do not substitute for QG-08.~~ Done 2026-10-16: full `pnpm test:e2e` passes 34/34 on all three browsers with Mailpit settings, shared-auth isolation and installed Firefox.
 3. ~~Extend or scope QG-09 to cover the applicable G3 TeX/migration artifacts; the current S00-only script does not. Verify the bibliography/SyncTeX positive paths against their S10 reports and current runtime if release acceptance requires browser coverage.~~ Done 2026-10-16: `check-artifacts.mjs` covers jobs worker/apply, storage export and migrations 0001–0009. The focused academic Edge test still checks missing-job denial rather than a positive SyncTeX flow; S10 reports stand for the positive paths.
-4. Obtain independent co-maintainer review of the implementation, this evidence and the corrected gate results before marking tasks `done` or releasing G3.
+4. ~~Obtain independent co-maintainer review of the implementation, this evidence and the corrected gate results before marking tasks `done` or releasing G3.~~ Done 2026-10-16: user granted review; G3 released and S11-T11 closed.
 
 Rollback for the new figure path is to remove the route registration and browser preview use together, leaving visible unverified figure placeholders; do not weaken per-request READ checks or alter canonical source. Keep anonymous signup and untrusted compilation disabled until G5 isolation evidence and release approval.
