@@ -24,6 +24,7 @@ import { registerBulkProjectRoutes } from "./modules/projects/bulk.js";
 
 import { registerOwnershipRoutes } from "./modules/projects/ownership.js";
 import { registerTagRoutes } from "./modules/tags/routes.js";
+import { registerTemplateRoutes } from "./modules/templates/routes.js";
 import { registerTreeRoutes } from "./modules/files/tree.js";
 import { registerFigurePreviewRoute } from "./modules/files/figure-preview.js";
 import { registerBinaryDownloadRoutes } from "./modules/files/binary-download.js";
@@ -210,6 +211,7 @@ export function createServer(options: ServerOptions) {
     });
     registerFigurePreviewRoute(app, { db: options.db, storage: options.storage });
     registerBinaryDownloadRoutes(app, { db: options.db, storage: options.storage });
+    registerTemplateRoutes(app, { db: options.db });
     registerTextRoutes(app, {
       db: options.db,
       origin: options.origin,

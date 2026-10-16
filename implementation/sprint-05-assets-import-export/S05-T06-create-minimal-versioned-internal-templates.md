@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T05]
 requirements: [PRO-02, PRO-11]
 source_task: S05-T06
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: ready
 ---
 # S05-T06 — Create minimal versioned internal templates
 

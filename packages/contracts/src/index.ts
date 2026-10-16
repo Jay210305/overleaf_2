@@ -627,6 +627,40 @@ export const visualPatchResultSchema = z.strictObject({
 });
 export type VisualPatchResult = z.infer<typeof visualPatchResultSchema>;
 
+export const templateFileSchema = z.strictObject({
+  path: z.string().min(1).max(1000),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/),
+  sizeBytes: z.number().int().min(0),
+  mime: z.string().min(1).max(128),
+});
+export type TemplateFile = z.infer<typeof templateFileSchema>;
+
+export const templateViewSchema = z.strictObject({
+  id: z.string().min(1).max(64),
+  title: z.string().min(1).max(200),
+  category: z.string().min(1).max(64),
+  description: z.string().min(1).max(2000),
+  version: z.string().regex(/^\d+\.\d+\.\d+$/),
+  manifestHash: z.string().regex(/^[a-f0-9]{64}$/),
+  mainPath: z.string().min(1).max(1000),
+  files: z.array(templateFileSchema),
+});
+export type TemplateView = z.infer<typeof templateViewSchema>;
+
+export const templateInstantiateSchema = z.strictObject({
+  title: z.string().trim().min(1).max(300),
+});
+export type TemplateInstantiateInput = z.infer<typeof templateInstantiateSchema>;
+
+export const templateInstantiationViewSchema = z.strictObject({
+  id: z.string().uuid(),
+  title: z.string(),
+  templateId: z.string().min(1).max(64),
+  templateVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+  mainFileId: z.string().uuid(),
+});
+export type TemplateInstantiationView = z.infer<typeof templateInstantiationViewSchema>;
+
 export * from "./storage.js";
 export * from "./executor.js";
 
