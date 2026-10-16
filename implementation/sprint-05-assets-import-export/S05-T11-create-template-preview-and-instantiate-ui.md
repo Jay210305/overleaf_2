@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T06]
 requirements: [PRO-11, PRO-02]
 source_task: S05-T06
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: ready
 ---
 # S05-T11 — Create template preview and instantiate UI
 

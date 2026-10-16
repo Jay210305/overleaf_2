@@ -652,6 +652,24 @@ export const templateInstantiateSchema = z.strictObject({
 });
 export type TemplateInstantiateInput = z.infer<typeof templateInstantiateSchema>;
 
+export const templateDetailViewSchema = z.strictObject({
+  id: z.string().min(1).max(64),
+  title: z.string().min(1).max(200),
+  category: z.string().min(1).max(64),
+  description: z.string().min(1).max(2000),
+  version: z.string().regex(/^\d+\.\d+\.\d+$/),
+  manifestHash: z.string().regex(/^[a-f0-9]{64}$/),
+  mainPath: z.string().min(1).max(1000),
+  files: z.array(templateFileSchema),
+  contents: z.array(
+    z.strictObject({
+      path: z.string().min(1).max(1000),
+      content: z.string().max(1024 * 1024),
+    }),
+  ),
+});
+export type TemplateDetailView = z.infer<typeof templateDetailViewSchema>;
+
 export const templateInstantiationViewSchema = z.strictObject({
   id: z.string().uuid(),
   title: z.string(),

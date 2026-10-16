@@ -1,5 +1,6 @@
 import type { FastifyInstance, FastifyReply } from "fastify";
 import {
+  templateDetailViewSchema,
   templateInstantiateSchema,
   templateViewSchema,
   type TemplateInstantiationView,
@@ -59,6 +60,45 @@ export function registerTemplateRoutes(
           }),
         );
         return reply.code(200).type("application/json").send({ templates });
+      } catch (error) {
+        return handleTemplateError(error, reply, request.id);
+      }
+    },
+  );
+
+  app.get(
+    "/api/v1/templates/:templateId",
+    { config: { sessionOnly: true } },
+    async (request, reply) => {
+      try {
+        if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
+        const identity = request.sessionIdentity as { userId: string } | undefined;
+        if (!identity) throw new AuthError(401, "AUTHENTICATION_REQUIRED");
+        const { templateId } = request.params as { templateId: string };
+        if (typeof templateId !== "string" || templateId.length === 0 || templateId.length > 64) {
+          throw new AuthError(404, "RESOURCE_NOT_FOUND");
+        }
+        const template = getTemplate(templateId);
+        if (!template) throw new AuthError(404, "RESOURCE_NOT_FOUND");
+        // Internal sources are identical for every actor, so the detail is
+        // safe to serve to any authenticated session; per-project binaries
+        // are never part of a template and stay behind their own READ gates.
+        return reply.code(200).type("application/json").send(
+          templateDetailViewSchema.parse({
+            id: template.id,
+            title: template.title,
+            category: template.category,
+            description: template.description,
+            version: template.version,
+            manifestHash: template.manifestHash,
+            mainPath: template.mainPath,
+            files: template.files,
+            contents: template.filesWithContent.map((file) => ({
+              path: file.path,
+              content: file.content,
+            })),
+          }),
+        );
       } catch (error) {
         return handleTemplateError(error, reply, request.id);
       }
