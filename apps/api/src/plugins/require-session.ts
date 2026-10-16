@@ -120,7 +120,8 @@ export function installProjectGuard(
     // projectAction, otherwise the guard denies it.
     if (
       !request.url.startsWith("/api/v1/projects/") &&
-      !request.url.startsWith("/api/v1/templates")
+      !request.url.startsWith("/api/v1/templates") &&
+      !request.url.startsWith("/api/v1/integrations")
     )
       return;
     try {

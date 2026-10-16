@@ -401,3 +401,15 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Scope:** Completed the S08-T10 stabilization audit on evidence head `14b4a06`: all G2 checklist items PASS, shared gates green (unit 355/1262, integration 3/3, e2e 34/34, lint/typecheck/build/security/format/plan-lint/artifacts), GAP-29/GAP-30 closed, carried debt recorded (GAP-15 migration ordering, session-revocation propagation + invalidation-subscriber hardening, XSS option, GAP-12 OpenAPI parity, protocol-level five-client note).
 - **Change:** Rewrote [gate-g2-audit](../test-reports/gate-g2-audit.md) verdict/verification/limits and [s08-t10](../test-reports/s08-t10.md); reconciled stale `review pending` headers in s08-t06/07/08 reports, [sprint-08](sprint-08.md) risks/next-task, COL-04/05/06/07/13 evidence and GAP-29/30. S08-T01–T09 frontmatter already `done`; S08-T10 stays `in_progress` until co-maintainer review.
 - **Effort:** Not measured. **Next:** user acceptance of the G2 audit flips S08-T10, sprint-08 and COL-04/05/06/07 to DONE.
+
+### 2026-10-16 — Sprint 12 start on `codex/sprint-12-github-sync`
+
+- **Scope:** Committed the G2 docs (`0555e8d`) and pushed `main`; created and published `codex/sprint-12-github-sync` from `0555e8d`. Started S12-T01 (deps S09-T14/S11-T11 done; `superpowers:test-driven-development` unavailable in this session, task's own test-first steps followed).
+- **Change:** New `apps/api/src/modules/integrations/github-auth.ts` (PKCE/state/replay/revocation, AES-256-GCM server-held tokens, explicit CREDENTIALS_MISSING when unconfigured), contract DTOs, server/main wiring with no new required env, 3 test files (12 tests), [report](../test-reports/s12-t01.md). S12-T01 `in_progress`/`ready`; sprint-12 IN_PROGRESS.
+- **Effort:** Not measured. **Next:** run scoped suites + shared gates outside the sandbox, then co-maintainer review.
+
+### 2026-10-16 — S12-T01 full rerun and acceptance
+
+- **Rerun:** Scoped 12/12, full `pnpm test` 387/1361 with 100% coverage, integration 3/3, typecheck/lint/build/format/security/artifacts/plan_lint/map all PASS. Found and repaired a real HEAD regression: the S11 merge reintroduced unformatted S08-side hunks (15 files, reflow-only fix) plus 3 new S12 files.
+- **Acceptance:** User granted independent co-maintainer review; S12-T01 done. INT-05 evidence updated (feature stays IN_PROGRESS); NFR-10 evidence stands via the S12-T01 log/payload audit.
+- **Effort:** Not measured. **Next:** S12-T02 link authorized repository and branch.

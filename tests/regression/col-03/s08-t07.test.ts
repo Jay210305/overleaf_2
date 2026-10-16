@@ -106,22 +106,25 @@ describe("S08-T07 role enforcement on comment, reply and chat writes (COL-03)", 
     expect(response.statusCode).toBe(201);
   });
 
-  it.each(["owner", "editor", "reviewer"] as const)("allows %s reply and chat writes", async (who) => {
-    const reply = await fixture.app.inject({
-      method: "POST",
-      url: `/api/v1/projects/${projectId}/comments/${commentId}/replies`,
-      headers: await headers(users[who].email),
-      payload: { body: `${who} reply` },
-    });
-    expect(reply.statusCode).toBe(201);
-    const chat = await fixture.app.inject({
-      method: "POST",
-      url: `/api/v1/projects/${projectId}/chat/messages`,
-      headers: await headers(users[who].email),
-      payload: { body: `${who} chat` },
-    });
-    expect(chat.statusCode).toBe(201);
-  });
+  it.each(["owner", "editor", "reviewer"] as const)(
+    "allows %s reply and chat writes",
+    async (who) => {
+      const reply = await fixture.app.inject({
+        method: "POST",
+        url: `/api/v1/projects/${projectId}/comments/${commentId}/replies`,
+        headers: await headers(users[who].email),
+        payload: { body: `${who} reply` },
+      });
+      expect(reply.statusCode).toBe(201);
+      const chat = await fixture.app.inject({
+        method: "POST",
+        url: `/api/v1/projects/${projectId}/chat/messages`,
+        headers: await headers(users[who].email),
+        payload: { body: `${who} chat` },
+      });
+      expect(chat.statusCode).toBe(201);
+    },
+  );
 
   it("denies every viewer write with 403 and preserves state", async () => {
     const viewerHeaders = await headers(users.viewer.email);

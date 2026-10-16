@@ -71,7 +71,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | INT-02 | G3 | Should | DONE | [S10-T03 BibTeX reference search by key, title, author, DOI, year](test-reports/s10-t03.md) |
 | INT-03 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-04 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| INT-05 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| INT-05 | G4 | Could | IN_PROGRESS | [S12-T01 credential handling accepted](test-reports/s12-t01.md) with link-only capabilities; repo/branch linking and pull/push guards are S12-T02..T04 work |
 | INT-06 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-07 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-08 | G3 | Should | DONE | [S10-T03 safe BibTeX normalization preserving raw source by default](test-reports/s10-t03.md) |

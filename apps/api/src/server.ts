@@ -51,6 +51,12 @@ import { registerChatEvents } from "./modules/chat/events.js";
 import { registerNotificationRoutes } from "./modules/notifications/mentions.js";
 import { registerSynctexRoutes } from "./modules/synctex/routes.js";
 import { registerSearchRoutes } from "./modules/search/routes.js";
+import {
+  registerGitHubAuthRoutes,
+  type ExchangeCode,
+  type GitHubOAuthConfig,
+  type RevokeToken,
+} from "./modules/integrations/github-auth.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -92,6 +98,13 @@ export interface ServerOptions {
   rateLimiter?: AuthRateLimiter | undefined;
   ticketStore?: TicketStore | undefined;
   collabInvalidation?: CollabInvalidationPublisher | undefined;
+  githubAuth?:
+    | {
+        config?: GitHubOAuthConfig | undefined;
+        exchangeCode?: ExchangeCode | undefined;
+        revokeToken?: RevokeToken | undefined;
+      }
+    | undefined;
 }
 export function createServer(options: ServerOptions) {
   const app = Fastify({
@@ -300,6 +313,7 @@ export function createServer(options: ServerOptions) {
       db: options.db,
       storage: options.storage,
     });
+    registerGitHubAuthRoutes(app, { db: options.db, githubAuth: options.githubAuth });
   }
   return app;
 }

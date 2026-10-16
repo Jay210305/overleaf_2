@@ -667,7 +667,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S12-T01](../../implementation/sprint-12-github-sync/S12-T01-implement-github-oauth-credential-handling.md) | Implement GitHub OAuth credential handling | 8 | Julio | ⬜ todo | PKCE/state/replay/revocation and encrypted server-held tokens pass; browser/logs contain no provider token |
+| [S12-T01](../../implementation/sprint-12-github-sync/S12-T01-implement-github-oauth-credential-handling.md) | Implement GitHub OAuth credential handling | 8 | Julio | ✅ done | PKCE/state/replay/revocation and encrypted server-held tokens pass; browser/logs contain no provider token |
 | [S12-T02](../../implementation/sprint-12-github-sync/S12-T02-link-authorized-repository-and-branch.md) | Link authorized repository and branch | 8 | Julio | ⬜ todo | Explicit import-new versus pair-existing compares manifests and records remote ref without destructive initial merge |
 | [S12-T03](../../implementation/sprint-12-github-sync/S12-T03-pull-using-checkpoint-and-base-sha.md) | Pull using checkpoint and base SHA | 8 | Julio | ⬜ todo | Pull validates paths and base, snapshots local state and surfaces concurrent local/remote/binary conflicts |
 | [S12-T08](../../implementation/sprint-12-github-sync/S12-T08-apply-remote-changes-through-live-canonical-service.md) | Apply remote changes through live canonical service | 8 | Julio | ⬜ todo | Pull mutation is authorized through canonical text service, emits invalidations, preserves metadata and reports detached anchors |

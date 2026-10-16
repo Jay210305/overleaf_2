@@ -25,10 +25,7 @@ test("project and file tree journey: create, mutate tree, reload persistence, an
   // mutations pass the CSRF guard without a per-spec login.
   const { csrf } = readSharedCsrf();
   const context = await browser.newContext({ storageState: AUTH_STATE_PATH });
-  await context.addInitScript(
-    (value) => sessionStorage.setItem("csrf_token", value),
-    csrf,
-  );
+  await context.addInitScript((value) => sessionStorage.setItem("csrf_token", value), csrf);
   const page = await context.newPage();
 
   // Ensure database migrations and health

@@ -38,10 +38,10 @@ describe("S08-T07 comment and chat safety", () => {
       [projectId, owner.id],
       [otherProjectId, owner.id],
     ] as const) {
-      await fixture.db.query("INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Safety')", [
-        id,
-        ownerId,
-      ]);
+      await fixture.db.query(
+        "INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Safety')",
+        [id, ownerId],
+      );
     }
     await fixture.db.query(
       "INSERT INTO project_members (project_id, user_id, role) VALUES ($1, $2, 'REVIEWER'), ($1, $3, 'VIEWER')",
@@ -102,10 +102,24 @@ describe("S08-T07 comment and chat safety", () => {
     const viewerHeaders = await headers(viewer.email);
     const outsiderHeaders = await headers(outsider.email);
     expect(
-      (await fixture.app.inject({ method: "POST", url: `/api/v1/projects/${projectId}/comments`, headers: viewerHeaders, payload: anchor("viewer comment") })).statusCode,
+      (
+        await fixture.app.inject({
+          method: "POST",
+          url: `/api/v1/projects/${projectId}/comments`,
+          headers: viewerHeaders,
+          payload: anchor("viewer comment"),
+        })
+      ).statusCode,
     ).toBe(403);
     expect(
-      (await fixture.app.inject({ method: "POST", url: `/api/v1/projects/${projectId}/comments`, headers: outsiderHeaders, payload: anchor("outsider comment") })).statusCode,
+      (
+        await fixture.app.inject({
+          method: "POST",
+          url: `/api/v1/projects/${projectId}/comments`,
+          headers: outsiderHeaders,
+          payload: anchor("outsider comment"),
+        })
+      ).statusCode,
     ).toBe(404);
     const created = await fixture.app.inject({
       method: "POST",

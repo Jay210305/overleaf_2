@@ -117,8 +117,7 @@ export function registerProjectMemberRoutes(
   options: { db: DatabaseClient; collabInvalidation?: CollabInvalidationPublisher | undefined },
 ): void {
   const { db } = options;
-  const publish =
-    options.collabInvalidation ?? noopCollabInvalidationPublisher();
+  const publish = options.collabInvalidation ?? noopCollabInvalidationPublisher();
   const path = "/api/v1/projects/:projectId/members";
   const ownerOnly = { config: { projectAction: "MANAGE_MEMBERS" } } as const;
 
@@ -181,7 +180,10 @@ export function registerProjectMemberRoutes(
       await publish
         .publish({ type: "role_changed", userId, projectId: auth.projectId, newRole: member.role })
         .catch((error: unknown) => {
-          request.log.warn({ requestId: request.id, reason: error instanceof Error ? error.message : "unknown" }, "Collab role invalidation not delivered");
+          request.log.warn(
+            { requestId: request.id, reason: error instanceof Error ? error.message : "unknown" },
+            "Collab role invalidation not delivered",
+          );
         });
       return reply.send(member);
     } catch (error) {
@@ -212,7 +214,10 @@ export function registerProjectMemberRoutes(
       await publish
         .publish({ type: "member_removed", userId, projectId: auth.projectId })
         .catch((error: unknown) => {
-          request.log.warn({ requestId: request.id, reason: error instanceof Error ? error.message : "unknown" }, "Collab removal invalidation not delivered");
+          request.log.warn(
+            { requestId: request.id, reason: error instanceof Error ? error.message : "unknown" },
+            "Collab removal invalidation not delivered",
+          );
         });
       return reply.code(204).send();
     } catch (error) {

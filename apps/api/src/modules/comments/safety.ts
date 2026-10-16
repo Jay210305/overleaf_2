@@ -7,9 +7,11 @@ export const MAX_BODY_LENGTH = 10_000;
 export const COMMENT_CREATE_LIMIT = 30;
 export const COMMENT_CREATE_WINDOW_SECONDS = 300;
 
-const FORBIDDEN_TAG = /<\s*\/?\s*(script|style|iframe|object|embed|form|input|button|select|textarea|link|meta|base|frame|frameset|applet)\b/i;
+const FORBIDDEN_TAG =
+  /<\s*\/?\s*(script|style|iframe|object|embed|form|input|button|select|textarea|link|meta|base|frame|frameset|applet)\b/i;
 const EVENT_HANDLER_ATTR = /<[^>]*\bon[a-z]+\s*=/i;
-const DANGEROUS_URL_ATTR = /<[^>]*(?:href|src|xlink:href)\s*=\s*["']?\s*(javascript|data|vbscript)\s*:/i;
+const DANGEROUS_URL_ATTR =
+  /<[^>]*(?:href|src|xlink:href)\s*=\s*["']?\s*(javascript|data|vbscript)\s*:/i;
 const MARKDOWN_UNSAFE_DESTINATION = /\[[^\]]*\]\(\s*<?\s*(javascript|data|vbscript)\s*:/i;
 const REFERENCE_DEFINITION = /^\s*\[[^\]]+\]\s*:\s*(javascript|data|vbscript)\s*:/im;
 

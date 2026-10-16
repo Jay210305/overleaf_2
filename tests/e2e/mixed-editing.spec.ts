@@ -48,7 +48,10 @@ test("two browser editors converge through the persistent collaboration socket",
   try {
     const csrf = await Promise.all(
       contexts.map(async (context) => {
-        await context.addInitScript((value) => sessionStorage.setItem("csrf_token", value), sharedCsrf);
+        await context.addInitScript(
+          (value) => sessionStorage.setItem("csrf_token", value),
+          sharedCsrf,
+        );
         return sharedCsrf;
       }),
     );

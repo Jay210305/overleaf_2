@@ -61,10 +61,10 @@ describe("S08-T08 sharing revocation closes collaboration access", () => {
     member = await fixture.seed();
     linked = await fixture.seed();
     projectId = randomUUID();
-    await fixture.db.query("INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Revocation')", [
-      projectId,
-      owner.id,
-    ]);
+    await fixture.db.query(
+      "INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Revocation')",
+      [projectId, owner.id],
+    );
     await fixture.db.query(
       "INSERT INTO project_members (project_id, user_id, role) VALUES ($1, $2, 'EDITOR')",
       [projectId, member.id],

@@ -28,10 +28,10 @@ describe("S08-T08 invitation lifecycle denials (COL-04)", () => {
     projectId = randomUUID();
     otherProjectId = randomUUID();
     for (const id of [projectId, otherProjectId]) {
-      await fixture.db.query("INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Invite lifecycle')", [
-        id,
-        owner.id,
-      ]);
+      await fixture.db.query(
+        "INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Invite lifecycle')",
+        [id, owner.id],
+      );
     }
   });
 

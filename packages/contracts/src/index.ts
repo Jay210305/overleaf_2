@@ -876,5 +876,33 @@ export const templateInstantiationViewSchema = z.strictObject({
 });
 export type TemplateInstantiationView = z.infer<typeof templateInstantiationViewSchema>;
 
+export const githubConnectionViewSchema = z.strictObject({
+  id: z.string().uuid(),
+  provider: z.literal("github"),
+  scopes: z.array(z.string().min(1).max(64)),
+  status: z.string().min(1).max(32),
+  createdAt: z.string().min(1),
+});
+export type GitHubConnectionView = z.infer<typeof githubConnectionViewSchema>;
+
+export const githubOAuthStartResponseSchema = z.strictObject({
+  authorizationUrl: z.string().min(1).max(2000),
+  state: z.string().min(32).max(128),
+});
+export type GitHubOAuthStartResponse = z.infer<typeof githubOAuthStartResponseSchema>;
+
+export const githubOAuthCallbackSchema = z.strictObject({
+  code: z.string().min(1).max(512),
+  state: z.string().min(32).max(128),
+});
+export type GitHubOAuthCallbackInput = z.infer<typeof githubOAuthCallbackSchema>;
+
+export const githubOAuthStatusSchema = z.strictObject({
+  connected: z.boolean(),
+  connectionId: z.string().uuid().optional(),
+  scopes: z.array(z.string().min(1).max(64)).optional(),
+});
+export type GitHubOAuthStatus = z.infer<typeof githubOAuthStatusSchema>;
+
 export * from "./storage.js";
 export * from "./executor.js";

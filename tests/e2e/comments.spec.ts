@@ -148,10 +148,10 @@ test("deleted comment range shows a detached reason instead of moving", async ({
       [email, passwordHash],
     );
     const userId = user.rows[0]!.id;
-    await db.query("INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Detached project')", [
-      projectId,
-      userId,
-    ]);
+    await db.query(
+      "INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Detached project')",
+      [projectId, userId],
+    );
     await db.query(
       "INSERT INTO project_nodes (id, project_id, name, kind, mime, content_kind) VALUES ($1, $2, 'main.tex', 'FILE', 'text/x-tex', 'TEXT')",
       [fileId, projectId],

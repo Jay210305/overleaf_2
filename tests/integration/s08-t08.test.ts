@@ -122,10 +122,10 @@ describe("S08-T08 sharing revocation and detached anchors", () => {
       payload: { token },
     });
     expect(expired.statusCode).toBe(410);
-    const membership = await fixture.db.query("SELECT user_id FROM project_members WHERE project_id = $1 AND user_id = $2", [
-      projectId,
-      invited.id,
-    ]);
+    const membership = await fixture.db.query(
+      "SELECT user_id FROM project_members WHERE project_id = $1 AND user_id = $2",
+      [projectId, invited.id],
+    );
     expect(membership.rows).toHaveLength(0);
   });
 
@@ -183,7 +183,11 @@ describe("S08-T08 sharing revocation and detached anchors", () => {
       method: "POST",
       url: `/api/v1/projects/${projectId}/share-links`,
       headers: ownerHeaders,
-      payload: { role: "VIEWER", expiresAt: new Date(Date.now() + 3_600_000).toISOString(), maxUses: 1 },
+      payload: {
+        role: "VIEWER",
+        expiresAt: new Date(Date.now() + 3_600_000).toISOString(),
+        maxUses: 1,
+      },
     });
     expect(created.statusCode).toBe(201);
     expect(JSON.stringify(created.json().link)).not.toContain(created.json().token);
@@ -216,9 +220,10 @@ describe("S08-T08 sharing revocation and detached anchors", () => {
     const expiringToken = expiring.json().token as string;
     const expiringId = expiring.json().link.id as string;
     expect(expiring.statusCode).toBe(201);
-    await fixture.db.query("UPDATE share_links SET created_at = NOW() - INTERVAL '2 minutes', expires_at = NOW() - INTERVAL '1 second' WHERE id = $1", [
-      expiringId,
-    ]);
+    await fixture.db.query(
+      "UPDATE share_links SET created_at = NOW() - INTERVAL '2 minutes', expires_at = NOW() - INTERVAL '1 second' WHERE id = $1",
+      [expiringId],
+    );
     expect(
       (
         await app.inject({
@@ -330,10 +335,10 @@ describe("S08-T08 sharing revocation and detached anchors", () => {
       "INSERT INTO crdt_updates (file_id, seq, actor_user_id, payload_bytes) VALUES ($1, $2, $3, $4)",
       [fileId, next, owner.id, Buffer.from(Y.encodeStateAsUpdate(doc))],
     );
-    await fixture.db.query(
-      "UPDATE text_documents SET last_persisted_seq = $2 WHERE file_id = $1",
-      [fileId, next],
-    );
+    await fixture.db.query("UPDATE text_documents SET last_persisted_seq = $2 WHERE file_id = $1", [
+      fileId,
+      next,
+    ]);
     const listed = await app.inject({
       method: "GET",
       url: `/api/v1/projects/${projectId}/comments`,

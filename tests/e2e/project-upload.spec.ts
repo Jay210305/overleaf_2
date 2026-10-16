@@ -22,10 +22,7 @@ test("signed multi-file upload persists nodes and reports per-file errors", asyn
   // Shared session cookies plus the app's sessionStorage CSRF token, so UI
   // mutations pass the CSRF guard without a per-spec login.
   const context = await browser.newContext({ storageState: AUTH_STATE_PATH });
-  await context.addInitScript(
-    (value) => sessionStorage.setItem("csrf_token", value),
-    csrf,
-  );
+  await context.addInitScript((value) => sessionStorage.setItem("csrf_token", value), csrf);
   const page = await context.newPage();
   try {
     await expect

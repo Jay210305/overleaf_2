@@ -14,10 +14,10 @@ describe("S08-T08 share-link lifecycle denials (COL-05)", () => {
     projectId = randomUUID();
     otherProjectId = randomUUID();
     for (const id of [projectId, otherProjectId]) {
-      await fixture.db.query("INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Link lifecycle')", [
-        id,
-        owner.id,
-      ]);
+      await fixture.db.query(
+        "INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Link lifecycle')",
+        [id, owner.id],
+      );
     }
   });
 

@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { containsUnsafeMarkdown, assertSafeBody } from "../../../apps/api/src/modules/comments/safety.js";
+import {
+  containsUnsafeMarkdown,
+  assertSafeBody,
+} from "../../../apps/api/src/modules/comments/safety.js";
 import { AuthError } from "../../../apps/api/src/modules/auth/errors.js";
 
 const unsafeCorpus = [

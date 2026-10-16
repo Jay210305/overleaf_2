@@ -7,6 +7,7 @@ import { MemoryTicketStore } from "./modules/collab/ticket.js";
 import { CollabServer } from "@latex-collab/collab";
 import { createRedisAuthRateLimiter } from "./plugins/rate-limit.js";
 import { createRedisCollabInvalidationPublisher } from "./modules/collab/invalidation.js";
+import { githubAuthConfigFromEnv } from "./modules/integrations/github-auth.js";
 import { processAvatarCleanup } from "./modules/account/avatar.js";
 import {
   createSmtpVerificationSender,
@@ -36,6 +37,7 @@ async function main() {
     collabInvalidation,
     storage,
     ticketStore,
+    githubAuth: { config: githubAuthConfigFromEnv(process.env) },
     sendVerification:
       config.SMTP_URL && config.EMAIL_FROM
         ? createSmtpVerificationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)

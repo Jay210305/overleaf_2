@@ -29,10 +29,10 @@ describe("S08-T08 resolve, permission-aware delete and detached view (COL-06)", 
     fileId = randomUUID();
     doc = new Y.Doc();
     doc.getText("content").insert(0, "Deletable anchored paragraph");
-    await fixture.db.query("INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Delete guard')", [
-      projectId,
-      owner.id,
-    ]);
+    await fixture.db.query(
+      "INSERT INTO projects (id, owner_id, title) VALUES ($1, $2, 'Delete guard')",
+      [projectId, owner.id],
+    );
     await fixture.db.query(
       "INSERT INTO project_members (project_id, user_id, role) VALUES ($1, $2, 'REVIEWER'), ($1, $3, 'REVIEWER')",
       [projectId, author.id, stranger.id],

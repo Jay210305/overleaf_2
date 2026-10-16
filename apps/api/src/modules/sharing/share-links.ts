@@ -246,7 +246,10 @@ export function registerShareLinkRoutes(
             .publish({ type: "member_removed", userId: row.user_id, projectId: auth.projectId })
             .catch((error: unknown) => {
               request.log.warn(
-                { requestId: request.id, reason: error instanceof Error ? error.message : "unknown" },
+                {
+                  requestId: request.id,
+                  reason: error instanceof Error ? error.message : "unknown",
+                },
                 "Collab link-revocation invalidation not delivered",
               );
             });

@@ -20,7 +20,7 @@ Remote synchronization must verify capabilities and expected remote versions wit
 
 ## Shape
 
-Proposed paths: `apps/jobs/src/sync`, `apps/git-bridge`; provider/API choices and credentials remain research gaps. G4 is optional.
+Proposed paths: `apps/jobs/src/sync`, `apps/git-bridge`; provider/API choices and credentials remain research gaps. G4 is optional. Live since S12-T01 (in progress): `apps/api/src/modules/integrations/github-auth.ts` handles GitHub OAuth credentials (PKCE/state/replay/revocation, encrypted server-held tokens); no live provider session is asserted.
 
 ## Connected to
 
@@ -33,7 +33,7 @@ Consumes immutable revisions and server-held credentials; references browser/API
 
 ## Surfaces
 
-Maintainers research design sources; no live provider session or adapter implementation is asserted.
+Maintainers research design sources; no live provider session is asserted. The S12-T01 credential-handling slice (`apps/api/src/modules/integrations/github-auth.ts`, contract DTOs, `external_connections` row from S01-T04) is under test-first implementation on `codex/sprint-12-github-sync`.
 
 ## See
 
