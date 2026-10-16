@@ -389,3 +389,15 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Collision rule (user-directed):** main's S05-T10 implementation wins; the branch versions of `apply-project.ts`, its tests/report and the reservation/blob repository methods were dropped in favor of main's. Statuses follow main for S05-T10 (`in_progress`, review pending). S05-T04/T05/T06/T11 have no main-side counterpart and merge in as implemented.
 - **Union merges:** workspace/dashboard UI (sharing + chat + visual/live editor), contracts, feature parity, roadmap/index/progress trackers, map cards (regenerated inventory), e2e shared-auth harness.
 - **Open-gap IDs:** both lines defined GAP-15..26 differently; the merged table keeps this branch's chain and appends main's differing gaps as GAP-28..33 with cross-reference notes (see entry below).
+
+### 2026-10-16 — S05-T10 co-maintainer acceptance
+
+- **Scope:** User recorded independent review of S05-T10 in this conversation.
+- **Change:** S05-T10 task/index/roadmap/sprint progress now read `done`/`completed`; [S05-T10 report](../test-reports/s05-t10.md) records 2026-10-16 acceptance; GAP-28 closed. PRO-02/PRO-10 evidence updated; features stay IN_PROGRESS pending S05-T07/T08.
+- **Effort:** Not measured. **Next:** S05-T11 review decision; S05-T07/T08 verifications remain.
+
+### 2026-10-16 — S08-T10 G2 audit completion (review pending)
+
+- **Scope:** Completed the S08-T10 stabilization audit on evidence head `14b4a06`: all G2 checklist items PASS, shared gates green (unit 355/1262, integration 3/3, e2e 34/34, lint/typecheck/build/security/format/plan-lint/artifacts), GAP-29/GAP-30 closed, carried debt recorded (GAP-15 migration ordering, session-revocation propagation + invalidation-subscriber hardening, XSS option, GAP-12 OpenAPI parity, protocol-level five-client note).
+- **Change:** Rewrote [gate-g2-audit](../test-reports/gate-g2-audit.md) verdict/verification/limits and [s08-t10](../test-reports/s08-t10.md); reconciled stale `review pending` headers in s08-t06/07/08 reports, [sprint-08](sprint-08.md) risks/next-task, COL-04/05/06/07/13 evidence and GAP-29/30. S08-T01–T09 frontmatter already `done`; S08-T10 stays `in_progress` until co-maintainer review.
+- **Effort:** Not measured. **Next:** user acceptance of the G2 audit flips S08-T10, sprint-08 and COL-04/05/06/07 to DONE.

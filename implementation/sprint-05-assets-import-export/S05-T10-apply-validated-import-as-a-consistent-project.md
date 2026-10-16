@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T03, S05-T12]
 requirements: [PRO-02, PRO-10]
 source_task: S05-T03
-status: in_progress
-readiness: ready
+status: done
+readiness: completed
 ---
 # S05-T10 — Apply validated import as a consistent project
 
@@ -101,4 +101,4 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 - [x] Runtime behavior is real, permission-checked and persistent when applicable.
 - [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
 - [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

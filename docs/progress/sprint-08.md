@@ -43,12 +43,8 @@ S08-T06 adds transactional mention/reply notifications with preference checks, i
 
 ## Risks and Debt
 
-The production migration runner/ordering gap (GAP-15) affects the S08 migrations. Full browser matrix GAP-29/GAP-30 remains separate, and the inherited empty file-tree accessibility finding is GAP-32. Independent review of S08-T01–T05 and T09 was confirmed 2026-10-15. Collaboration-socket closure on link expiry/revocation is now wired through `collab:invalidations` under S08-T08 with review pending. S08-T10 remains unstarted.
+The production migration runner/ordering gap (GAP-15) affects the S08 migrations. GAP-29 (Redis recovery) and GAP-30 (Firefox/SMTP matrix) are fixed on the current head via the bounded limiter reconnect, `tests/e2e/recovery.spec.ts` and the 34/34 Mailpit-configured matrix; the inherited empty file-tree accessibility finding is GAP-32. Independent review of S08-T01–T09 was confirmed 2026-10-15. Collaboration-socket closure on link expiry/revocation is wired through `collab:invalidations` under S08-T08 (accepted 2026-10-15). S08-T10 audit is complete with a PASS verdict; co-maintainer review of the audit is the remaining step before DONE.
 
 ## Next Task
 
-S08-T06 mention and in-app notifications are DONE with user review confirmed 2026-10-15. Proceed to S08-T07 safety and limits. S08-T08 must verify closure of already-open collaboration sockets after expiry/revocation.
-
-S08-T07 adds transactional body policy (XSS backstop plus `vbscript:` closure) and PostgreSQL-backed sliding-window flood limits for comment/reply/chat writes, with the writer-role helper shared by both routes. Focused checks passed (4 files, 17 tests); typecheck, lint, build, plan lint and secret scan passed. [S08-T07 evidence](../test-reports/s08-t07.md) records the red-green path and limits; user review was confirmed 2026-10-15.
-
-S08-T08 closes the sharing-revocation propagation gap (API now publishes member/role/link events to `collab:invalidations`) and verifies the full lifecycle: expired/revoked/consumed invitations and links denied, redemption project-bound, wrong-project and viewer writes rejected, reply/resolve/reopen and permission-aware delete intact, deleted ranges detached, and revoked members cut off from REST, tickets and notifications. Focused checks passed (6 files, 16 tests); typecheck, lint, build, plan lint and secret scan passed. [S08-T08 evidence](../test-reports/s08-t08.md) records the red-green path and limits; review is pending and COL-04, COL-05, COL-06, NFR-03 and G2 remain IN_PROGRESS.
+S08-T01 through S08-T09 are DONE with user review confirmed 2026-10-15. S08-T10 audit is complete (PASS with carried debt) on evidence head `14b4a06`; pending step is co-maintainer review of [the audit](../test-reports/gate-g2-audit.md) and [S08-T10 evidence](../test-reports/s08-t10.md), then flip S08-T10, the sprint and COL-04/05/06/07 to DONE.
