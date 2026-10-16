@@ -46,6 +46,14 @@ export type ImportJobView = {
   updatedAt: Date;
 };
 
+/**
+ * Internal apply view. The pending reservation ID and any object key stay
+ * server-side; the public `ImportJobView` DTO never carries them.
+ */
+export type ImportApplyJobView = ImportJobView & {
+  pendingProjectId: string | null;
+};
+
 export type ReserveImportJobInput = {
   actorId: string;
   idempotencyKey: string;
@@ -69,6 +77,7 @@ type JobRow = {
   error_code: ImportJobErrorCode | null;
   archive_swept: boolean;
   project_id: string | null;
+  pending_project_id: string | null;
   created_at: Date;
   updated_at: Date;
 };
@@ -102,6 +111,10 @@ function toView(row: JobRow): ImportJobView {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
+}
+
+function toApplyView(row: JobRow): ImportApplyJobView {
+  return { ...toView(row), pendingProjectId: row.pending_project_id };
 }
 
 function checkInput(input: ReserveImportJobInput): string {
@@ -345,6 +358,45 @@ export class ImportJobRepository {
     ]);
     if (!found.rows[0] || !STATUSES.includes(found.rows[0].status)) return null;
     return toView(found.rows[0]);
+  }
+
+  /**
+   * Reserve one project ID for a validated job before any object write.
+   * Repeated calls return the same ID; the update is atomic so concurrent
+   * reservers converge. Only validated jobs can reserve.
+   */
+  async reserveProjectId(jobId: string): Promise<ImportApplyJobView> {
+    assertUUID(jobId, "jobId");
+    try {
+      const updated = await this.client.query<JobRow>(
+        `UPDATE import_jobs
+            SET pending_project_id = COALESCE(pending_project_id, gen_random_uuid()),
+                updated_at = NOW()
+          WHERE id = $1 AND status = 'validated'
+          RETURNING *`,
+        [jobId],
+      );
+      if (!updated.rows[0]) {
+        throw new PersistenceError(
+          "CONSTRAINT_VIOLATION",
+          "Import job is not validated",
+          false,
+        );
+      }
+      return toApplyView(updated.rows[0]);
+    } catch (error) {
+      throw mapDatabaseError(error);
+    }
+  }
+
+  /** Internal apply read including the server-only reservation ID. */
+  async getForApply(jobId: string): Promise<ImportApplyJobView | null> {
+    assertUUID(jobId, "jobId");
+    const found = await this.client.query<JobRow>("SELECT * FROM import_jobs WHERE id = $1", [
+      jobId,
+    ]);
+    if (!found.rows[0] || !STATUSES.includes(found.rows[0].status)) return null;
+    return toApplyView(found.rows[0]);
   }
 
   /** Failed jobs whose server-only archives still need sweeping. */
