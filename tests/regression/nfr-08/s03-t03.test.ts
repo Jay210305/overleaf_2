@@ -13,8 +13,10 @@ describe("NFR-08 regression: Accessible project dashboard (S03-T03)", () => {
   it("exposes semantic landmarks, accessible names and keyboard-focusable controls", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
-        new Response(
+      vi.fn(async (url: string) => {
+        if (url.includes("/me/notifications"))
+          return new Response(JSON.stringify({ items: [], nextCursor: null }), { status: 200 });
+        return new Response(
           JSON.stringify({
             items: [
               {
@@ -32,8 +34,8 @@ describe("NFR-08 regression: Accessible project dashboard (S03-T03)", () => {
             nextCursor: null,
           }),
           { status: 200 },
-        ),
-      ),
+        );
+      }),
     );
 
     render(createElement(ProjectsDashboard, { apiUrl: "http://api.test/api/v1" }));

@@ -76,19 +76,26 @@ describe("S08-T08 revoked users lose REST, ticket and notification access (NFR-0
       ).statusCode,
     ).toBe(204);
 
-    for (const request of [
-      { method: "POST", url: `/api/v1/projects/${projectId}/collab-ticket`, payload: { fileId, action: "read" } },
-      { method: "POST", url: `/api/v1/projects/${projectId}/chat/messages`, payload: { body: "muted" } },
-      { method: "GET", url: `/api/v1/projects/${projectId}/members`, payload: undefined },
-    ] as const) {
-      const response = await fixture.app.inject({
-        method: request.method,
-        url: request.url,
-        headers: memberHeaders,
-        payload: request.payload,
-      });
-      expect(response.statusCode).toBe(404);
-    }
+    const ticketDenied = await fixture.app.inject({
+      method: "POST",
+      url: `/api/v1/projects/${projectId}/collab-ticket`,
+      headers: memberHeaders,
+      payload: { fileId, action: "read" },
+    });
+    expect(ticketDenied.statusCode).toBe(404);
+    const chatDenied = await fixture.app.inject({
+      method: "POST",
+      url: `/api/v1/projects/${projectId}/chat/messages`,
+      headers: memberHeaders,
+      payload: { body: "muted" },
+    });
+    expect(chatDenied.statusCode).toBe(404);
+    const membersDenied = await fixture.app.inject({
+      method: "GET",
+      url: `/api/v1/projects/${projectId}/members`,
+      headers: memberHeaders,
+    });
+    expect(membersDenied.statusCode).toBe(404);
     const hidden = await fixture.app.inject({
       method: "GET",
       url: "/api/v1/me/notifications",

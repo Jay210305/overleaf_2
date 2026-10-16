@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S08-T08]
 requirements: [PL-05, NFR-01, NFR-02, NFR-03, NFR-12]
 source_task: S07-T10
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: ready
 ---
 # S08-T10 — Stabilize and review G2 collaboration
 
