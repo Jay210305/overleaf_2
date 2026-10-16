@@ -35,6 +35,23 @@ export async function createSessionFixture(
     ),
   );
   await db.query(sessions);
+  // This helper runs in many parallel Vitest workers. Replaying ALTER/VIEW DDL
+  // on every fixture can invalidate queries in another worker mid-request.
+  await db.transaction(async (tx) => {
+    await tx.query("SELECT pg_advisory_xact_lock(80802)");
+    const installed = await tx.query<{ name: string | null }>(
+      "SELECT to_regclass('public.active_project_members')::text AS name",
+    );
+    if (installed.rows[0]?.name) return;
+    for (const migration of ["0009-project-invitations.sql", "0010-share-link-grants.sql"]) {
+      await tx.query(
+        readFileSync(
+          resolve(import.meta.dirname, "../../packages/db/migrations", migration),
+          "utf8",
+        ),
+      );
+    }
+  });
   const app = createServer({
     checkReadiness: async () => true,
     db,

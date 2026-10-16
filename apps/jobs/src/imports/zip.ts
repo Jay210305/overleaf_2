@@ -142,13 +142,10 @@ async function readEntryBytes(
   return data;
 }
 
-/**
- * Private bounded ZIP validator. Reads only the central directory for
- * metadata, streams each entry once with independent byte counters, and
- * returns a versioned manifest with hashes but no source bytes. It writes
- * no project, node or text rows. Never called with a filesystem path.
- */
-export async function validateZipArchive(input: Uint8Array): Promise<ImportManifest> {
+async function scanZipArchive(
+  input: Uint8Array,
+  retainBytes: boolean,
+): Promise<{ manifest: ImportManifest; files: Map<string, Buffer> }> {
   const bytes = Buffer.isBuffer(input) ? input : Buffer.from(input);
   let zipfile: yauzl.ZipFile;
   try {
@@ -161,19 +158,26 @@ export async function validateZipArchive(input: Uint8Array): Promise<ImportManif
     throw new ZipValidationError("INVALID_ARCHIVE");
   }
   const seen = new Set<string>();
-  const implied = new Set<string>();
+  const directories = new Set<string>();
+  const filePaths = new Set<string>();
   const entries: ImportManifestEntry[] = [];
+  const files = new Map<string, Buffer>();
   const totalUsed = { value: 0 };
   let nodes = 0;
   try {
     for await (const entry of zipfile.eachEntry()) {
       const { path, directory } = normalizeArchivePath(decodeName(entry.fileNameRaw), seen);
       if (directory) {
-        nodes += 1;
+        if (filePaths.has(path)) throw new ZipValidationError("UNSAFE_PATH");
+        if (!directories.has(path)) {
+          directories.add(path);
+          nodes += 1;
+        }
         if (nodes > maxArchiveNodes) throw new ZipValidationError("LIMIT_EXCEEDED");
         entries.push({ path: `${path}/`, kind: "DIRECTORY" });
         continue;
       }
+      if (directories.has(path)) throw new ZipValidationError("UNSAFE_PATH");
       if (entry.isEncrypted() || !entry.canDecodeFileData()) {
         throw new ZipValidationError("INVALID_ARCHIVE");
       }
@@ -198,18 +202,19 @@ export async function validateZipArchive(input: Uint8Array): Promise<ImportManif
       }
       const sha256 = createHash("sha256").update(data).digest("hex");
       nodes += 1;
-      const ancestors: string[] = [];
+      filePaths.add(path);
       const parts = path.split("/").slice(0, -1);
       for (let depth = 1; depth <= parts.length; depth++) {
         const ancestor = parts.slice(0, depth).join("/");
-        if (!seen.has(ancestor) && !implied.has(ancestor)) {
-          implied.add(ancestor);
-          ancestors.push(ancestor);
+        if (filePaths.has(ancestor)) throw new ZipValidationError("UNSAFE_PATH");
+        if (!directories.has(ancestor)) {
+          directories.add(ancestor);
+          nodes += 1;
         }
       }
-      nodes += ancestors.length;
       if (nodes > maxArchiveNodes) throw new ZipValidationError("LIMIT_EXCEEDED");
       entries.push({ path, kind: policy.kind, mime: policy.mime, size: data.length, sha256 });
+      if (retainBytes) files.set(path, data);
     }
   } catch (error) {
     if (error instanceof ZipValidationError) throw error;
@@ -217,5 +222,36 @@ export async function validateZipArchive(input: Uint8Array): Promise<ImportManif
   }
   if (entries.length === 0) throw new ZipValidationError("INVALID_ARCHIVE");
   entries.sort((left, right) => (left.path < right.path ? -1 : left.path > right.path ? 1 : 0));
-  return { version: 1, entries };
+  return { manifest: { version: 1, entries }, files };
+}
+
+/** Private bounded ZIP validator; never writes project state or source bytes. */
+export async function validateZipArchive(input: Uint8Array): Promise<ImportManifest> {
+  return (await scanZipArchive(input, false)).manifest;
+}
+
+/** Re-validate and materialize source bytes only when the manifest still matches. */
+export async function readArchiveForApply(
+  input: Uint8Array,
+  expected: ImportManifest,
+): Promise<Map<string, Buffer>> {
+  const scanned = await scanZipArchive(input, true);
+  if (
+    expected?.version !== 1 ||
+    !Array.isArray(expected.entries) ||
+    expected.entries.length !== scanned.manifest.entries.length ||
+    !expected.entries.every((entry, index) => {
+      const actual = scanned.manifest.entries[index];
+      if (!actual || entry.path !== actual.path || entry.kind !== actual.kind) return false;
+      if (entry.kind === "DIRECTORY" || actual.kind === "DIRECTORY") {
+        return entry.kind === "DIRECTORY" && actual.kind === "DIRECTORY";
+      }
+      return (
+        entry.mime === actual.mime && entry.size === actual.size && entry.sha256 === actual.sha256
+      );
+    })
+  ) {
+    throw new ZipValidationError("INVALID_ARCHIVE");
+  }
+  return scanned.files;
 }

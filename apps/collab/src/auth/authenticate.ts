@@ -57,14 +57,26 @@ export async function authenticateConnection(
   if (!result.ok) {
     switch (result.error) {
       case "ORIGIN_NOT_ALLOWED":
-        throw new AuthenticationError("ORIGIN_NOT_ALLOWED", "Origin header does not match allowed origin");
+        throw new AuthenticationError(
+          "ORIGIN_NOT_ALLOWED",
+          "Origin header does not match allowed origin",
+        );
       case "TICKET_MISSING":
       case "TICKET_INVALID_OR_EXPIRED":
-        throw new AuthenticationError("TICKET_INVALID_OR_EXPIRED", "Ticket is missing, invalid, expired or already consumed");
+        throw new AuthenticationError(
+          "TICKET_INVALID_OR_EXPIRED",
+          "Ticket is missing, invalid, expired or already consumed",
+        );
       case "MEMBERSHIP_REVOKED":
-        throw new AuthenticationError("MEMBERSHIP_REVOKED", "User membership is no longer active in project");
+        throw new AuthenticationError(
+          "MEMBERSHIP_REVOKED",
+          "User membership is no longer active in project",
+        );
       case "PERMISSION_DENIED":
-        throw new AuthenticationError("PERMISSION_DENIED", "Insufficient permissions for requested action");
+        throw new AuthenticationError(
+          "PERMISSION_DENIED",
+          "Insufficient permissions for requested action",
+        );
       case "RESOURCE_NOT_FOUND":
         throw new AuthenticationError("RESOURCE_NOT_FOUND", "Project or file not found or deleted");
       default:
@@ -95,7 +107,7 @@ export async function authenticateConnection(
       role = "OWNER";
     } else {
       const memberRes = await db.query<{ role: string }>(
-        `SELECT role FROM project_members WHERE project_id = $1 AND user_id = $2`,
+        `SELECT role FROM active_project_members WHERE project_id = $1 AND user_id = $2`,
         [data.projectId, data.userId],
       );
       if (memberRes.rows[0]) {

@@ -12,6 +12,7 @@ import type { SendPasswordReset } from "./modules/auth/password-reset.js";
 import { installProjectGuard } from "./plugins/require-session.js";
 import { safeLoggerOptions } from "./plugins/logging.js";
 import type { AuthRateLimiter } from "./plugins/rate-limit.js";
+import type { CollabInvalidationPublisher } from "./modules/collab/invalidation.js";
 import { registerProfileRoutes } from "./modules/account/profile.js";
 import { registerPasswordChangeRoute } from "./modules/account/password-change.js";
 import { registerDeleteAccountRoute } from "./modules/account/delete-account.js";
@@ -33,6 +34,16 @@ import { registerUploadRoutes } from "./modules/uploads/routes.js";
 import { registerImportRoutes } from "./modules/imports/routes.js";
 import { registerCompilationRoutes } from "./modules/compilations/routes.js";
 import { registerCollabTicketRoutes, type TicketStore } from "./modules/collab/ticket.js";
+import {
+  registerProjectInvitationRoutes,
+  type SendProjectInvitation,
+} from "./modules/sharing/invitations.js";
+import { registerShareLinkRoutes } from "./modules/sharing/share-links.js";
+import { registerProjectMemberRoutes } from "./modules/sharing/members.js";
+import { registerCommentRoutes } from "./modules/comments/routes.js";
+import { registerChatRoutes } from "./modules/chat/routes.js";
+import { registerChatEvents } from "./modules/chat/events.js";
+import { registerNotificationRoutes } from "./modules/notifications/mentions.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -54,6 +65,11 @@ const authScopes = new Set([
   "POST /api/v1/me/password",
   "POST /api/v1/me/avatar",
   "GET /api/v1/me/avatar/content",
+  "POST /api/v1/projects/:projectId/invitations",
+  "POST /api/v1/invitations/accept",
+  "POST /api/v1/invitations/reject",
+  "POST /api/v1/projects/:projectId/share-links",
+  "POST /api/v1/share-links/redeem",
 ]);
 
 export interface ServerOptions {
@@ -64,9 +80,11 @@ export interface ServerOptions {
   storage?: StorageAdapter | undefined;
   sendVerification?: SendVerification | undefined;
   sendPasswordReset?: SendPasswordReset | undefined;
+  sendProjectInvitation?: SendProjectInvitation | undefined;
   secureCookies?: boolean | undefined;
   rateLimiter?: AuthRateLimiter | undefined;
   ticketStore?: TicketStore | undefined;
+  collabInvalidation?: CollabInvalidationPublisher | undefined;
 }
 export function createServer(options: ServerOptions) {
   const app = Fastify({
@@ -230,6 +248,36 @@ export function createServer(options: ServerOptions) {
       db: options.db,
       ticketStore: options.ticketStore,
     });
+    registerProjectInvitationRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      sendProjectInvitation: options.sendProjectInvitation,
+    });
+    registerShareLinkRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      collabInvalidation: options.collabInvalidation,
+    });
+    registerProjectMemberRoutes(app, {
+      db: options.db,
+      collabInvalidation: options.collabInvalidation,
+    });
+    registerCommentRoutes(app, options.db);
+    registerChatRoutes(app, options.db);
+    registerNotificationRoutes(
+      app,
+      options.db,
+      options.origin,
+      options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    );
+    registerChatEvents(
+      app,
+      options.db,
+      options.origin,
+      options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    );
   }
   return app;
 }

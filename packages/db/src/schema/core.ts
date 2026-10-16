@@ -143,12 +143,19 @@ export const projectMembers = pgTable(
     role: text("role").notNull(),
     joinedAt: timestamp("joined_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
     revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+    sourceShareLinkId: uuid("source_share_link_id").references(() => shareLinks.id, {
+      onDelete: "cascade",
+    }),
   },
   (table) => [
     primaryKey({ columns: [table.projectId, table.userId] }),
     check(
       "project_members_role_check",
       sql`${table.role} IN ('OWNER', 'EDITOR', 'REVIEWER', 'VIEWER')`,
+    ),
+    check(
+      "project_members_link_role_check",
+      sql`${table.sourceShareLinkId} IS NULL OR ${table.role} IN ('EDITOR', 'REVIEWER', 'VIEWER')`,
     ),
   ],
 );
@@ -165,14 +172,20 @@ export const projectInvitations = pgTable(
     tokenHash: text("token_hash").notNull(),
     expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
     acceptedAt: timestamp("accepted_at", { withTimezone: true, mode: "date" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+    deliveredAt: timestamp("delivered_at", { withTimezone: true, mode: "date" }),
+    rejectedAt: timestamp("rejected_at", { withTimezone: true, mode: "date" }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
     invitedBy: text("invited_by").notNull(),
   },
   (table) => [
     uniqueIndex("project_invitations_token_hash_idx").on(table.tokenHash),
-    check(
-      "project_invitations_role_check",
-      sql`${table.role} IN ('OWNER', 'EDITOR', 'REVIEWER', 'VIEWER')`,
-    ),
+    uniqueIndex("project_invitations_pending_email_uidx")
+      .on(table.projectId, table.emailNormalized)
+      .where(
+        sql`${table.acceptedAt} IS NULL AND ${table.rejectedAt} IS NULL AND ${table.revokedAt} IS NULL`,
+      ),
+    check("project_invitations_role_check", sql`${table.role} IN ('EDITOR', 'REVIEWER', 'VIEWER')`),
   ],
 );
 
@@ -189,15 +202,20 @@ export const shareLinks = pgTable(
     maxUses: bigint("max_uses", { mode: "number" }),
     useCount: bigint("use_count", { mode: "number" }).notNull().default(0),
     revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
   },
   (table) => [
     uniqueIndex("share_links_token_hash_idx").on(table.tokenHash),
-    check(
-      "share_links_role_check",
-      sql`${table.role} IN ('OWNER', 'EDITOR', 'REVIEWER', 'VIEWER')`,
-    ),
+    check("share_links_role_check", sql`${table.role} IN ('EDITOR', 'REVIEWER', 'VIEWER')`),
     check("share_links_use_count_check", sql`${table.useCount} >= 0`),
-    check("share_links_max_uses_check", sql`${table.maxUses} IS NULL OR ${table.maxUses} >= 0`),
+    check(
+      "share_links_max_uses_check",
+      sql`${table.maxUses} IS NULL OR (${table.maxUses} BETWEEN 1 AND 10000 AND ${table.useCount} <= ${table.maxUses})`,
+    ),
+    check(
+      "share_links_expiry_check",
+      sql`${table.expiresAt} IS NOT NULL AND ${table.expiresAt} > ${table.createdAt}`,
+    ),
   ],
 );
 
@@ -295,6 +313,7 @@ export const importJobs = pgTable(
     manifestVersion: integer("manifest_version"),
     errorCode: text("error_code"),
     archiveSwept: boolean("archive_swept").notNull().default(false),
+    pendingProjectId: uuid("pending_project_id"),
     projectId: uuid("project_id").references(() => projects.id, { onDelete: "set null" }),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),

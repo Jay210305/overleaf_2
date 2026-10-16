@@ -62,10 +62,10 @@ Generated from the planned OpenAPI baseline. All operations are NOT_STARTED. The
 | POST | `/ownership/{offerId}/accept` | - | ProjectView | 200 | session | Current policy |
 | DELETE | `/projects/{projectId}/ownership/{offerId}` | - | - | 204 | owner | Current policy |
 | GET | `/projects/{projectId}/statistics` | - | Statistics | 200 | read | Current policy |
-| GET | `/projects/{projectId}/members` | - | MemberViewPage | 200 | read | Current policy |
+| GET | `/projects/{projectId}/members` | - | MemberViewPage | 200 | read | Active members only; bounded UUID cursor; S08-T03 |
 | POST | `/projects/{projectId}/members` | InviteRequest | InvitationView | 201 | owner | Current policy |
-| PATCH | `/projects/{projectId}/members/{userId}` | RolePatch | MemberView | 200 | owner | Current policy |
-| DELETE | `/projects/{projectId}/members/{userId}` | - | - | 204 | owner | Current policy |
+| PATCH | `/projects/{projectId}/members/{userId}` | RolePatch | MemberView | 200 | owner | Current session/CSRF, active non-owner target, audit; S08-T03 |
+| DELETE | `/projects/{projectId}/members/{userId}` | - | - | 204 | owner | Current session/CSRF, active non-owner target, audit; S08-T03 |
 | GET | `/projects/{projectId}/invitations` | - | InvitationViewPage | 200 | owner | Current policy |
 | POST | `/projects/{projectId}/invitations` | InviteRequest | InvitationView | 201 | owner | Current policy |
 | POST | `/invitations/{token}/accept` | - | MemberView | 200 | session | Current policy |
@@ -74,7 +74,7 @@ Generated from the planned OpenAPI baseline. All operations are NOT_STARTED. The
 | GET | `/projects/{projectId}/share-links` | - | ShareViewPage | 200 | owner | Current policy |
 | POST | `/projects/{projectId}/share-links` | ShareRequest | CreatedShareView | 201 | owner | Current policy |
 | DELETE | `/projects/{projectId}/share-links/{linkId}` | - | - | 204 | owner | Current policy |
-| POST | `/share/{token}/redeem` | - | ProjectView | 200 | session | Current policy |
+| POST | `/share-links/redeem` | ShareRedeemRequest | ShareRedemptionView | 200 | session | Current policy; token in JSON body, exact Origin and CSRF |
 | POST | `/projects/{projectId}/collab-ticket` | TicketRequest | TicketView | 200 | read | Current policy |
 | GET | `/projects/{projectId}/comments` | - | CommentViewPage | 200 | read | Current policy |
 | POST | `/projects/{projectId}/comments` | CommentRequest | CommentView | 201 | comment | Current policy |

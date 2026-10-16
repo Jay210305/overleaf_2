@@ -168,6 +168,9 @@ importers:
       redis:
         specifier: 6.3.0
         version: 6.3.0
+      ws:
+        specifier: ^8.22.0
+        version: 8.22.0
       yjs:
         specifier: 13.6.27
         version: 13.6.27
@@ -223,6 +226,9 @@ importers:
       yauzl:
         specifier: 3.4.0
         version: 3.4.0
+      yjs:
+        specifier: 13.6.27
+        version: 13.6.27
     devDependencies:
       '@types/yauzl':
         specifier: 3.4.0

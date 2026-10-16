@@ -65,8 +65,8 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S05-T09 | [Implement quota and orphan object cleanup](sprint-05-assets-import-export/S05-T09-implement-quota-and-orphan-object-cleanup.md) | Project Co-owner (proposed) | 8 | done |
 | S05-T02 | [Create multi-file upload interactions](sprint-05-assets-import-export/S05-T02-create-multi-file-upload-interactions.md) | Project Co-owner (proposed) | 8 | done |
 | S05-T03 | [Validate archives and define idempotent import job](sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | Project Co-owner (proposed) | 8 | done |
-| S05-T12 | [Implement authenticated ZIP import intake](sprint-05-assets-import-export/S05-T12-implement-authenticated-zip-import-intake.md) | Project Co-owner (proposed) | 8 | in_progress |
-| S05-T10 | [Apply validated import as a consistent project](sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | Project Co-owner (proposed) | 8 | todo |
+| S05-T12 | [Implement authenticated ZIP import intake](sprint-05-assets-import-export/S05-T12-implement-authenticated-zip-import-intake.md) | Project Co-owner (proposed) | 8 | done |
+| S05-T10 | [Apply validated import as a consistent project](sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | Project Co-owner (proposed) | 8 | in_progress |
 | S05-T04 | [Export immutable source ZIP](sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | Project Co-owner (proposed) | 8 | todo |
 | S05-T05 | [Preview and download safe binary assets](sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | Project Co-owner (proposed) | 6 | todo |
 | S05-T06 | [Create minimal versioned internal templates](sprint-05-assets-import-export/S05-T06-create-minimal-versioned-internal-templates.md) | Project Co-owner (proposed) | 8 | todo |
@@ -102,15 +102,15 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S07-T08 | [Apply live role and session revocation](sprint-07-durable-collaboration/S07-T08-apply-live-role-and-session-revocation.md) | Project Co-owner (proposed) | 8 | done |
 | S07-T09 | [Instrument collaborative durability metrics](sprint-07-durable-collaboration/S07-T09-instrument-collaborative-durability-metrics.md) | Project Co-owner (proposed) | 6 | done |
 | S07-T10 | [Verify convergence failures and recovery](sprint-07-durable-collaboration/S07-T10-verify-convergence-failures-and-recovery.md) | Project Co-owner (proposed) | 8 | done |
-| S08-T01 | [Implement expiring email invitations](sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md) | Julio (proposed) | 8 | todo |
-| S08-T02 | [Implement bounded hashed share links](sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md) | Julio (proposed) | 8 | todo |
-| S08-T03 | [Create sharing and role management UI](sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md) | Julio (proposed) | 8 | todo |
-| S08-T04 | [Implement anchored comments and replies](sprint-08-sharing-comments-chat/S08-T04-implement-anchored-comments-and-replies.md) | Julio (proposed) | 8 | todo |
-| S08-T09 | [Render comment anchor and reply interactions](sprint-08-sharing-comments-chat/S08-T09-render-comment-anchor-and-reply-interactions.md) | Julio (proposed) | 6 | todo |
-| S08-T05 | [Create authorized durable project chat](sprint-08-sharing-comments-chat/S08-T05-create-authorized-durable-project-chat.md) | Julio (proposed) | 8 | todo |
-| S08-T06 | [Create mention and in-app notifications](sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md) | Julio (proposed) | 6 | todo |
-| S08-T07 | [Enforce comment chat safety and limits](sprint-08-sharing-comments-chat/S08-T07-enforce-comment-chat-safety-and-limits.md) | Julio (proposed) | 6 | todo |
-| S08-T08 | [Verify sharing revocation and detached anchors](sprint-08-sharing-comments-chat/S08-T08-verify-sharing-revocation-and-detached-anchors.md) | Julio (proposed) | 6 | todo |
+| S08-T01 | [Implement expiring email invitations](sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md) | Julio (proposed) | 8 | done |
+| S08-T02 | [Implement bounded hashed share links](sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md) | Julio (proposed) | 8 | done |
+| S08-T03 | [Create sharing and role management UI](sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md) | Julio (proposed) | 8 | done |
+| S08-T04 | [Implement anchored comments and replies](sprint-08-sharing-comments-chat/S08-T04-implement-anchored-comments-and-replies.md) | Julio (proposed) | 8 | done |
+| S08-T09 | [Render comment anchor and reply interactions](sprint-08-sharing-comments-chat/S08-T09-render-comment-anchor-and-reply-interactions.md) | Julio (proposed) | 6 | done |
+| S08-T05 | [Create authorized durable project chat](sprint-08-sharing-comments-chat/S08-T05-create-authorized-durable-project-chat.md) | Julio (proposed) | 8 | done |
+| S08-T06 | [Create mention and in-app notifications](sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md) | Julio (proposed) | 6 | done |
+| S08-T07 | [Enforce comment chat safety and limits](sprint-08-sharing-comments-chat/S08-T07-enforce-comment-chat-safety-and-limits.md) | Julio (proposed) | 6 | done |
+| S08-T08 | [Verify sharing revocation and detached anchors](sprint-08-sharing-comments-chat/S08-T08-verify-sharing-revocation-and-detached-anchors.md) | Julio (proposed) | 6 | in_progress |
 | S08-T10 | [Stabilize and review G2 collaboration](sprint-08-sharing-comments-chat/S08-T10-stabilize-and-review-g2-collaboration.md) | Julio (proposed) | 8 | todo |
 | S09-T01 | [Create immutable labeled history queries](sprint-09-history-review/S09-T01-create-immutable-labeled-history-queries.md) | Project Co-owner (proposed) | 8 | done |
 | S09-T02 | [Compare text tree and binary revisions](sprint-09-history-review/S09-T02-compare-text-tree-and-binary-revisions.md) | Project Co-owner (proposed) | 8 | done |

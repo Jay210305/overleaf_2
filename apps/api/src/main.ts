@@ -4,16 +4,19 @@ import { S3StorageAdapter } from "@latex-collab/storage";
 import { createReadiness } from "./readiness.js";
 import { createServer, safeLoggerOptions } from "./server.js";
 import { createRedisAuthRateLimiter } from "./plugins/rate-limit.js";
+import { createRedisCollabInvalidationPublisher } from "./modules/collab/invalidation.js";
 import { processAvatarCleanup } from "./modules/account/avatar.js";
 import {
   createSmtpVerificationSender,
   createSmtpPasswordResetSender,
+  createSmtpProjectInvitationSender,
 } from "./modules/auth/mail.js";
 async function main() {
   const config = parseServerConfig(process.env);
   const probes = createReadiness(config);
   const db = new DatabaseClient(config.DATABASE_URL);
   const rateLimiter = await createRedisAuthRateLimiter(config.REDIS_URL);
+  const collabInvalidation = await createRedisCollabInvalidationPublisher(config.REDIS_URL);
   const storage = new S3StorageAdapter({
     endpoint: config.S3_ENDPOINT,
     region: config.S3_REGION,
@@ -27,6 +30,7 @@ async function main() {
     logger: safeLoggerOptions(config.LOG_LEVEL),
     db,
     rateLimiter,
+    collabInvalidation,
     storage,
     sendVerification:
       config.SMTP_URL && config.EMAIL_FROM
@@ -35,6 +39,10 @@ async function main() {
     sendPasswordReset:
       config.SMTP_URL && config.EMAIL_FROM
         ? createSmtpPasswordResetSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
+        : undefined,
+    sendProjectInvitation:
+      config.SMTP_URL && config.EMAIL_FROM
+        ? createSmtpProjectInvitationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
         : undefined,
     secureCookies: config.NODE_ENV === "production" || config.APP_ORIGIN.startsWith("https://"),
   });
@@ -57,6 +65,7 @@ async function main() {
     probes.close();
     await db.close();
     await rateLimiter.close();
+    await collabInvalidation.close();
   });
   const stop = () => {
     void app.close().catch(() => {

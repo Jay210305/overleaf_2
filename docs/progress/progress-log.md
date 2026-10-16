@@ -29,6 +29,14 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-12 | S03 projects, file tree, dashboard and structural manifests on `codex/sprint-03-projects-files` | 66 h | [S03 progress](sprint-03.md), reports [s03-t01](../test-reports/s03-t01.md) through [s03-t08](../test-reports/s03-t08.md), Playwright E2E and 287 Vitest tests PASS | S03 closed, all 9 tasks marked DONE; next S04-T01 |
 | 2026-10-13 | S06 trusted compilation and Gate 1 release audit on `codex/sprint-06-trusted-compilation` | Not measured | [S06 progress](sprint-06.md), reports [s06-t01](../test-reports/s06-t01.md) through [s06-t17](../test-reports/s06-t17.md), [g1-audit](../test-reports/gate-g1-audit.md), 105 tests PASS | S06 closed, all 17 tasks marked DONE; Gate G1 passed; next S07-T01 |
 | 2026-10-14 | S07 durable collaboration and multi-replica real-time editing on `codex/sprint-07-durable-collaboration` | Not measured | [S07 progress](sprint-07.md), reports [s07-t01](../test-reports/s07-t01.md) through [s07-t12](../test-reports/s07-t12.md), 40 test files / 77 tests PASS | S07 closed, all 12 tasks marked DONE; next S08-T01 |
+| 2026-10-14 | Published `codex/sprint-08-sharing-comments-chat` from `a568117`; implemented S08-T01 email invitations | Not measured | [S08-T01 report](../test-reports/s08-t01.md): real PostgreSQL/Mailpit, 11 focused tests PASS; contract 2.0.0 and ADR-010 | Independent co-maintainer review pending; GAP-15 migration deployment ordering remains |
+| 2026-10-14 | Continued S08-T02 hashed share links and active membership authorization | Not measured | [S08-T02 report](../test-reports/s08-t02.md): 5 focused PostgreSQL tests and 633 full-suite tests PASS; contract 3.0.0 and ADR-011 | Co-maintainer review pending; reconcile S08-T01 review evidence (GAP-25), migration ordering (GAP-15), live socket closure in S08-T08 |
+| 2026-10-15 | Added shared rate limiting to S08-T02 link creation/redemption and refreshed verification | Not measured | Failing limiter assertion then 6 focused tests PASS; 239 files/634 full-suite tests, lint, typecheck and build PASS; [report](../test-reports/s08-t02.md) | Co-maintainer review pending; GAP-15 and GAP-25 remain, with active socket closure due in S08-T08 |
+| 2026-10-15 | User confirmed review of the Sprint 08 invitation/share-link slices and authorized S08-T03 | Not measured | [S08-T01](../test-reports/s08-t01.md) and [S08-T02](../test-reports/s08-t02.md) reports reconciled with task/index/roadmap status; GAP-25 closed | COL-04/05 and G2 remain in progress; GAP-15 and live socket closure remain |
+| 2026-10-15 | Implemented S08-T03 member rights and sharing UI | Not measured | [S08-T03 report](../test-reports/s08-t03.md): 644/644 isolated full-suite tests, 1/1 Edge sharing journey, lint/types/build/integration PASS | Independent review pending; GAP-15/GAP-26 and live socket closure remain |
+| 2026-10-15 | S08-T06 mention and in-app notifications on `codex/sprint-08-sharing-comments-chat` | Not measured | [S08-T06 report](../test-reports/s08-t06.md): 3 focused files/5 tests PASS (PostgreSQL idempotency, preference/revocation, UI mark-read); typecheck/lint/build/plan-lint/secret-scan PASS; Edge journey NOT RUN | Independent co-maintainer review pending before done; next S08-T07 |
+| 2026-10-15 | S08-T06 accepted by user; S08-T07 safety and limits on `codex/sprint-08-sharing-comments-chat` | Not measured | [S08-T07 report](../test-reports/s08-t07.md): 4 focused files/17 tests PASS (role matrix, XSS/`vbscript:`/oversized 400s, verbatim safe Markdown, per-author/per-project flood 429s, sliding-window recovery); typecheck PASS, lint/build/plan-lint/secret-scan rerun at commit | Independent co-maintainer review pending before done; next S08-T08 after review |
+| 2026-10-15 | S08-T07 accepted by user; S08-T08 revocation and detached anchors on `codex/sprint-08-sharing-comments-chat` | Not measured | [S08-T08 report](../test-reports/s08-t08.md): 6 focused files/16 tests PASS (collab invalidation emission on member/role/link paths with manager socket-closure composition; invite/link lifecycle denials; resolve/delete guards; revoked-member cutoff); typecheck PASS, lint/build/plan-lint/secret-scan rerun at commit | Independent co-maintainer review pending before done; next S08-T10 after review |
 | 2026-10-14 | S09 history review and project management on `codex/sprint-09-history-review` | 102 h | [S09 progress](sprint-09.md), reports [s09-t01](../test-reports/s09-t01.md) through [s09-t14](../test-reports/s09-t14.md), 27 test files / 62 tests PASS | S09 closed, all 14 tasks marked DONE; next S10-T01 |
 
 
@@ -151,12 +159,24 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Observed checks:** Focused S05-T12 3 files/13 tests PASS; S05-T03 suites 17/17 PASS alongside; `pnpm typecheck`, `pnpm lint`, constituent builds, secret check and `plan_lint.py` (123 operations) PASS. Repository-wide `vitest run`: 144 files/412 tests with 408 PASS; the 4 failures are `s00-t03`/PL-01 tests spawning bare `pnpm`, which is not on PATH (GAP-21, pre-existing quirk). Report in [s05-t12](../test-reports/s05-t12.md).
 - **Next:** Independent co-maintainer review of S05-T12, then S05-T10 project application.
 
+### 2026-10-13 — S05-T12 acceptance and S05-T10 start
+
+- **Acceptance:** The user accepted S05-T12 after reviewing its implementation and refreshed 412/412 repository test evidence. Its task, index, roadmap and sprint progress now read `done`; GAP-22 is closed.
+- **Next:** The user approved the [S05-T10 implementation plan](../superpowers/plans/2026-10-13-s05-import-project-apply.md) for native execution. S05-T10 is `in_progress`; apply validated ZIPs as a consistent project with test-first evidence.
+
 ### 2026-10-13 — Sprint S05-T12 shared-test verification follow-up
 
 - **Contributor:** Codex, continuing the user's authorized S05 work on `codex/sprint-05-assets-import-export`.
 - **Task:** Kept S05-T12 in progress. Parallel S05-T03/T12 suites now serialize their import migrations under a PostgreSQL advisory lock; the S05-T03 lease assertion uses a virtual future lease to avoid competition with other test workers. Product behavior was unchanged; actual effort was not measured.
 - **Observed checks:** Focused S05 archive suites 6 files/30 tests PASS and repository-wide direct Node Vitest 144 files/412 tests PASS against local PostgreSQL and MinIO. Typecheck, ESLint and planning lint PASS. The initial full run was 411/412 with only the shared-queue lease assertion failing; the follow-up run passed. See [S05-T12 report](../test-reports/s05-t12.md).
 - **Next:** Independent co-maintainer review of S05-T12, then S05-T10 project application.
+
+### 2026-10-13 — Sprint S05-T10 transactional ZIP project application
+
+- **Contributor:** Codex on `codex/sprint-05-assets-import-export`, executing the user-approved S05-T10 plan after S05-T12 acceptance. Actual effort was not measured.
+- **Task:** Rechecked actual archive bytes and complete manifest, reserved a stable project ID, verified private binary blobs, and committed the owner project/tree/Yjs updates/successful job state atomically. Added a bounded private apply pass and 14-day successful archive retention; failed pre-commit jobs clean their unreferenced prepared blobs and source archive in bounded passes.
+- **Observed checks:** S05-T10 focused files 23/23 PASS; combined S05-T03/T12/T10 suite 53/53 PASS; repository-wide `pnpm test --coverage.enabled false --silent --maxWorkers 4` 147 files/435 tests PASS against local PostgreSQL and MinIO after a synchronized pnpm install and Docker service restart. `pnpm typecheck`, `pnpm lint`, `pnpm build`, secret and artifact checks PASS. See [S05-T10 report](../test-reports/s05-t10.md).
+- **Review:** S05-T10 remains `in_progress` pending independent co-maintainer review. GAP-15 migration deployment and GAP-17 revision-reference safety are unaffected.
 
 ### 2026-10-13 — Sprint S06 Trusted Compilation and Gate G1 Release Audit
 
@@ -257,5 +277,10 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Technical Debt:** None. Untrusted compilation and anonymous signup remain disabled per G1/G5 boundaries.
 - **Next Ready Task:** S10-T01 (Sprint S10: Academic editing).
 
+### 2026-10-15 — Sprint S08 project chat continuation
 
+- **Branch/base:** `codex/sprint-08-sharing-comments-chat`, published with upstream; base `a568117` (`origin/main`, after S07).
+- **Review:** Project Co-owner independently accepted S08-T09 and S08-T05 on 2026-10-15.
+- **S08-T05:** Added project-scoped durable chat REST pages and writes, read-only WSS invalidation from committed rows, and a mounted browser panel with reconciliation after missed hints. Local PostgreSQL denial tests and a real two-user Edge journey passed; see [the scoped report](../test-reports/s08-t05.md) for commands, full-suite result and limits.
+- **Actual hours:** Not measured. **Next:** S08-T06; S08-T07 still owns rate limits and COL-07 remains IN_PROGRESS.
 

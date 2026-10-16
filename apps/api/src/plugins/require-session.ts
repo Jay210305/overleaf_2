@@ -92,7 +92,7 @@ export async function requireProjectAction(
     revoked_at: Date | null;
   }>(
     `SELECT p.owner_id, p.status, pm.role, pm.revoked_at
-     FROM projects p LEFT JOIN project_members pm ON pm.project_id = p.id AND pm.user_id = $2
+     FROM projects p LEFT JOIN active_project_members pm ON pm.project_id = p.id AND pm.user_id = $2
      WHERE p.id = $1`,
     [projectId, identity.userId],
   );
