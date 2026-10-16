@@ -13,10 +13,12 @@ export default defineConfig({
     timeout: 30000,
   },
   projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
-    { name: "firefox", use: { ...devices["Desktop Firefox"] } },
+    { name: "setup", testMatch: /auth\.setup\.ts/ },
+    { name: "chromium", dependencies: ["setup"], use: { ...devices["Desktop Chrome"] } },
+    { name: "firefox", dependencies: ["setup"], use: { ...devices["Desktop Firefox"] } },
     {
       name: "edge",
+      dependencies: ["setup"],
       use: {
         ...devices["Desktop Edge"],
         ...(process.env.EDGE_EXECUTABLE_PATH

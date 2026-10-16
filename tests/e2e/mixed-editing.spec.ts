@@ -1,11 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { loadEnvFile } from "node:process";
-import argon2 from "argon2";
 import { test, expect } from "@playwright/test";
 import { parseServerConfig } from "@latex-collab/config/server";
 import { DatabaseClient } from "@latex-collab/db";
 import { S3StorageAdapter } from "@latex-collab/storage";
 import * as Y from "yjs";
+import { AUTH_STATE_PATH, readSharedCsrf } from "./shared-auth.js";
 
 loadEnvFile(".env");
 const config = parseServerConfig(process.env);
@@ -37,28 +37,19 @@ test("two browser editors converge through the persistent collaboration socket",
     secretAccessKey: config.S3_SECRET_ACCESS_KEY,
   });
   let imageKey: string | null = null;
-  const email = `e2e-mixed-visual-${randomUUID()}@example.test`;
-  const password = "correct-password-123";
-  const passwordHash = await argon2.hash(password, { type: argon2.argon2id });
-  await db.query(
-    `INSERT INTO users (email_normalized, display_name, password_hash, email_verified_at)
-     VALUES ($1, 'Mixed Visual User', $2, NOW())`,
-    [email, passwordHash],
-  );
+  // Shared suite session (see auth.setup.ts): both editor contexts reuse one
+  // login instead of consuming the Redis rate-limit window per context.
+  const { csrf: sharedCsrf } = readSharedCsrf();
 
-  const contexts = await Promise.all([browser.newContext(), browser.newContext()]);
+  const contexts = await Promise.all([
+    browser.newContext({ storageState: AUTH_STATE_PATH }),
+    browser.newContext({ storageState: AUTH_STATE_PATH }),
+  ]);
   try {
     const csrf = await Promise.all(
       contexts.map(async (context) => {
-        const response = await context.request.post(`${api}/auth/login`, {
-          headers: { origin, "x-csrf-token": "login-bootstrap" },
-          data: { email, password },
-        });
-        expect(response.status()).toBe(200);
-        const token = response.headers()["x-csrf-token"] ?? "";
-        expect(token).not.toBe("");
-        await context.addInitScript((value) => sessionStorage.setItem("csrf_token", value), token);
-        return token;
+        await context.addInitScript((value) => sessionStorage.setItem("csrf_token", value), sharedCsrf);
+        return sharedCsrf;
       }),
     );
 
