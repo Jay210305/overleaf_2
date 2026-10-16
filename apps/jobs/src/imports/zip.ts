@@ -149,7 +149,84 @@ async function readEntryBytes(
  * no project, node or text rows. Never called with a filesystem path.
  */
 export async function validateZipArchive(input: Uint8Array): Promise<ImportManifest> {
+  const { manifest } = await scanArchive(input, false);
+  return manifest;
+}
+
+function manifestsEqual(
+  actual: ImportManifest,
+  expected: ImportManifest,
+): boolean {
+  if (expected?.version !== 1 || actual.version !== 1) return false;
+  if (!Array.isArray(expected.entries) || actual.entries.length !== expected.entries.length) {
+    return false;
+  }
+  for (let index = 0; index < actual.entries.length; index++) {
+    const left = actual.entries[index]!;
+    const right = expected.entries[index]!;
+    if (left.path !== right.path || left.kind !== right.kind) return false;
+    // JSONB round-trips reorder object keys, so compare field by field.
+    if (left.kind === "DIRECTORY" || right.kind === "DIRECTORY") {
+      if (left.kind !== "DIRECTORY" || right.kind !== "DIRECTORY") return false;
+      continue;
+    }
+    if (
+      left.mime !== right.mime ||
+      left.size !== right.size ||
+      left.sha256 !== right.sha256
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * A validated file path must never block another entry's folder: `notes.tex`
+ * as a file plus `notes.tex/extra.tex` passes the name scan but cannot be
+ * applied without destroying one of them.
+ */
+function assertNoPathCollisions(entries: ImportManifestEntry[]): void {
+  const filePaths = entries.filter((entry) => entry.kind !== "DIRECTORY").map((entry) => entry.path);
+  for (const filePath of filePaths) {
+    const prefix = `${filePath}/`;
+    for (const entry of entries) {
+      if (entry.path !== filePath && entry.path.startsWith(prefix)) {
+        throw new ZipValidationError("INVALID_ARCHIVE");
+      }
+    }
+  }
+}
+
+/**
+ * Reopens a validated archive and returns exact file bytes keyed by archive
+ * path. The scan reproduces the validator's manifest from the current bytes
+ * and compares it field by field against the expected manifest, so bytes
+ * replaced after validation or a tampered manifest fail with no partial map.
+ * Directory entries are structural only and never returned as files.
+ */
+export async function readArchiveForApply(
+  input: Uint8Array,
+  expected: ImportManifest,
+): Promise<Map<string, Buffer>> {
+  const { manifest, files } = await scanArchive(input, true);
+  if (!manifestsEqual(manifest, expected)) {
+    throw new ZipValidationError("INVALID_ARCHIVE");
+  }
+  assertNoPathCollisions(manifest.entries);
+  return files;
+}
+/**
+ * Shared bounded entry scan. With `collect` it also retains exact file bytes;
+ * otherwise only the manifest is produced. Callers must compare the manifest
+ * before trusting retained bytes.
+ */
+async function scanArchive(
+  input: Uint8Array,
+  collect: boolean,
+): Promise<{ manifest: ImportManifest; files: Map<string, Buffer> }> {
   const bytes = Buffer.isBuffer(input) ? input : Buffer.from(input);
+  const files = new Map<string, Buffer>();
   let zipfile: yauzl.ZipFile;
   try {
     zipfile = await yauzl.fromBufferPromise(bytes, {
@@ -197,6 +274,7 @@ export async function validateZipArchive(input: Uint8Array): Promise<ImportManif
         throw error;
       }
       const sha256 = createHash("sha256").update(data).digest("hex");
+      if (collect) files.set(path, data);
       nodes += 1;
       const ancestors: string[] = [];
       const parts = path.split("/").slice(0, -1);
@@ -217,5 +295,5 @@ export async function validateZipArchive(input: Uint8Array): Promise<ImportManif
   }
   if (entries.length === 0) throw new ZipValidationError("INVALID_ARCHIVE");
   entries.sort((left, right) => (left.path < right.path ? -1 : left.path > right.path ? 1 : 0));
-  return { version: 1, entries };
+  return { manifest: { version: 1, entries }, files };
 }

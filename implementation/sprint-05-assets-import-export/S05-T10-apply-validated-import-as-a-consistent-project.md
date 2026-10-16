@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T03, S05-T12]
 requirements: [PRO-02, PRO-10]
 source_task: S05-T03
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: ready
 ---
 # S05-T10 — Apply validated import as a consistent project
 
