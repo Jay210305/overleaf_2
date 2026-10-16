@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S09-T08]
 requirements: [PRO-08]
 source_task: S03-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T09 — Implement archive trash and permanent deletion
 

@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S09-T07]
 requirements: [COL-11, NFR-08]
 source_task: S09-T08
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T08 — Create explicit restore confirmation UI
 

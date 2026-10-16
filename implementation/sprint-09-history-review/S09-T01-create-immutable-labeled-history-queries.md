@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S08-T10]
 requirements: [COL-10]
 source_task: S09-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T01 — Create immutable labeled history queries
 

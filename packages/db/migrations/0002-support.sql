@@ -77,6 +77,8 @@ CREATE TABLE IF NOT EXISTS suggestions (
   CONSTRAINT suggestions_status_check CHECK (status IN ('pending', 'accepted', 'rejected', 'conflict'))
 );
 
+ALTER TABLE suggestions ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+
 DO $$
 BEGIN
   IF NOT EXISTS (
@@ -196,3 +198,19 @@ CREATE TABLE IF NOT EXISTS feature_flags (
   scope TEXT NOT NULL DEFAULT 'global',
   configuration_json JSONB NOT NULL DEFAULT '{}'::jsonb
 );
+
+-- Project Ownership Offers
+CREATE TABLE IF NOT EXISTS project_ownership_offers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  owner_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  recipient_user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  status TEXT NOT NULL DEFAULT 'pending',
+  expires_at TIMESTAMPTZ NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT ownership_offers_status_check CHECK (status IN ('pending', 'accepted', 'rejected', 'cancelled'))
+);
+
+CREATE INDEX IF NOT EXISTS ownership_offers_project_idx ON project_ownership_offers (project_id);
+CREATE INDEX IF NOT EXISTS ownership_offers_recipient_idx ON project_ownership_offers (recipient_user_id);
+

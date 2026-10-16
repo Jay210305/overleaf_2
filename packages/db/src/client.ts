@@ -28,8 +28,8 @@ export class PersistenceError extends Error {
   readonly code: PersistenceErrorCode;
   readonly retryable: boolean;
 
-  constructor(code: PersistenceErrorCode, message: string, retryable: boolean) {
-    super(message);
+  constructor(code: PersistenceErrorCode, message: string, retryable: boolean, options?: { cause?: unknown }) {
+    super(message, options);
     this.name = "PersistenceError";
     this.code = code;
     this.retryable = retryable;
@@ -52,12 +52,12 @@ export function mapDatabaseError(error: unknown): PersistenceError {
     sqlCode === "23502" || // not_null_violation
     sqlCode.startsWith("22") // data exceptions (22P02 invalid text, 22007 invalid datetime, etc.)
   ) {
-    return new PersistenceError("CONSTRAINT_VIOLATION", "Database constraint violation", false);
+    return new PersistenceError("CONSTRAINT_VIOLATION", err.message || "Database constraint violation", false, { cause: error });
   }
 
   // Postgres transaction conflict / serialization failure / deadlock
   if (sqlCode === "40001" || sqlCode === "40P01") {
-    return new PersistenceError("TRANSACTION_CONFLICT", "Transaction concurrency conflict", true);
+    return new PersistenceError("TRANSACTION_CONFLICT", "Transaction concurrency conflict", true, { cause: error });
   }
 
   // Database unavailable / connection errors
@@ -68,10 +68,10 @@ export function mapDatabaseError(error: unknown): PersistenceError {
     sqlCode === "57P03" ||
     (err.message && /ECONNREFUSED|connection timeout|Connection terminated/i.test(err.message))
   ) {
-    return new PersistenceError("DATABASE_UNAVAILABLE", "Database service unavailable", true);
+    return new PersistenceError("DATABASE_UNAVAILABLE", "Database service unavailable", true, { cause: error });
   }
 
-  return new PersistenceError("CONSTRAINT_VIOLATION", "Database operation failed", false);
+  return new PersistenceError("CONSTRAINT_VIOLATION", err.message || "Database operation failed", false, { cause: error });
 }
 
 export class DatabaseClient {

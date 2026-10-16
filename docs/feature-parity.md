@@ -10,21 +10,21 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | ACC-04 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-05 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | ACC-06 | G1 | Must | IN_PROGRESS | [S02-T03 recovery reset revokes sessions, accepted](test-reports/s02-t03.md); [S02-T10 authenticated change accepted](test-reports/s02-t10.md); remaining gate checks apply |
-| ACC-07 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| ACC-07 | G3 | Should | DONE | [S09-T13 export data](test-reports/s09-t13.md); [S09-T14 account deletion](test-reports/s09-t14.md) |
 | ACC-08 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-01 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t03.md) (accepted 2026-10-10); [S03-T01 CRUD/pagination](test-reports/s03-t01.md); [S03-T03 dashboard](test-reports/s03-t03.md); [S03-T08 journey](test-reports/s03-t08.md); G1 gate stabilization applies |
 | PRO-02 | G1 | Must | IN_PROGRESS | [S03-T02 blank project creation](test-reports/s03-t02.md); [S05-T03 validated job](test-reports/s05-t03.md) and [S05-T12 signed ZIP intake](test-reports/s05-t12.md) accepted 2026-10-13; [S05-T10 transactional ZIP project application](test-reports/s05-t10.md) implemented with review pending; remaining mapped tasks apply |
 | PRO-03 | G1 | Must | IN_PROGRESS | [S03-T01 rename](test-reports/s03-t01.md); [S03-T02 project clone](test-reports/s03-t02.md); G1 gate stabilization applies |
 | PRO-04 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t07.md) (accepted 2026-10-10); [S03-T04 ID-based tree](test-reports/s03-t04.md); [S03-T05 tree interactions](test-reports/s03-t05.md); [S03-T09 transaction safety](test-reports/s03-t09.md); [S03-T08 journey](test-reports/s03-t08.md); [S07-T06 open room sync accepted](test-reports/s07-t06.md); remaining mapped tasks still apply |
 | PRO-05 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S05-T01 upload API](test-reports/s05-t01.md), [S05-T09 cleanup/quota](test-reports/s05-t09.md) and [S05-T02 browser upload](test-reports/s05-t02.md) accepted 2026-10-13; import and remaining mapped tasks still apply |
-| PRO-06 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); remaining mapped tasks still apply |
+| PRO-06 | G1 | Must | IN_PROGRESS | [S01 verified scope](test-reports/s01-t08.md) (accepted 2026-10-10); [S09-T13 authorized export download](test-reports/s09-t13.md); remaining mapped tasks still apply |
 | PRO-07 | G1 | Must | IN_PROGRESS | [S03-T06 root document setting](test-reports/s03-t06.md); G1 gate stabilization applies |
-| PRO-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PRO-09 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| PRO-08 | G3 | Should | DONE | [S09-T09 archive, trash, and permanent deletion](test-reports/s09-t09.md) |
+| PRO-09 | G3 | Should | DONE | [S09-T10 owned project tags](test-reports/s09-t10.md); [S09-T11 bulk tagging](test-reports/s09-t11.md) |
 | PRO-10 | G1 | Must | IN_PROGRESS | [S05-T03 hostile archive validation](test-reports/s05-t03.md) and [S05-T12 signed ZIP intake](test-reports/s05-t12.md) accepted 2026-10-13; [S05-T10 archive recheck and atomic application](test-reports/s05-t10.md) implemented with review pending; remaining mapped tasks apply |
 | PRO-11 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PRO-12 | G3 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| PRO-13 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| PRO-12 | G3 | Could | DONE | [S09-T11 permission-aware bulk project actions](test-reports/s09-t11.md) |
+| PRO-13 | G3 | Should | DONE | [S09-T12 explicit ownership transfer](test-reports/s09-t12.md) |
 | PRO-14 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | PRO-15 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | EDT-01 | G1 | Must | IN_PROGRESS | [S04-T01 CodeMirror extensions](test-reports/s04-t01.md); [S04-T08 Unicode editing](test-reports/s04-t08.md); G1 gate stabilization applies |
@@ -60,10 +60,10 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | COL-05 | G2 | Should | IN_PROGRESS | [S08-T02 hashed link REST/new WSS evidence](test-reports/s08-t02.md); [S08-T03 link UI and Edge redemption](test-reports/s08-t03.md); [S08-T08 revoke/expiry/exhaustion denials and derived-grant closure](test-reports/s08-t08.md) implemented with review pending |
 | COL-06 | G2 | Must | IN_PROGRESS | [S08-T04 anchored comment threads, detached ranges and UI](test-reports/s08-t04.md) and [S08-T09 source-verified anchor excerpts, reply flow and Edge journey](test-reports/s08-t09.md) accepted; [S08-T06 mention/reply delivery, idempotency and in-app UI](test-reports/s08-t06.md) implemented with review pending; safety hardening remains S08-T07 |
 | COL-07 | G2 | Should | IN_PROGRESS | [S08-T05 durable chat REST, WSS, UI and Edge evidence](test-reports/s08-t05.md) accepted; [S08-T07 PostgreSQL-backed rate limits and body policy](test-reports/s08-t07.md) implemented with review pending; open-socket closure remains S08-T08 |
-| COL-08 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| COL-09 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| COL-10 | G3 | Should | IN_PROGRESS | [S03-T07 structural revision manifests](test-reports/s03-t07.md); [S04-T07 text/binary checkpoints](test-reports/s04-t07.md); remaining collaboration manifests apply |
-| COL-11 | G3 | Should | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| COL-08 | G3 | Should | DONE | [S09-T04 reviewer suggestions](test-reports/s09-t04.md); [S09-T07 concurrency verification](test-reports/s09-t07.md) |
+| COL-09 | G3 | Should | DONE | [S09-T04 suggestion modeling](test-reports/s09-t04.md); [S09-T05 suggestion resolution](test-reports/s09-t05.md); [S09-T07 concurrency verification](test-reports/s09-t07.md) |
+| COL-10 | G3 | Should | DONE | [S03-T07 structural revision manifests](test-reports/s03-t07.md); [S04-T07 text/binary checkpoints](test-reports/s04-t07.md); [S09-T01 history queries](test-reports/s09-t01.md); [S09-T02 Myers diff and revision compare](test-reports/s09-t02.md) |
+| COL-11 | G3 | Should | DONE | [S09-T03 restore with version guard](test-reports/s09-t03.md); [S09-T06 restore ACL and anchor preservation](test-reports/s09-t06.md); [S09-T08 restore dialog](test-reports/s09-t08.md) |
 | COL-12 | G2 | Must | DONE | [S07-T05 offline persistence & reconnect](test-reports/s07-t05.md); [S07-T06 open room sync on tree rename/delete](test-reports/s07-t06.md) |
 | COL-13 | G4 | Could | IN_PROGRESS | [S08-T06 preference-aware mention/reply in-app notifications](test-reports/s08-t06.md) implemented with review pending; remaining preference-controlled activity scope stays planned |
 | COL-14 | G1 | Must | IN_PROGRESS | [S02-T09 account/session audit scope accepted](test-reports/s02-t09.md); invitation/download/restore actions remain later work |

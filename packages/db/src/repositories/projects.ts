@@ -8,6 +8,7 @@ export type ListProjectsInput = {
   limit: number;
   filter: "owned" | "shared" | "recent" | "archived" | "trashed";
   order: "updatedAt" | "owner";
+  tagId?: string | undefined;
   q?: string | undefined;
 };
 
@@ -114,6 +115,17 @@ export class ProjectRepository {
       }
     }
 
+    let tagSql = "";
+    if (input.tagId && input.tagId.trim().length > 0) {
+      assertUUID(input.tagId, "tagId");
+      params.push(input.tagId);
+      tagSql = `AND p.id IN (
+        SELECT ptl.project_id FROM project_tag_links ptl
+        JOIN project_tags pt ON pt.id = ptl.tag_id
+        WHERE pt.id = $${params.length} AND pt.user_id = $1
+      )`;
+    }
+
     const orderBy =
       order === "updatedAt" ? "p.updated_at DESC, p.id DESC" : "p.owner_id ASC, p.id ASC";
 
@@ -135,6 +147,7 @@ export class ProjectRepository {
       FROM projects p
       WHERE ${filterSql}
       ${searchSql}
+      ${tagSql}
       ${cursorCondition}
       ORDER BY ${orderBy}
       LIMIT $${limitIdx}

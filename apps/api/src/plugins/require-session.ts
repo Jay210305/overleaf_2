@@ -101,7 +101,7 @@ export async function requireProjectAction(
   const role: Role | null =
     project.owner_id === identity.userId ? "OWNER" : project.revoked_at ? null : project.role;
   if (!role) throw new AuthError(404, "RESOURCE_NOT_FOUND");
-  if (project.status !== "active" && action !== "RESTORE")
+  if (project.status !== "active" && action !== "RESTORE" && action !== "DELETE")
     throw new AuthError(404, "RESOURCE_NOT_FOUND");
   if (!allowsProjectAction(role, action)) throw new AuthError(403, "PROJECT_PERMISSION_DENIED");
   return { ...identity, projectId, role, action };

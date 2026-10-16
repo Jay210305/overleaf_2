@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S09-T03]
 requirements: [COL-08, COL-09]
 source_task: S09-T04
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S09-T04 — Model reviewer suggestions separately
 

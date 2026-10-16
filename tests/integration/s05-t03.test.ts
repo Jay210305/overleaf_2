@@ -205,14 +205,13 @@ describe("S05-T03 archive validation and import jobs", () => {
       title: "S05-T03 untouched project",
       compiler: "pdflatex",
     });
-    void project;
     const counts = async () =>
       fixture.db.query<{ kind: string; total: string }>(
-        `SELECT 'projects' AS kind, COUNT(*)::text AS total FROM projects WHERE owner_id = $1
-         UNION ALL SELECT 'nodes', COUNT(*)::text FROM project_nodes n JOIN projects p ON p.id = n.project_id WHERE p.owner_id = $1
-         UNION ALL SELECT 'texts', COUNT(*)::text FROM text_documents t JOIN projects p ON p.id = t.project_id WHERE p.owner_id = $1
-         UNION ALL SELECT 'updates', COUNT(*)::text FROM crdt_updates u JOIN project_nodes n ON n.id = u.file_id JOIN projects p ON p.id = n.project_id WHERE p.owner_id = $1`,
-        [actorId],
+        `SELECT 'projects' AS kind, COUNT(*)::text AS total FROM projects WHERE id = $1
+         UNION ALL SELECT 'nodes', COUNT(*)::text FROM project_nodes WHERE project_id = $1
+         UNION ALL SELECT 'texts', COUNT(*)::text FROM text_documents WHERE project_id = $1
+         UNION ALL SELECT 'updates', COUNT(*)::text FROM crdt_updates u JOIN text_documents t ON t.file_id = u.file_id WHERE t.project_id = $1`,
+        [project.id],
       );
     const before = await counts();
     const { bytes, job } = await stageValid();

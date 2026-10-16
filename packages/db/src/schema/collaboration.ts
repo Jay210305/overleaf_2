@@ -129,6 +129,7 @@ export const suggestions = pgTable(
     newText: text("new_text").notNull(),
     status: text("status").notNull().default("pending"),
     resolvedBy: text("resolved_by"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
   },
   (table) => [
     foreignKey({
