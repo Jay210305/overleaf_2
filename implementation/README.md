@@ -67,8 +67,8 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S05-T03 | [Validate archives and define idempotent import job](sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | Project Co-owner (proposed) | 8 | done |
 | S05-T12 | [Implement authenticated ZIP import intake](sprint-05-assets-import-export/S05-T12-implement-authenticated-zip-import-intake.md) | Project Co-owner (proposed) | 8 | done |
 | S05-T10 | [Apply validated import as a consistent project](sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | Project Co-owner (proposed) | 8 | done |
-| S05-T04 | [Export immutable source ZIP](sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | Project Co-owner (proposed) | 8 | in_progress |
-| S05-T05 | [Preview and download safe binary assets](sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | Project Co-owner (proposed) | 6 | todo |
+| S05-T04 | [Export immutable source ZIP](sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | Project Co-owner (proposed) | 8 | done |
+| S05-T05 | [Preview and download safe binary assets](sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | Project Co-owner (proposed) | 6 | in_progress |
 | S05-T06 | [Create minimal versioned internal templates](sprint-05-assets-import-export/S05-T06-create-minimal-versioned-internal-templates.md) | Project Co-owner (proposed) | 8 | todo |
 | S05-T11 | [Create template preview and instantiate UI](sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | Project Co-owner (proposed) | 6 | todo |
 | S05-T07 | [Verify imported paths and custom styles](sprint-05-assets-import-export/S05-T07-verify-imported-paths-and-custom-styles.md) | Project Co-owner (proposed) | 6 | todo |

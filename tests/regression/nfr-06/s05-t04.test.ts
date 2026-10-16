@@ -5,7 +5,7 @@ import { parseServerConfig } from "@latex-collab/config/server";
 import { ImportJobRepository } from "../../../packages/db/src/repositories/import-jobs.js";
 import { RevisionsRepository } from "../../../packages/db/src/repositories/revisions.js";
 import { S3StorageAdapter } from "../../../packages/storage/src/s3.js";
-import { buildSourceZip } from "../../../apps/jobs/src/exports/zip.js";
+import { buildSourceZip } from "@latex-collab/storage/source-export";
 import { applyValidatedImport } from "../../../apps/jobs/src/imports/apply-project.js";
 import { createSessionFixture } from "../../helpers/s02-session.js";
 import { applyImportMigrations } from "../../helpers/import-migrations.js";

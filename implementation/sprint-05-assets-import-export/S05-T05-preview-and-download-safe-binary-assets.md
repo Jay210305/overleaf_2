@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T04]
 requirements: [PRO-05, PRO-06, PL-07]
 source_task: S05-T05
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: ready
 ---
 # S05-T05 — Preview and download safe binary assets
 

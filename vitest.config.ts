@@ -74,6 +74,12 @@ export default defineConfig({
         replacement: fileURLToPath(new URL("./packages/storage/src/s3.ts", import.meta.url)),
       },
       {
+        find: "@latex-collab/storage/source-export",
+        replacement: fileURLToPath(
+          new URL("./packages/storage/src/source-export.ts", import.meta.url),
+        ),
+      },
+      {
         find: "@latex-collab/storage",
         replacement: fileURLToPath(new URL("./packages/storage/src/index.ts", import.meta.url)),
       },

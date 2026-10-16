@@ -9,7 +9,7 @@ import { S3StorageAdapter } from "../../packages/storage/src/s3.js";
 import {
   buildSourceZip,
   SourceExportError,
-} from "../../apps/jobs/src/exports/zip.js";
+} from "@latex-collab/storage/source-export";
 import { applyValidatedImport } from "../../apps/jobs/src/imports/apply-project.js";
 import {
   readArchiveForApply,

@@ -8,8 +8,8 @@ import {
   maxArchiveNodes,
   maxExpandedBytes,
   maxFileBytes,
-  type StorageAdapter,
-} from "@latex-collab/storage";
+} from "./content-policy.js";
+import type { StorageAdapter } from "@latex-collab/contracts";
 
 export type SourceExportErrorCode = "NOT_FOUND" | "LIMIT_EXCEEDED" | "INVALID_STATE";
 

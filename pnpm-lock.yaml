@@ -367,6 +367,12 @@ importers:
       '@latex-collab/contracts':
         specifier: workspace:*
         version: link:../contracts
+      '@latex-collab/db':
+        specifier: workspace:*
+        version: link:../db
+      yjs:
+        specifier: 13.6.27
+        version: 13.6.27
 
   packages/test-utils:
     dependencies:

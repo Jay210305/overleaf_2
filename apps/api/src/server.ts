@@ -26,6 +26,7 @@ import { registerOwnershipRoutes } from "./modules/projects/ownership.js";
 import { registerTagRoutes } from "./modules/tags/routes.js";
 import { registerTreeRoutes } from "./modules/files/tree.js";
 import { registerFigurePreviewRoute } from "./modules/files/figure-preview.js";
+import { registerBinaryDownloadRoutes } from "./modules/files/binary-download.js";
 import { registerTextRoutes } from "./modules/text/routes.js";
 import { registerCheckpointRoutes } from "./modules/history/checkpoint.js";
 import { registerHistoryRoutes } from "./modules/history/routes.js";
@@ -208,6 +209,7 @@ export function createServer(options: ServerOptions) {
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
     });
     registerFigurePreviewRoute(app, { db: options.db, storage: options.storage });
+    registerBinaryDownloadRoutes(app, { db: options.db, storage: options.storage });
     registerTextRoutes(app, {
       db: options.db,
       origin: options.origin,
