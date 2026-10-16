@@ -7,6 +7,7 @@
     "@aws-sdk/client-s3": "3.1149.0",
     "@fastify/cors": "11.3.1",
     "@latex-collab/auth": "workspace:*",
+    "@latex-collab/collab": "workspace:*",
     "@latex-collab/config": "workspace:*",
     "@latex-collab/contracts": "workspace:*",
     "@latex-collab/db": "workspace:*",

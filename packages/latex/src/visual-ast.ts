@@ -1,7 +1,9 @@
-import { createHash } from "node:crypto";
+import { sha256 } from "@noble/hashes/sha2.js";
 
 export function computeTextHash(text: string): string {
-  return createHash("sha256").update(text, "utf8").digest("hex");
+  return Array.from(sha256(new TextEncoder().encode(text)), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
 }
 
 export interface VisualSourceRange {
@@ -11,11 +13,43 @@ export interface VisualSourceRange {
 
 export type VisualSpan =
   | { kind: "text"; text: string; range: VisualSourceRange; raw: string }
-  | { kind: "bold"; content: string; range: VisualSourceRange; innerRange: VisualSourceRange; raw: string }
-  | { kind: "italic"; content: string; macro: "textit" | "emph"; range: VisualSourceRange; innerRange: VisualSourceRange; raw: string }
-  | { kind: "mathInline"; formula: string; range: VisualSourceRange; innerRange: VisualSourceRange; raw: string }
-  | { kind: "citation"; keys: string[]; range: VisualSourceRange; innerRange: VisualSourceRange; raw: string }
-  | { kind: "reference"; key: string; command: "ref" | "eqref"; range: VisualSourceRange; innerRange: VisualSourceRange; raw: string }
+  | {
+      kind: "bold";
+      content: string;
+      range: VisualSourceRange;
+      innerRange: VisualSourceRange;
+      raw: string;
+    }
+  | {
+      kind: "italic";
+      content: string;
+      macro: "textit" | "emph";
+      range: VisualSourceRange;
+      innerRange: VisualSourceRange;
+      raw: string;
+    }
+  | {
+      kind: "mathInline";
+      formula: string;
+      range: VisualSourceRange;
+      innerRange: VisualSourceRange;
+      raw: string;
+    }
+  | {
+      kind: "citation";
+      keys: string[];
+      range: VisualSourceRange;
+      innerRange: VisualSourceRange;
+      raw: string;
+    }
+  | {
+      kind: "reference";
+      key: string;
+      command: "ref" | "eqref";
+      range: VisualSourceRange;
+      innerRange: VisualSourceRange;
+      raw: string;
+    }
   | { kind: "rawInline"; raw: string; range: VisualSourceRange };
 
 export interface VisualListItem {
@@ -116,12 +150,7 @@ export interface TableNode {
 }
 
 export type FallbackReason =
-  | "preamble"
-  | "unknownMacro"
-  | "complexEnvironment"
-  | "verbatim"
-  | "tikz"
-  | "parseError";
+  "preamble" | "unknownMacro" | "complexEnvironment" | "verbatim" | "tikz" | "parseError";
 
 export interface LiteralFallbackNode {
   id: string;
@@ -155,7 +184,10 @@ export interface VisualAstDocument {
 }
 
 export class VisualAstParseError extends Error {
-  constructor(message: string, public readonly offset: number) {
+  constructor(
+    message: string,
+    public readonly offset: number,
+  ) {
     super(message);
     this.name = "VisualAstParseError";
   }
@@ -316,7 +348,16 @@ function findMatchingBrace(text: string, openIndex: number): number {
 }
 
 function findNextSpecial(text: string, fromIndex: number): number {
-  const specials = ["$", "\\(", "\\textbf{", "\\textit{", "\\emph{", "\\cite", "\\ref{", "\\eqref{"];
+  const specials = [
+    "$",
+    "\\(",
+    "\\textbf{",
+    "\\textit{",
+    "\\emph{",
+    "\\cite",
+    "\\ref{",
+    "\\eqref{",
+  ];
   let minIdx = text.length;
 
   for (const s of specials) {
@@ -461,7 +502,8 @@ export function parseVisualAst(source: string): VisualAstDocument {
     // TikZ environment
     if (inner.startsWith("\\begin{tikzpicture}")) {
       const closeIdx = inner.indexOf("\\end{tikzpicture}");
-      const endOffset = closeIdx !== -1 ? innerOffset + closeIdx + "\\end{tikzpicture}".length : len;
+      const endOffset =
+        closeIdx !== -1 ? innerOffset + closeIdx + "\\end{tikzpicture}".length : len;
       const finalEnd = consumeTrailingWhitespace(source, endOffset);
       const raw = source.slice(offset, finalEnd);
       nodes.push({
@@ -486,7 +528,8 @@ export function parseVisualAst(source: string): VisualAstDocument {
         const innerFormulaText = inner.slice(2, closeIdx);
         const formula = innerFormulaText.trim();
         const innerRel = innerFormulaText.indexOf(formula);
-        const formulaStart = formula.length > 0 && innerRel !== -1 ? innerOffset + 2 + innerRel : innerOffset + 2;
+        const formulaStart =
+          formula.length > 0 && innerRel !== -1 ? innerOffset + 2 + innerRel : innerOffset + 2;
         const formulaEnd = formulaStart + formula.length;
         nodes.push({
           id: nextId(),
@@ -512,7 +555,8 @@ export function parseVisualAst(source: string): VisualAstDocument {
         const innerFormulaText = inner.slice(2, closeIdx);
         const formula = innerFormulaText.trim();
         const innerRel = innerFormulaText.indexOf(formula);
-        const formulaStart = formula.length > 0 && innerRel !== -1 ? innerOffset + 2 + innerRel : innerOffset + 2;
+        const formulaStart =
+          formula.length > 0 && innerRel !== -1 ? innerOffset + 2 + innerRel : innerOffset + 2;
         const formulaEnd = formulaStart + formula.length;
         nodes.push({
           id: nextId(),
@@ -536,12 +580,18 @@ export function parseVisualAst(source: string): VisualAstDocument {
       const closeTag = isStar ? "\\end{equation*}" : "\\end{equation}";
       const closeIdx = inner.indexOf(closeTag);
       if (closeIdx !== -1) {
-        const finalEnd = consumeTrailingWhitespace(source, innerOffset + closeIdx + closeTag.length);
+        const finalEnd = consumeTrailingWhitespace(
+          source,
+          innerOffset + closeIdx + closeTag.length,
+        );
         const raw = source.slice(offset, finalEnd);
         const innerFormulaText = inner.slice(openEnvLen, closeIdx);
         const formula = innerFormulaText.trim();
         const innerRel = innerFormulaText.indexOf(formula);
-        const formulaStart = formula.length > 0 && innerRel !== -1 ? innerOffset + openEnvLen + innerRel : innerOffset + openEnvLen;
+        const formulaStart =
+          formula.length > 0 && innerRel !== -1
+            ? innerOffset + openEnvLen + innerRel
+            : innerOffset + openEnvLen;
         const formulaEnd = formulaStart + formula.length;
         nodes.push({
           id: nextId(),
@@ -594,7 +644,11 @@ export function parseVisualAst(source: string): VisualAstDocument {
         const fullLen = closeIdx + closeTag.length;
         const finalEnd = consumeTrailingWhitespace(source, innerOffset + fullLen);
         const raw = source.slice(offset, finalEnd);
-        const items = parseListItems(inner.slice(0, fullLen), innerOffset, isEnumerate ? "enumerate" : "itemize");
+        const items = parseListItems(
+          inner.slice(0, fullLen),
+          innerOffset,
+          isEnumerate ? "enumerate" : "itemize",
+        );
         nodes.push({
           id: nextId(),
           kind: "list",
@@ -670,8 +724,17 @@ export function parseVisualAst(source: string): VisualAstDocument {
     if (macroCallMatch && macroCallMatch[1]) {
       const cmd = macroCallMatch[1];
       const inlineCommands = new Set([
-        "textbf", "textit", "emph", "cite", "citep", "citet",
-        "ref", "eqref", "url", "href", "item",
+        "textbf",
+        "textit",
+        "emph",
+        "cite",
+        "citep",
+        "citet",
+        "ref",
+        "eqref",
+        "url",
+        "href",
+        "item",
       ]);
 
       if (!inlineCommands.has(cmd)) {
@@ -699,7 +762,10 @@ export function parseVisualAst(source: string): VisualAstDocument {
       const envName = unsuppEnvMatch[1];
       const closeTag = `\\end{${envName}}`;
       const closeIdx = inner.indexOf(closeTag);
-      const endOffset = closeIdx !== -1 ? innerOffset + closeIdx + closeTag.length : innerOffset + inner.indexOf("\n");
+      const endOffset =
+        closeIdx !== -1
+          ? innerOffset + closeIdx + closeTag.length
+          : innerOffset + inner.indexOf("\n");
       const safeEnd = endOffset > offset ? endOffset : len;
       const finalEnd = consumeTrailingWhitespace(source, safeEnd);
       const raw = source.slice(offset, finalEnd);
@@ -755,7 +821,11 @@ export function parseVisualAst(source: string): VisualAstDocument {
   };
 }
 
-function parseListItems(raw: string, baseOffset: number, _kind: "itemize" | "enumerate"): VisualListItem[] {
+function parseListItems(
+  raw: string,
+  baseOffset: number,
+  _kind: "itemize" | "enumerate",
+): VisualListItem[] {
   const items: VisualListItem[] = [];
   const itemRegex = /\\item(?:\s*\[([^\]]*)\])?/g;
   let match: RegExpExecArray | null;
@@ -801,7 +871,10 @@ function parseListItems(raw: string, baseOffset: number, _kind: "itemize" | "enu
   return items;
 }
 
-function parseFigureEnvironment(raw: string, baseOffset: number): {
+function parseFigureEnvironment(
+  raw: string,
+  baseOffset: number,
+): {
   imagePath: string;
   imagePathRange: VisualSourceRange;
   caption: string | null;
@@ -844,7 +917,10 @@ function parseFigureEnvironment(raw: string, baseOffset: number): {
   return { imagePath, imagePathRange, caption, captionRange, label, labelRange };
 }
 
-function parseTableEnvironment(raw: string, baseOffset: number): {
+function parseTableEnvironment(
+  raw: string,
+  baseOffset: number,
+): {
   alignment: string;
   alignmentRange: VisualSourceRange;
   rows: VisualTableRow[];
@@ -881,7 +957,9 @@ function parseTableEnvironment(raw: string, baseOffset: number): {
     const rowStart = baseOffset + bodyStart + lastEnd;
     const rowEnd = baseOffset + bodyStart + match.index + match[0].length;
 
-    const cleanRowContent = rowContentOnly.replace(/\\(?:hline|cline\{[^}]*\}|toprule|midrule|bottomrule)/g, "").trim();
+    const cleanRowContent = rowContentOnly
+      .replace(/\\(?:hline|cline\{[^}]*\}|toprule|midrule|bottomrule)/g, "")
+      .trim();
     if (cleanRowContent.length > 0) {
       const cellChunks = rowContentOnly.split(/(?<!\\)&/);
       let cellOffset = rowStart;
@@ -890,7 +968,9 @@ function parseTableEnvironment(raw: string, baseOffset: number): {
       for (let c = 0; c < cellChunks.length; c++) {
         const cellText = cellChunks[c];
         if (cellText === undefined) continue;
-        const cleanContent = cellText.replace(/\\(?:hline|cline\{[^}]*\}|toprule|midrule|bottomrule)/g, "").trim();
+        const cleanContent = cellText
+          .replace(/\\(?:hline|cline\{[^}]*\}|toprule|midrule|bottomrule)/g, "")
+          .trim();
         let cellStart = cellOffset;
         let cellEnd = cellOffset;
         if (cleanContent.length > 0) {
@@ -923,7 +1003,9 @@ function parseTableEnvironment(raw: string, baseOffset: number): {
   }
 
   const remainder = tableBody.slice(lastEnd);
-  const cleanRemainder = remainder.replace(/\\(?:hline|cline\{[^}]*\}|toprule|midrule|bottomrule)/g, "").trim();
+  const cleanRemainder = remainder
+    .replace(/\\(?:hline|cline\{[^}]*\}|toprule|midrule|bottomrule)/g, "")
+    .trim();
   if (cleanRemainder.length > 0) {
     const rowStart = baseOffset + bodyStart + lastEnd;
     const cellChunks = remainder.split(/(?<!\\)&/);
@@ -933,7 +1015,9 @@ function parseTableEnvironment(raw: string, baseOffset: number): {
     for (let c = 0; c < cellChunks.length; c++) {
       const cellText = cellChunks[c];
       if (cellText === undefined) continue;
-      const cleanContent = cellText.replace(/\\(?:hline|cline\{[^}]*\}|toprule|midrule|bottomrule)/g, "").trim();
+      const cleanContent = cellText
+        .replace(/\\(?:hline|cline\{[^}]*\}|toprule|midrule|bottomrule)/g, "")
+        .trim();
       let cellStart = cellOffset;
       let cellEnd = cellOffset;
       if (cleanContent.length > 0) {
@@ -967,7 +1051,8 @@ function parseTableEnvironment(raw: string, baseOffset: number): {
 }
 
 function findNextBlockBoundary(source: string, fromOffset: number): number {
-  const boundaryRegex = /(?:\r?\n){2,}|\r?\n(?=[ \t]*\\(?:section|subsection|subsubsection|begin|end\{document\}|\[|\$\$|documentclass|[a-zA-Z@]+(?![a-zA-Z@])))/g;
+  const boundaryRegex =
+    /(?:\r?\n){2,}|\r?\n(?=[ \t]*\\(?:section|subsection|subsubsection|begin|end\{document\}|\[|\$\$|documentclass|[a-zA-Z@]+(?![a-zA-Z@])))/g;
   boundaryRegex.lastIndex = fromOffset;
   const match = boundaryRegex.exec(source);
   if (match) {

@@ -1,8 +1,25 @@
+// @vitest-environment jsdom
+import { createElement } from "react";
 import * as Y from "yjs";
-import { describe, expect, it } from "vitest";
-import { parseVisualAst, type MathDisplayNode, type TableNode, type HeadingNode } from "@latex-collab/latex";
+import { describe, expect, it, vi, afterEach } from "vitest";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  parseVisualAst,
+  type MathDisplayNode,
+  type TableNode,
+  type HeadingNode,
+} from "@latex-collab/latex";
 import { applyVisualPatch, createVisualPatch } from "../../packages/editor/src/visual-patch.js";
-import { applyFormulaPatch, applyTableCellPatch } from "../../packages/editor/src/visual-academic-patch.js";
+import {
+  applyFormulaPatch,
+  applyTableCellPatch,
+} from "../../packages/editor/src/visual-academic-patch.js";
+import { LiveTextDocument } from "../../apps/web/src/features/collab/live-document.js";
+
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+});
 
 function syncDocs(docA: Y.Doc, docB: Y.Doc): void {
   const updateA = Y.encodeStateAsUpdate(docA, Y.encodeStateVector(docB));
@@ -12,6 +29,121 @@ function syncDocs(docA: Y.Doc, docB: Y.Doc): void {
 }
 
 describe("S11-T09 Integration: Mixed Code and Visual Coediting", () => {
+  it("two mounted clients exchange a visual heading edit through the socket and receive a durable ack", async () => {
+    const fileId = "5b3675db-bba8-4fb8-94da-ab9c6841df29";
+    const projectId = "56d03d93-8bf3-4e5a-a924-0cce961c7ca1";
+    const serverDoc = new Y.Doc();
+    serverDoc.getText("content").insert(0, "\\section{Original}\nBody text.\n");
+    const sockets: FakeSocket[] = [];
+    const acknowledgements: Array<{ socket: FakeSocket; message: unknown }> = [];
+    class FakeSocket {
+      static OPEN = 1;
+      readyState = 1;
+      onopen: (() => void) | null = null;
+      onmessage: ((event: { data: string }) => void) | null = null;
+      onclose: ((event: { code: number }) => void) | null = null;
+      constructor(_url: string) {
+        sockets.push(this);
+        queueMicrotask(() => this.onopen?.());
+      }
+      send(raw: string) {
+        const message = JSON.parse(raw) as { type: string; updateBase64?: string };
+        if (message.type === "auth") {
+          queueMicrotask(() =>
+            this.emit({
+              type: "auth.ok",
+              fileId,
+              action: "write",
+              updateBase64: btoa(String.fromCharCode(...Y.encodeStateAsUpdate(serverDoc))),
+            }),
+          );
+        } else if (message.type === "sync.update") {
+          const update = Uint8Array.from(atob(message.updateBase64 ?? ""), (char) =>
+            char.charCodeAt(0),
+          );
+          Y.applyUpdate(serverDoc, update);
+          for (const peer of sockets) {
+            if (peer !== this)
+              peer.emit({ type: "sync.update", updateBase64: message.updateBase64 });
+          }
+          acknowledgements.push({
+            socket: this,
+            message: {
+              type: "text.durable_ack",
+              version: 1,
+              fileId,
+              persistedSeq: 1,
+              stateVectorBase64: btoa(String.fromCharCode(...Y.encodeStateVector(serverDoc))),
+            },
+          });
+        }
+      }
+      emit(message: unknown) {
+        this.onmessage?.({ data: JSON.stringify(message) });
+      }
+      close() {
+        this.readyState = 3;
+        this.onclose?.({ code: 1000 });
+      }
+    }
+    vi.stubGlobal("WebSocket", FakeSocket);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ ticket: "a".repeat(48), expiresAt: new Date().toISOString() }),
+      }),
+    );
+
+    render(
+      createElement(
+        "div",
+        null,
+        createElement(LiveTextDocument, {
+          projectId,
+          fileId,
+          fileName: "main.tex",
+          apiUrl: "http://localhost/api/v1",
+          csrfToken: "test",
+        }),
+        createElement(LiveTextDocument, {
+          projectId,
+          fileId,
+          fileName: "main.tex",
+          apiUrl: "http://localhost/api/v1",
+          csrfToken: "test",
+        }),
+      ),
+    );
+    await waitFor(() =>
+      expect(screen.getAllByTestId("live-save-status").map((el) => el.textContent)).toEqual([
+        "saved",
+        "saved",
+      ]),
+    );
+    const second = screen.getAllByTestId("live-document")[1]!;
+    fireEvent.click(within(second).getByTestId("mode-visual-btn"));
+    fireEvent.click(within(second).getByText("Original"));
+    const input = within(second).getByTestId("heading-input");
+    fireEvent.change(input, { target: { value: "Collaborative" } });
+    fireEvent.blur(input);
+    await waitFor(() =>
+      expect(serverDoc.getText("content").toString()).toContain("\\section{Collaborative}"),
+    );
+    expect(within(second).getByTestId("live-save-status").textContent).toBe("saving");
+    const ack = acknowledgements.shift()!;
+    ack.socket.emit(ack.message);
+    await waitFor(() =>
+      expect(screen.getAllByTestId("live-save-status").map((el) => el.textContent)).toEqual([
+        "saved",
+        "saved",
+      ]),
+    );
+    expect(screen.getAllByTestId("codemirror-container")[0]!.textContent).toContain(
+      "Collaborative",
+    );
+  });
   it("two clients on supported regions converge cleanly", () => {
     const raw = `\\section{Background}
 Initial introductory paragraph text.
@@ -95,7 +227,7 @@ Paragraph text.`;
       headingB.titleRange.end,
       headingB.title,
       "Beta Title",
-      docB
+      docB,
     );
 
     const resB = applyVisualPatch(textB, patchB);

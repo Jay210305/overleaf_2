@@ -1,6 +1,10 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import * as Y from "yjs";
 import { computeTextHash, parseVisualAst, type VisualAstDocument } from "@latex-collab/editor";
+import { textStateSchema } from "@latex-collab/contracts";
+import { AcademicVisualNodesView } from "./academic-nodes.js";
+import { BasicVisualNodesView } from "./basic-nodes.js";
+import { VisualLiteralFallback } from "./fallback-node.js";
 
 export type EditorMode = "code" | "visual";
 
@@ -89,7 +93,9 @@ export function useEditorModeSwitch({
         if (!hasUncommittedEdits && initialSourceHash) {
           // Zero-mutation invariant check
           if (currentHash !== initialSourceHash) {
-            console.error("Invariant violation: Source hash mutated during unedited visual session!");
+            console.error(
+              "Invariant violation: Source hash mutated during unedited visual session!",
+            );
           }
         }
         setModeState("code");
@@ -98,7 +104,7 @@ export function useEditorModeSwitch({
         return true;
       }
     },
-    [mode, activeOffset, yText, initialSourceHash, hasUncommittedEdits, onModeChange]
+    [mode, activeOffset, yText, initialSourceHash, hasUncommittedEdits, onModeChange],
   );
 
   const toggleMode = useCallback(
@@ -106,7 +112,7 @@ export function useEditorModeSwitch({
       const nextMode: EditorMode = mode === "code" ? "visual" : "code";
       return setMode(nextMode, targetOffset);
     },
-    [mode, setMode]
+    [mode, setMode],
   );
 
   return {
@@ -157,7 +163,12 @@ export const EditorModeSwitch: React.FC<EditorModeSwitchProps> = ({
         data-testid="mode-code-btn"
       >
         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+          />
         </svg>
         <span>Code</span>
       </button>
@@ -176,8 +187,18 @@ export const EditorModeSwitch: React.FC<EditorModeSwitchProps> = ({
         data-testid="mode-visual-btn"
       >
         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+          />
         </svg>
         <span>Visual</span>
         {hasErrors && (
@@ -191,3 +212,136 @@ export const EditorModeSwitch: React.FC<EditorModeSwitchProps> = ({
     </div>
   );
 };
+
+export interface ReadOnlyTextDocumentProps {
+  projectId: string;
+  fileId: string;
+  apiUrl: string;
+}
+
+/** Authorized canonical source projection. No local edit is presented as saved. */
+export function ReadOnlyTextDocument({ projectId, fileId, apiUrl }: ReadOnlyTextDocumentProps) {
+  const [doc, setDoc] = useState<Y.Doc | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setDoc(null);
+    setError(null);
+    void (async () => {
+      try {
+        const response = await fetch(`${apiUrl}/projects/${projectId}/files/${fileId}/text`, {
+          method: "GET",
+          headers: { accept: "application/json" },
+          credentials: "include",
+          signal: controller.signal,
+        });
+        if (!response.ok) {
+          throw new Error(
+            response.status === 401 || response.status === 403 || response.status === 404
+              ? "Text unavailable or access denied."
+              : "Could not load document text.",
+          );
+        }
+        const state = textStateSchema.parse(await response.json());
+        if (state.fileId !== fileId)
+          throw new Error("Text response did not match the selected file.");
+        const loaded = new Y.Doc();
+        Y.applyUpdate(
+          loaded,
+          Uint8Array.from(atob(state.updateBase64), (char) => char.charCodeAt(0)),
+        );
+        if (!controller.signal.aborted) setDoc(loaded);
+      } catch (cause) {
+        if (!controller.signal.aborted) {
+          setError(
+            cause instanceof Error && cause.message.startsWith("Text unavailable")
+              ? cause.message
+              : "Could not load document text.",
+          );
+        }
+      }
+    })();
+    return () => controller.abort();
+  }, [apiUrl, fileId, projectId]);
+
+  if (error) return <p role="alert">{error}</p>;
+  if (!doc) return <p role="status">Loading document text…</p>;
+  return (
+    <ReadOnlyLoadedDocument
+      yText={doc.getText("content")}
+      projectId={projectId}
+      fileId={fileId}
+      apiUrl={apiUrl}
+    />
+  );
+}
+
+function ReadOnlyLoadedDocument({
+  yText,
+  projectId,
+  fileId,
+  apiUrl,
+}: {
+  yText: Y.Text;
+  projectId: string;
+  fileId: string;
+  apiUrl: string;
+}) {
+  const { mode, ast, setMode } = useEditorModeSwitch({ yText });
+
+  return (
+    <div role="region" aria-label="Read-only document">
+      <p role="status">Read-only preview. Editing is unavailable here.</p>
+      <EditorModeSwitch mode={mode} onSelectMode={setMode} hasErrors={ast?.hasErrors ?? false} />
+      {mode === "code" ? (
+        <pre data-testid="source-code" style={{ whiteSpace: "pre-wrap" }}>
+          {yText.toString()}
+        </pre>
+      ) : (
+        <div data-testid="visual-document">
+          {ast?.nodes.map((node) => {
+            if (node.kind === "paragraph") {
+              if (node.spans.some((span) => span.kind === "text" && span.text.includes("\\"))) {
+                return (
+                  <VisualLiteralFallback
+                    key={node.id}
+                    node={{
+                      id: node.id,
+                      kind: "literalFallback",
+                      reason: "unknownMacro",
+                      description:
+                        "Source shown literally because this paragraph contains unsupported TeX.",
+                      range: node.range,
+                      raw: node.raw,
+                      hash: node.hash,
+                    }}
+                    readOnly
+                  />
+                );
+              }
+            }
+            if (node.kind === "literalFallback") {
+              return <VisualLiteralFallback key={node.id} node={node} readOnly />;
+            }
+            if (node.kind === "heading" || node.kind === "paragraph" || node.kind === "list") {
+              return <BasicVisualNodesView key={node.id} nodes={[node]} readOnly />;
+            }
+            if (node.kind === "mathDisplay" || node.kind === "figure" || node.kind === "table") {
+              return (
+                <AcademicVisualNodesView
+                  key={node.id}
+                  nodes={[node]}
+                  readOnly
+                  projectId={projectId}
+                  fileId={fileId}
+                  apiUrl={apiUrl}
+                />
+              );
+            }
+          })}
+        </div>
+      )}
+    </div>
+  );
+}

@@ -9,7 +9,7 @@ depends_on: [S11-T08]
 requirements: [EDT-13, NFR-02]
 source_task: S11-T09
 status: done
-readiness: completed
+readiness: ready
 ---
 # S11-T09 — Verify mixed code visual coediting
 
@@ -67,10 +67,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Two clients on supported region converge; incompatible simultaneous changes surface conflict and preserve source
-- [ ] EDT-13: Supported visual nodes edit canonical source; unsupported syntax has visible non-destructive fallback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] NFR-02: Five simultaneous editors converge on identical content. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Two clients on supported region converge; incompatible simultaneous changes surface conflict and preserve source
+- [x] EDT-13: Supported visual nodes edit canonical source; unsupported syntax has visible non-destructive fallback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] NFR-02: Five simultaneous editors converge on identical content. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 

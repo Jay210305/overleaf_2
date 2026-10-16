@@ -8,7 +8,12 @@ import {
   VisualList,
   BasicVisualNodesView,
 } from "../../apps/web/src/features/visual/basic-nodes.js";
-import { parseVisualAst, type HeadingNode, type ParagraphNode, type ListNode } from "../../packages/latex/src/visual-ast.js";
+import {
+  parseVisualAst,
+  type HeadingNode,
+  type ParagraphNode,
+  type ListNode,
+} from "../../packages/latex/src/visual-ast.js";
 
 afterEach(() => {
   cleanup();
@@ -25,7 +30,7 @@ describe("S11-T03 Integration: Render Basic Supported Visual Nodes", () => {
         node: headingNode,
         readOnly: false,
         onTitleChange,
-      })
+      }),
     );
 
     // Assert semantic heading
@@ -41,11 +46,17 @@ describe("S11-T03 Integration: Render Basic Supported Visual Nodes", () => {
     fireEvent.change(input, { target: { value: "Updated Overview" } });
     fireEvent.keyDown(input, { key: "Enter" });
 
-    expect(onTitleChange).toHaveBeenCalledWith(headingNode.id, "Updated Overview", headingNode.hash);
+    expect(onTitleChange).toHaveBeenCalledWith(
+      headingNode.id,
+      "Updated Overview",
+      headingNode.hash,
+    );
   });
 
   it("renders paragraphs with bold, italic, and math spans correctly", () => {
-    const doc = parseVisualAst("A paragraph with \\textbf{important} notes and \\emph{emphasis} plus $E=mc^2$.");
+    const doc = parseVisualAst(
+      "A paragraph with \\textbf{important} notes and \\emph{emphasis} plus $E=mc^2$.",
+    );
     const paraNode = doc.nodes.find((n) => n.kind === "paragraph") as ParagraphNode;
     const onTextChange = vi.fn();
 
@@ -54,13 +65,13 @@ describe("S11-T03 Integration: Render Basic Supported Visual Nodes", () => {
         node: paraNode,
         readOnly: false,
         onTextChange,
-      })
+      }),
     );
 
     const paraContainer = screen.getByTestId("visual-paragraph");
     expect(paraContainer.textContent).toContain("important");
     expect(paraContainer.textContent).toContain("emphasis");
-    expect(paraContainer.textContent).toContain("$E=mc^2$");
+    expect(paraContainer.querySelector(".katex")).not.toBeNull();
 
     // Verify strong and em tags
     expect(paraContainer.querySelector("strong")?.textContent).toBe("important");
@@ -90,7 +101,7 @@ describe("S11-T03 Integration: Render Basic Supported Visual Nodes", () => {
         node: listNode,
         readOnly: false,
         onItemChange,
-      })
+      }),
     );
 
     const listItems = screen.getAllByTestId("visual-list-item");
@@ -107,7 +118,12 @@ describe("S11-T03 Integration: Render Basic Supported Visual Nodes", () => {
     fireEvent.change(itemInput, { target: { value: "First modified step" } });
     fireEvent.keyDown(itemInput, { key: "Enter" });
 
-    expect(onItemChange).toHaveBeenCalledWith(listNode.id, 0, "First modified step", listNode.items[0]?.hash);
+    expect(onItemChange).toHaveBeenCalledWith(
+      listNode.id,
+      0,
+      "First modified step",
+      listNode.items[0]?.hash,
+    );
   });
 
   it("enforces read-only protection when readOnly is enabled", () => {
@@ -119,7 +135,7 @@ describe("S11-T03 Integration: Render Basic Supported Visual Nodes", () => {
       createElement(BasicVisualNodesView, {
         nodes: [heading, para],
         readOnly: true,
-      })
+      }),
     );
 
     const headingEl = screen.getByRole("heading", { level: 1 });

@@ -327,3 +327,31 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Technical Debt:** None. Untrusted compilation and anonymous signup remain disabled per G1/G5 boundaries.
 - **Next Ready Task:** S12-T01 (Sprint S12: GitHub sync).
 
+### 2026-10-15 — S11 corrective continuation
+
+- **Scope:** Rechecked the existing S11 implementation against the live project route and fixed one S11-T05 figure status defect.
+- **Finding:** The workspace mounts no code/visual editor, and the named Playwright mixed-editing spec uses local Yjs documents without browser interaction. Reopened S11-T05/T07/T09/T11 and changed G3 to FAIL pending live acceptance; see [GAP-23](open-gaps.md).
+- **Change:** Figure status now requires an exact authorized project path. A new focused test failed on the original code and passed after the change.
+- **Checks:** Focused S11-T05 integration 5/5 PASS; EDT-13 regression 2/2 PASS; S11 shared-worker collection 19/20 files with 169 tests PASS and one temporary-file suite-load failure; that suite separately passed 103/103. TypeScript typecheck, focused ESLint, web Vite build, map build/check, plan lint, and `git diff --check` PASS. A single complete suite PASS, browser E2E, and remaining monorepo gates were not completed ([GAP-24](open-gaps.md)).
+- **Effort:** Not measured. **Next slice:** connect visual mode to the real project editing flow, then verify two browser sessions and repeat G3 review.
+
+### 2026-10-15 — S11-T07 read-only workspace continuation
+
+- **Scope:** Mounted the authorized Yjs text snapshot in the project workspace with visible Code/Visual switching and conservative literal fallback; moved parser hashing to a browser-compatible synchronous SHA-256 implementation.
+- **Checks:** Focused S11-T07 integration and EDT-13 regression 10/10 PASS; broader parser/patch/round-trip selection 121/121 PASS. A headless Edge smoke check of the built app with mocked authorized GET responses passed exact Code→Visual→Code source comparison. `pnpm lint`, `pnpm typecheck`, `pnpm build`, plan lint, map build/check and `git diff --check` PASS. The first web-only build failed on stale `dist` exports, then passed after the package build. `pnpm format:check` fails on 186 inherited files; focused changed-file Prettier PASS.
+- **Limit:** This view is intentionally read-only and loads one server snapshot. Editable collaboration, live-service two-browser E2E, full monorepo gates and independent co-maintainer review remain open under GAP-23/GAP-24. Task status stays IN_PROGRESS. Additional effort not measured.
+
+### 2026-10-16 — S11-T07 acceptance
+
+- The user accepted the scoped read-only Code/Visual task. S11-T07 is DONE; editable mixed-session coediting remains S11-T09 work, and G3 remains open. No additional effort was measured.
+
+- **2026-10-16 — S11-T09 continuation:** The API now attaches the scoped collaboration WebSocket service, and the workspace offers a Y.Text-backed Code/Visual live editor. Two authenticated Edge contexts passed persisted convergence and stale-heading conflict checks; focused Vitest 8/8, lint, typecheck and build passed. See [S11-T09 report](../test-reports/s11-t09.md). Task remains IN_PROGRESS for independent review and broader EDT-13/G3 scope; continuation effort not measured.
+- **2026-10-16 — S11-T09 acceptance:** The user accepted the completed S11-T09 slice. Status moved to DONE; continuation effort remains unmeasured. S11-T05 and S11-T11 remain open.
+
+### 2026-10-16 — S11-T05 rendering and S11-T11 G3 stabilization
+
+- **Contributor / branch:** Codex on `codex/sprint-11-visual-editor`, based on `codex/sprint-10-academic-editing`; existing contributor changes preserved.
+- **S11-T05:** Added READ-authorized private project image preview, compatible KaTeX math rendering and literal fallback, plus PostgreSQL/MinIO denial and two-context Edge evidence. See [task report](../test-reports/s11-t05.md).
+- **S11-T11:** Scoped an S05-T12 fixture assertion, serialized Vitest suites after migration contention, and fixed a real statistics `BIGINT` response failure exposed by the academic Edge check. The [G3 audit](../test-reports/gate-g3-audit.md) records pass/fail gate outcomes and recovery.
+- **Checks:** Full Vitest 335 files/1,205 tests PASS; integration 3/3 PASS; focused 114/114 after statistics fix; mixed, academic and Redis-recovery Edge checks PASS; security, lint, typecheck, build and plan lint PASS. Artifact script PASS with S00-only coverage. Formatting FAIL on 177 inherited files. Full E2E with local Mailpit settings FAIL 20/33: Firefox launch and shared login-limit 429 remain. No G3 PASS claimed.
+- **Effort:** Additional hours not measured. **Next:** Resolve the full browser, formatting and applicable artifact gates, then independent co-maintainer review before closing S11-T05/T11 or G3.

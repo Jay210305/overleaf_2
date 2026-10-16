@@ -3,6 +3,8 @@ import { DatabaseClient } from "@latex-collab/db";
 import { S3StorageAdapter } from "@latex-collab/storage";
 import { createReadiness } from "./readiness.js";
 import { createServer, safeLoggerOptions } from "./server.js";
+import { MemoryTicketStore } from "./modules/collab/ticket.js";
+import { CollabServer } from "@latex-collab/collab";
 import { createRedisAuthRateLimiter } from "./plugins/rate-limit.js";
 import { processAvatarCleanup } from "./modules/account/avatar.js";
 import {
@@ -21,6 +23,7 @@ async function main() {
     accessKeyId: config.S3_ACCESS_KEY_ID,
     secretAccessKey: config.S3_SECRET_ACCESS_KEY,
   });
+  const ticketStore = new MemoryTicketStore();
   const app = createServer({
     checkReadiness: probes.check,
     origin: config.APP_ORIGIN,
@@ -28,6 +31,7 @@ async function main() {
     db,
     rateLimiter,
     storage,
+    ticketStore,
     sendVerification:
       config.SMTP_URL && config.EMAIL_FROM
         ? createSmtpVerificationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
@@ -38,6 +42,13 @@ async function main() {
         : undefined,
     secureCookies: config.NODE_ENV === "production" || config.APP_ORIGIN.startsWith("https://"),
   });
+  const collab = new CollabServer({
+    server: app.server,
+    db,
+    ticketStore,
+    allowedOrigin: config.APP_ORIGIN,
+  });
+  await collab.start();
   let cleanupRunning = false;
   const runAvatarCleanup = async () => {
     if (cleanupRunning) return;
@@ -54,6 +65,7 @@ async function main() {
   cleanupTimer.unref();
   app.addHook("onClose", async () => {
     clearInterval(cleanupTimer);
+    await collab.stop();
     probes.close();
     await db.close();
     await rateLimiter.close();

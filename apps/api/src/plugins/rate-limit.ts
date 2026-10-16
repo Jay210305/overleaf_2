@@ -48,7 +48,8 @@ export async function createRedisAuthRateLimiter(
     throw new Error("Invalid rate-limit configuration");
   const client = createClient({
     url,
-    socket: { connectTimeout: 1500, reconnectStrategy: false },
+    disableOfflineQueue: true,
+    socket: { connectTimeout: 1500, reconnectStrategy: (retries) => Math.min(retries * 100, 1000) },
   });
   client.on("error", () => {
     // Requests fail closed in consume; connection details must not enter logs.

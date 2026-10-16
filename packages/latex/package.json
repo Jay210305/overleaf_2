@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@latex-collab/contracts": "workspace:*"
+    "@latex-collab/contracts": "workspace:*",
+    "@noble/hashes": "2.2.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"

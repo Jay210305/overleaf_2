@@ -112,7 +112,8 @@ export default defineConfig({
     ],
   },
   test: {
-    maxWorkers: 2,
+    // ponytail: shared PostgreSQL migrations need serial suites; use isolated databases before parallel workers.
+    maxWorkers: 1,
     testTimeout: 30000,
     exclude: ["tests/e2e/**", "tests/services/**", "**/node_modules/**", "**/dist/**"],
     coverage: {

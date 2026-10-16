@@ -1,20 +1,13 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import {
-  statisticsSchema,
-  type StatisticsView,
-} from "@latex-collab/contracts";
-import {
-  CompilationsRepository,
-  DatabaseClient,
-  isUUID,
-} from "@latex-collab/db";
+import { statisticsSchema, type StatisticsView } from "@latex-collab/contracts";
+import { CompilationsRepository, DatabaseClient, isUUID } from "@latex-collab/db";
 import { problem } from "../../plugins/errors.js";
 
 interface ProjectNodeRow {
   id: string;
   name: string;
   kind: string;
-  size_bytes: number | null;
+  size_bytes: string | number | null;
   deleted_at: Date | null;
 }
 
@@ -62,14 +55,14 @@ export function registerProjectStatisticsRoutes(
 
       const activeFiles = nodesRes.rows.filter((n) => n.kind === "FILE");
       const fileCount = activeFiles.length;
-      const sizeBytes = activeFiles.reduce((sum, n) => sum + (n.size_bytes ?? 0), 0);
+      const sizeBytes = activeFiles.reduce((sum, n) => sum + Number(n.size_bytes ?? 0), 0);
 
       // Approximate word count: calculate across main or text files
       let approximateWords = 0;
       for (const file of activeFiles) {
         if (file.name.endsWith(".tex") || file.name.endsWith(".txt")) {
           // If content is not stored in DB node row, approximate using size_bytes / 6
-          const estimated = Math.max(0, Math.round((file.size_bytes ?? 0) / 6));
+          const estimated = Math.max(0, Math.round(Number(file.size_bytes ?? 0) / 6));
           approximateWords += estimated;
         }
       }

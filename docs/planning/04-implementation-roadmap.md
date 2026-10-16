@@ -606,7 +606,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S11: Conservative visual editor and G3 release (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 80 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Project Co-owner (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 80 h (ASSUMPTION A-03) | **Status:** 🟨 IN_PROGRESS | **Owner:** Project Co-owner (proposed A-02)
 **Goal:** Conservative visual editor and G3 release for G3, using independently verified slices.
 
 ### Deliverables
@@ -629,13 +629,13 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 | [S11-T02](../../implementation/sprint-11-visual-editor/S11-T02-create-source-ast-projection-and-range-map.md) | Create source AST projection and range map | 8 | Project Co-owner | ✅ done | Supported nodes retain exact source ranges/escaping and parser failure returns controlled code-mode fallback |
 | [S11-T03](../../implementation/sprint-11-visual-editor/S11-T03-render-basic-supported-visual-nodes.md) | Render basic supported visual nodes | 8 | Project Co-owner | ✅ done | Headings/paragraphs/bold/italic/lists render as supported projection with significant spaces/comments preserved |
 | [S11-T04](../../implementation/sprint-11-visual-editor/S11-T04-apply-minimal-version-checked-source-patches.md) | Apply minimal version-checked source patches | 8 | Project Co-owner | ✅ done | Patch changes only expected Y.Text region; stale concurrent region reparse/conflict prevents silent overwrite |
-| [S11-T05](../../implementation/sprint-11-visual-editor/S11-T05-render-supported-math-figures-tables-and-cites.md) | Render supported math figures tables and cites | 8 | Project Co-owner | ✅ done | Only declared simple nodes edit; previews use authorized assets and compatible math while compiled PDF remains final rendering |
+| [S11-T05](../../implementation/sprint-11-visual-editor/S11-T05-render-supported-math-figures-tables-and-cites.md) | Render supported math figures tables and cites | 8 | Project Co-owner | 🟨 in_progress | Only declared simple nodes edit; previews use authorized assets and compatible math while compiled PDF remains final rendering |
 | [S11-T10](../../implementation/sprint-11-visual-editor/S11-T10-complete-simple-table-and-formula-editing-slices.md) | Complete simple table and formula editing slices | 8 | Project Co-owner | ✅ done | Simple supported table/math edits modify their region only; unsupported nesting goes literal and conflict preserves old source |
 | [S11-T06](../../implementation/sprint-11-visual-editor/S11-T06-create-literal-fallback-for-unsupported-tex.md) | Create literal fallback for unsupported TeX | 6 | Project Co-owner | ✅ done | Unknown macros/verbatim/TikZ/preamble/redefinitions stay literal and cannot be destructively rewritten |
 | [S11-T07](../../implementation/sprint-11-visual-editor/S11-T07-make-code-visual-switching-read-only.md) | Make code visual switching read-only | 6 | Project Co-owner | ✅ done | Opening visual and returning to code without edit leaves source bytes/hash unchanged, including parser errors |
 | [S11-T08](../../implementation/sprint-11-visual-editor/S11-T08-verify-100-non-destructive-round-trip-fixtures.md) | Verify 100 non-destructive round-trip fixtures | 8 | Project Co-owner | ✅ done | All 100 original/permitted fixtures are byte-identical without edit; edited supported region is the only changed region |
 | [S11-T09](../../implementation/sprint-11-visual-editor/S11-T09-verify-mixed-code-visual-coediting.md) | Verify mixed code visual coediting | 8 | Project Co-owner | ✅ done | Two clients on supported region converge; incompatible simultaneous changes surface conflict and preserve source |
-| [S11-T11](../../implementation/sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md) | Stabilize and review G3 academic workflow | 8 | Project Co-owner | ✅ done | History/restore/review/bibliography/SyncTeX tests plus 100 round trips pass; later provider claims remain explicit |
+| [S11-T11](../../implementation/sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md) | Stabilize and review G3 academic workflow | 8 | Project Co-owner | 🟨 in_progress | History/restore/review/bibliography/SyncTeX tests plus 100 round trips pass; later provider claims remain explicit |
 
 ### DoD
 

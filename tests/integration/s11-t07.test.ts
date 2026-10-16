@@ -1,19 +1,140 @@
 // @vitest-environment jsdom
+import { createHash } from "node:crypto";
 import { createElement } from "react";
+import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi, afterEach } from "vitest";
-import { cleanup, fireEvent, render, screen, renderHook, act } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  renderHook,
+  act,
+  waitFor,
+} from "@testing-library/react";
 import * as Y from "yjs";
 import { computeTextHash } from "@latex-collab/latex";
 import {
   EditorModeSwitch,
+  ReadOnlyTextDocument,
   useEditorModeSwitch,
 } from "../../apps/web/src/features/visual/mode-switch.js";
+import { ProjectWorkspace } from "../../apps/web/src/features/projects/workspace.js";
 
 afterEach(() => {
   cleanup();
+  vi.unstubAllGlobals();
 });
 
 describe("S11-T07 Integration: Read-Only Code/Visual Mode Switching", () => {
+  it("computes browser-compatible SHA-256 for source fragments", () => {
+    expect(computeTextHash("abc")).toBe(
+      "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+    );
+    const unicode = "TeX π 😀 \ud800";
+    expect(computeTextHash(unicode)).toBe(
+      createHash("sha256").update(unicode, "utf8").digest("hex"),
+    );
+  });
+
+  it("loads canonical text and switches the visible document without sending a mutation", async () => {
+    const raw = "\\section{Intro}\nHello \\unknown{world}\n";
+    const doc = new Y.Doc();
+    doc.getText("content").insert(0, raw);
+    const fileId = "0e33ca5c-f523-4fa5-95fb-ec3bea44c471";
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        fileId,
+        updateBase64: btoa(String.fromCharCode(...Y.encodeStateAsUpdate(doc))),
+        stateVectorBase64: btoa(String.fromCharCode(...Y.encodeStateVector(doc))),
+        persistedSeq: 1,
+      }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      createElement(ReadOnlyTextDocument, { projectId: "project-1", fileId, apiUrl: "/api/v1" }),
+    );
+    await waitFor(() => expect(screen.getByTestId("source-code").textContent).toBe(raw));
+    fireEvent.click(screen.getByTestId("mode-visual-btn"));
+    expect(screen.getByText("Intro")).toBeDefined();
+    expect(screen.getByTestId("visual-literal-fallback").textContent).toContain("\\unknown{world}");
+    fireEvent.click(screen.getByTestId("mode-code-btn"));
+    expect(screen.getByTestId("source-code").textContent).toBe(raw);
+    expect(fetchMock).toHaveBeenCalledExactlyOnceWith(
+      `/api/v1/projects/project-1/files/${fileId}/text`,
+      expect.objectContaining({ method: "GET", credentials: "include" }),
+    );
+  });
+
+  it("does not show source or mode controls when the text route denies access", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 403 }));
+    render(
+      createElement(ReadOnlyTextDocument, {
+        projectId: "project-1",
+        fileId: "file-1",
+        apiUrl: "/api/v1",
+      }),
+    );
+    await waitFor(() => expect(screen.getByRole("alert").textContent).toContain("access denied"));
+    expect(screen.queryByTestId("source-code")).toBeNull();
+    expect(screen.queryByTestId("editor-mode-switch")).toBeNull();
+  });
+
+  it("opens the authorized text document from the actual project file tree", async () => {
+    const projectId = "56d03d93-8bf3-4e5a-a924-0cce961c7ca1";
+    const fileId = "5b3675db-bba8-4fb8-94da-ab9c6841df29";
+    const doc = new Y.Doc();
+    doc.getText("content").insert(0, "\\section{Workspace}\n");
+    const fetchMock = vi.fn(async (url: string) => ({
+      ok: true,
+      json: async () =>
+        url.endsWith("/nodes")
+          ? {
+              projectId,
+              treeVersion: 1,
+              items: [
+                {
+                  id: fileId,
+                  projectId,
+                  parentId: null,
+                  name: "main.tex",
+                  kind: "FILE",
+                  mime: "application/x-tex",
+                  sizeBytes: 20,
+                  contentKind: "TEXT",
+                },
+              ],
+            }
+          : url.endsWith("/text")
+            ? {
+                fileId,
+                updateBase64: btoa(String.fromCharCode(...Y.encodeStateAsUpdate(doc))),
+                stateVectorBase64: btoa(String.fromCharCode(...Y.encodeStateVector(doc))),
+                persistedSeq: 1,
+              }
+            : { id: projectId, title: "Workspace test" },
+    }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      createElement(
+        MemoryRouter,
+        null,
+        createElement(ProjectWorkspace, { projectId, apiUrl: "/api/v1" }),
+      ),
+    );
+    const treeItem = await screen.findByRole("treeitem", { name: "main.tex (file)" });
+    fireEvent.click(treeItem);
+    await waitFor(() =>
+      expect(screen.getByTestId("source-code").textContent).toContain("Workspace"),
+    );
+    expect(fetchMock).toHaveBeenCalledWith(
+      `/api/v1/projects/${projectId}/files/${fileId}/text`,
+      expect.objectContaining({ method: "GET", credentials: "include" }),
+    );
+  });
   it("renders mode switch controls and notifies mode changes", () => {
     const onSelectMode = vi.fn();
 
@@ -22,7 +143,7 @@ describe("S11-T07 Integration: Read-Only Code/Visual Mode Switching", () => {
         mode: "code",
         onSelectMode,
         hasErrors: true,
-      })
+      }),
     );
 
     const codeBtn = screen.getByTestId("mode-code-btn");
@@ -58,7 +179,7 @@ And unknown macro \\unsupportedCommand{arg} here.
         yText,
         initialMode: "code",
         onModeChange,
-      })
+      }),
     );
 
     expect(result.current.mode).toBe("code");
@@ -100,7 +221,7 @@ no end tabular here`;
       useEditorModeSwitch({
         yText,
         initialMode: "code",
-      })
+      }),
     );
 
     act(() => {
@@ -129,7 +250,7 @@ no end tabular here`;
       useEditorModeSwitch({
         yText,
         initialMode: "code",
-      })
+      }),
     );
 
     act(() => {

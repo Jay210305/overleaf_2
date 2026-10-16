@@ -8,12 +8,15 @@ import {
   EditorState,
 } from "@latex-collab/editor";
 import type { Role } from "@latex-collab/contracts";
+import type * as Y from "yjs";
+import { createCollabBinding } from "../collab/binding.js";
 
 export interface LatexCodeEditorProps {
   projectId: string;
   fileId: string;
   fileName?: string;
   initialContent?: string;
+  yText?: Y.Text;
   readOnly?: boolean;
   theme?: EditorTheme;
   userRole?: Role;
@@ -30,6 +33,7 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
   fileId,
   fileName = "main.tex",
   initialContent = "",
+  yText,
   readOnly = false,
   theme = "light",
   userRole,
@@ -51,12 +55,14 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
   useEffect(() => {
     if (!containerRef.current) return;
 
+    const binding = yText?.doc ? createCollabBinding({ doc: yText.doc }) : null;
     const extensions = [
       ...createLatexEditorExtensions({
         mode,
         theme,
         readOnly: isViewerOrReadOnly,
       }),
+      ...(binding?.extensions ?? []),
       createEditorKeymap({
         onSave,
         onCompile,
@@ -75,7 +81,7 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
     ];
 
     const state = EditorState.create({
-      doc: initialContent,
+      doc: yText?.toString() ?? initialContent,
       extensions,
     });
 
@@ -88,9 +94,10 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
 
     return () => {
       view.destroy();
+      binding?.undoManager.destroy();
       viewRef.current = null;
     };
-  }, [fileId, isViewerOrReadOnly, mode, theme]);
+  }, [fileId, isViewerOrReadOnly, mode, theme, yText]);
 
   return (
     <div
@@ -135,7 +142,8 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
           className="bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-200 text-xs px-3 py-1.5 border-b border-rose-200 dark:border-rose-800"
           data-testid="error-conflict"
         >
-          Version conflict (409): The server has a more recent version. Please refresh and reconcile.
+          Version conflict (409): The server has a more recent version. Please refresh and
+          reconcile.
         </div>
       )}
 

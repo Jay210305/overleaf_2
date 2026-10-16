@@ -4,7 +4,7 @@ cluster: runtime-design
 universe: live
 status: verified
 entity: packages/storage/src/s3.ts
-sources: ["packages/storage/src/s3.ts", "packages/contracts/src/storage.ts", "apps/api/src/modules/development/sample.ts", "apps/api/src/modules/account/avatar.ts", "apps/api/src/modules/uploads/routes.ts", "apps/jobs/src/maintenance/storage-gc.ts", "infra/docker-compose.yml", "tests/integration/s01-t08.test.ts", "tests/integration/s02-t11.test.ts", "tests/integration/s05-t09.test.ts", "tests/regression/pl-07/s01-t08.test.ts", "tests/regression/pl-07/s02-t11.test.ts", "tests/regression/pl-07/s05-t01.test.ts", "tests/regression/pro-05/s05-t09.test.ts", "tests/regression/pro-05/s05-t02.test.ts", "docs/test-reports/s01-t08.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s05-t01.md", "docs/test-reports/s05-t09.md", "docs/test-reports/s05-t02.md", "docs/contracts/storage-and-revisions.md"]
+sources: ["packages/storage/src/s3.ts", "packages/contracts/src/storage.ts", "apps/api/src/modules/development/sample.ts", "apps/api/src/modules/account/avatar.ts", "apps/api/src/modules/uploads/routes.ts", "apps/api/src/modules/files/figure-preview.ts", "apps/jobs/src/maintenance/storage-gc.ts", "infra/docker-compose.yml", "tests/integration/s01-t08.test.ts", "tests/integration/s02-t11.test.ts", "tests/integration/s05-t09.test.ts", "tests/integration/s11-t05-assets.test.ts", "tests/regression/pl-07/s01-t08.test.ts", "tests/regression/pl-07/s02-t11.test.ts", "tests/regression/pl-07/s05-t01.test.ts", "tests/regression/pro-05/s05-t09.test.ts", "tests/regression/pro-05/s05-t02.test.ts", "docs/test-reports/s01-t08.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s05-t01.md", "docs/test-reports/s05-t09.md", "docs/test-reports/s05-t02.md", "docs/test-reports/s11-t05.md", "docs/contracts/storage-and-revisions.md"]
 runtime: implemented
 verified_on: 2026-10-12
 snapshot: _meta/file-inventory.json
@@ -25,6 +25,8 @@ Private project objects need scoped keys and content hashes before uploads, revi
 `packages/contracts/src/storage.ts` defines `StorageAdapter`; `packages/storage/src/s3.ts` validates keys, including encoded traversal, and checks project and avatar user scope. `S3StorageAdapter` implements put/get/getLimited/head/list/delete/presign. The S05 upload route signs a unique `projects/<id>/uploads/<uploadId>` PUT, then uses `getLimited` to verify bytes before copying a binary to `projects/<id>/blobs/<sha256>`. The jobs pass lists only known project prefixes and rechecks references before deleting an aged object. Because revision item references can cascade away with physical node deletion, any project with a revision retains all its blobs. The avatar route derives its private key from the current session and database row.
 
 The local MinIO API restricts CORS to `APP_ORIGIN` via `MINIO_API_CORS_ALLOW_ORIGIN`; a signed PUT is still scoped and verified by the API at completion. A foreign Origin preflight is denied in the local regression. Hosted object-store CORS needs separate evidence.
+
+S11-T05 adds a bounded private image read for a current project node through the [figure preview route](../../../apps/api/src/modules/files/figure-preview.ts). The API checks membership, the source-relative path, image MIME and blob key on each request; the browser receives bytes through the API and makes a temporary local preview URL.
 
 ## Connected to
 
