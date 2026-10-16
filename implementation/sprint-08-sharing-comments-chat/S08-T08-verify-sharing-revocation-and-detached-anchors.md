@@ -8,7 +8,7 @@ estimate_basis: assumption-a-03
 depends_on: [S08-T07]
 requirements: [COL-04, COL-05, COL-06, NFR-03]
 source_task: S08-T08
-status: in_progress
+status: done
 readiness: ready
 ---
 # S08-T08 — Verify sharing revocation and detached anchors
@@ -106,4 +106,4 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 - [x] Runtime behavior is real, permission-checked and persistent when applicable.
 - [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
 - [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

@@ -38,23 +38,18 @@ describe("PRO-01 regression: Paginated searchable owned/shared/recent dashboard 
       },
     ];
 
-    const fetcher = vi
-      .fn()
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify({ items: page1Items, nextCursor: "cursor-to-page-2" }), {
-          status: 200,
-        }),
-      )
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify({ items: page2Items, nextCursor: null }), {
-          status: 200,
-        }),
-      )
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify({ items: page1Items, nextCursor: "cursor-to-page-2" }), {
-          status: 200,
-        }),
-      );
+    const emptyNotifications = () =>
+      new Response(JSON.stringify({ items: [], nextCursor: null }), { status: 200 });
+    const page = (items: unknown, nextCursor: string | null) =>
+      new Response(JSON.stringify({ items, nextCursor }), { status: 200 });
+    let projectReads = 0;
+    const fetcher = vi.fn(async (url: string) => {
+      if (url.includes("/me/notifications")) return emptyNotifications();
+      projectReads += 1;
+      if (projectReads === 1) return page(page1Items, "cursor-to-page-2");
+      if (projectReads === 2) return page(page2Items, null);
+      return page(page1Items, "cursor-to-page-2");
+    });
     vi.stubGlobal("fetch", fetcher);
 
     render(createElement(ProjectsDashboard, { apiUrl: "http://api.test/api/v1" }));
