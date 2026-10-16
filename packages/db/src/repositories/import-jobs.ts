@@ -427,4 +427,65 @@ export class ImportJobRepository {
       throw mapDatabaseError(error);
     }
   }
+
+  /** Succeeded jobs whose 14-day server-only archive retention has expired. */
+  async listSweepableSucceeded(before: Date, limit = 25): Promise<ImportJobView[]> {
+    if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100) {
+      throw new PersistenceError("CONSTRAINT_VIOLATION", "Invalid sweep limit", false);
+    }
+    const found = await this.client.query<JobRow>(
+      `SELECT * FROM import_jobs
+        WHERE status = 'succeeded' AND archive_swept = FALSE AND created_at < $1
+        ORDER BY created_at ASC LIMIT $2`,
+      [before, limit],
+    );
+    return found.rows.map(toView);
+  }
+
+  /** Record that a succeeded job's retained server-only archive is gone. */
+  async markSucceededArchiveSwept(jobId: string): Promise<void> {
+    assertUUID(jobId, "jobId");
+    try {
+      await this.client.query(
+        `UPDATE import_jobs
+            SET archive_swept = TRUE, updated_at = NOW()
+          WHERE id = $1 AND status = 'succeeded'`,
+        [jobId],
+      );
+    } catch (error) {
+      throw mapDatabaseError(error);
+    }
+  }
+
+  /**
+   * Record that a validated job's server-only archive is permanently gone
+   * (confirmed missing, not a transient outage). Mirrors `fail` so the
+   * validation sweeper and audits observe one failure shape.
+   */
+  async failApply(jobId: string, errorCode: ImportJobErrorCode): Promise<ImportJobView> {
+    assertUUID(jobId, "jobId");
+    if (
+      errorCode !== "UNSAFE_PATH" &&
+      errorCode !== "LIMIT_EXCEEDED" &&
+      errorCode !== "INVALID_ARCHIVE"
+    ) {
+      throw new PersistenceError("CONSTRAINT_VIOLATION", "Invalid import error code", false);
+    }
+    try {
+      const updated = await this.client.query<JobRow>(
+        `UPDATE import_jobs
+            SET status = 'failed', error_code = $2, manifest = NULL, manifest_version = NULL,
+                lease_expires_at = NULL, updated_at = NOW()
+          WHERE id = $1 AND status = 'validated'
+          RETURNING *`,
+        [jobId, errorCode],
+      );
+      if (!updated.rows[0]) {
+        throw new PersistenceError("CONSTRAINT_VIOLATION", "Import job is not validated", false);
+      }
+      return toView(updated.rows[0]);
+    } catch (error) {
+      throw mapDatabaseError(error);
+    }
+  }
 }

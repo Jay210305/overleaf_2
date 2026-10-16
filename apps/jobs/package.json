@@ -9,12 +9,14 @@
     "@latex-collab/db": "workspace:*",
     "@latex-collab/latex": "workspace:*",
     "@latex-collab/storage": "workspace:*",
+    "yjs": "13.6.27",
     "yauzl": "3.4.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/main.js",
     "storage:gc": "node --env-file=../../.env --import tsx src/main.ts --once",
+    "imports:apply": "node --env-file=../../.env --import tsx src/imports/apply.ts --once",
     "imports:validate": "node --env-file=../../.env --import tsx src/imports/worker.ts --once"
   },
   "devDependencies": {
