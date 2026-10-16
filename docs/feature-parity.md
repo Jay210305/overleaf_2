@@ -22,7 +22,7 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | PRO-08 | G3 | Should | DONE | [S09-T09 archive, trash, and permanent deletion](test-reports/s09-t09.md) |
 | PRO-09 | G3 | Should | DONE | [S09-T10 owned project tags](test-reports/s09-t10.md); [S09-T11 bulk tagging](test-reports/s09-t11.md) |
 | PRO-10 | G1 | Must | IN_PROGRESS | [S05-T03 hostile archive validation](test-reports/s05-t03.md); [S05-T10 hostile apply quarantine](test-reports/s05-t10.md) implemented, review pending |
-| PRO-11 | G3 | Should | IN_PROGRESS | [S05-T06 versioned catalogue and instantiation](test-reports/s05-t06.md) implemented, review pending; preview UI breadth remains with S05-T11 |
+| PRO-11 | G3 | Should | IN_PROGRESS | [S05-T06 versioned catalogue and instantiation](test-reports/s05-t06.md) implemented, review pending; [S05-T11 preview and instantiate UI](test-reports/s05-t11.md) implemented, review pending |
 | PRO-12 | G3 | Could | DONE | [S09-T11 permission-aware bulk project actions](test-reports/s09-t11.md) |
 | PRO-13 | G3 | Should | DONE | [S09-T12 explicit ownership transfer](test-reports/s09-t12.md) |
 | PRO-14 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
