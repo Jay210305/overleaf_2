@@ -29,7 +29,6 @@ describe("S05-T05 authorized binary download and export", () => {
   let revisions: RevisionsRepository;
   let actorId: string;
   let cookie: string;
-  let csrf: string;
   let projectId: string;
   let pngNodeId: string;
   let fontNodeId: string;
@@ -43,7 +42,6 @@ describe("S05-T05 authorized binary download and export", () => {
     actorId = owner.id;
     const login = await fixture.login(owner.email);
     cookie = String(login.headers["set-cookie"]).split(";")[0]!;
-    csrf = String(login.headers["x-csrf-token"]);
     const config = parseServerConfig(process.env);
     storage = new S3StorageAdapter({
       endpoint: config.S3_ENDPOINT,

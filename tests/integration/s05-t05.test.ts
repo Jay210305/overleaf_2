@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { createElement } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { BinaryPreview } from "../../apps/web/src/features/files/binary-preview.js";
 
 const projectId = "11111111-1111-4111-8111-111111111111";
@@ -44,7 +44,7 @@ describe("S05-T05 binary preview safety", () => {
     const image = (await screen.findByTestId("binary-image")) as HTMLImageElement;
     expect(image.src).toMatch(/^blob:/);
     expect(fetcher).toHaveBeenCalledTimes(1);
-    const [url, init] = fetcher.mock.calls[0] as [string, RequestInit];
+    const [url, init] = fetcher.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toBe(`${apiUrl}/projects/${projectId}/files/a1/download`);
     expect(init.credentials).toBe("include");
   });

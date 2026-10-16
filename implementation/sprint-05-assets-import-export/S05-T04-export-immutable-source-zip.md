@@ -57,7 +57,7 @@ Each code slice starts with the specified failing assertion; documentation/resea
 
 ## Deliverables
 
-- `apps/jobs/src/exports/zip.ts`
+- `packages/storage/src/source-export.ts` (relocated from the planned `apps/jobs/src/exports/zip.ts` so both the jobs worker and the S05-T05 API download route consume one implementation through the package contract)
 - `tests/integration/s05-t04.test.ts`
 - `tests/regression/pro-06/s05-t04.test.ts`
 - `tests/regression/nfr-06/s05-t04.test.ts`

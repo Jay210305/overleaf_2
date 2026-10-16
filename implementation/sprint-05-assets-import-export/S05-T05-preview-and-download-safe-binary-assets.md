@@ -57,6 +57,7 @@ Each code slice starts with the specified failing assertion; documentation/resea
 ## Deliverables
 
 - `apps/web/src/features/files/binary-preview.tsx`
+- `apps/api/src/modules/files/binary-download.ts` (planned `download`/`export` operations from [http-operations](../../docs/contracts/http-operations.md); required so the component's authorized fetch targets a real READ-checked route instead of UI-only state)
 - `tests/integration/s05-t05.test.ts`
 - `tests/regression/pro-05/s05-t05.test.ts`
 - `tests/regression/pro-06/s05-t05.test.ts`
