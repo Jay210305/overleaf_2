@@ -67,7 +67,7 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 ## Acceptance Criteria
 
 - [x] Only declared simple nodes edit; previews use authorized assets and compatible math while compiled PDF remains final rendering. Scoped checks are in [S11-T05 report](../../docs/test-reports/s11-t05.md); final acceptance awaits G3 gates and independent review.
-- [ ] EDT-13: Supported visual nodes edit canonical source; unsupported syntax has visible non-destructive fallback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] EDT-13: Supported visual nodes edit canonical source; unsupported syntax has visible non-destructive fallback. Task part complete and evidenced; the feature is DONE only after all mapped task assertions for its gate pass (S11-T11 open).
 - [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim. Real PostgreSQL/MinIO denial and two-context browser checks are recorded in the report.
 
 ## Verification
