@@ -65,6 +65,13 @@ These are planning decisions adopted under delegated scope authority. Their impl
 **Decision:** Add S05-T12 for authenticated actor-bound signed ZIP intake, keep S05-T03 as a private durable validator/job, and leave atomic project application to S05-T10. A server-only copied archive key and versioned manifest separate uploaded bytes from project state.
 **Consequences:** New import jobs and storage keys require migrations, scoped cleanup and an import-specific status DTO. A `validated` job is not a completed project. Independent S05-T02 acceptance remains the prerequisite for S05-T03 product work. See the [approved design](../superpowers/specs/2026-10-12-s05-archive-import-design.md).
 
+## ADR-010 — Project Invitation Token Transport
+
+**Context:** Planned redemption URLs exposed bearer invitation tokens in route paths that proxy access logs could retain.
+**Options:** Keep path tokens with universal redaction, use query tokens, or mail a URL fragment and redeem by JSON body after sign-in.
+**Decision:** Use the fragment/body flow, hash tokens in PostgreSQL, bind redemption to a verified trusted email and retain owner-only invitation management. The planned contract moves to version 2.0.0 before its runtime consumer ships; see [individual ADR](../adr/010-invitation-tokens.md).
+**Consequences:** S08-T03 clears the fragment after reading it; existing trusted accounts can join now, while new-account onboarding remains separately controlled under the public-signup gate.
+
 ## ADR Maintenance
 
 S00-T08 establishes individual ADR records in `docs/adr/` from this baseline. Later ADRs retain context, options, decision and consequences, add measured evidence, and state which entry they supersede. A breaking interface change requires an ADR and a MAJOR contract version bump.

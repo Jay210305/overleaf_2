@@ -1,6 +1,6 @@
 # Interface Contracts
 
-**Contract version:** 1.0.0 | **Status:** Design baseline; runtime implementation NOT_STARTED.
+**Contract version:** 3.0.0 | **Status:** Design baseline with independently verified runtime slices.
 
 These contracts complete missing planning choices as explicit proposals. No hosting capability, sandbox primitive, provider permission, installed dependency, or passing test is asserted by writing them. Changes to an interface require synchronized consumers and producer tests; breaking changes require an ADR and MAJOR version.
 

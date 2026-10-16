@@ -79,6 +79,8 @@ export const comments = pgTable(
     createdBy: text("created_by").notNull(),
     anchorStartJson: jsonb("anchor_start_json").notNull(),
     anchorEndJson: jsonb("anchor_end_json").notNull(),
+    selectedText: text("selected_text").notNull().default(""),
+    mentions: jsonb("mentions").notNull().default([]),
     body: text("body").notNull(),
     status: text("status").notNull().default("open"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
@@ -102,6 +104,7 @@ export const commentReplies = pgTable("comment_replies", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   body: text("body").notNull(),
+  mentions: jsonb("mentions").notNull().default([]),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
   deletedAt: timestamp("deleted_at", { withTimezone: true, mode: "date" }),
 });

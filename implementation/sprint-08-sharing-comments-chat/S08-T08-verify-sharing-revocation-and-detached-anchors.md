@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S08-T07]
 requirements: [COL-04, COL-05, COL-06, NFR-03]
 source_task: S08-T08
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: ready
 ---
 # S08-T08 — Verify sharing revocation and detached anchors
 
@@ -70,12 +70,12 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Expired invite, revoked link, wrong-project comment and viewer are rejected; reply/resolve and detached-range UI pass
-- [ ] COL-04: Email invitations can be accepted/rejected/revoked, expire and remain project-scoped. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] COL-05: High-entropy hashed share links restrict roles, expiry, uses and revocation. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] COL-06: Relative-position comments support mention/reply/resolve/reopen and permission-aware deletion. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] NFR-03: Revoked users cannot mutate REST or WSS and stop receiving newly unauthorized data. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Expired invite, revoked link, wrong-project comment and viewer are rejected; reply/resolve and detached-range UI pass
+- [x] COL-04: Email invitations can be accepted/rejected/revoked, expire and remain project-scoped. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] COL-05: High-entropy hashed share links restrict roles, expiry, uses and revocation. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] COL-06: Relative-position comments support mention/reply/resolve/reopen and permission-aware deletion. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] NFR-03: Revoked users cannot mutate REST or WSS and stop receiving newly unauthorized data. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -101,9 +101,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
 - [ ] Independent co-maintainer review complete; status updated to done only after evidence.

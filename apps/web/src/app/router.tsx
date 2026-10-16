@@ -20,6 +20,11 @@ const ProjectWorkspace = lazy(() =>
     default: module.ProjectWorkspace,
   })),
 );
+const AccessRedemption = lazy(() =>
+  import("../features/sharing/share-dialog").then((module) => ({
+    default: module.AccessRedemption,
+  })),
+);
 function AuthRoute({ mode }: { mode: AuthMode }) {
   return (
     <Suspense fallback={<p role="status">Loading account form…</p>}>
@@ -111,6 +116,22 @@ function Shell() {
             element={
               <Suspense fallback={<p role="status">Loading workspace…</p>}>
                 <ProjectWorkspace />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/invitations"
+            element={
+              <Suspense fallback={<p role="status">Loading invitation…</p>}>
+                <AccessRedemption kind="invitation" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/share-links"
+            element={
+              <Suspense fallback={<p role="status">Loading share link…</p>}>
+                <AccessRedemption kind="share-link" />
               </Suspense>
             }
           />

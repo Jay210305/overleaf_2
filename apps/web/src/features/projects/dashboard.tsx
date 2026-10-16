@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { parsePublicConfig } from "@latex-collab/config";
-import {
-  projectListViewSchema,
-  type ProjectView,
-  type Compiler,
-} from "@latex-collab/contracts";
+import { projectListViewSchema, type ProjectView, type Compiler } from "@latex-collab/contracts";
+import { NotificationList } from "../notifications/list.js";
 
 const config = parsePublicConfig(import.meta.env);
 const defaultApiUrl = config.VITE_API_URL;
@@ -259,6 +256,8 @@ export function ProjectsDashboard({
         </div>
       )}
 
+      <NotificationList apiUrl={apiUrl} />
+
       {/* Toolbar: Filters, Search, Sort */}
       <section className="dashboard-toolbar" aria-label="Project list controls">
         <div className="filter-tabs" role="tablist" aria-label="Project filter categories">
@@ -399,7 +398,12 @@ export function ProjectsDashboard({
 
       {/* Create Project Modal */}
       {showCreateModal && (
-        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div
+          className="modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+        >
           <div className="modal-dialog">
             <h2 id="modal-title">Create New Project</h2>
             <form onSubmit={(e) => void handleCreateProject(e)}>
@@ -447,11 +451,7 @@ export function ProjectsDashboard({
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={isSubmitting}
-                >
+                <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
                   {isSubmitting ? "Creating..." : "Create"}
                 </button>
               </div>

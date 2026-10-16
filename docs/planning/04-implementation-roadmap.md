@@ -440,7 +440,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S08: Sharing comments chat and G2 release (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 72 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Julio (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 72 h (ASSUMPTION A-03) | **Status:** 🟡 IN_PROGRESS | **Owner:** Julio (proposed A-02)
 **Goal:** Sharing comments chat and G2 release for G2, using independently verified slices.
 
 ### Deliverables
@@ -463,15 +463,15 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S08-T01](../../implementation/sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md) | Implement expiring email invitations | 8 | Julio | ⬜ todo | OWNER invites allowed role; one-use accept/reject/revoke/expiry stay project-scoped and Mailpit captures local mail |
-| [S08-T02](../../implementation/sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md) | Implement bounded hashed share links | 8 | Julio | ⬜ todo | Create reveals token once; allowed role/expiry/maxUses/revocation validated server-side; revoked link denies next request |
-| [S08-T03](../../implementation/sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md) | Create sharing and role management UI | 8 | Julio | ⬜ todo | Owner sees pending invite/member/role/link state; non-owner cannot mutate rights via handcrafted requests |
-| [S08-T04](../../implementation/sprint-08-sharing-comments-chat/S08-T04-implement-anchored-comments-and-replies.md) | Implement anchored comments and replies | 8 | Julio | ⬜ todo | Relative anchors plus context retain replies/resolve/reopen/mentions; deleted ranges become detached rather than move to unrelated text |
-| [S08-T09](../../implementation/sprint-08-sharing-comments-chat/S08-T09-render-comment-anchor-and-reply-interactions.md) | Render comment anchor and reply interactions | 6 | Julio | ⬜ todo | Visible anchors/replies/mentions/resolve/reopen follow relative ranges; detached reason appears without moving comment to unrelated source |
-| [S08-T05](../../implementation/sprint-08-sharing-comments-chat/S08-T05-create-authorized-durable-project-chat.md) | Create authorized durable project chat | 8 | Julio | ⬜ todo | Paginated messages persist and WSS invalidation refreshes authorized clients; missing notification recovers history |
-| [S08-T06](../../implementation/sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md) | Create mention and in-app notifications | 6 | Julio | ⬜ todo | Authorized mention recipients get one idempotent notification, can mark read, and see no foreign-project content |
-| [S08-T07](../../implementation/sprint-08-sharing-comments-chat/S08-T07-enforce-comment-chat-safety-and-limits.md) | Enforce comment chat safety and limits | 6 | Julio | ⬜ todo | Role checks, size/rate limits and sanitized Markdown reject viewer writes/XSS/spam without stripping safe content |
-| [S08-T08](../../implementation/sprint-08-sharing-comments-chat/S08-T08-verify-sharing-revocation-and-detached-anchors.md) | Verify sharing revocation and detached anchors | 6 | Julio | ⬜ todo | Expired invite, revoked link, wrong-project comment and viewer are rejected; reply/resolve and detached-range UI pass |
+| [S08-T01](../../implementation/sprint-08-sharing-comments-chat/S08-T01-implement-expiring-email-invitations.md) | Implement expiring email invitations | 8 | Julio | ✅ done | OWNER invites allowed role; one-use accept/reject/revoke/expiry stay project-scoped and Mailpit captures local mail |
+| [S08-T02](../../implementation/sprint-08-sharing-comments-chat/S08-T02-implement-bounded-hashed-share-links.md) | Implement bounded hashed share links | 8 | Julio | ✅ done | Create reveals token once; allowed role/expiry/maxUses/revocation validated server-side; revoked link denies next request |
+| [S08-T03](../../implementation/sprint-08-sharing-comments-chat/S08-T03-create-sharing-and-role-management-ui.md) | Create sharing and role management UI | 8 | Julio | ✅ done | Owner sees pending invite/member/role/link state; non-owner cannot mutate rights via handcrafted requests |
+| [S08-T04](../../implementation/sprint-08-sharing-comments-chat/S08-T04-implement-anchored-comments-and-replies.md) | Implement anchored comments and replies | 8 | Julio | ✅ done | Relative anchors plus context retain replies/resolve/reopen/mentions; deleted ranges become detached rather than move to unrelated text |
+| [S08-T09](../../implementation/sprint-08-sharing-comments-chat/S08-T09-render-comment-anchor-and-reply-interactions.md) | Render comment anchor and reply interactions | 6 | Julio | ✅ done | Visible anchors/replies/mentions/resolve/reopen follow relative ranges; detached reason appears without moving comment to unrelated source |
+| [S08-T05](../../implementation/sprint-08-sharing-comments-chat/S08-T05-create-authorized-durable-project-chat.md) | Create authorized durable project chat | 8 | Julio | ✅ done | Paginated messages persist and WSS invalidation refreshes authorized clients; missing notification recovers history |
+| [S08-T06](../../implementation/sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md) | Create mention and in-app notifications | 6 | Julio | ✅ done | Authorized mention recipients get one idempotent notification, can mark read, and see no foreign-project content |
+| [S08-T07](../../implementation/sprint-08-sharing-comments-chat/S08-T07-enforce-comment-chat-safety-and-limits.md) | Enforce comment chat safety and limits | 6 | Julio | ✅ done | Role checks, size/rate limits and sanitized Markdown reject viewer writes/XSS/spam without stripping safe content |
+| [S08-T08](../../implementation/sprint-08-sharing-comments-chat/S08-T08-verify-sharing-revocation-and-detached-anchors.md) | Verify sharing revocation and detached anchors | 6 | Julio | 🔄 in_progress | Expired invite, revoked link, wrong-project comment and viewer are rejected; reply/resolve and detached-range UI pass |
 | [S08-T10](../../implementation/sprint-08-sharing-comments-chat/S08-T10-stabilize-and-review-g2-collaboration.md) | Stabilize and review G2 collaboration | 8 | Julio | ⬜ todo | G2 Must convergence/durability/revocation journeys pass with five clients and pending offline state visible |
 
 ### DoD

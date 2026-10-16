@@ -50,10 +50,12 @@ export class MemoryTicketStore implements TicketStore {
     if (!this.userTickets.has(data.userId)) this.userTickets.set(data.userId, new Set());
     this.userTickets.get(data.userId)!.add(ticketHash);
 
-    if (!this.sessionTickets.has(data.sessionId)) this.sessionTickets.set(data.sessionId, new Set());
+    if (!this.sessionTickets.has(data.sessionId))
+      this.sessionTickets.set(data.sessionId, new Set());
     this.sessionTickets.get(data.sessionId)!.add(ticketHash);
 
-    if (!this.projectTickets.has(data.projectId)) this.projectTickets.set(data.projectId, new Set());
+    if (!this.projectTickets.has(data.projectId))
+      this.projectTickets.set(data.projectId, new Set());
     this.projectTickets.get(data.projectId)!.add(ticketHash);
 
     return {
@@ -195,7 +197,7 @@ export async function validateAndConsumeTicket(
     let role = "OWNER";
     if (proj.owner_id !== ticketData.userId) {
       const memberRes = await db.query<{ role: string }>(
-        `SELECT role FROM project_members WHERE project_id = $1 AND user_id = $2`,
+        `SELECT role FROM active_project_members WHERE project_id = $1 AND user_id = $2`,
         [ticketData.projectId, ticketData.userId],
       );
       const member = memberRes.rows[0];

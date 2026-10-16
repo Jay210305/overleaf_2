@@ -208,10 +208,11 @@ describe("S05-T03 archive validation and import jobs", () => {
     void project;
     const counts = async () =>
       fixture.db.query<{ kind: string; total: string }>(
-        `SELECT 'projects' AS kind, COUNT(*)::text AS total FROM projects
-         UNION ALL SELECT 'nodes', COUNT(*)::text FROM project_nodes
-         UNION ALL SELECT 'texts', COUNT(*)::text FROM text_documents
-         UNION ALL SELECT 'updates', COUNT(*)::text FROM crdt_updates`,
+        `SELECT 'projects' AS kind, COUNT(*)::text AS total FROM projects WHERE owner_id = $1
+         UNION ALL SELECT 'nodes', COUNT(*)::text FROM project_nodes n JOIN projects p ON p.id = n.project_id WHERE p.owner_id = $1
+         UNION ALL SELECT 'texts', COUNT(*)::text FROM text_documents t JOIN projects p ON p.id = t.project_id WHERE p.owner_id = $1
+         UNION ALL SELECT 'updates', COUNT(*)::text FROM crdt_updates u JOIN project_nodes n ON n.id = u.file_id JOIN projects p ON p.id = n.project_id WHERE p.owner_id = $1`,
+        [actorId],
       );
     const before = await counts();
     const { bytes, job } = await stageValid();

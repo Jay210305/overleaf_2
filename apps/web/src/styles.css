@@ -245,3 +245,73 @@ footer {
   justify-self: start;
   padding: 4px 8px;
 }
+.share-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgb(0 0 0 / 55%);
+}
+.share-dialog {
+  width: min(760px, 100%);
+  max-height: min(90vh, 900px);
+  overflow-y: auto;
+  margin: 0;
+  padding: 24px;
+  border: 1px solid #b7c9bf;
+  border-radius: 10px;
+  background: #fff;
+  color: #182622;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 25%);
+}
+.share-dialog-header {
+  padding: 0 0 16px;
+  justify-content: space-between;
+}
+.share-dialog-header h2 {
+  margin: 0;
+}
+.share-sections section {
+  margin-top: 16px;
+  padding: 16px 0;
+}
+.share-sections ul {
+  padding-left: 20px;
+  overflow-wrap: anywhere;
+}
+.share-sections li {
+  margin: 12px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.share-sections form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+.share-sections label {
+  display: grid;
+  gap: 4px;
+}
+.share-sections input,
+.share-sections select {
+  min-height: 40px;
+  max-width: 100%;
+  padding: 8px;
+  border: 1px solid #6c887b;
+  border-radius: 6px;
+  background: #fff;
+  color: #182622;
+}
+.share-sections input[readonly] {
+  width: min(600px, 75vw);
+}
+.dark .share-dialog {
+  background: #203a30;
+  color: #f3f7f4;
+}
