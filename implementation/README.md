@@ -144,7 +144,7 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S11-T02 | [Create source AST projection and range map](sprint-11-visual-editor/S11-T02-create-source-ast-projection-and-range-map.md) | Project Co-owner (proposed) | 8 | done |
 | S11-T03 | [Render basic supported visual nodes](sprint-11-visual-editor/S11-T03-render-basic-supported-visual-nodes.md) | Project Co-owner (proposed) | 8 | done |
 | S11-T04 | [Apply minimal version-checked source patches](sprint-11-visual-editor/S11-T04-apply-minimal-version-checked-source-patches.md) | Project Co-owner (proposed) | 8 | done |
-| S11-T05 | [Render supported math figures tables and cites](sprint-11-visual-editor/S11-T05-render-supported-math-figures-tables-and-cites.md) | Project Co-owner (proposed) | 8 | in_progress |
+| S11-T05 | [Render supported math figures tables and cites](sprint-11-visual-editor/S11-T05-render-supported-math-figures-tables-and-cites.md) | Project Co-owner (proposed) | 8 | done |
 | S11-T10 | [Complete simple table and formula editing slices](sprint-11-visual-editor/S11-T10-complete-simple-table-and-formula-editing-slices.md) | Project Co-owner (proposed) | 8 | done |
 | S11-T06 | [Create literal fallback for unsupported TeX](sprint-11-visual-editor/S11-T06-create-literal-fallback-for-unsupported-tex.md) | Project Co-owner (proposed) | 6 | done |
 | S11-T07 | [Make code visual switching read-only](sprint-11-visual-editor/S11-T07-make-code-visual-switching-read-only.md) | Project Co-owner (proposed) | 6 | done |
