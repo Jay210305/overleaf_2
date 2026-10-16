@@ -70,7 +70,9 @@ describe("S06-T05 Enforce trusted compiler execution limits integration", () => 
 
     expect(output.status).toBe("timed_out");
     expect(output.exitCode).toBe(124);
-    expect(output.diagnostics.some((d) => d.message.includes("exceeded execution timeout"))).toBe(true);
+    expect(output.diagnostics.some((d) => d.message.includes("exceeded execution timeout"))).toBe(
+      true,
+    );
   });
 
   it("rejects compilation producing artifacts beyond maxOutputBytes cap (25 MiB)", async () => {
@@ -99,7 +101,9 @@ describe("S06-T05 Enforce trusted compiler execution limits integration", () => 
     });
 
     expect(output.status).toBe("failed");
-    expect(output.diagnostics.some((d) => d.message.includes("exceeded maximum allowed size"))).toBe(true);
+    expect(
+      output.diagnostics.some((d) => d.message.includes("exceeded maximum allowed size")),
+    ).toBe(true);
   });
 
   it("handles parent cancellation cleanly", async () => {

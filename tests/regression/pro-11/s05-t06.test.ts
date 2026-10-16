@@ -53,9 +53,7 @@ describe("S05-T06 PRO-11 versioned template catalogue", () => {
       expect(template.version).toMatch(/^\d+\.\d+\.\d+$/);
       const recomputed = createHash("sha256")
         .update(
-          JSON.stringify(
-            template.files.map((file) => [file.path, file.sha256, file.sizeBytes]),
-          ),
+          JSON.stringify(template.files.map((file) => [file.path, file.sha256, file.sizeBytes])),
           "utf8",
         )
         .digest("hex");

@@ -8,9 +8,7 @@ import {
   isReadOnly,
   formatPermissionNotice,
 } from "../../apps/web/src/features/editor/permissions.js";
-import {
-  checkTextRevisionConcurrency,
-} from "../../apps/api/src/modules/files/version-guard.js";
+import { checkTextRevisionConcurrency } from "../../apps/api/src/modules/files/version-guard.js";
 
 describe("S04-T06 Enforce read-only and metadata concurrency integration", () => {
   let fixture: Awaited<ReturnType<typeof createSessionFixture>>;
@@ -139,12 +137,8 @@ describe("S04-T06 Enforce read-only and metadata concurrency integration", () =>
   });
 
   it("Version guard utilities reject stale base vector with 409", () => {
-    expect(() =>
-      checkTextRevisionConcurrency("actualVector", "actualVector"),
-    ).not.toThrow();
+    expect(() => checkTextRevisionConcurrency("actualVector", "actualVector")).not.toThrow();
 
-    expect(() =>
-      checkTextRevisionConcurrency("actualVector", "staleVector"),
-    ).toThrowError();
+    expect(() => checkTextRevisionConcurrency("actualVector", "staleVector")).toThrowError();
   });
 });

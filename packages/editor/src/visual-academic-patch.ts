@@ -48,7 +48,7 @@ export interface FigureLabelPatchOptions {
  */
 export function applyTableCellPatch(
   yText: Y.Text,
-  options: TableCellPatchOptions
+  options: TableCellPatchOptions,
 ): VisualPatchResult {
   const row = options.tableNode.rows[options.rowIndex];
   if (!row) {
@@ -74,7 +74,7 @@ export function applyTableCellPatch(
     cell.range.end,
     cell.content,
     options.newContent,
-    options.baseDoc
+    options.baseDoc,
   );
 
   // If caller provided a specific expectedCellHash, enforce it
@@ -93,10 +93,7 @@ export function applyTableCellPatch(
  * Applies a minimal version-checked patch to a math display formula.
  * Mutates only the formula body, preserving the outer formula delimiters.
  */
-export function applyFormulaPatch(
-  yText: Y.Text,
-  options: FormulaPatchOptions
-): VisualPatchResult {
+export function applyFormulaPatch(yText: Y.Text, options: FormulaPatchOptions): VisualPatchResult {
   const range = options.mathNode.formulaRange;
 
   const patch = createVisualPatch(
@@ -105,7 +102,7 @@ export function applyFormulaPatch(
     range.end,
     options.mathNode.formula,
     options.newFormula,
-    options.baseDoc
+    options.baseDoc,
   );
 
   if (
@@ -128,7 +125,7 @@ export function applyFormulaPatch(
  */
 export function applyFigureCaptionPatch(
   yText: Y.Text,
-  options: FigureCaptionPatchOptions
+  options: FigureCaptionPatchOptions,
 ): VisualPatchResult {
   const range = options.figureNode.captionRange;
   if (!range || options.figureNode.caption === null) {
@@ -145,7 +142,7 @@ export function applyFigureCaptionPatch(
     range.end,
     options.figureNode.caption,
     options.newCaption,
-    options.baseDoc
+    options.baseDoc,
   );
 
   if (
@@ -168,7 +165,7 @@ export function applyFigureCaptionPatch(
  */
 export function applyFigureLabelPatch(
   yText: Y.Text,
-  options: FigureLabelPatchOptions
+  options: FigureLabelPatchOptions,
 ): VisualPatchResult {
   const range = options.figureNode.labelRange;
   if (!range || options.figureNode.label === null) {
@@ -185,7 +182,7 @@ export function applyFigureLabelPatch(
     range.end,
     options.figureNode.label,
     options.newLabel,
-    options.baseDoc
+    options.baseDoc,
   );
 
   if (

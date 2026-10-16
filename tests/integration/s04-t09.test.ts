@@ -41,7 +41,9 @@ describe("S04-T09 Persist and replay canonical text updates integration", () => 
     // Doc 2: second insertion on top of doc1
     const doc2 = new Y.Doc();
     Y.applyUpdate(doc2, update1);
-    doc2.getText("content").insert(doc2.getText("content").length, "\\begin{document}\n¡Hola mundo!\n\\end{document}");
+    doc2
+      .getText("content")
+      .insert(doc2.getText("content").length, "\\begin{document}\n¡Hola mundo!\n\\end{document}");
     const update2 = Y.encodeStateAsUpdate(doc2, Y.encodeStateVector(doc1));
     const { seq: seq2 } = await store.appendUpdate(fileId, owner.id, update2);
     expect(seq2).toBe(2);

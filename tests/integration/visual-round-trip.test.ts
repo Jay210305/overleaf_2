@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { parseVisualAst, serializeVisualAst, computeTextHash, type HeadingNode, type TableNode } from "@latex-collab/latex";
+import {
+  parseVisualAst,
+  serializeVisualAst,
+  computeTextHash,
+  type HeadingNode,
+  type TableNode,
+} from "@latex-collab/latex";
 import { applyVisualPatch, createVisualPatch } from "../../packages/editor/src/visual-patch.js";
 import { applyTableCellPatch } from "../../packages/editor/src/visual-academic-patch.js";
 import * as Y from "yjs";
@@ -112,7 +118,7 @@ export const ROUND_TRIP_FIXTURES: string[] = [
   "\\begin{verbatim}\n#include <stdio.h>\nint main() { return 0; }\n\\end{verbatim}",
   "\\begin{verbatim}\nSELECT * FROM users WHERE active = true;\n\\end{verbatim}",
   "\\begin{verbatim}\n<html><body><h1>Title</h1></body></html>\n\\end{verbatim}",
-  "\\begin{verbatim}\n{\n  \"key\": \"value\"\n}\n\\end{verbatim}",
+  '\\begin{verbatim}\n{\n  "key": "value"\n}\n\\end{verbatim}',
   "\\begin{verbatim}\nLine with special characters: % $ & _ { } ~ ^ \\\n\\end{verbatim}",
   "\\begin{verbatim}\nEmpty follows\n\n\n\\end{verbatim}",
 
@@ -162,7 +168,7 @@ describe("S11-T08 Round-Trip Fixtures: 100 Non-Destructive TeX Cases", () => {
       heading.titleRange.end,
       heading.title,
       "Preliminary Remarks",
-      yDoc
+      yDoc,
     );
 
     const patchResult = applyVisualPatch(yText, patch);

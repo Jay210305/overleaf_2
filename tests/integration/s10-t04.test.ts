@@ -131,11 +131,7 @@ x1,15:4718592,9437184
   it("verifies tolerance calculations and scale transformations", () => {
     expect(isWithinSyncTeXDistance({ x: 100, y: 100 }, { x: 102, y: 102 })).toBe(true);
     expect(
-      isWithinSyncTeXDistance(
-        { x: 100, y: 100 },
-        { x: 120, y: 120 },
-        SYNCTEX_POINT_TOLERANCE_PT,
-      ),
+      isWithinSyncTeXDistance({ x: 100, y: 100 }, { x: 120, y: 120 }, SYNCTEX_POINT_TOLERANCE_PT),
     ).toBe(false);
 
     expect(pdfPointsToPixels(72, 1.5)).toBe(108);

@@ -8,10 +8,7 @@ import { createServer } from "../../../apps/api/src/server.js";
 import { applyValidatedImport } from "../../../apps/jobs/src/imports/apply-project.js";
 import { createSessionFixture, origin } from "../../helpers/s02-session.js";
 import { applyImportMigrations } from "../../helpers/import-migrations.js";
-import {
-  buildImportArchive,
-  settleValidatedJob,
-} from "../../helpers/import-apply.js";
+import { buildImportArchive, settleValidatedJob } from "../../helpers/import-apply.js";
 import { minimalPng } from "../../helpers/zip-fixtures.js";
 
 loadEnvFile(".env");

@@ -60,7 +60,7 @@ Original closing remarks.
     // Client 1 (Visual Mode): edits Abstract paragraph text
     const ast1 = parseVisualAst(clients[1]!.text.toString());
     const abstractPara = ast1.nodes.find(
-      (n) => n.kind === "paragraph" && n.text.includes("Initial abstract")
+      (n) => n.kind === "paragraph" && n.text.includes("Initial abstract"),
     ) as ParagraphNode;
     expect(abstractPara).toBeDefined();
 
@@ -70,7 +70,7 @@ Original closing remarks.
       abstractPara.range.end,
       abstractPara.raw,
       "\\paragraph{Abstract}\nConcurrent CRDT editing validated across multiple peers.\n\n",
-      clients[1]!.doc
+      clients[1]!.doc,
     );
     const res1 = applyVisualPatch(clients[1]!.text, patch1);
     expect(res1.success).toBe(true);
@@ -109,7 +109,7 @@ Original closing remarks.
     const endDocIndex = clients[4]!.text.toString().indexOf("\\end{document}");
     clients[4]!.text.insert(
       endDocIndex,
-      "\\section{Acknowledgments}\nWe thank the distributed systems engineering team.\n\n"
+      "\\section{Acknowledgments}\nWe thank the distributed systems engineering team.\n\n",
     );
 
     // Full-mesh exchange of all updates among all 5 peers
@@ -118,7 +118,7 @@ Original closing remarks.
         if (i !== j) {
           const update = Y.encodeStateAsUpdate(
             clients[i]!.doc,
-            Y.encodeStateVector(clients[j]!.doc)
+            Y.encodeStateVector(clients[j]!.doc),
           );
           Y.applyUpdate(clients[j]!.doc, update);
         }

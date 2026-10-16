@@ -63,7 +63,7 @@ async function mutateNodeInternal(
 
   let validatedParentId: string | null | undefined;
   if (updates.parentId !== undefined) {
-    if (updates.parentId !== null && (!isUUID(updates.parentId))) {
+    if (updates.parentId !== null && !isUUID(updates.parentId)) {
       throw new AuthError(400, "VALIDATION_ERROR");
     }
     validatedParentId = updates.parentId;
@@ -169,10 +169,10 @@ async function mutateNodeInternal(
 
     // 6. Advance project revision
     const newRev = currentRev + 1;
-    await tx.query(
-      `UPDATE projects SET current_revision = $1, updated_at = now() WHERE id = $2`,
-      [newRev, projectId],
-    );
+    await tx.query(`UPDATE projects SET current_revision = $1, updated_at = now() WHERE id = $2`, [
+      newRev,
+      projectId,
+    ]);
 
     const nodeView: ProjectNodeView = {
       id: node.id,

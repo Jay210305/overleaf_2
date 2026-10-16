@@ -110,7 +110,10 @@ describe("S05-T10 validated import application", () => {
     throw new Error("import job did not validate");
   }
 
-  async function applyFiles(): Promise<{ manifest: Awaited<ReturnType<typeof validateZipArchive>>; files: Map<string, ImportFileBytes> }> {
+  async function applyFiles(): Promise<{
+    manifest: Awaited<ReturnType<typeof validateZipArchive>>;
+    files: Map<string, ImportFileBytes>;
+  }> {
     const bytes = validArchive();
     const manifest = await validateZipArchive(bytes);
     const raw = await readArchiveForApply(bytes, manifest);
@@ -165,9 +168,7 @@ describe("S05-T10 validated import application", () => {
     const tamperedHash = {
       version: 1 as const,
       entries: manifest.entries.map((entry, index) =>
-        index === 0 && entry.kind !== "DIRECTORY"
-          ? { ...entry, sha256: "0".repeat(64) }
-          : entry,
+        index === 0 && entry.kind !== "DIRECTORY" ? { ...entry, sha256: "0".repeat(64) } : entry,
       ),
     };
     await expect(readArchiveForApply(bytes, tamperedHash)).rejects.toBeInstanceOf(

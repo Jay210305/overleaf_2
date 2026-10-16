@@ -73,9 +73,7 @@ describe("EDT-01 S04-T01 CodeMirror highlights LaTeX/BibTeX with line numbers an
       view.dispatch({
         changes: { from: view.state.doc.length, insert: " — Más texto: año 2026" },
       });
-      expect(view.state.doc.toString()).toBe(
-        unicodeText + " — Más texto: año 2026",
-      );
+      expect(view.state.doc.toString()).toBe(unicodeText + " — Más texto: año 2026");
     } finally {
       view.destroy();
       container.remove();

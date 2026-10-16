@@ -33,10 +33,10 @@ describe("S09-T01: Create immutable labeled history queries", () => {
     );
     const fileId = nodeRes.rows[0]!.id;
 
-    await fixture.db.query(
-      `INSERT INTO text_documents (file_id, project_id) VALUES ($1, $2)`,
-      [fileId, projectId],
-    );
+    await fixture.db.query(`INSERT INTO text_documents (file_id, project_id) VALUES ($1, $2)`, [
+      fileId,
+      projectId,
+    ]);
 
     // Add editor and viewer members
     await fixture.db.query(

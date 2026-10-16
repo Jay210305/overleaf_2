@@ -65,7 +65,10 @@ export function RestoreDialog({
       aria-describedby="restore-dialog-desc"
     >
       <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-zinc-900">
-        <h2 id="restore-dialog-title" className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+        <h2
+          id="restore-dialog-title"
+          className="text-xl font-bold text-zinc-900 dark:text-zinc-100"
+        >
           {isFileRestore ? `Restore file "${targetFile.name}"` : "Restore project"}
         </h2>
 
@@ -81,7 +84,8 @@ export function RestoreDialog({
 
         {/* Anchor detachment warning */}
         <div className="mt-3 rounded border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200">
-          <strong>Notice:</strong> Any open comments or pending suggestions on affected files will become detached or marked conflicted to prevent pointing to incorrect restored text.
+          <strong>Notice:</strong> Any open comments or pending suggestions on affected files will
+          become detached or marked conflicted to prevent pointing to incorrect restored text.
         </div>
 
         {/* Affected files list */}
@@ -123,7 +127,8 @@ export function RestoreDialog({
             role="alert"
             className="mt-4 rounded border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200"
           >
-            You do not have permission to restore revisions. Only project owners and editors can perform this action.
+            You do not have permission to restore revisions. Only project owners and editors can
+            perform this action.
           </div>
         )}
 
@@ -143,7 +148,8 @@ export function RestoreDialog({
             role="status"
             className="mt-4 rounded border border-green-300 bg-green-50 p-3 text-sm text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200"
           >
-            Successfully restored to new revision v{result.revisionNo} ({result.changedCount} file(s) changed).
+            Successfully restored to new revision v{result.revisionNo} ({result.changedCount}{" "}
+            file(s) changed).
           </div>
         )}
 
@@ -164,9 +170,7 @@ export function RestoreDialog({
                 setInternalError(null);
                 await onConfirm();
               } catch (err) {
-                setInternalError(
-                  err instanceof Error ? err.message : "Failed to restore revision",
-                );
+                setInternalError(err instanceof Error ? err.message : "Failed to restore revision");
               }
             }}
             disabled={!canRestore || isRestoring}

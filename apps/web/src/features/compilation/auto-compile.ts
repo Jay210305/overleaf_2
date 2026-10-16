@@ -35,17 +35,20 @@ export class AutoCompileController {
   private hasPendingSuccessorState = false;
   private pendingRevision?: number | undefined;
 
-  constructor(
-    config: Partial<AutoCompileConfig> = {},
-    onTriggerCompile: CompileTriggerCallback,
-  ) {
+  constructor(config: Partial<AutoCompileConfig> = {}, onTriggerCompile: CompileTriggerCallback) {
     this.config = {
       ...DEFAULT_AUTO_COMPILE_CONFIG,
       ...config,
       // Clamp debounce between 500ms and 10000ms
-      debounceMs: Math.max(500, Math.min(10000, config.debounceMs ?? DEFAULT_AUTO_COMPILE_CONFIG.debounceMs)),
+      debounceMs: Math.max(
+        500,
+        Math.min(10000, config.debounceMs ?? DEFAULT_AUTO_COMPILE_CONFIG.debounceMs),
+      ),
       // Max timeout bounded by server policy (max 60s)
-      maxTimeoutMs: Math.min(60000, config.maxTimeoutMs ?? DEFAULT_AUTO_COMPILE_CONFIG.maxTimeoutMs),
+      maxTimeoutMs: Math.min(
+        60000,
+        config.maxTimeoutMs ?? DEFAULT_AUTO_COMPILE_CONFIG.maxTimeoutMs,
+      ),
     };
     this.onTriggerCompile = onTriggerCompile;
   }
@@ -58,12 +61,14 @@ export class AutoCompileController {
     this.config = {
       ...this.config,
       ...updates,
-      debounceMs: updates.debounceMs !== undefined
-        ? Math.max(500, Math.min(10000, updates.debounceMs))
-        : this.config.debounceMs,
-      maxTimeoutMs: updates.maxTimeoutMs !== undefined
-        ? Math.min(60000, updates.maxTimeoutMs)
-        : this.config.maxTimeoutMs,
+      debounceMs:
+        updates.debounceMs !== undefined
+          ? Math.max(500, Math.min(10000, updates.debounceMs))
+          : this.config.debounceMs,
+      maxTimeoutMs:
+        updates.maxTimeoutMs !== undefined
+          ? Math.min(60000, updates.maxTimeoutMs)
+          : this.config.maxTimeoutMs,
     };
   }
 
@@ -120,9 +125,7 @@ export class AutoCompileController {
       });
 
       if (promise && typeof promise.then === "function") {
-        promise
-          .then(() => this.onCompileFinished())
-          .catch(() => this.onCompileFinished());
+        promise.then(() => this.onCompileFinished()).catch(() => this.onCompileFinished());
       }
     } catch {
       this.onCompileFinished();

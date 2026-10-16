@@ -76,7 +76,10 @@ export const VisualLiteralFallback: React.FC<VisualLiteralFallbackProps> = ({
     >
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-amber-200/60 dark:border-amber-800/40 text-xs font-mono">
         <div className="flex items-center gap-2">
-          <span className={`px-2 py-0.5 rounded font-medium ${meta.badgeClass}`} data-testid="fallback-badge">
+          <span
+            className={`px-2 py-0.5 rounded font-medium ${meta.badgeClass}`}
+            data-testid="fallback-badge"
+          >
             {meta.title}
           </span>
           <span className="text-gray-500 text-[11px]" data-testid="fallback-desc">

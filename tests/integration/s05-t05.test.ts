@@ -40,7 +40,9 @@ describe("S05-T05 binary preview safety", () => {
         }),
     );
     vi.stubGlobal("fetch", fetcher);
-    render(createElement(BinaryPreview, { projectId, apiUrl, node: node("a1", "fig.png", "image/png") }));
+    render(
+      createElement(BinaryPreview, { projectId, apiUrl, node: node("a1", "fig.png", "image/png") }),
+    );
     const image = (await screen.findByTestId("binary-image")) as HTMLImageElement;
     expect(image.src).toMatch(/^blob:/);
     expect(fetcher).toHaveBeenCalledTimes(1);
@@ -61,7 +63,13 @@ describe("S05-T05 binary preview safety", () => {
           }),
       ),
     );
-    render(createElement(BinaryPreview, { projectId, apiUrl, node: node("b2", "doc.pdf", "application/pdf") }));
+    render(
+      createElement(BinaryPreview, {
+        projectId,
+        apiUrl,
+        node: node("b2", "doc.pdf", "application/pdf"),
+      }),
+    );
     const embed = (await screen.findByTestId("binary-pdf")) as HTMLEmbedElement;
     expect(embed.src).toMatch(/^blob:/);
     expect(document.querySelector("iframe")).toBeNull();
@@ -72,12 +80,22 @@ describe("S05-T05 binary preview safety", () => {
     const fetcher = vi.fn();
     vi.stubGlobal("fetch", fetcher);
     const { rerender } = render(
-      createElement(BinaryPreview, { projectId, apiUrl, node: node("c3", "evil.html", "text/html") }),
+      createElement(BinaryPreview, {
+        projectId,
+        apiUrl,
+        node: node("c3", "evil.html", "text/html"),
+      }),
     );
     const htmlLink = (await screen.findByTestId("binary-download")) as HTMLAnchorElement;
     expect(htmlLink.getAttribute("href")).toBe(`${apiUrl}/projects/${projectId}/files/c3/download`);
     expect(htmlLink.hasAttribute("download")).toBe(true);
-    rerender(createElement(BinaryPreview, { projectId, apiUrl, node: node("c4", "art.svg", "image/svg+xml") }));
+    rerender(
+      createElement(BinaryPreview, {
+        projectId,
+        apiUrl,
+        node: node("c4", "art.svg", "image/svg+xml"),
+      }),
+    );
     expect(await screen.findByTestId("binary-download")).not.toBeNull();
     expect(fetcher).not.toHaveBeenCalled();
     expect(document.querySelector("iframe")).toBeNull();
@@ -91,7 +109,13 @@ describe("S05-T05 binary preview safety", () => {
       "fetch",
       vi.fn(async () => new Response("denied", { status: 404 })),
     );
-    render(createElement(BinaryPreview, { projectId, apiUrl, node: node("d4", "gone.png", "image/png") }));
+    render(
+      createElement(BinaryPreview, {
+        projectId,
+        apiUrl,
+        node: node("d4", "gone.png", "image/png"),
+      }),
+    );
     expect(await screen.findByTestId("binary-unavailable")).not.toBeNull();
     expect(screen.queryByTestId("binary-image")).toBeNull();
   });

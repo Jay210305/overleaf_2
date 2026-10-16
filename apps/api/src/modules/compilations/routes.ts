@@ -1,9 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import type { StorageAdapter } from "@latex-collab/storage";
-import {
-  compilationRequestSchema,
-  type Compiler,
-} from "@latex-collab/contracts";
+import { compilationRequestSchema, type Compiler } from "@latex-collab/contracts";
 import {
   CompilationsRepository,
   CompileQuotaError,
@@ -313,7 +310,10 @@ export function registerCompilationRoutes(
         if (artRow.pdf_key) {
           items.push({
             name: "output.pdf",
-            sha256: artRow.source_hash.length === 64 ? artRow.source_hash : artRow.source_hash.padStart(64, "0"),
+            sha256:
+              artRow.source_hash.length === 64
+                ? artRow.source_hash
+                : artRow.source_hash.padStart(64, "0"),
             mime: "application/pdf",
             sizeBytes: 1024,
             url: `${baseOrigin}/api/v1/projects/${projectId}/compilations/${jobId}/artifacts/output.pdf`,
@@ -323,7 +323,10 @@ export function registerCompilationRoutes(
         if (artRow.log_key) {
           items.push({
             name: "compile.log",
-            sha256: artRow.source_hash.length === 64 ? artRow.source_hash : artRow.source_hash.padStart(64, "0"),
+            sha256:
+              artRow.source_hash.length === 64
+                ? artRow.source_hash
+                : artRow.source_hash.padStart(64, "0"),
             mime: "text/plain",
             sizeBytes: 512,
             url: `${baseOrigin}/api/v1/projects/${projectId}/compilations/${jobId}/artifacts/compile.log`,
@@ -333,7 +336,10 @@ export function registerCompilationRoutes(
         if (artRow.synctex_key) {
           items.push({
             name: "output.synctex.gz",
-            sha256: artRow.source_hash.length === 64 ? artRow.source_hash : artRow.source_hash.padStart(64, "0"),
+            sha256:
+              artRow.source_hash.length === 64
+                ? artRow.source_hash
+                : artRow.source_hash.padStart(64, "0"),
             mime: "application/gzip",
             sizeBytes: 256,
             url: `${baseOrigin}/api/v1/projects/${projectId}/compilations/${jobId}/artifacts/output.synctex.gz`,
@@ -388,10 +394,9 @@ export function registerCompilationRoutes(
         pdf_key: string | null;
         log_key: string | null;
         synctex_key: string | null;
-      }>(
-        `SELECT pdf_key, log_key, synctex_key FROM artifact_sets WHERE compile_job_id = $1`,
-        [jobId],
-      );
+      }>(`SELECT pdf_key, log_key, synctex_key FROM artifact_sets WHERE compile_job_id = $1`, [
+        jobId,
+      ]);
 
       const artRow = artRes.rows[0];
       if (!artRow) {
@@ -443,4 +448,3 @@ export function registerCompilationRoutes(
     },
   );
 }
-

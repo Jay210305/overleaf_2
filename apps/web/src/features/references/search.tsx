@@ -18,7 +18,9 @@ export const ReferenceSearch: React.FC<ReferenceSearchProps> = ({
   onInsertCitation,
 }) => {
   const [query, setQuery] = useState("");
-  const [filterField, setFilterField] = useState<"all" | "key" | "title" | "author" | "year">("all");
+  const [filterField, setFilterField] = useState<"all" | "key" | "title" | "author" | "year">(
+    "all",
+  );
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   // Parse entries without altering bibSource (INT-08)

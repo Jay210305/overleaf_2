@@ -44,9 +44,9 @@ describe("PRO-04 Regression: File tree UI traversal rejection and error recovery
   };
 
   it("PRO-04: client blocks path traversal names before dispatching network request", async () => {
-    const fetcher = vi.fn().mockResolvedValue(
-      new Response(JSON.stringify(mockTree), { status: 200 }),
-    );
+    const fetcher = vi
+      .fn()
+      .mockResolvedValue(new Response(JSON.stringify(mockTree), { status: 200 }));
     vi.stubGlobal("fetch", fetcher);
 
     render(createElement(FileTree, { projectId, apiUrl: "http://api.test/api/v1" }));
@@ -69,18 +69,15 @@ describe("PRO-04 Regression: File tree UI traversal rejection and error recovery
   });
 
   it("PRO-04: displays backend 400 cycle error and cleans up dialog without corrupted state", async () => {
-    const fetcher = vi.fn()
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify(mockTree), { status: 200 }),
-      )
+    const fetcher = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(mockTree), { status: 200 }))
       .mockResolvedValueOnce(
         new Response(JSON.stringify({ code: "VALIDATION_ERROR", detail: "Cycle detected" }), {
           status: 400,
         }),
       )
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify(mockTree), { status: 200 }),
-      );
+      .mockResolvedValueOnce(new Response(JSON.stringify(mockTree), { status: 200 }));
     vi.stubGlobal("fetch", fetcher);
 
     render(createElement(FileTree, { projectId, apiUrl: "http://api.test/api/v1" }));

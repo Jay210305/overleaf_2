@@ -55,8 +55,6 @@ describe("ACC-02 Session revocation and ticket invalidation (S07-T02)", () => {
     await fixture.ticketStore.invalidateUser(fixture.owner.id);
 
     // 3. Attempt to use ticket on WSS -> must fail
-    await expect(fixture.createClient(ticket)).rejects.toThrow(
-      /TICKET_INVALID_OR_EXPIRED/,
-    );
+    await expect(fixture.createClient(ticket)).rejects.toThrow(/TICKET_INVALID_OR_EXPIRED/);
   });
 });

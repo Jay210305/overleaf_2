@@ -6,15 +6,9 @@ import { parseServerConfig } from "@latex-collab/config/server";
 import { ImportJobRepository } from "../../packages/db/src/repositories/import-jobs.js";
 import { RevisionsRepository } from "../../packages/db/src/repositories/revisions.js";
 import { S3StorageAdapter } from "../../packages/storage/src/s3.js";
-import {
-  buildSourceZip,
-  SourceExportError,
-} from "@latex-collab/storage/source-export";
+import { buildSourceZip, SourceExportError } from "@latex-collab/storage/source-export";
 import { applyValidatedImport } from "../../apps/jobs/src/imports/apply-project.js";
-import {
-  readArchiveForApply,
-  validateZipArchive,
-} from "../../apps/jobs/src/imports/zip.js";
+import { readArchiveForApply, validateZipArchive } from "../../apps/jobs/src/imports/zip.js";
 import { createSessionFixture } from "../helpers/s02-session.js";
 import { applyImportMigrations } from "../helpers/import-migrations.js";
 import {
@@ -55,7 +49,9 @@ describe("S05-T04 immutable source ZIP export", () => {
     if (fixture) await fixture.close();
   });
 
-  async function stageExportedProject(title: string): Promise<{ projectId: string; revisionNo: number }> {
+  async function stageExportedProject(
+    title: string,
+  ): Promise<{ projectId: string; revisionNo: number }> {
     const settled = await settleValidatedJob(
       fixture.db,
       storage,

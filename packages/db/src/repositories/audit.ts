@@ -1,6 +1,7 @@
 import { assertUUID, PersistenceError, type TransactionContext, type UUID } from "../client.js";
 
-export type AuditAction = "account.created" | "session.login" | "session.revoked" | "account.deleted";
+export type AuditAction =
+  "account.created" | "session.login" | "session.revoked" | "account.deleted";
 export type AuditTarget = "user" | "session";
 
 export interface AuditEventInput {
@@ -20,7 +21,11 @@ export async function writeAuditEvent(
   assertUUID(event.requestId, "requestId");
   const targetType: AuditTarget =
     event.action === "account.created" || event.action === "account.deleted" ? "user" : "session";
-  if (!["account.created", "session.login", "session.revoked", "account.deleted"].includes(event.action))
+  if (
+    !["account.created", "session.login", "session.revoked", "account.deleted"].includes(
+      event.action,
+    )
+  )
     throw new PersistenceError("CONSTRAINT_VIOLATION", "Unknown audit action", false);
   const result = await tx.query<{ id: string }>(
     `INSERT INTO audit_events (actor_id, action, target_type, target_id, metadata_redacted, request_id)

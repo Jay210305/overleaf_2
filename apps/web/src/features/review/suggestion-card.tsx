@@ -30,13 +30,29 @@ export function SuggestionCard({
   const getStatusBadge = () => {
     switch (suggestion.status) {
       case "accepted":
-        return <span className="px-2 py-0.5 rounded text-xs bg-emerald-100 text-emerald-800 font-medium">Accepted</span>;
+        return (
+          <span className="px-2 py-0.5 rounded text-xs bg-emerald-100 text-emerald-800 font-medium">
+            Accepted
+          </span>
+        );
       case "rejected":
-        return <span className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700 font-medium">Rejected</span>;
+        return (
+          <span className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700 font-medium">
+            Rejected
+          </span>
+        );
       case "conflict":
-        return <span className="px-2 py-0.5 rounded text-xs bg-red-100 text-red-800 font-medium">Conflict</span>;
+        return (
+          <span className="px-2 py-0.5 rounded text-xs bg-red-100 text-red-800 font-medium">
+            Conflict
+          </span>
+        );
       default:
-        return <span className="px-2 py-0.5 rounded text-xs bg-amber-100 text-amber-800 font-medium">Pending Review</span>;
+        return (
+          <span className="px-2 py-0.5 rounded text-xs bg-amber-100 text-amber-800 font-medium">
+            Pending Review
+          </span>
+        );
     }
   };
 
@@ -67,7 +83,10 @@ export function SuggestionCard({
           </span>
           <span className="text-gray-400">•</span>
           <time className="text-gray-400" dateTime={suggestion.createdAt}>
-            {new Date(suggestion.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {new Date(suggestion.createdAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </time>
         </div>
         {getStatusBadge()}
@@ -79,9 +98,7 @@ export function SuggestionCard({
             [Content proposed for deletion]
           </span>
         ) : (
-          <span className="text-emerald-700 dark:text-emerald-300">
-            {suggestion.newText}
-          </span>
+          <span className="text-emerald-700 dark:text-emerald-300">{suggestion.newText}</span>
         )}
       </div>
 

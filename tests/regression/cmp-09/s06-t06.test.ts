@@ -82,7 +82,12 @@ describe("CMP-09 Store allowed compilation artifacts privately with retention (S
       artifacts: [
         { name: "output.pdf", mime: "application/pdf", bytes: pdfBytes, sha256: "pdf" },
         { name: "compile.log", mime: "text/plain", bytes: logBytes, sha256: "log" },
-        { name: "output.synctex.gz", mime: "application/gzip", bytes: synctexBytes, sha256: "synctex" },
+        {
+          name: "output.synctex.gz",
+          mime: "application/gzip",
+          bytes: synctexBytes,
+          sha256: "synctex",
+        },
       ],
       retentionDays: 14,
     });

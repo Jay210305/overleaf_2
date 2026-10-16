@@ -8,17 +8,8 @@ import {
   type DecorationSet,
   type ViewUpdate,
 } from "@codemirror/view";
-import {
-  EditorState,
-  type Extension,
-  RangeSetBuilder,
-} from "@codemirror/state";
-import {
-  foldGutter,
-  foldService,
-  indentUnit,
-  bracketMatching,
-} from "@codemirror/language";
+import { EditorState, type Extension, RangeSetBuilder } from "@codemirror/state";
+import { foldGutter, foldService, indentUnit, bracketMatching } from "@codemirror/language";
 import { history } from "@codemirror/commands";
 
 export type EditorMode = "latex" | "bibtex" | "style" | "plain";
@@ -31,19 +22,42 @@ export function getModeForFilename(filename: string): EditorMode {
   const lower = filename.toLowerCase().trim();
   if (lower.endsWith(".tex")) return "latex";
   if (lower.endsWith(".bib")) return "bibtex";
-  if (lower.endsWith(".sty") || lower.endsWith(".cls") || lower.endsWith(".dtx") || lower.endsWith(".ins")) {
+  if (
+    lower.endsWith(".sty") ||
+    lower.endsWith(".cls") ||
+    lower.endsWith(".dtx") ||
+    lower.endsWith(".ins")
+  ) {
     return "style";
   }
   return "plain";
 }
 
 // Token decoration types
-const commentDeco = Decoration.mark({ class: "cm-latex-comment", attributes: { style: "color: #6b7280; font-style: italic;" } });
-const commandDeco = Decoration.mark({ class: "cm-latex-command", attributes: { style: "color: #2563eb; font-weight: 600;" } });
-const envDeco = Decoration.mark({ class: "cm-latex-environment", attributes: { style: "color: #7c3aed; font-weight: 600;" } });
-const mathDeco = Decoration.mark({ class: "cm-latex-math", attributes: { style: "color: #059669; font-weight: 500;" } });
-const bibEntryDeco = Decoration.mark({ class: "cm-bibtex-entry", attributes: { style: "color: #b45309; font-weight: 700;" } });
-const bibFieldDeco = Decoration.mark({ class: "cm-bibtex-field", attributes: { style: "color: #0284c7; font-weight: 500;" } });
+const commentDeco = Decoration.mark({
+  class: "cm-latex-comment",
+  attributes: { style: "color: #6b7280; font-style: italic;" },
+});
+const commandDeco = Decoration.mark({
+  class: "cm-latex-command",
+  attributes: { style: "color: #2563eb; font-weight: 600;" },
+});
+const envDeco = Decoration.mark({
+  class: "cm-latex-environment",
+  attributes: { style: "color: #7c3aed; font-weight: 600;" },
+});
+const mathDeco = Decoration.mark({
+  class: "cm-latex-math",
+  attributes: { style: "color: #059669; font-weight: 500;" },
+});
+const bibEntryDeco = Decoration.mark({
+  class: "cm-bibtex-entry",
+  attributes: { style: "color: #b45309; font-weight: 700;" },
+});
+const bibFieldDeco = Decoration.mark({
+  class: "cm-bibtex-field",
+  attributes: { style: "color: #0284c7; font-weight: 500;" },
+});
 
 /**
  * Parse lines and build token decorations according to the active mode.
@@ -117,7 +131,11 @@ function buildDecorations(view: EditorView, mode: EditorMode): DecorationSet {
           const fieldName = m[1] ?? "";
           const startIdx = text.indexOf(fieldName, m.index);
           if (startIdx >= 0) {
-            builder.add(lineStart + startIdx, lineStart + startIdx + fieldName.length, bibFieldDeco);
+            builder.add(
+              lineStart + startIdx,
+              lineStart + startIdx + fieldName.length,
+              bibFieldDeco,
+            );
           }
         }
       }

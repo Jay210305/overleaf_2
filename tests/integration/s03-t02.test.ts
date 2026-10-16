@@ -159,10 +159,12 @@ describe("S03-T02 Duplicate and rename project sources integration", () => {
     expect(clonedInvites.rows).toHaveLength(0);
 
     // Verify folder hierarchy was preserved in cloned project
-    const clonedNodes = await fixture.db.query<{ id: string; parent_id: string | null; name: string; kind: string }>(
-      "SELECT id, parent_id, name, kind FROM project_nodes WHERE project_id = $1",
-      [cloned.id],
-    );
+    const clonedNodes = await fixture.db.query<{
+      id: string;
+      parent_id: string | null;
+      name: string;
+      kind: string;
+    }>("SELECT id, parent_id, name, kind FROM project_nodes WHERE project_id = $1", [cloned.id]);
     expect(clonedNodes.rows).toHaveLength(3); // main.tex, sections, intro.tex
     const folder = clonedNodes.rows.find((n) => n.name === "sections")!;
     const intro = clonedNodes.rows.find((n) => n.name === "intro.tex")!;

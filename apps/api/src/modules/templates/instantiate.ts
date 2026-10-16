@@ -53,7 +53,9 @@ export async function instantiateTemplate(
     }
     let mainFileId: string | null = null;
     for (const file of template.filesWithContent) {
-      const parentPath = file.path.includes("/") ? file.path.slice(0, file.path.lastIndexOf("/")) : null;
+      const parentPath = file.path.includes("/")
+        ? file.path.slice(0, file.path.lastIndexOf("/"))
+        : null;
       const nodeId = randomUUID();
       const sizeBytes = Buffer.byteLength(file.content, "utf8");
       await tx.query(

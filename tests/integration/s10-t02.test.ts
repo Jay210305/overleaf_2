@@ -17,7 +17,9 @@ describe("S10-T02 Integration: Bibliography multipass and citation completion", 
   it("detects backend correctly from document source", () => {
     expect(detectBibliographyBackend(BIBLIOGRAPHY_FIXTURES.bibtex.mainTex)).toBe("bibtex");
     expect(detectBibliographyBackend(BIBLIOGRAPHY_FIXTURES.biber.mainTex)).toBe("biber");
-    expect(detectBibliographyBackend("\\documentclass{article}\\begin{document}No bib\\end{document}")).toBe("none");
+    expect(
+      detectBibliographyBackend("\\documentclass{article}\\begin{document}No bib\\end{document}"),
+    ).toBe("none");
   });
 
   it("resolves allowlisted argv for bibtex and biber backends", () => {
@@ -149,4 +151,3 @@ Warning--empty journal in knuth1984
     expect(summaries[0]?.year).toBe("2004");
   });
 });
-

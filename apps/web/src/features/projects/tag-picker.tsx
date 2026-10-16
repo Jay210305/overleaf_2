@@ -34,7 +34,11 @@ export function TagPicker({
   };
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800" role="region" aria-label="Tag manager">
+    <div
+      className="flex flex-col gap-3 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
+      role="region"
+      aria-label="Tag manager"
+    >
       <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Project Tags</h3>
 
       {/* Existing tags list */}

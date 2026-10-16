@@ -32,11 +32,7 @@ export class RestoreService {
     this.revisionsRepo = new RevisionsRepository(db);
   }
 
-  async restore(
-    projectId: string,
-    actorId: string,
-    input: RestoreInput,
-  ): Promise<RestoreResult> {
+  async restore(projectId: string, actorId: string, input: RestoreInput): Promise<RestoreResult> {
     return this.db.transaction(async (tx) => {
       // 1. Lock project row
       const projRes = await tx.query<{
@@ -127,7 +123,9 @@ export class RestoreService {
         } else {
           // Re-create node if it was completely purged
           const name = targetItem.path.split("/").pop() || targetItem.path;
-          const mime = targetItem.path.endsWith(".tex") ? "application/x-tex" : "application/octet-stream";
+          const mime = targetItem.path.endsWith(".tex")
+            ? "application/x-tex"
+            : "application/octet-stream";
           const contentKind = targetItem.path.endsWith(".tex") ? "TEXT" : "BINARY";
           await tx.query(
             `INSERT INTO project_nodes (id, project_id, name, kind, mime, content_kind, blob_key)
@@ -172,7 +170,9 @@ export class RestoreService {
             );
           } else {
             const name = item.path.split("/").pop() || item.path;
-            const mime = item.path.endsWith(".tex") ? "application/x-tex" : "application/octet-stream";
+            const mime = item.path.endsWith(".tex")
+              ? "application/x-tex"
+              : "application/octet-stream";
             const contentKind = item.path.endsWith(".tex") ? "TEXT" : "BINARY";
             await tx.query(
               `INSERT INTO project_nodes (id, project_id, name, kind, mime, content_kind, blob_key)

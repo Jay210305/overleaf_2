@@ -68,10 +68,9 @@ describe("S09-T03: Restore file or project with version guard", () => {
     );
     file2Id = f2.rows[0]!.id;
 
-    await fixture.db.query(
-      `UPDATE project_nodes SET blob_key = 'blob-v2-main' WHERE id = $1`,
-      [file1Id],
-    );
+    await fixture.db.query(`UPDATE project_nodes SET blob_key = 'blob-v2-main' WHERE id = $1`, [
+      file1Id,
+    ]);
 
     // 6. Create Revision 2
     await revRepo.createStructuralRevision({

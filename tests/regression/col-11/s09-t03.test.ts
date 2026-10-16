@@ -41,10 +41,7 @@ describe("Regression COL-11 (S09-T03): Restore file or project preserves current
       label: "Initial v1",
     });
 
-    await fixture.db.query(
-      `UPDATE project_nodes SET blob_key = 'blob-v2' WHERE id = $1`,
-      [fileId],
-    );
+    await fixture.db.query(`UPDATE project_nodes SET blob_key = 'blob-v2' WHERE id = $1`, [fileId]);
 
     await revRepo.createStructuralRevision({
       projectId,

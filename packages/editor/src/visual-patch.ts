@@ -22,7 +22,7 @@ export function createVisualPatch(
   end: number,
   expectedText: string,
   replacement: string,
-  baseDoc?: Y.Doc
+  baseDoc?: Y.Doc,
 ): VisualPatch {
   let baseStateVectorBase64 = "";
   if (baseDoc) {
@@ -109,7 +109,7 @@ export function applyVisualPatch(yText: Y.Text, patch: VisualPatch): VisualPatch
 export function reanchorRange(
   initialStart: number,
   initialEnd: number,
-  deltas: ReanchorDelta[]
+  deltas: ReanchorDelta[],
 ): { start: number; end: number; shifted: boolean } {
   let start = initialStart;
   let end = initialEnd;
@@ -142,17 +142,14 @@ export interface HeadingPatchOptions {
  * Applies a minimal version-checked patch to a heading title.
  * Mutates only the title text, preserving the command and surrounding braces/whitespace.
  */
-export function applyHeadingPatch(
-  yText: Y.Text,
-  options: HeadingPatchOptions
-): VisualPatchResult {
+export function applyHeadingPatch(yText: Y.Text, options: HeadingPatchOptions): VisualPatchResult {
   const patch = createVisualPatch(
     options.fileId,
     options.headingNode.titleRange.start,
     options.headingNode.titleRange.end,
     options.headingNode.title,
     options.newTitle,
-    options.baseDoc
+    options.baseDoc,
   );
 
   if (
@@ -184,7 +181,7 @@ export interface ParagraphPatchOptions {
  */
 export function applyParagraphPatch(
   yText: Y.Text,
-  options: ParagraphPatchOptions
+  options: ParagraphPatchOptions,
 ): VisualPatchResult {
   const patch = createVisualPatch(
     options.fileId,
@@ -192,7 +189,7 @@ export function applyParagraphPatch(
     options.paragraphNode.range.end,
     options.paragraphNode.raw,
     options.newText,
-    options.baseDoc
+    options.baseDoc,
   );
 
   if (
@@ -225,7 +222,7 @@ export interface ListItemPatchOptions {
  */
 export function applyListItemPatch(
   yText: Y.Text,
-  options: ListItemPatchOptions
+  options: ListItemPatchOptions,
 ): VisualPatchResult {
   const item = options.listNode.items[options.itemIndex];
   if (!item) {
@@ -242,7 +239,7 @@ export function applyListItemPatch(
     item.contentRange.end,
     item.content,
     options.newContent,
-    options.baseDoc
+    options.baseDoc,
   );
 
   if (
@@ -260,4 +257,3 @@ export function applyListItemPatch(
 
   return applyVisualPatch(yText, patch);
 }
-

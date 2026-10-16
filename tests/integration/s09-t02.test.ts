@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  myersDiff,
-  compareRevisionManifests,
-  type ManifestItemDiff,
-} from "@latex-collab/latex";
+import { myersDiff, compareRevisionManifests, type ManifestItemDiff } from "@latex-collab/latex";
 import {
   myersDiff as webMyersDiff,
   compareRevisionManifests as webCompareRevisionManifests,
@@ -33,7 +29,9 @@ describe("S09-T02: Compare text tree and binary revisions", () => {
       // Line 4: equal
       // Line 5: insert Line 5
       expect(diff.lines.some((l) => l.type === "delete" && l.content === "Line 2")).toBe(true);
-      expect(diff.lines.some((l) => l.type === "insert" && l.content === "Line 2 modified")).toBe(true);
+      expect(diff.lines.some((l) => l.type === "insert" && l.content === "Line 2 modified")).toBe(
+        true,
+      );
       expect(diff.lines.some((l) => l.type === "delete" && l.content === "Line 3")).toBe(true);
       expect(diff.lines.some((l) => l.type === "equal" && l.content === "Line 4")).toBe(true);
       expect(diff.lines.some((l) => l.type === "insert" && l.content === "Line 5")).toBe(true);
@@ -164,8 +162,12 @@ describe("S09-T02: Compare text tree and binary revisions", () => {
       expect(clientDiff.insertions).toBe(serverDiff.insertions);
       expect(clientDiff.deletions).toBe(serverDiff.deletions);
       expect(clientDiff.equal).toBe(serverDiff.equal);
-      expect(clientDiff.lines.some((l) => l.type === "delete" && l.content === "Line 2")).toBe(true);
-      expect(clientDiff.lines.some((l) => l.type === "insert" && l.content === "Line 2 modified")).toBe(true);
+      expect(clientDiff.lines.some((l) => l.type === "delete" && l.content === "Line 2")).toBe(
+        true,
+      );
+      expect(
+        clientDiff.lines.some((l) => l.type === "insert" && l.content === "Line 2 modified"),
+      ).toBe(true);
     });
 
     it("mirrors tree and binary manifest comparison in client", () => {

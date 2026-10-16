@@ -22,8 +22,6 @@ describe("EDT-02 S04-T06 Metadata and text concurrency guard rejection", () => {
 
     expect(() =>
       checkTextRevisionConcurrency("current-server-vector", "stale-client-vector"),
-    ).toThrowError(
-      expect.objectContaining({ status: 409, code: "REVISION_CONFLICT" }),
-    );
+    ).toThrowError(expect.objectContaining({ status: 409, code: "REVISION_CONFLICT" }));
   });
 });

@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  normalizeBibTeX,
-  parseBibTeX,
-  searchBibEntries,
-} from "../../packages/latex/src/bib.js";
+import { normalizeBibTeX, parseBibTeX, searchBibEntries } from "../../packages/latex/src/bib.js";
 
 describe("S10-T03 Integration: Index BibTeX and search local references", () => {
   const sampleBib = `@article{einstein1905,
@@ -133,4 +129,3 @@ describe("S10-T03 Integration: Index BibTeX and search local references", () => 
     expect(multi?.title).toBe("Global Report");
   });
 });
-

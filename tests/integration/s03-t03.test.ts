@@ -59,9 +59,7 @@ describe("S03-T03 API-backed dashboard integration", () => {
   });
 
   it("renders error state when API returns 401 or network error", async () => {
-    const fetcher = vi.fn().mockResolvedValueOnce(
-      new Response("Unauthorized", { status: 401 }),
-    );
+    const fetcher = vi.fn().mockResolvedValueOnce(new Response("Unauthorized", { status: 401 }));
     vi.stubGlobal("fetch", fetcher);
 
     render(createElement(ProjectsDashboard, { apiUrl: "http://api.test/api/v1" }));

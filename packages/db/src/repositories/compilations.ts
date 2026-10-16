@@ -329,10 +329,7 @@ export class CompilationsRepository {
    * - running -> cancel_requested
    * - cancel_requested / succeeded / failed / timed_out / cancelled -> unchanged
    */
-  async cancelJob(
-    jobId: string,
-    projectId: string,
-  ): Promise<CompilationView | null> {
+  async cancelJob(jobId: string, projectId: string): Promise<CompilationView | null> {
     assertUUID(jobId, "jobId");
     assertUUID(projectId, "projectId");
 
@@ -428,10 +425,7 @@ export class CompilationsRepository {
   /**
    * Completes a compile job with its terminal result and diagnostics.
    */
-  async completeJob(
-    jobId: string,
-    result: CompleteJobInput,
-  ): Promise<CompileJobRow | null> {
+  async completeJob(jobId: string, result: CompleteJobInput): Promise<CompileJobRow | null> {
     assertUUID(jobId, "jobId");
 
     const res = await this.client.query<CompileJobRow>(
@@ -554,7 +548,9 @@ export async function freezeCompilationRevision(
 
     const revision = await revisionsRepo.getRevision(params.projectId, Number(row.revision_no));
     if (!revision) {
-      throw new RevisionNotFoundError(`Target revision ${params.targetRevisionId} could not be loaded`);
+      throw new RevisionNotFoundError(
+        `Target revision ${params.targetRevisionId} could not be loaded`,
+      );
     }
 
     return {

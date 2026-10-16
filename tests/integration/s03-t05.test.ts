@@ -62,7 +62,8 @@ describe("S03-T05 File tree interactions integration", () => {
   });
 
   it("creates a new file through dialog and calls POST endpoint with If-Match", async () => {
-    const fetcher = vi.fn()
+    const fetcher = vi
+      .fn()
       .mockResolvedValueOnce(
         new Response(JSON.stringify(mockTreeResponse), {
           status: 200,
@@ -112,7 +113,13 @@ describe("S03-T05 File tree interactions integration", () => {
       );
     vi.stubGlobal("fetch", fetcher);
 
-    render(createElement(FileTree, { projectId, apiUrl: "http://api.test/api/v1", csrfToken: "csrf-val" }));
+    render(
+      createElement(FileTree, {
+        projectId,
+        apiUrl: "http://api.test/api/v1",
+        csrfToken: "csrf-val",
+      }),
+    );
     await screen.findByText("main.tex");
 
     // Click "New File" toolbar button
@@ -142,19 +149,16 @@ describe("S03-T05 File tree interactions integration", () => {
   });
 
   it("recovers from 409 conflict without creating phantom nodes", async () => {
-    const fetcher = vi.fn()
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify(mockTreeResponse), { status: 200 }),
-      )
+    const fetcher = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(mockTreeResponse), { status: 200 }))
       .mockResolvedValueOnce(
         new Response(JSON.stringify({ code: "REVISION_CONFLICT", detail: "Sibling collision" }), {
           status: 409,
           headers: { "content-type": "application/problem+json" },
         }),
       )
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify(mockTreeResponse), { status: 200 }),
-      );
+      .mockResolvedValueOnce(new Response(JSON.stringify(mockTreeResponse), { status: 200 }));
     vi.stubGlobal("fetch", fetcher);
 
     render(createElement(FileTree, { projectId, apiUrl: "http://api.test/api/v1" }));
@@ -177,10 +181,9 @@ describe("S03-T05 File tree interactions integration", () => {
   });
 
   it("handles rename and delete actions through dialogs", async () => {
-    const fetcher = vi.fn()
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify(mockTreeResponse), { status: 200 }),
-      )
+    const fetcher = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(mockTreeResponse), { status: 200 }))
       .mockResolvedValueOnce(
         new Response(
           JSON.stringify({ ...mockTreeResponse.items[0], name: "root.tex", treeVersion: 3 }),
@@ -192,7 +195,10 @@ describe("S03-T05 File tree interactions integration", () => {
           JSON.stringify({
             ...mockTreeResponse,
             treeVersion: 3,
-            items: [{ ...mockTreeResponse.items[0]!, name: "root.tex" }, mockTreeResponse.items[1]!],
+            items: [
+              { ...mockTreeResponse.items[0]!, name: "root.tex" },
+              mockTreeResponse.items[1]!,
+            ],
           }),
           { status: 200 },
         ),

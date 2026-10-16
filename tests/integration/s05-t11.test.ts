@@ -49,7 +49,7 @@ describe("S05-T11 template preview and instantiate", () => {
   it("instantiates from the preview with a title", async () => {
     const fetcher = vi.fn(async (url: string, init?: RequestInit) => {
       if (url.endsWith("/instantiate")) {
-        expect((init?.method ?? "GET")).toBe("POST");
+        expect(init?.method ?? "GET").toBe("POST");
         return new Response(
           JSON.stringify({
             id: "22222222-2222-4222-8222-222222222222",
@@ -69,7 +69,9 @@ describe("S05-T11 template preview and instantiate", () => {
       createElement(TemplatePreview, { apiUrl, templateId: "thesis-outline", onInstantiated }),
     );
     expect(await screen.findByTestId("template-preview")).not.toBeNull();
-    fireEvent.change(screen.getByTestId("template-title-input"), { target: { value: "From preview" } });
+    fireEvent.change(screen.getByTestId("template-title-input"), {
+      target: { value: "From preview" },
+    });
     fireEvent.click(screen.getByTestId("template-instantiate"));
     await waitFor(() =>
       expect(onInstantiated).toHaveBeenCalledWith(

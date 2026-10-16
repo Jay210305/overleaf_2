@@ -67,10 +67,7 @@ describe("COL-01 Concurrent editing across replicas convergence (S07-T07)", () =
     const bReceivedByA = clientA.waitForMessage((m) => m.type === "sync.update");
     const aReceivedByB = clientB.waitForMessage((m) => m.type === "sync.update");
 
-    await Promise.all([
-      clientA.sendUpdate(updateA),
-      clientB.sendUpdate(updateB),
-    ]);
+    await Promise.all([clientA.sendUpdate(updateA), clientB.sendUpdate(updateB)]);
 
     const msgB = await bReceivedByA;
     const msgA = await aReceivedByB;

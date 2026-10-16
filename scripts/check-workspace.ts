@@ -81,7 +81,9 @@ export function assertBrowserPackageBoundary(root: string): void {
           if (specifier) {
             const privatePackage =
               specifier.startsWith("@latex-collab/") &&
-              !browserAllowedPackages.includes(specifier as (typeof browserAllowedPackages)[number]);
+              !browserAllowedPackages.includes(
+                specifier as (typeof browserAllowedPackages)[number],
+              );
             const outsideApp =
               specifier.startsWith(".") &&
               (() => {

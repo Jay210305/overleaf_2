@@ -36,10 +36,10 @@ describe("NFR-03 Revoked users cannot mutate or receive unauthorized data (S07-T
     });
 
     // Revoke editor member
-    await fixture.db.query(
-      `DELETE FROM project_members WHERE project_id = $1 AND user_id = $2`,
-      [fixture.projectId, fixture.editor.id],
-    );
+    await fixture.db.query(`DELETE FROM project_members WHERE project_id = $1 AND user_id = $2`, [
+      fixture.projectId,
+      fixture.editor.id,
+    ]);
 
     await revocationManager.handleRevocation({
       type: "member_removed",

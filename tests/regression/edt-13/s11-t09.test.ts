@@ -26,7 +26,7 @@ Paragraph content for testing.`;
       headingA.titleRange.end,
       headingA.title,
       "Revised Section",
-      docA
+      docA,
     );
     applyVisualPatch(textA, patchA);
 
@@ -77,7 +77,7 @@ Paragraph content for testing. Additional verified details.`);
     // Client B (Code): adds TikZ block under diagrams section
     textB.insert(
       textB.length,
-      "\n\\begin{tikzpicture}\n  \\draw (0,0) -- (1,0);\n\\end{tikzpicture}"
+      "\n\\begin{tikzpicture}\n  \\draw (0,0) -- (1,0);\n\\end{tikzpicture}",
     );
 
     const uA = Y.encodeStateAsUpdate(docA, Y.encodeStateVector(docB));

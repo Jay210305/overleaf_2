@@ -63,7 +63,9 @@ export function generateTableSnippet(options: TableSnippetOptions = {}): string 
   const rowLines: string[] = [];
 
   for (let r = 0; r < rowsCount; r++) {
-    const rowCells = Array.from({ length: colsCount }, (_, c) => `Item ${r + 1},${c + 1}`).join(" & ");
+    const rowCells = Array.from({ length: colsCount }, (_, c) => `Item ${r + 1},${c + 1}`).join(
+      " & ",
+    );
     rowLines.push(`    ${rowCells} \\\\\n    \\hline`);
   }
 
@@ -105,7 +107,8 @@ export function generateSectionSnippet(options: SectionSnippetOptions): string {
  */
 export function generateListSnippet(options: ListSnippetOptions = {}): string {
   const type = options.type ?? "itemize";
-  const items = options.items && options.items.length > 0 ? options.items : ["First item", "Second item"];
+  const items =
+    options.items && options.items.length > 0 ? options.items : ["First item", "Second item"];
   const itemLines = items.map((it) => `  \\item ${it}`).join("\n");
 
   return `\\begin{${type}}
@@ -158,7 +161,9 @@ export function insertSnippet(
   snippet: string,
 ): { newText: string; newCursor: number } {
   if (from < 0 || to < from || to > source.length) {
-    throw new Error(`Invalid selection range: [${from}, ${to}] for text of length ${source.length}`);
+    throw new Error(
+      `Invalid selection range: [${from}, ${to}] for text of length ${source.length}`,
+    );
   }
 
   const before = source.slice(0, from);

@@ -377,11 +377,7 @@ export class ImportJobRepository {
         [jobId],
       );
       if (!updated.rows[0]) {
-        throw new PersistenceError(
-          "CONSTRAINT_VIOLATION",
-          "Import job is not validated",
-          false,
-        );
+        throw new PersistenceError("CONSTRAINT_VIOLATION", "Import job is not validated", false);
       }
       return toApplyView(updated.rows[0]);
     } catch (error) {

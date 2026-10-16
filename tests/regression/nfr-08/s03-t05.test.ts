@@ -46,9 +46,7 @@ describe("NFR-08 regression: Accessible file tree interactions (S03-T05)", () =>
   it("exposes semantic landmarks, tree roles, and accessible labels", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
-        new Response(JSON.stringify(mockTree), { status: 200 }),
-      ),
+      vi.fn().mockResolvedValue(new Response(JSON.stringify(mockTree), { status: 200 })),
     );
 
     render(createElement(FileTree, { projectId, apiUrl: "http://api.test/api/v1" }));
@@ -82,13 +80,17 @@ describe("NFR-08 regression: Accessible file tree interactions (S03-T05)", () =>
   it("supports keyboard navigation with arrow keys and Enter", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
-        new Response(JSON.stringify(mockTree), { status: 200 }),
-      ),
+      vi.fn().mockResolvedValue(new Response(JSON.stringify(mockTree), { status: 200 })),
     );
 
     const onSelect = vi.fn();
-    render(createElement(FileTree, { projectId, apiUrl: "http://api.test/api/v1", onSelectNode: onSelect }));
+    render(
+      createElement(FileTree, {
+        projectId,
+        apiUrl: "http://api.test/api/v1",
+        onSelectNode: onSelect,
+      }),
+    );
     await screen.findByText("main.tex");
 
     const tree = screen.getByRole("tree", { name: "Project files tree" });
@@ -104,9 +106,7 @@ describe("NFR-08 regression: Accessible file tree interactions (S03-T05)", () =>
   it("manages focus and accessible dialog attributes on modal interactions", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
-        new Response(JSON.stringify(mockTree), { status: 200 }),
-      ),
+      vi.fn().mockResolvedValue(new Response(JSON.stringify(mockTree), { status: 200 })),
     );
 
     render(createElement(FileTree, { projectId, apiUrl: "http://api.test/api/v1" }));

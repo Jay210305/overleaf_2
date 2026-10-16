@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { parseVisualAst, serializeVisualAst, computeTextHash, type HeadingNode, type ParagraphNode } from "@latex-collab/latex";
+import {
+  parseVisualAst,
+  serializeVisualAst,
+  computeTextHash,
+  type HeadingNode,
+  type ParagraphNode,
+} from "@latex-collab/latex";
 import { applyVisualPatch, createVisualPatch } from "../../packages/editor/src/visual-patch.js";
 import { ROUND_TRIP_FIXTURES } from "./visual-round-trip.test.js";
 import * as Y from "yjs";
@@ -36,7 +42,9 @@ Concluding remarks.`;
     yText.insert(0, raw);
 
     const doc = parseVisualAst(raw);
-    const firstSection = doc.nodes.find((n) => n.kind === "heading" && n.title === "First Section") as HeadingNode;
+    const firstSection = doc.nodes.find(
+      (n) => n.kind === "heading" && n.title === "First Section",
+    ) as HeadingNode;
     expect(firstSection).toBeDefined();
 
     const patch = createVisualPatch(
@@ -45,7 +53,7 @@ Concluding remarks.`;
       firstSection.titleRange.end,
       firstSection.title,
       "Updated Section Title",
-      yDoc
+      yDoc,
     );
 
     const result = applyVisualPatch(yText, patch);
@@ -67,8 +75,13 @@ Nested paragraph text.
 Concluding remarks.`;
 
     expect(updated).toBe(expected);
-    expect(computeTextHash(updated.slice(firstSection.range.end + ("Updated Section Title".length - "First Section".length))))
-      .toBe(computeTextHash(raw.slice(firstSection.range.end)));
+    expect(
+      computeTextHash(
+        updated.slice(
+          firstSection.range.end + ("Updated Section Title".length - "First Section".length),
+        ),
+      ),
+    ).toBe(computeTextHash(raw.slice(firstSection.range.end)));
   });
 
   it("re-anchors non-overlapping concurrent edits correctly", () => {
@@ -88,7 +101,7 @@ Concluding remarks.`;
       paraBeta.range.end,
       paraBeta.raw,
       "Paragraph Beta (Modified).\n\n",
-      yDoc
+      yDoc,
     );
 
     const result = applyVisualPatch(yText, patch);

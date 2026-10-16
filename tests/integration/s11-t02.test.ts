@@ -86,7 +86,9 @@ See equation~\\eqref{eq:einstein} and citation~\\cite{knuth1984}.
     const para = doc.nodes.find((n) => n.kind === "paragraph") as ParagraphNode;
     expect(para).toBeDefined();
     expect(para.spans.some((s) => s.kind === "reference" && s.key === "eq:einstein")).toBe(true);
-    expect(para.spans.some((s) => s.kind === "citation" && s.keys.includes("knuth1984"))).toBe(true);
+    expect(para.spans.some((s) => s.kind === "citation" && s.keys.includes("knuth1984"))).toBe(
+      true,
+    );
 
     // Figure
     const figure = doc.nodes.find((n) => n.kind === "figure") as FigureNode;
@@ -127,7 +129,9 @@ raw verbatim text % not a comment
 \\end{document}`;
 
     const doc = parseVisualAst(source);
-    const literalNodes = doc.nodes.filter((n) => n.kind === "literalFallback") as LiteralFallbackNode[];
+    const literalNodes = doc.nodes.filter(
+      (n) => n.kind === "literalFallback",
+    ) as LiteralFallbackNode[];
 
     expect(literalNodes.length).toBeGreaterThanOrEqual(4);
     expect(literalNodes.some((n) => n.reason === "preamble")).toBe(true);
@@ -217,7 +221,9 @@ broken content`;
     expect(list).toBeDefined();
     expect(list.items.length).toBe(2);
     expect(list.items[0]?.content).toBe("Indented bullet one");
-    expect(source.slice(list.items[0]!.contentRange.start, list.items[0]!.contentRange.end)).toBe("Indented bullet one");
+    expect(source.slice(list.items[0]!.contentRange.start, list.items[0]!.contentRange.end)).toBe(
+      "Indented bullet one",
+    );
 
     const math = doc.nodes.find((n) => n.kind === "mathDisplay") as MathDisplayNode;
     expect(math).toBeDefined();
@@ -243,7 +249,9 @@ Paragraph content follows.`;
     const heading = doc.nodes[0] as HeadingNode;
     expect(heading.kind).toBe("heading");
     expect(heading.title).toBe("Full Detailed Section Title");
-    expect(source.slice(heading.titleRange.start, heading.titleRange.end)).toBe("Full Detailed Section Title");
+    expect(source.slice(heading.titleRange.start, heading.titleRange.end)).toBe(
+      "Full Detailed Section Title",
+    );
     expect(serializeVisualAst(doc)).toBe(source);
   });
 

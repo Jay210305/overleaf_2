@@ -1,11 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createSessionFixture, origin } from "../../helpers/s02-session.js";
-import {
-  RevisionsRepository,
-  canonicalJsonStringify,
-  computeSha256,
-} from "@latex-collab/db";
+import { RevisionsRepository, canonicalJsonStringify, computeSha256 } from "@latex-collab/db";
 
 describe("Regression NFR-06 (S09-T03): Restored revision manifest hash matches exact source manifest", () => {
   let fixture: Awaited<ReturnType<typeof createSessionFixture>>;

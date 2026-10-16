@@ -34,7 +34,7 @@ Text with strange spacing:   three spaces   here.
       useEditorModeSwitch({
         yText,
         initialMode: "code",
-      })
+      }),
     );
 
     // Switch to visual and back 5 times
@@ -69,7 +69,7 @@ Text with strange spacing:   three spaces   here.
       useEditorModeSwitch({
         yText,
         initialMode: "code",
-      })
+      }),
     );
 
     act(() => {

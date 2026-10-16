@@ -93,10 +93,10 @@ export class TagService {
   }
 
   async deleteTag(userId: string, tagId: string): Promise<void> {
-    const res = await this.db.query(
-      `DELETE FROM project_tags WHERE id = $1 AND user_id = $2`,
-      [tagId, userId],
-    );
+    const res = await this.db.query(`DELETE FROM project_tags WHERE id = $1 AND user_id = $2`, [
+      tagId,
+      userId,
+    ]);
     if (res.rowCount === 0) throw new AuthError(404, "RESOURCE_NOT_FOUND");
   }
 
@@ -125,10 +125,10 @@ export class TagService {
     );
     if (tagRes.rows.length === 0) throw new AuthError(404, "RESOURCE_NOT_FOUND");
 
-    await this.db.query(
-      `DELETE FROM project_tag_links WHERE project_id = $1 AND tag_id = $2`,
-      [projectId, tagId],
-    );
+    await this.db.query(`DELETE FROM project_tag_links WHERE project_id = $1 AND tag_id = $2`, [
+      projectId,
+      tagId,
+    ]);
   }
 }
 
@@ -148,7 +148,13 @@ export function registerTagRoutes(
   app.get("/api/v1/tags", async (request, reply) => {
     try {
       if (!options.db || !service) throw new AuthError(503, "SERVICE_UNAVAILABLE");
-      const identity = await requireSession(options.db, request, options.origin, secureCookies, false);
+      const identity = await requireSession(
+        options.db,
+        request,
+        options.origin,
+        secureCookies,
+        false,
+      );
       const result = await service.listTags(identity.userId);
       return reply.code(200).type("application/json").send(result);
     } catch (error) {
@@ -160,7 +166,13 @@ export function registerTagRoutes(
   app.post("/api/v1/tags", async (request, reply) => {
     try {
       if (!options.db || !service) throw new AuthError(503, "SERVICE_UNAVAILABLE");
-      const identity = await requireSession(options.db, request, options.origin, secureCookies, true);
+      const identity = await requireSession(
+        options.db,
+        request,
+        options.origin,
+        secureCookies,
+        true,
+      );
       const parsed = createTagSchema.safeParse(request.body);
       if (!parsed.success) throw new AuthError(400, "VALIDATION_ERROR");
 
@@ -180,7 +192,13 @@ export function registerTagRoutes(
         const { tagId } = request.params;
         if (!isUUID(tagId)) throw new AuthError(400, "VALIDATION_ERROR");
 
-        const identity = await requireSession(options.db, request, options.origin, secureCookies, true);
+        const identity = await requireSession(
+          options.db,
+          request,
+          options.origin,
+          secureCookies,
+          true,
+        );
         const parsed = updateTagSchema.safeParse(request.body);
         if (!parsed.success) throw new AuthError(400, "VALIDATION_ERROR");
 
@@ -201,7 +219,13 @@ export function registerTagRoutes(
         const { tagId } = request.params;
         if (!isUUID(tagId)) throw new AuthError(400, "VALIDATION_ERROR");
 
-        const identity = await requireSession(options.db, request, options.origin, secureCookies, true);
+        const identity = await requireSession(
+          options.db,
+          request,
+          options.origin,
+          secureCookies,
+          true,
+        );
         await service.deleteTag(identity.userId, tagId);
         return reply.code(204).send();
       } catch (error) {
@@ -214,10 +238,7 @@ export function registerTagRoutes(
   app.post(
     "/api/v1/projects/:projectId/tags/:tagId",
     { config: { projectAction: "EDIT" } },
-    async (
-      request: FastifyRequest<{ Params: { projectId: string; tagId: string } }>,
-      reply,
-    ) => {
+    async (request: FastifyRequest<{ Params: { projectId: string; tagId: string } }>, reply) => {
       try {
         if (!options.db || !service) throw new AuthError(503, "SERVICE_UNAVAILABLE");
         const { projectId, tagId } = request.params;
@@ -238,10 +259,7 @@ export function registerTagRoutes(
   app.delete(
     "/api/v1/projects/:projectId/tags/:tagId",
     { config: { projectAction: "EDIT" } },
-    async (
-      request: FastifyRequest<{ Params: { projectId: string; tagId: string } }>,
-      reply,
-    ) => {
+    async (request: FastifyRequest<{ Params: { projectId: string; tagId: string } }>, reply) => {
       try {
         if (!options.db || !service) throw new AuthError(503, "SERVICE_UNAVAILABLE");
         const { projectId, tagId } = request.params;

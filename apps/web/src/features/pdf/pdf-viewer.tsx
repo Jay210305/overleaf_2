@@ -10,7 +10,8 @@ export interface PdfViewerProps {
   revisionLabel?: string;
   isStale?: boolean;
   totalPages?: number;
-  lastCompileStatus?: "queued" | "running" | "succeeded" | "failed" | "timed_out" | "cancelled" | null;
+  lastCompileStatus?:
+    "queued" | "running" | "succeeded" | "failed" | "timed_out" | "cancelled" | null;
   errorMessage?: string | null;
   onDownload?: () => void;
   className?: string;
@@ -113,20 +114,39 @@ export function PdfViewer({
     <div
       data-testid="pdf-viewer"
       className={`pdf-viewer-container flex flex-col h-full w-full bg-neutral-900 text-neutral-100 ${className}`}
-      style={{ display: "flex", flexDirection: "column", height: "100%", width: "100%", backgroundColor: "#1e1e1e", color: "#f3f4f6" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        width: "100%",
+        backgroundColor: "#1e1e1e",
+        color: "#f3f4f6",
+      }}
     >
       {/* 1. Stale warning banner if subsequent compile failed but previous PDF is kept */}
       {isStale && (
         <div
           data-testid="stale-banner"
           className="stale-pdf-banner flex items-center justify-between px-4 py-2 bg-amber-900/80 text-amber-200 border-b border-amber-700 text-sm"
-          style={{ backgroundColor: "#78350f", color: "#fef3c7", padding: "6px 12px", fontSize: "0.875rem", display: "flex", justifyContent: "space-between" }}
+          style={{
+            backgroundColor: "#78350f",
+            color: "#fef3c7",
+            padding: "6px 12px",
+            fontSize: "0.875rem",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
         >
           <div className="flex items-center gap-2">
             <span
               data-testid="stale-badge"
               className="px-2 py-0.5 rounded bg-amber-700 text-white font-semibold text-xs"
-              style={{ backgroundColor: "#b45309", padding: "2px 6px", borderRadius: "4px", fontWeight: "bold" }}
+              style={{
+                backgroundColor: "#b45309",
+                padding: "2px 6px",
+                borderRadius: "4px",
+                fontWeight: "bold",
+              }}
             >
               OUTDATED
             </span>
@@ -154,14 +174,22 @@ export function PdfViewer({
         }}
       >
         {/* Left: Page Navigation */}
-        <div className="flex items-center gap-1.5" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        <div
+          className="flex items-center gap-1.5"
+          style={{ display: "flex", alignItems: "center", gap: "6px" }}
+        >
           <button
             type="button"
             data-testid="page-prev"
             onClick={handlePrevPage}
             disabled={currentPage <= 1 || !pdfUrl}
             className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 disabled:opacity-40"
-            style={{ padding: "4px 8px", borderRadius: "4px", backgroundColor: "#404040", color: "#fff" }}
+            style={{
+              padding: "4px 8px",
+              borderRadius: "4px",
+              backgroundColor: "#404040",
+              color: "#fff",
+            }}
           >
             &lt;
           </button>
@@ -175,7 +203,13 @@ export function PdfViewer({
             onChange={handlePageChange}
             disabled={!pdfUrl}
             className="w-12 px-1 py-0.5 text-center bg-neutral-900 border border-neutral-600 rounded text-neutral-100"
-            style={{ width: "45px", textAlign: "center", backgroundColor: "#171717", color: "#fff", border: "1px solid #525252" }}
+            style={{
+              width: "45px",
+              textAlign: "center",
+              backgroundColor: "#171717",
+              color: "#fff",
+              border: "1px solid #525252",
+            }}
           />
           <span>of</span>
           <span data-testid="page-total">{totalPages}</span>
@@ -185,21 +219,34 @@ export function PdfViewer({
             onClick={handleNextPage}
             disabled={currentPage >= totalPages || !pdfUrl}
             className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 disabled:opacity-40"
-            style={{ padding: "4px 8px", borderRadius: "4px", backgroundColor: "#404040", color: "#fff" }}
+            style={{
+              padding: "4px 8px",
+              borderRadius: "4px",
+              backgroundColor: "#404040",
+              color: "#fff",
+            }}
           >
             &gt;
           </button>
         </div>
 
         {/* Center: Zoom Controls & Fit Modes */}
-        <div className="flex items-center gap-1.5" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        <div
+          className="flex items-center gap-1.5"
+          style={{ display: "flex", alignItems: "center", gap: "6px" }}
+        >
           <button
             type="button"
             data-testid="zoom-out"
             onClick={handleZoomOut}
             disabled={!pdfUrl}
             className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 disabled:opacity-40"
-            style={{ padding: "4px 8px", borderRadius: "4px", backgroundColor: "#404040", color: "#fff" }}
+            style={{
+              padding: "4px 8px",
+              borderRadius: "4px",
+              backgroundColor: "#404040",
+              color: "#fff",
+            }}
           >
             -
           </button>
@@ -209,7 +256,12 @@ export function PdfViewer({
             onClick={handleZoomReset}
             disabled={!pdfUrl}
             className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 font-mono disabled:opacity-40"
-            style={{ padding: "4px 8px", borderRadius: "4px", backgroundColor: "#404040", color: "#fff" }}
+            style={{
+              padding: "4px 8px",
+              borderRadius: "4px",
+              backgroundColor: "#404040",
+              color: "#fff",
+            }}
           >
             {fitMode === "none" ? `${zoom}%` : fitMode === "fit-width" ? "Fit Width" : "Fit Page"}
           </button>
@@ -219,7 +271,12 @@ export function PdfViewer({
             onClick={handleZoomIn}
             disabled={!pdfUrl}
             className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 disabled:opacity-40"
-            style={{ padding: "4px 8px", borderRadius: "4px", backgroundColor: "#404040", color: "#fff" }}
+            style={{
+              padding: "4px 8px",
+              borderRadius: "4px",
+              backgroundColor: "#404040",
+              color: "#fff",
+            }}
           >
             +
           </button>
@@ -259,12 +316,21 @@ export function PdfViewer({
         </div>
 
         {/* Right: Revision provenance & Download */}
-        <div className="flex items-center gap-2" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <div
+          className="flex items-center gap-2"
+          style={{ display: "flex", alignItems: "center", gap: "8px" }}
+        >
           {formattedRevision && (
             <span
               data-testid="revision-label"
               className="text-neutral-400 font-mono text-xs px-1.5 py-0.5 rounded bg-neutral-900 border border-neutral-700"
-              style={{ padding: "2px 6px", borderRadius: "4px", backgroundColor: "#171717", color: "#9ca3af", border: "1px solid #404040" }}
+              style={{
+                padding: "2px 6px",
+                borderRadius: "4px",
+                backgroundColor: "#171717",
+                color: "#9ca3af",
+                border: "1px solid #404040",
+              }}
             >
               {formattedRevision}
             </span>

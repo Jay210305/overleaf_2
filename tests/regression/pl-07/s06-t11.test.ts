@@ -18,7 +18,9 @@ describe("PL-07 Trusted execution and closed public mode documentation (S06-T11)
 
   it("verifies explicit warning that dedicated worker is not verified public isolation", () => {
     const content = readFileSync(docPath, "utf8");
-    expect(content).toMatch(/does not constitute verified multi-tenant adversarial public isolation/i);
+    expect(content).toMatch(
+      /does not constitute verified multi-tenant adversarial public isolation/i,
+    );
     expect(content).toMatch(/Sprint 15/);
   });
 });

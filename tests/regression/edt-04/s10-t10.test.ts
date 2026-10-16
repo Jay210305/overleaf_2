@@ -30,14 +30,17 @@ describe("Regression EDT-04 (S10-T10): Editor Shortcuts, Keymaps, and Search Act
     expect(matches[0]?.fileName).toBe("main.tex");
     expect(matches[0]?.lineNumber).toBe(1);
 
-    const preview = previewReplace(matches[0]!.lineContent, matches[0]!.startIndex, matches[0]!.endIndex, "chapter");
+    const preview = previewReplace(
+      matches[0]!.lineContent,
+      matches[0]!.startIndex,
+      matches[0]!.endIndex,
+      "chapter",
+    );
     expect(preview).toBe("Here is a chapter.");
   });
 
   it("handles case-sensitive search across files", () => {
-    const files = [
-      { id: "1", name: "main.tex", content: "LaTeX latex LATEX" },
-    ];
+    const files = [{ id: "1", name: "main.tex", content: "LaTeX latex LATEX" }];
 
     const matchesExact = searchAcrossFiles(files, { query: "LaTeX", caseSensitive: true });
     expect(matchesExact).toHaveLength(1);

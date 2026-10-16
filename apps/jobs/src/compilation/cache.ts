@@ -82,7 +82,7 @@ export class CompilationCache {
     // Strict tenant isolation: foreign project cannot claim or view another project's cache entry
     if (entry.projectId !== requestingProjectId) {
       throw new ForeignArtifactAccessDeniedError(
-        `Project '${requestingProjectId}' is unauthorized to access cached artifacts owned by project '${entry.projectId}'`
+        `Project '${requestingProjectId}' is unauthorized to access cached artifacts owned by project '${entry.projectId}'`,
       );
     }
 
@@ -130,8 +130,5 @@ export function verifyManifestAndRevisionMatch(
   expectedRevision: number,
   expectedManifestHash: string,
 ): boolean {
-  return (
-    record.sourceRevision === expectedRevision &&
-    record.manifestHash === expectedManifestHash
-  );
+  return record.sourceRevision === expectedRevision && record.manifestHash === expectedManifestHash;
 }

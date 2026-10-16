@@ -2,13 +2,7 @@ import type { Compiler } from "./index.js";
 import type { RevisionManifest } from "./storage.js";
 
 export type CompileStatus =
-  | "queued"
-  | "running"
-  | "succeeded"
-  | "failed"
-  | "timed_out"
-  | "cancel_requested"
-  | "cancelled";
+  "queued" | "running" | "succeeded" | "failed" | "timed_out" | "cancel_requested" | "cancelled";
 
 export type Diagnostic = {
   severity: "error" | "warning" | "info";
@@ -91,4 +85,3 @@ export class MockCompilerExecutor implements CompilerExecutor {
     };
   }
 }
-

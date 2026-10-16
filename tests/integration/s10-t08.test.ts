@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  setProjectFileText,
-  validateSafeRegex,
-} from "../../apps/api/src/modules/search/routes.js";
+import { setProjectFileText, validateSafeRegex } from "../../apps/api/src/modules/search/routes.js";
 
 describe("S10-T08 Integration: Project Search and Previewed Replacement", () => {
   const projectId = "11111111-1111-4111-8111-111111111111";
@@ -14,11 +11,7 @@ describe("S10-T08 Integration: Project Search and Previewed Replacement", () => 
     file1,
     "\\section{Quantum Mechanics}\nQuantum entanglement is a phenomenon.",
   );
-  setProjectFileText(
-    projectId,
-    file2,
-    "In classical physics, quantum effects are negligible.",
-  );
+  setProjectFileText(projectId, file2, "In classical physics, quantum effects are negligible.");
 
   it("validates safe regex patterns and rejects catastrophic backtracking or overlong patterns", () => {
     const valid = validateSafeRegex("quantum.*");

@@ -1,8 +1,4 @@
-import type {
-  CompilationLimits,
-  ExecuteInput,
-  ExecuteOutput,
-} from "@latex-collab/contracts";
+import type { CompilationLimits, ExecuteInput, ExecuteOutput } from "@latex-collab/contracts";
 
 export const DEFAULT_COMPILATION_LIMITS: Readonly<CompilationLimits> = {
   timeoutSeconds: 60,

@@ -53,10 +53,9 @@ export class SnapshotService {
         const priorSnapRes = await tx.query<{
           upto_seq: number;
           state_bytes: Buffer | null;
-        }>(
-          `SELECT upto_seq, state_bytes FROM crdt_snapshots WHERE id = $1`,
-          [docRow.latest_snapshot_id],
-        );
+        }>(`SELECT upto_seq, state_bytes FROM crdt_snapshots WHERE id = $1`, [
+          docRow.latest_snapshot_id,
+        ]);
         const prior = priorSnapRes.rows[0];
         if (prior?.state_bytes) {
           Y.applyUpdate(doc, new Uint8Array(prior.state_bytes));

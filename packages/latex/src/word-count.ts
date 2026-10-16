@@ -52,7 +52,10 @@ export function countLatexWords(source: string): WordCountResult {
   }
 
   // 4. Strip display math environments
-  text = text.replace(/\\begin\{(equation\*?|align\*?|gather\*?|multline\*?|displaymath)\}[\s\S]*?\\end\{\1\}/g, " ");
+  text = text.replace(
+    /\\begin\{(equation\*?|align\*?|gather\*?|multline\*?|displaymath)\}[\s\S]*?\\end\{\1\}/g,
+    " ",
+  );
   text = text.replace(/\\\[[\s\S]*?\\\]/g, " ");
   text = text.replace(/\$\$[\s\S]*?\$\$/g, " ");
 
@@ -61,11 +64,17 @@ export function countLatexWords(source: string): WordCountResult {
 
   // 6. Strip commands whose arguments should not be counted as words
   // e.g. \cite{...}, \ref{...}, \label{...}, \includegraphics[...]{...}, \bibliographystyle{...}, \bibliography{...}
-  text = text.replace(/\\(cite|citep|citet|autocite|ref|eqref|pageref|autoref|label|bibliographystyle|bibliography|input|include|usepackage|documentclass)\*?(?:\[[^\]]*\])?\{[^}]*\}/g, " ");
+  text = text.replace(
+    /\\(cite|citep|citet|autocite|ref|eqref|pageref|autoref|label|bibliographystyle|bibliography|input|include|usepackage|documentclass)\*?(?:\[[^\]]*\])?\{[^}]*\}/g,
+    " ",
+  );
   text = text.replace(/\\includegraphics(?:\[[^\]]*\])?\{[^}]*\}/g, " ");
 
   // 7. Unwrap text formatting commands: \textbf{word} -> word, \section{title} -> title
-  text = text.replace(/\\(textbf|textit|emph|underline|section|subsection|subsubsection|paragraph|caption)\*?\{([^}]*)\}/g, " $2 ");
+  text = text.replace(
+    /\\(textbf|textit|emph|underline|section|subsection|subsubsection|paragraph|caption)\*?\{([^}]*)\}/g,
+    " $2 ",
+  );
 
   // 8. Strip standalone commands: \item, \newline, \newpage, \maketitle, \\, etc.
   text = text.replace(/\\[a-zA-Z]+\*?/g, " ");

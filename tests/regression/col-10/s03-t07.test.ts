@@ -44,15 +44,11 @@ describe("COL-10 Regression - Revision history comparison (S03-T07)", () => {
     });
 
     // Mutate state: delete old.tex, add conclusion.tex, modify intro.tex (new blob_key)
-    await fixture.db.query(
-      `UPDATE project_nodes SET deleted_at = now() WHERE id = $1`,
-      [file2Id],
-    );
+    await fixture.db.query(`UPDATE project_nodes SET deleted_at = now() WHERE id = $1`, [file2Id]);
 
-    await fixture.db.query(
-      `UPDATE project_nodes SET blob_key = 'blob1_updated' WHERE id = $1`,
-      [file1Id],
-    );
+    await fixture.db.query(`UPDATE project_nodes SET blob_key = 'blob1_updated' WHERE id = $1`, [
+      file1Id,
+    ]);
 
     const file3Id = randomUUID();
     await fixture.db.query(

@@ -9,7 +9,8 @@ describe("CMP-01 Pinned TeX Live pdfLaTeX produces genuine PDF artifact (S06-T10
     const pdfContent = "%PDF-1.7\n1 0 obj\n<<>>\nendobj\n%%EOF";
     const executor = new TrustedWorkerExecutor({
       runner: async (_cmd, args, options) => {
-        const outDir = args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
+        const outDir =
+          args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
         await writeFile(join(outDir, "main.pdf"), pdfContent);
         return { exitCode: 0, stdout: "latexmk finished", stderr: "" };
       },
@@ -30,7 +31,12 @@ describe("CMP-01 Pinned TeX Live pdfLaTeX produces genuine PDF artifact (S06-T10
             nodeId: "node-main",
             path: "main.tex",
             kind: "TEXT",
-            object: { key: "node-main-key", sha256: "hash-main", sizeBytes: 10, mime: "text/x-tex" },
+            object: {
+              key: "node-main-key",
+              sha256: "hash-main",
+              sizeBytes: 10,
+              mime: "text/x-tex",
+            },
           },
         ],
       },

@@ -65,10 +65,9 @@ describe("NFR-06 Generated PDF sourceRevision and manifest hash match exactly (S
       id: string;
       revision_no: number;
       manifest_hash: string;
-    }>(
-      `SELECT id, revision_no, manifest_hash FROM project_revisions WHERE id = $1`,
-      [job.sourceRevisionId],
-    );
+    }>(`SELECT id, revision_no, manifest_hash FROM project_revisions WHERE id = $1`, [
+      job.sourceRevisionId,
+    ]);
     expect(revRes.rows.length).toBe(1);
     const rev = revRes.rows[0]!;
 

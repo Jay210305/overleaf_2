@@ -16,7 +16,10 @@ describe("NFR-02 Five simultaneous editors convergence through network perturbat
     for (let round = 0; round < 10; round++) {
       for (let i = 0; i < clients; i++) {
         const text = clientDocs[i]!.getText("content");
-        text.insert(Math.floor(Math.random() * (text.length + 1)), `[Client ${i + 1} Round ${round}] `);
+        text.insert(
+          Math.floor(Math.random() * (text.length + 1)),
+          `[Client ${i + 1} Round ${round}] `,
+        );
         updates.push(Y.encodeStateAsUpdate(clientDocs[i]!));
       }
     }

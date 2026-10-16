@@ -86,7 +86,7 @@ describe("S05-T10 PRO-02 import creates a consistent project", () => {
       const parentPath =
         row.parent_id === null
           ? ""
-          : [...idByPath.entries()].find(([, id]) => id === row.parent_id)?.[0] ?? "";
+          : ([...idByPath.entries()].find(([, id]) => id === row.parent_id)?.[0] ?? "");
       const fullPath = parentPath === "" ? row.name : `${parentPath}/${row.name}`;
       byPath.set(fullPath, row);
       idByPath.set(fullPath, row.id);

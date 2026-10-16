@@ -22,12 +22,23 @@ export interface CollabTestFixture {
   viewer: { id: string; email: string };
   projectId: string;
   fileId: string;
-  createClient: (ticket: string, options?: { origin?: string; fileId?: string; projectId?: string; serverUrl?: string | undefined }) => Promise<{
+  createClient: (
+    ticket: string,
+    options?: {
+      origin?: string;
+      fileId?: string;
+      projectId?: string;
+      serverUrl?: string | undefined;
+    },
+  ) => Promise<{
     ws: WebSocket;
     initialSync: CollabTestMessage;
     send: (msg: unknown) => void;
     sendUpdate: (updateBytes: Uint8Array, timeoutMs?: number) => Promise<CollabTestMessage>;
-    waitForMessage: (predicate: (msg: CollabTestMessage) => boolean, timeoutMs?: number) => Promise<CollabTestMessage>;
+    waitForMessage: (
+      predicate: (msg: CollabTestMessage) => boolean,
+      timeoutMs?: number,
+    ) => Promise<CollabTestMessage>;
     close: () => Promise<void>;
   }>;
   getTicket: (userEmail: string, fileId: string, action?: "read" | "write") => Promise<string>;
@@ -96,7 +107,11 @@ export async function createCollabTestFixture(options?: {
     };
   }
 
-  async function getTicket(userEmail: string, targetFileId: string, action: "read" | "write" = "write") {
+  async function getTicket(
+    userEmail: string,
+    targetFileId: string,
+    action: "read" | "write" = "write",
+  ) {
     const s = await loginUser(userEmail);
     const res = await app.inject({
       method: "POST",
@@ -119,7 +134,12 @@ export async function createCollabTestFixture(options?: {
 
   async function createClient(
     ticket: string,
-    clientOptions?: { origin?: string; fileId?: string; projectId?: string; serverUrl?: string | undefined },
+    clientOptions?: {
+      origin?: string;
+      fileId?: string;
+      projectId?: string;
+      serverUrl?: string | undefined;
+    },
   ) {
     const clientOrigin = clientOptions?.origin ?? origin;
     const targetUrl = clientOptions?.serverUrl ?? collabUrl;
@@ -174,7 +194,10 @@ export async function createCollabTestFixture(options?: {
     async function sendUpdate(updateBytes: Uint8Array, timeoutMs = 5000) {
       const updateBase64 = Buffer.from(updateBytes).toString("base64");
       const ackPromise = new Promise<CollabTestMessage>((resolve, reject) => {
-        const timer = setTimeout(() => reject(new Error("Timeout waiting for durable ack")), timeoutMs);
+        const timer = setTimeout(
+          () => reject(new Error("Timeout waiting for durable ack")),
+          timeoutMs,
+        );
         const handler = (m: CollabTestMessage) => {
           if (m.type === "text.durable_ack" || m.type === "error") {
             clearTimeout(timer);
@@ -189,7 +212,10 @@ export async function createCollabTestFixture(options?: {
       return ackPromise;
     }
 
-    async function waitForMessage(predicate: (msg: CollabTestMessage) => boolean, timeoutMs = 5000) {
+    async function waitForMessage(
+      predicate: (msg: CollabTestMessage) => boolean,
+      timeoutMs = 5000,
+    ) {
       // Check already received messages
       for (const m of messages) {
         if (predicate(m)) return m;

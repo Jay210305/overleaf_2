@@ -110,8 +110,7 @@ describe("S10-T01 Integration: Alternative TeX Profiles", () => {
         runner: async (_cmd, args, options) => {
           executedArgs = [...args];
           const outDir =
-            args.find((a) => a.startsWith("-outdir="))?.slice(8) ??
-            join(options.cwd, "../out");
+            args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
           await writeFile(join(outDir, "main.pdf"), genuinePdf);
           await writeFile(
             join(outDir, "main.log"),
@@ -136,14 +135,24 @@ describe("S10-T01 Integration: Alternative TeX Profiles", () => {
               nodeId: "main-node",
               path: "main.tex",
               kind: "TEXT",
-              object: { key: "main-key", sha256: "hash", sizeBytes: fixture.source.length, mime: "text/x-tex" },
+              object: {
+                key: "main-key",
+                sha256: "hash",
+                sizeBytes: fixture.source.length,
+                mime: "text/x-tex",
+              },
             },
           ],
         },
         compiler: fixture.compiler,
         imageDigest: "texlive:latest",
         policyVersion: "1.0.0",
-        limits: { timeoutSeconds: 60, memoryMiB: 512, cpuCores: 1, maxOutputBytes: 25 * 1024 * 1024 },
+        limits: {
+          timeoutSeconds: 60,
+          memoryMiB: 512,
+          cpuCores: 1,
+          maxOutputBytes: 25 * 1024 * 1024,
+        },
       };
 
       const result = await executor.execute(input, new AbortController().signal);

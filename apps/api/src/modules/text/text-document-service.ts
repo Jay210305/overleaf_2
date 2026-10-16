@@ -93,10 +93,9 @@ export class DefaultTextDocumentService implements TextDocumentService {
     const docRes = await client.query<{
       latest_snapshot_id: string | null;
       last_persisted_seq: number;
-    }>(
-      `SELECT latest_snapshot_id, last_persisted_seq FROM text_documents WHERE file_id = $1`,
-      [fileId],
-    );
+    }>(`SELECT latest_snapshot_id, last_persisted_seq FROM text_documents WHERE file_id = $1`, [
+      fileId,
+    ]);
     const docRow = docRes.rows[0];
     const lastPersistedSeq = docRow ? Number(docRow.last_persisted_seq) : 0;
     let uptoSeq = 0;
@@ -105,10 +104,9 @@ export class DefaultTextDocumentService implements TextDocumentService {
       const snapRes = await client.query<{
         upto_seq: number;
         state_bytes: Buffer | null;
-      }>(
-        `SELECT upto_seq, state_bytes FROM crdt_snapshots WHERE id = $1`,
-        [docRow.latest_snapshot_id],
-      );
+      }>(`SELECT upto_seq, state_bytes FROM crdt_snapshots WHERE id = $1`, [
+        docRow.latest_snapshot_id,
+      ]);
       const snap = snapRes.rows[0];
       if (snap?.state_bytes) {
         Y.applyUpdate(doc, new Uint8Array(snap.state_bytes));
@@ -200,10 +198,7 @@ export class DefaultTextDocumentService implements TextDocumentService {
 
       const lockRes = await tx.query<{
         last_persisted_seq: number;
-      }>(
-        `SELECT last_persisted_seq FROM text_documents WHERE file_id = $1 FOR UPDATE`,
-        [fileId],
-      );
+      }>(`SELECT last_persisted_seq FROM text_documents WHERE file_id = $1 FOR UPDATE`, [fileId]);
       const currentSeq = Number(lockRes.rows[0]?.last_persisted_seq ?? 0);
 
       // Reconstruct existing doc inside transaction

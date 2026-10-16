@@ -1,10 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { StorageAdapter } from "@latex-collab/storage";
-import {
-  assertImportKeyScope,
-  maxArchiveBytes,
-  StorageLimitError,
-} from "@latex-collab/storage";
+import { assertImportKeyScope, maxArchiveBytes, StorageLimitError } from "@latex-collab/storage";
 import {
   assertUUID,
   type DatabaseClient,
@@ -195,14 +191,21 @@ export async function applyValidatedImport(
         `INSERT INTO project_nodes
            (id, project_id, parent_id, name, kind, mime, content_kind, size_bytes, blob_key)
          VALUES ($1, $2, $3, $4, 'FOLDER', 'inode/directory', 'TEXT', 0, NULL)`,
-        [nodeId, projectId, parentPath === null ? null : nodeIds.get(parentPath), dirPath.slice(dirPath.lastIndexOf("/") + 1)],
+        [
+          nodeId,
+          projectId,
+          parentPath === null ? null : nodeIds.get(parentPath),
+          dirPath.slice(dirPath.lastIndexOf("/") + 1),
+        ],
       );
       nodeIds.set(dirPath, nodeId);
     }
     let mainFileId: string | null = null;
     for (const entry of manifest.entries) {
       if (entry.kind === "DIRECTORY") continue;
-      const parentPath = entry.path.includes("/") ? entry.path.slice(0, entry.path.lastIndexOf("/")) : null;
+      const parentPath = entry.path.includes("/")
+        ? entry.path.slice(0, entry.path.lastIndexOf("/"))
+        : null;
       const nodeId = randomUUID();
       const source = files.get(entry.path)!.data;
       await tx.query(
@@ -236,7 +239,10 @@ export async function applyValidatedImport(
       if (entry.path === mainPath) mainFileId = nodeId;
     }
     if (mainFileId !== null) {
-      await tx.query("UPDATE projects SET main_file_id = $1 WHERE id = $2", [mainFileId, projectId]);
+      await tx.query("UPDATE projects SET main_file_id = $1 WHERE id = $2", [
+        mainFileId,
+        projectId,
+      ]);
     }
     try {
       const completed = await tx.query<Record<string, unknown>>(
@@ -311,9 +317,14 @@ export async function runImportApplyPass(
   const retentionDays = options.retentionDays ?? 14;
   const now = options.now ?? new Date();
   if (
-    !Number.isSafeInteger(limit) || limit < 1 || limit > 100 ||
-    !Number.isSafeInteger(sweepLimit) || sweepLimit < 1 || sweepLimit > 100 ||
-    !Number.isSafeInteger(retentionDays) || retentionDays < 0 ||
+    !Number.isSafeInteger(limit) ||
+    limit < 1 ||
+    limit > 100 ||
+    !Number.isSafeInteger(sweepLimit) ||
+    sweepLimit < 1 ||
+    sweepLimit > 100 ||
+    !Number.isSafeInteger(retentionDays) ||
+    retentionDays < 0 ||
     !Number.isFinite(now.getTime())
   ) {
     throw new Error("Invalid import apply options");

@@ -68,7 +68,7 @@ export class TabSessionManager {
   }
 
   public getActiveTab(): TabState | null {
-    return this.activeId ? this.tabs.get(this.activeId) ?? null : null;
+    return this.activeId ? (this.tabs.get(this.activeId) ?? null) : null;
   }
 
   public getTab(fileId: string): TabState | undefined {
@@ -84,7 +84,12 @@ export class TabSessionManager {
     this.notify();
   }
 
-  public openTab(tab: { fileId: string; fileName: string; projectId: string; content?: string }): void {
+  public openTab(tab: {
+    fileId: string;
+    fileName: string;
+    projectId: string;
+    content?: string;
+  }): void {
     if (this.tabs.has(tab.fileId)) {
       this.activeId = tab.fileId;
     } else {

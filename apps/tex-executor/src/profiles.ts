@@ -90,10 +90,7 @@ export interface ResolveArgvOptions {
  * - Always includes -interaction=nonstopmode
  * - Rejects directory traversal or shell injection characters in paths
  */
-export function resolveProfileArgv(
-  engine: string,
-  options: ResolveArgvOptions,
-): string[] {
+export function resolveProfileArgv(engine: string, options: ResolveArgvOptions): string[] {
   const profile = getTeXProfile(engine);
 
   if (/[;&|`$><\r\n]/.test(options.outDir) || /[;&|`$><\r\n]/.test(options.mainPath)) {
@@ -135,13 +132,15 @@ export const PROFILE_FIXTURES: readonly ProfileFixture[] = [
   {
     compiler: "xelatex",
     title: "XeLaTeX Unicode article",
-    source: "\\documentclass{article}\\usepackage{fontspec}\\begin{document}Hello XeLaTeX\\end{document}",
+    source:
+      "\\documentclass{article}\\usepackage{fontspec}\\begin{document}Hello XeLaTeX\\end{document}",
     expectedBannerKeyword: "XeTeX",
   },
   {
     compiler: "lualatex",
     title: "LuaLaTeX article with fontspec",
-    source: "\\documentclass{article}\\usepackage{fontspec}\\begin{document}Hello LuaLaTeX\\end{document}",
+    source:
+      "\\documentclass{article}\\usepackage{fontspec}\\begin{document}Hello LuaLaTeX\\end{document}",
     expectedBannerKeyword: "LuaHBTeX",
   },
   {

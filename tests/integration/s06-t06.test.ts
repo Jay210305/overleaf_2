@@ -24,9 +24,13 @@ describe("S06-T06 Persist verified artifacts and job result integration", () => 
   let outsider: { id: string; email: string };
   let projectId: string;
 
-  const validPdfBytes = new TextEncoder().encode("%PDF-1.5\n1 0 obj\n<<>>\nendobj\ntrailer\n<<>>\n%%EOF");
+  const validPdfBytes = new TextEncoder().encode(
+    "%PDF-1.5\n1 0 obj\n<<>>\nendobj\ntrailer\n<<>>\n%%EOF",
+  );
   const invalidPdfBytes = new TextEncoder().encode("Not a valid PDF header at all");
-  const logBytes = new TextEncoder().encode("This is TeX compilation log output.\nTranscript finished.");
+  const logBytes = new TextEncoder().encode(
+    "This is TeX compilation log output.\nTranscript finished.",
+  );
   const synctexBytes = new TextEncoder().encode("SyncTeX Version:1\nInput:1:main.tex");
 
   beforeAll(async () => {
@@ -129,7 +133,12 @@ describe("S06-T06 Persist verified artifacts and job result integration", () => 
       artifacts: [
         { name: "output.pdf", mime: "application/pdf", bytes: validPdfBytes, sha256: "hash-pdf" },
         { name: "compile.log", mime: "text/plain", bytes: logBytes, sha256: "hash-log" },
-        { name: "output.synctex.gz", mime: "application/gzip", bytes: synctexBytes, sha256: "hash-synctex" },
+        {
+          name: "output.synctex.gz",
+          mime: "application/gzip",
+          bytes: synctexBytes,
+          sha256: "hash-synctex",
+        },
       ],
       retentionDays: 14,
     });
@@ -138,7 +147,9 @@ describe("S06-T06 Persist verified artifacts and job result integration", () => 
     expect(artifactSet.compileJobId).toBe(jobId);
     expect(artifactSet.pdfKey).toBe(`projects/${projectId}/artifacts/${jobId}/output.pdf`);
     expect(artifactSet.logKey).toBe(`projects/${projectId}/artifacts/${jobId}/compile.log`);
-    expect(artifactSet.synctexKey).toBe(`projects/${projectId}/artifacts/${jobId}/output.synctex.gz`);
+    expect(artifactSet.synctexKey).toBe(
+      `projects/${projectId}/artifacts/${jobId}/output.synctex.gz`,
+    );
 
     // 3. Verify retry idempotency: repeating persistence does not create a duplicate row
     const retrySet = await persistJobArtifacts({
@@ -187,7 +198,12 @@ describe("S06-T06 Persist verified artifacts and job result integration", () => 
         jobId: fakeJobId,
         sourceHash: "b".repeat(64),
         artifacts: [
-          { name: "output.pdf", mime: "application/pdf", bytes: invalidPdfBytes, sha256: "bad-hash" },
+          {
+            name: "output.pdf",
+            mime: "application/pdf",
+            bytes: invalidPdfBytes,
+            sha256: "bad-hash",
+          },
         ],
       }),
     ).rejects.toThrow(PdfValidationError);
@@ -230,10 +246,11 @@ describe("S06-T06 Persist verified artifacts and job result integration", () => 
     expect(passResult.failed).toBe(1);
 
     // Verify job in database is failed with INVALID_PDF_ARTIFACT
-    const jobRes = await fixture.db.query<{ status: string; error_code: string; pdf_available: boolean }>(
-      `SELECT status, error_code, pdf_available FROM compile_jobs WHERE id = $1`,
-      [jobId],
-    );
+    const jobRes = await fixture.db.query<{
+      status: string;
+      error_code: string;
+      pdf_available: boolean;
+    }>(`SELECT status, error_code, pdf_available FROM compile_jobs WHERE id = $1`, [jobId]);
     expect(jobRes.rows[0]?.status).toBe("failed");
     expect(jobRes.rows[0]?.error_code).toBe("INVALID_PDF_ARTIFACT");
     expect(jobRes.rows[0]?.pdf_available).toBe(false);
@@ -268,7 +285,12 @@ describe("S06-T06 Persist verified artifacts and job result integration", () => 
           exitCode: 0,
           diagnostics: [],
           artifacts: [
-            { name: "output.pdf", mime: "application/pdf", bytes: validPdfBytes, sha256: "pdf-hash" },
+            {
+              name: "output.pdf",
+              mime: "application/pdf",
+              bytes: validPdfBytes,
+              sha256: "pdf-hash",
+            },
             { name: "compile.log", mime: "text/plain", bytes: logBytes, sha256: "log-hash" },
           ],
         };

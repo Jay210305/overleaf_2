@@ -42,10 +42,9 @@ describe("Regression COL-06 (S09-T06): Relative-position comment anchors become 
     });
 
     // v2: text modified
-    await fixture.db.query(
-      `UPDATE project_nodes SET blob_key = 'blob-modified' WHERE id = $1`,
-      [fileId],
-    );
+    await fixture.db.query(`UPDATE project_nodes SET blob_key = 'blob-modified' WHERE id = $1`, [
+      fileId,
+    ]);
     await revRepo.createStructuralRevision({
       projectId,
       authorId: owner.id,

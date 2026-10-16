@@ -128,4 +128,3 @@ And a duplicate \\label{sec:intro}.`;
     expect(multiCiteRes.items[0]?.insertText).toBe("einstein1905");
   });
 });
-

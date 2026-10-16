@@ -125,8 +125,13 @@ export function CompileControls({
       }
 
       if (!res.ok) {
-        const errJson = (await res.json().catch(() => null)) as { message?: string; detail?: string } | null;
-        throw new Error(errJson?.detail ?? errJson?.message ?? `Compilation request failed (${res.status})`);
+        const errJson = (await res.json().catch(() => null)) as {
+          message?: string;
+          detail?: string;
+        } | null;
+        throw new Error(
+          errJson?.detail ?? errJson?.message ?? `Compilation request failed (${res.status})`,
+        );
       }
 
       const enqueued = (await res.json()) as CompilationView;
@@ -161,10 +166,9 @@ export function CompileControls({
     if (!currentId || !fetchImpl) return;
 
     try {
-      const res = await fetchImpl(
-        `${apiBaseUrl}/projects/${projectId}/compilations/${currentId}`,
-        { method: "DELETE" },
-      );
+      const res = await fetchImpl(`${apiBaseUrl}/projects/${projectId}/compilations/${currentId}`, {
+        method: "DELETE",
+      });
       if (res.ok) {
         const cancelled = (await res.json()) as CompilationView;
         setActiveJob(cancelled);
@@ -212,7 +216,10 @@ export function CompileControls({
       }}
     >
       {/* Left: Engine Selector & Cache toggle */}
-      <div className="flex items-center gap-2" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <div
+        className="flex items-center gap-2"
+        style={{ display: "flex", alignItems: "center", gap: "8px" }}
+      >
         <select
           data-testid="engine-select"
           value={compiler}
@@ -235,7 +242,13 @@ export function CompileControls({
 
         <label
           className="flex items-center gap-1 cursor-pointer select-none text-neutral-400 hover:text-neutral-300"
-          style={{ display: "flex", alignItems: "center", gap: "4px", cursor: "pointer", color: "#a3a3a3" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            cursor: "pointer",
+            color: "#a3a3a3",
+          }}
         >
           <input
             type="checkbox"
@@ -250,7 +263,10 @@ export function CompileControls({
       </div>
 
       {/* Center: Compile status & diagnostics summary */}
-      <div className="flex items-center gap-2" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <div
+        className="flex items-center gap-2"
+        style={{ display: "flex", alignItems: "center", gap: "8px" }}
+      >
         {activeJob && (
           <span
             data-testid="compile-status-badge"
@@ -291,7 +307,13 @@ export function CompileControls({
           <span
             data-testid="compile-error-msg"
             className="text-xs text-red-400 italic max-w-xs truncate"
-            style={{ color: "#f87171", fontStyle: "italic", maxWidth: "250px", overflow: "hidden", textOverflow: "ellipsis" }}
+            style={{
+              color: "#f87171",
+              fontStyle: "italic",
+              maxWidth: "250px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
           >
             {errorMessage}
           </span>
@@ -299,7 +321,10 @@ export function CompileControls({
       </div>
 
       {/* Right: Compile Action Button & Cancel Button */}
-      <div className="flex items-center gap-2" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <div
+        className="flex items-center gap-2"
+        style={{ display: "flex", alignItems: "center", gap: "8px" }}
+      >
         {isCompiling && (
           <button
             type="button"

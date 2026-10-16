@@ -7,7 +7,9 @@ export class PdfValidationError extends Error {
   readonly code = "INVALID_PDF_ARTIFACT" as const;
   readonly status = 422 as const;
 
-  constructor(message = "Artifact named output.pdf is not a valid PDF document (missing %PDF- header)") {
+  constructor(
+    message = "Artifact named output.pdf is not a valid PDF document (missing %PDF- header)",
+  ) {
     super(message);
     this.name = "PdfValidationError";
   }
@@ -24,7 +26,7 @@ export function isValidPdf(bytes: Uint8Array): boolean {
     bytes[1] === 0x50 && // P
     bytes[2] === 0x44 && // D
     bytes[3] === 0x46 && // F
-    bytes[4] === 0x2d    // -
+    bytes[4] === 0x2d // -
   );
 }
 
@@ -104,15 +106,7 @@ export async function persistJobArtifacts(
            source_hash = EXCLUDED.source_hash,
            expires_at = EXCLUDED.expires_at
      RETURNING *`,
-    [
-      artifactSetId,
-      params.jobId,
-      pdfKey,
-      logKey,
-      synctexKey,
-      params.sourceHash,
-      expiresAt,
-    ],
+    [artifactSetId, params.jobId, pdfKey, logKey, synctexKey, params.sourceHash, expiresAt],
   );
 
   const row = insertRes.rows[0]!;

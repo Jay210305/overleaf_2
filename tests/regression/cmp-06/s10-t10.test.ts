@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { parseBibLog, resolveBibliographyArgv } from "../../../apps/tex-executor/src/bibliography.js";
+import {
+  parseBibLog,
+  resolveBibliographyArgv,
+} from "../../../apps/tex-executor/src/bibliography.js";
 import { extractBibKeys, findDuplicateBibKeys } from "@latex-collab/editor";
 
 describe("Regression CMP-06 (S10-T10): Multi-pass bibliography compilation and citation handling", () => {

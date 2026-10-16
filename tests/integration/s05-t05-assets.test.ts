@@ -9,10 +9,7 @@ import { createServer } from "../../apps/api/src/server.js";
 import { applyValidatedImport } from "../../apps/jobs/src/imports/apply-project.js";
 import { createSessionFixture, origin } from "../helpers/s02-session.js";
 import { applyImportMigrations } from "../helpers/import-migrations.js";
-import {
-  buildImportArchive,
-  settleValidatedJob,
-} from "../helpers/import-apply.js";
+import { buildImportArchive, settleValidatedJob } from "../helpers/import-apply.js";
 import { minimalPng, sha256Hex } from "../helpers/zip-fixtures.js";
 
 loadEnvFile(".env");
@@ -92,7 +89,12 @@ describe("S05-T05 authorized binary download and export", () => {
       `INSERT INTO project_nodes
          (id, project_id, parent_id, name, kind, mime, content_kind, size_bytes, blob_key)
        VALUES ($1, $2, NULL, 'face.ttf', 'FILE', 'font/ttf', 'BINARY', $3, $4)`,
-      [fontNodeId, projectId, fontBytes.length, `projects/${projectId}/blobs/${sha256Hex(fontBytes)}`],
+      [
+        fontNodeId,
+        projectId,
+        fontBytes.length,
+        `projects/${projectId}/blobs/${sha256Hex(fontBytes)}`,
+      ],
     );
     legacyHtmlNodeId = randomUUID();
     const htmlBytes = Buffer.from("<script>alert(1)</script>", "utf8");

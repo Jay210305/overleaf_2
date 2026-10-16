@@ -139,10 +139,9 @@ describe("S09-T14: Delete account under shared ownership rules", () => {
     }
 
     // Collaborator membership removed
-    const members = await fixture.db.query(
-      `SELECT * FROM project_members WHERE user_id = $1`,
-      [user.id],
-    );
+    const members = await fixture.db.query(`SELECT * FROM project_members WHERE user_id = $1`, [
+      user.id,
+    ]);
     expect(members.rows.length).toBe(0);
 
     // Project itself is still intact for otherUser

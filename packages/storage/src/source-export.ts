@@ -1,14 +1,7 @@
 import { createHash } from "node:crypto";
 import * as Y from "yjs";
-import {
-  assertUUID,
-  type DatabaseClient,
-} from "@latex-collab/db";
-import {
-  maxArchiveNodes,
-  maxExpandedBytes,
-  maxFileBytes,
-} from "./content-policy.js";
+import { assertUUID, type DatabaseClient } from "@latex-collab/db";
+import { maxArchiveNodes, maxExpandedBytes, maxFileBytes } from "./content-policy.js";
 import type { StorageAdapter } from "@latex-collab/contracts";
 
 export type SourceExportErrorCode = "NOT_FOUND" | "LIMIT_EXCEEDED" | "INVALID_STATE";
@@ -145,10 +138,7 @@ function digest(bytes: Uint8Array): string {
   return createHash("sha256").update(bytes).digest("hex");
 }
 
-async function replayText(
-  db: DatabaseClient,
-  fileId: string,
-): Promise<Buffer> {
+async function replayText(db: DatabaseClient, fileId: string): Promise<Buffer> {
   const updates = await db.query<{ payload_bytes: Buffer }>(
     "SELECT payload_bytes FROM crdt_updates WHERE file_id = $1 ORDER BY seq ASC",
     [fileId],

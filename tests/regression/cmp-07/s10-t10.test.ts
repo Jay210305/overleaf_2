@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { parseSynctexData, forwardLookup, inverseLookup } from "../../../apps/api/src/modules/synctex/routes.js";
+import {
+  parseSynctexData,
+  forwardLookup,
+  inverseLookup,
+} from "../../../apps/api/src/modules/synctex/routes.js";
 import {
   navigateSourceToPdf,
   navigatePdfToSource,

@@ -136,7 +136,10 @@ export const ProjectSearch: React.FC<ProjectSearchProps> = ({
 
       <form onSubmit={handleSearch} className="space-y-3 mb-4">
         <div>
-          <label htmlFor="search-input" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label
+            htmlFor="search-input"
+            className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >
             Search
           </label>
           <div className="flex gap-2">
@@ -160,7 +163,10 @@ export const ProjectSearch: React.FC<ProjectSearchProps> = ({
         </div>
 
         <div>
-          <label htmlFor="replace-input" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label
+            htmlFor="replace-input"
+            className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >
             Replace
           </label>
           <div className="flex gap-2">
@@ -197,7 +203,11 @@ export const ProjectSearch: React.FC<ProjectSearchProps> = ({
         </div>
       </form>
 
-      <div className="search-results-list max-h-72 overflow-y-auto space-y-2" role="feed" aria-label="Search Results">
+      <div
+        className="search-results-list max-h-72 overflow-y-auto space-y-2"
+        role="feed"
+        aria-label="Search Results"
+      >
         {matches.length === 0 && !loading && (
           <p className="text-sm text-gray-500 py-3 text-center">No matches to display.</p>
         )}

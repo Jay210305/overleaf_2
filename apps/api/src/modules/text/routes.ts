@@ -1,8 +1,5 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import {
-  applyTextUpdateSchema,
-  type DurableAck,
-} from "@latex-collab/contracts";
+import { applyTextUpdateSchema, type DurableAck } from "@latex-collab/contracts";
 import { DatabaseClient, isUUID } from "@latex-collab/db";
 import { AuthError } from "../auth/errors.js";
 import { problem } from "../../plugins/errors.js";
@@ -40,7 +37,8 @@ export function registerTextRoutes(
     service?: TextDocumentService | undefined;
   },
 ): void {
-  const service = options.service ?? (options.db ? new DefaultTextDocumentService(options.db) : undefined);
+  const service =
+    options.service ?? (options.db ? new DefaultTextDocumentService(options.db) : undefined);
 
   // 1. GET /api/v1/projects/:projectId/files/:fileId/text - read canonical text state
   app.get(

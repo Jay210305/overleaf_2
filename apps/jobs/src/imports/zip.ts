@@ -153,10 +153,7 @@ export async function validateZipArchive(input: Uint8Array): Promise<ImportManif
   return manifest;
 }
 
-function manifestsEqual(
-  actual: ImportManifest,
-  expected: ImportManifest,
-): boolean {
+function manifestsEqual(actual: ImportManifest, expected: ImportManifest): boolean {
   if (expected?.version !== 1 || actual.version !== 1) return false;
   if (!Array.isArray(expected.entries) || actual.entries.length !== expected.entries.length) {
     return false;
@@ -170,11 +167,7 @@ function manifestsEqual(
       if (left.kind !== "DIRECTORY" || right.kind !== "DIRECTORY") return false;
       continue;
     }
-    if (
-      left.mime !== right.mime ||
-      left.size !== right.size ||
-      left.sha256 !== right.sha256
-    ) {
+    if (left.mime !== right.mime || left.size !== right.size || left.sha256 !== right.sha256) {
       return false;
     }
   }
@@ -187,7 +180,9 @@ function manifestsEqual(
  * applied without destroying one of them.
  */
 function assertNoPathCollisions(entries: ImportManifestEntry[]): void {
-  const filePaths = entries.filter((entry) => entry.kind !== "DIRECTORY").map((entry) => entry.path);
+  const filePaths = entries
+    .filter((entry) => entry.kind !== "DIRECTORY")
+    .map((entry) => entry.path);
   for (const filePath of filePaths) {
     const prefix = `${filePath}/`;
     for (const entry of entries) {

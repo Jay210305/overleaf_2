@@ -9,10 +9,7 @@ import { buildSourceZip } from "@latex-collab/storage/source-export";
 import { applyValidatedImport } from "../../../apps/jobs/src/imports/apply-project.js";
 import { createSessionFixture } from "../../helpers/s02-session.js";
 import { applyImportMigrations } from "../../helpers/import-migrations.js";
-import {
-  buildImportArchive,
-  settleValidatedJob,
-} from "../../helpers/import-apply.js";
+import { buildImportArchive, settleValidatedJob } from "../../helpers/import-apply.js";
 import { sha256Hex } from "../../helpers/zip-fixtures.js";
 
 loadEnvFile(".env");

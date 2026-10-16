@@ -10,7 +10,8 @@ export function canonicalJsonStringify(obj: unknown): string {
   }
   const keys = Object.keys(obj as Record<string, unknown>).sort();
   const entries = keys.map(
-    (key) => `${JSON.stringify(key)}:${canonicalJsonStringify((obj as Record<string, unknown>)[key])}`,
+    (key) =>
+      `${JSON.stringify(key)}:${canonicalJsonStringify((obj as Record<string, unknown>)[key])}`,
   );
   return `{${entries.join(",")}}`;
 }
@@ -206,13 +207,7 @@ export class RevisionsRepository {
         await tx.query(
           `INSERT INTO revision_items (revision_id, node_id, path, blob_key, sha256, deleted)
            VALUES ($1, $2, $3, $4, $5, false)`,
-          [
-            revisionId,
-            item.nodeId,
-            item.path,
-            item.object.key,
-            item.object.sha256,
-          ],
+          [revisionId, item.nodeId, item.path, item.object.key, item.object.sha256],
         );
       }
 
@@ -256,7 +251,10 @@ export class RevisionsRepository {
   /**
    * Retrieves revision by project ID and revision number.
    */
-  async getRevision(projectId: string, revisionNo: number): Promise<StructuralRevisionRecord | null> {
+  async getRevision(
+    projectId: string,
+    revisionNo: number,
+  ): Promise<StructuralRevisionRecord | null> {
     const revRes = await this.db.query<{
       id: string;
       project_id: string;
@@ -359,7 +357,8 @@ export class RevisionsRepository {
 
     const added: Array<{ path: string; nodeId: string; sha256: string }> = [];
     const removed: Array<{ path: string; nodeId: string; sha256: string }> = [];
-    const modified: Array<{ path: string; nodeId: string; oldSha256: string; newSha256: string }> = [];
+    const modified: Array<{ path: string; nodeId: string; oldSha256: string; newSha256: string }> =
+      [];
     const unchanged: Array<{ path: string; nodeId: string; sha256: string }> = [];
 
     for (const [path, targetItem] of targetMap.entries()) {

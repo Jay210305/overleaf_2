@@ -34,10 +34,9 @@ export class OwnershipService {
     }
 
     // Verify recipient user exists
-    const userRes = await this.db.query<{ id: string }>(
-      `SELECT id FROM users WHERE id = $1`,
-      [input.recipientUserId],
-    );
+    const userRes = await this.db.query<{ id: string }>(`SELECT id FROM users WHERE id = $1`, [
+      input.recipientUserId,
+    ]);
     if (userRes.rows.length === 0) {
       throw new AuthError(404, "RESOURCE_NOT_FOUND");
     }
@@ -236,16 +235,19 @@ export function registerOwnershipRoutes(
   // 2. POST /api/v1/ownership/:offerId/accept - recipient accepts offer
   app.post(
     "/api/v1/ownership/:offerId/accept",
-    async (
-      request: FastifyRequest<{ Params: { offerId: string } }>,
-      reply,
-    ) => {
+    async (request: FastifyRequest<{ Params: { offerId: string } }>, reply) => {
       try {
         if (!options.db || !service) throw new AuthError(503, "SERVICE_UNAVAILABLE");
         const { offerId } = request.params;
         if (!isUUID(offerId)) throw new AuthError(400, "VALIDATION_ERROR");
 
-        const identity = await requireSession(options.db, request, options.origin, secureCookies, true);
+        const identity = await requireSession(
+          options.db,
+          request,
+          options.origin,
+          secureCookies,
+          true,
+        );
 
         const project = await service.acceptOffer(offerId, identity.userId);
         return reply.code(200).type("application/json").send(project);
@@ -261,10 +263,7 @@ export function registerOwnershipRoutes(
     {
       config: { projectAction: "TRANSFER" },
     },
-    async (
-      request: FastifyRequest<{ Params: { projectId: string; offerId: string } }>,
-      reply,
-    ) => {
+    async (request: FastifyRequest<{ Params: { projectId: string; offerId: string } }>, reply) => {
       try {
         if (!options.db || !service) throw new AuthError(503, "SERVICE_UNAVAILABLE");
         const { projectId, offerId } = request.params;

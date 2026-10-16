@@ -33,38 +33,34 @@ export function registerTemplateRoutes(
   app: FastifyInstance,
   options: { db?: DatabaseClient | undefined },
 ): void {
-  app.get(
-    "/api/v1/templates",
-    { config: { sessionOnly: true } },
-    async (request, reply) => {
-      try {
-        if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
-        const identity = request.sessionIdentity as { userId: string } | undefined;
-        if (!identity) throw new AuthError(401, "AUTHENTICATION_REQUIRED");
-        const { category } = request.query as { category?: unknown };
-        if (category !== undefined && (typeof category !== "string" || category.length > 64)) {
-          throw new AuthError(400, "VALIDATION_ERROR");
-        }
-        const templates = listTemplates(
-          typeof category === "string" && category.length > 0 ? category : undefined,
-        ).map((template) =>
-          templateViewSchema.parse({
-            id: template.id,
-            title: template.title,
-            category: template.category,
-            description: template.description,
-            version: template.version,
-            manifestHash: template.manifestHash,
-            mainPath: template.mainPath,
-            files: template.files,
-          }),
-        );
-        return reply.code(200).type("application/json").send({ templates });
-      } catch (error) {
-        return handleTemplateError(error, reply, request.id);
+  app.get("/api/v1/templates", { config: { sessionOnly: true } }, async (request, reply) => {
+    try {
+      if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
+      const identity = request.sessionIdentity as { userId: string } | undefined;
+      if (!identity) throw new AuthError(401, "AUTHENTICATION_REQUIRED");
+      const { category } = request.query as { category?: unknown };
+      if (category !== undefined && (typeof category !== "string" || category.length > 64)) {
+        throw new AuthError(400, "VALIDATION_ERROR");
       }
-    },
-  );
+      const templates = listTemplates(
+        typeof category === "string" && category.length > 0 ? category : undefined,
+      ).map((template) =>
+        templateViewSchema.parse({
+          id: template.id,
+          title: template.title,
+          category: template.category,
+          description: template.description,
+          version: template.version,
+          manifestHash: template.manifestHash,
+          mainPath: template.mainPath,
+          files: template.files,
+        }),
+      );
+      return reply.code(200).type("application/json").send({ templates });
+    } catch (error) {
+      return handleTemplateError(error, reply, request.id);
+    }
+  });
 
   app.get(
     "/api/v1/templates/:templateId",
@@ -83,22 +79,25 @@ export function registerTemplateRoutes(
         // Internal sources are identical for every actor, so the detail is
         // safe to serve to any authenticated session; per-project binaries
         // are never part of a template and stay behind their own READ gates.
-        return reply.code(200).type("application/json").send(
-          templateDetailViewSchema.parse({
-            id: template.id,
-            title: template.title,
-            category: template.category,
-            description: template.description,
-            version: template.version,
-            manifestHash: template.manifestHash,
-            mainPath: template.mainPath,
-            files: template.files,
-            contents: template.filesWithContent.map((file) => ({
-              path: file.path,
-              content: file.content,
-            })),
-          }),
-        );
+        return reply
+          .code(200)
+          .type("application/json")
+          .send(
+            templateDetailViewSchema.parse({
+              id: template.id,
+              title: template.title,
+              category: template.category,
+              description: template.description,
+              version: template.version,
+              manifestHash: template.manifestHash,
+              mainPath: template.mainPath,
+              files: template.files,
+              contents: template.filesWithContent.map((file) => ({
+                path: file.path,
+                content: file.content,
+              })),
+            }),
+          );
       } catch (error) {
         return handleTemplateError(error, reply, request.id);
       }

@@ -52,8 +52,13 @@ describe("S05-T06 template catalogue and instantiation", () => {
   it("lists two versioned templates with file manifests", async () => {
     const response = await get("/api/v1/templates");
     expect(response.statusCode).toBe(200);
-    const listed = response.json<{ templates: Array<{ id: string; version: string; manifestHash: string; files: unknown[] }> }>().templates;
-    expect(listed.map((template) => template.id).sort()).toEqual(["minimal-article", "thesis-outline"]);
+    const listed = response.json<{
+      templates: Array<{ id: string; version: string; manifestHash: string; files: unknown[] }>;
+    }>().templates;
+    expect(listed.map((template) => template.id).sort()).toEqual([
+      "minimal-article",
+      "thesis-outline",
+    ]);
     for (const template of listed) {
       expect(template.version).toBe("1.0.0");
       expect(template.manifestHash).toMatch(/^[a-f0-9]{64}$/);
@@ -103,9 +108,10 @@ describe("S05-T06 template catalogue and instantiation", () => {
     const text = doc.getText("content").toString();
     doc.destroy();
     expect(text).toContain("\\documentclass{report}");
-    const members = await fixture.db.query("SELECT user_id FROM project_members WHERE project_id = $1", [
-      created.id,
-    ]);
+    const members = await fixture.db.query(
+      "SELECT user_id FROM project_members WHERE project_id = $1",
+      [created.id],
+    );
     expect(members.rows).toHaveLength(0);
   });
 

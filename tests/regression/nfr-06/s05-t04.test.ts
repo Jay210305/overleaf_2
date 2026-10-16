@@ -9,10 +9,7 @@ import { buildSourceZip } from "@latex-collab/storage/source-export";
 import { applyValidatedImport } from "../../../apps/jobs/src/imports/apply-project.js";
 import { createSessionFixture } from "../../helpers/s02-session.js";
 import { applyImportMigrations } from "../../helpers/import-migrations.js";
-import {
-  buildImportArchive,
-  settleValidatedJob,
-} from "../../helpers/import-apply.js";
+import { buildImportArchive, settleValidatedJob } from "../../helpers/import-apply.js";
 
 loadEnvFile(".env");
 
@@ -72,9 +69,7 @@ describe("S05-T04 NFR-06 export hashes match exactly", () => {
       createHash("sha256").update(first.bytes).digest("hex"),
     );
     const recomputed = createHash("sha256")
-      .update(
-        JSON.stringify(first.files.map((file) => [file.path, file.sha256, file.sizeBytes])),
-      )
+      .update(JSON.stringify(first.files.map((file) => [file.path, file.sha256, file.sizeBytes])))
       .digest("hex");
     expect(first.manifestHash).toBe(recomputed);
   });

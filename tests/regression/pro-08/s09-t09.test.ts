@@ -83,10 +83,7 @@ describe("Regression PRO-08 (S09-T09): Archive differs from trash; restore and o
     });
     expect(resOwner.statusCode).toBe(204);
 
-    const checkFinal = await fixture.db.query(
-      `SELECT id FROM projects WHERE id = $1`,
-      [projectId],
-    );
+    const checkFinal = await fixture.db.query(`SELECT id FROM projects WHERE id = $1`, [projectId]);
     expect(checkFinal.rows.length).toBe(0);
   });
 });

@@ -22,11 +22,21 @@ export class CollabRedisCoordinator {
   readonly replicaId = randomUUID();
   private pubClient: RedisClientType | undefined;
   private subClient: RedisClientType | undefined;
-  private updateHandlers = new Map<string, (updateBytes: Uint8Array, originReplicaId: string) => void>();
-  private awarenessHandlers = new Map<string, (awareness: unknown, userId?: string, originReplicaId?: string) => void>();
+  private updateHandlers = new Map<
+    string,
+    (updateBytes: Uint8Array, originReplicaId: string) => void
+  >();
+  private awarenessHandlers = new Map<
+    string,
+    (awareness: unknown, userId?: string, originReplicaId?: string) => void
+  >();
   private invalidationHandlers: Array<(data: unknown) => void> = [];
 
-  constructor(options?: { pubClient?: RedisClientType | undefined; subClient?: RedisClientType | undefined } | undefined) {
+  constructor(
+    options?:
+      | { pubClient?: RedisClientType | undefined; subClient?: RedisClientType | undefined }
+      | undefined,
+  ) {
     this.pubClient = options?.pubClient;
     this.subClient = options?.subClient;
   }

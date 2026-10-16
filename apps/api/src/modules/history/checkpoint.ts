@@ -1,8 +1,5 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import {
-  createCheckpointSchema,
-  type CreateCheckpointInput,
-} from "@latex-collab/contracts";
+import { createCheckpointSchema, type CreateCheckpointInput } from "@latex-collab/contracts";
 import {
   DatabaseClient,
   RevisionsRepository,

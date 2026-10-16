@@ -370,4 +370,3 @@ export function registerProfileRoutes(
     }
   });
 }
-

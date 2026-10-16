@@ -100,9 +100,7 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
       throw error;
     }
 
-    const tempRoot = await mkdtemp(
-      join(this.baseTempDir ?? tmpdir(), `compile-${input.jobId}-`),
-    );
+    const tempRoot = await mkdtemp(join(this.baseTempDir ?? tmpdir(), `compile-${input.jobId}-`));
     const inputDir = join(tempRoot, "input");
     const outDir = join(tempRoot, "out");
 
@@ -158,7 +156,7 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
       ];
 
       const timeoutMs = (input.limits?.timeoutSeconds ?? 60) * 1000;
-      const maxBuffer = (input.limits?.maxOutputBytes ?? 25 * 1024 * 1024);
+      const maxBuffer = input.limits?.maxOutputBytes ?? 25 * 1024 * 1024;
 
       const runResult = await this.runner("latexmk", args, {
         cwd: inputDir,

@@ -22,7 +22,9 @@ describe("S11-T06 Integration: Literal Fallback for Unsupported TeX", () => {
 \\end{tikzpicture}
 \\end{document}`;
     const doc = parseVisualAst(raw);
-    const fallbacks = doc.nodes.filter((n) => n.kind === "literalFallback") as LiteralFallbackNode[];
+    const fallbacks = doc.nodes.filter(
+      (n) => n.kind === "literalFallback",
+    ) as LiteralFallbackNode[];
     expect(fallbacks.length).toBeGreaterThanOrEqual(2);
 
     render(createElement(FallbackNodesView, { nodes: doc.nodes, readOnly: true }));
@@ -50,7 +52,7 @@ code block raw
         node: fallback,
         readOnly: false,
         onSwitchToCodeMode: onSwitchToCode,
-      })
+      }),
     );
 
     const switchBtn = screen.getByTestId("fallback-switch-code-btn");
@@ -72,7 +74,7 @@ line1
         node: fallback,
         readOnly: false,
         onFallbackChange,
-      })
+      }),
     );
 
     fireEvent.click(screen.getByTestId("fallback-code-container"));
@@ -99,7 +101,7 @@ frozen text
         node: fallback,
         readOnly: true,
         onFallbackChange,
-      })
+      }),
     );
 
     fireEvent.click(screen.getByTestId("fallback-code-container"));

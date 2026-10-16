@@ -121,7 +121,9 @@ export function parseLatexLog(rawLog: string, options: { workDir?: string } = {}
     }
 
     // 3. LaTeX Warning with input line: "LaTeX Warning: ... on input line 23."
-    const warningLineMatch = line.match(/^LaTeX Warning:\s*(.+?)(?:\s+on input line\s+(\d+))?\.?$/i);
+    const warningLineMatch = line.match(
+      /^LaTeX Warning:\s*(.+?)(?:\s+on input line\s+(\d+))?\.?$/i,
+    );
     if (warningLineMatch) {
       const msg = warningLineMatch[1]!.trim();
       const lineNum = warningLineMatch[2] ? parseInt(warningLineMatch[2], 10) : undefined;
@@ -136,7 +138,9 @@ export function parseLatexLog(rawLog: string, options: { workDir?: string } = {}
     }
 
     // 4. Package/Class Warning: "Package hyperref Warning: ... on input line 42."
-    const pkgWarnMatch = line.match(/^(Package|Class)\s+([^\s]+)\s+Warning:\s*(.+?)(?:\s+on input line\s+(\d+))?\.?$/i);
+    const pkgWarnMatch = line.match(
+      /^(Package|Class)\s+([^\s]+)\s+Warning:\s*(.+?)(?:\s+on input line\s+(\d+))?\.?$/i,
+    );
     if (pkgWarnMatch) {
       const pkg = pkgWarnMatch[2]!;
       const rawMsg = pkgWarnMatch[3]!.trim();
@@ -152,7 +156,9 @@ export function parseLatexLog(rawLog: string, options: { workDir?: string } = {}
     }
 
     // 5. Bad boxes (Overfull / Underfull \hbox or \vbox)
-    const badBoxMatch = line.match(/^(Overfull|Underfull)\s+\\[hv]box\s+\((.+?)\)\s+in paragraph at lines\s+(\d+)--(\d+)/i);
+    const badBoxMatch = line.match(
+      /^(Overfull|Underfull)\s+\\[hv]box\s+\((.+?)\)\s+in paragraph at lines\s+(\d+)--(\d+)/i,
+    );
     if (badBoxMatch) {
       const kind = badBoxMatch[1]!;
       const details = badBoxMatch[2]!;

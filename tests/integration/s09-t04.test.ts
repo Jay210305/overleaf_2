@@ -40,10 +40,10 @@ describe("S09-T04: Model reviewer suggestions separately", () => {
     );
     fileId = fRes.rows[0]!.id;
 
-    await fixture.db.query(
-      `INSERT INTO text_documents (file_id, project_id) VALUES ($1, $2)`,
-      [fileId, projectId],
-    );
+    await fixture.db.query(`INSERT INTO text_documents (file_id, project_id) VALUES ($1, $2)`, [
+      fileId,
+      projectId,
+    ]);
   });
 
   afterAll(async () => {

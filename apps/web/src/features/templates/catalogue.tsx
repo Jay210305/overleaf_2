@@ -99,7 +99,8 @@ export const TemplateCatalogue: React.FC<TemplateCatalogueProps> = ({ apiUrl, on
             <p>v{template.version}</p>
             <p>{template.description}</p>
             <p>
-              {template.files.length} file{template.files.length === 1 ? "" : "s"} · {template.mainPath}
+              {template.files.length} file{template.files.length === 1 ? "" : "s"} ·{" "}
+              {template.mainPath}
             </p>
             <input
               data-testid="template-title-input"

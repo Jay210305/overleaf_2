@@ -1,6 +1,11 @@
 import * as Y from "yjs";
 import { describe, expect, it } from "vitest";
-import { parseVisualAst, type TableNode, type MathDisplayNode, type FigureNode } from "@latex-collab/latex";
+import {
+  parseVisualAst,
+  type TableNode,
+  type MathDisplayNode,
+  type FigureNode,
+} from "@latex-collab/latex";
 import {
   applyTableCellPatch,
   applyFormulaPatch,

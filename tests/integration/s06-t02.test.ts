@@ -65,10 +65,13 @@ describe("S06-T02 Freeze compilation source revision integration", () => {
     expect(job.sourceRevisionId).toBeDefined();
 
     // Verify revision exists in database and has manifest
-    const revRes = await fixture.db.query<{ id: string; revision_no: number; manifest_hash: string }>(
-      `SELECT id, revision_no, manifest_hash FROM project_revisions WHERE id = $1`,
-      [job.sourceRevisionId],
-    );
+    const revRes = await fixture.db.query<{
+      id: string;
+      revision_no: number;
+      manifest_hash: string;
+    }>(`SELECT id, revision_no, manifest_hash FROM project_revisions WHERE id = $1`, [
+      job.sourceRevisionId,
+    ]);
     expect(revRes.rows.length).toBe(1);
     const revRow = revRes.rows[0]!;
     expect(revRow.manifest_hash).toBeDefined();

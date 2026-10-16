@@ -22,7 +22,7 @@ describe("S11-T05 Regression EDT-13: Academic Visual Nodes Invariants", () => {
         nodes: doc.nodes,
         authorizedImagePaths: ["figures/magnetic.png"],
         readOnly: true,
-      })
+      }),
     );
 
     expect(screen.getByTestId("visual-math")).toBeDefined();
@@ -42,7 +42,7 @@ describe("S11-T05 Regression EDT-13: Academic Visual Nodes Invariants", () => {
       createElement(AcademicVisualNodesView, {
         nodes: doc.nodes,
         readOnly: true,
-      })
+      }),
     );
 
     const rows = screen.getAllByTestId("table-row");

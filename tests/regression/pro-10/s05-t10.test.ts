@@ -81,10 +81,7 @@ describe("S05-T10 PRO-10 hostile archives never become projects", () => {
 
   it("quarantines a traversal archive", async () => {
     const title = `PRO-10 traversal ${randomUUID()}`;
-    const jobId = await settleHostile(
-      title,
-      buildZip([{ name: "../evil.tex", data: "x" }]),
-    );
+    const jobId = await settleHostile(title, buildZip([{ name: "../evil.tex", data: "x" }]));
     await expectNoProject(title, jobId);
   });
 

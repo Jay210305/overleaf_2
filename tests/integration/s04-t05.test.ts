@@ -81,9 +81,7 @@ describe("S04-T05 Editor keymap, scoped undo and search integration", () => {
       ytext.insert(ytext.length, "Remote paragraph 2\n");
     }, remoteOrigin);
 
-    expect(ytext.toString()).toBe(
-      "Remote Header\nLocal paragraph 1\nRemote paragraph 2\n",
-    );
+    expect(ytext.toString()).toBe("Remote Header\nLocal paragraph 1\nRemote paragraph 2\n");
 
     // 4. Local user undoes their edit:
     // Invariant: MUST only revert Local paragraph 1, remote edits MUST NOT be undone!

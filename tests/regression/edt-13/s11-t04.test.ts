@@ -16,7 +16,9 @@ describe("S11-T04 Regression EDT-13: Minimal Source Patching Invariants", () => 
 
     const result = applyVisualPatch(yText, patch);
     expect(result.success).toBe(true);
-    expect(yText.toString()).toBe("\\documentclass{article}\n\\begin{document}\n\\section{New}\n\\end{document}");
+    expect(yText.toString()).toBe(
+      "\\documentclass{article}\n\\begin{document}\n\\section{New}\n\\end{document}",
+    );
   });
 
   it("EDT-13: Concurrent changes trigger reparse or visible conflict, preserving source", () => {

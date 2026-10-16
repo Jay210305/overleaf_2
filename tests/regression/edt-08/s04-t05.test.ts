@@ -1,15 +1,13 @@
 import { describe, expect, it } from "vitest";
-import {
-  searchAcrossFiles,
-  previewReplace,
-} from "../../../packages/editor/src/keymap.js";
+import { searchAcrossFiles, previewReplace } from "../../../packages/editor/src/keymap.js";
 
 describe("EDT-08 S04-T05 Search and replace locally and across project with regex and preview", () => {
   const projectFiles = [
     {
       id: "f1",
       name: "intro.tex",
-      content: "This is a LaTeX sample document.\nLaTeX is powerful.\nLatex is sometimes capitalized differently.",
+      content:
+        "This is a LaTeX sample document.\nLaTeX is powerful.\nLatex is sometimes capitalized differently.",
     },
     {
       id: "f2",

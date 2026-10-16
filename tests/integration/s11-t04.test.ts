@@ -41,7 +41,9 @@ describe("S11-T04 Integration: Apply Minimal Version-Checked Source Patches", ()
     // Verify surrounding text before start is untouched
     expect(updatedText.slice(0, start)).toBe("\\section{");
     // Verify surrounding text after replacement is untouched
-    expect(updatedText.slice(start + "Brand New Title".length)).toBe("}\n\nHere is a paragraph of text.");
+    expect(updatedText.slice(start + "Brand New Title".length)).toBe(
+      "}\n\nHere is a paragraph of text.",
+    );
   });
 
   it("detects stale fragment hash and returns conflict without mutating document", () => {
@@ -112,7 +114,7 @@ describe("S11-T04 Integration: Apply Minimal Version-Checked Source Patches", ()
       0,
       10,
       "Old Title",
-      "New Title"
+      "New Title",
     );
     expect(visualPatchSchema.safeParse(uuidPatch).success).toBe(true);
 

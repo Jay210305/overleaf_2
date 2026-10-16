@@ -131,9 +131,10 @@ export function registerHistoryRoutes(
 
         const hasMore = res.rows.length > limit;
         const pageRows = hasMore ? res.rows.slice(0, limit) : res.rows;
-        const nextCursor = hasMore && pageRows.length > 0
-          ? String(pageRows[pageRows.length - 1]!.revision_no)
-          : null;
+        const nextCursor =
+          hasMore && pageRows.length > 0
+            ? String(pageRows[pageRows.length - 1]!.revision_no)
+            : null;
 
         const items: RevisionSummary[] = pageRows.map((r) => ({
           id: r.id,
@@ -234,11 +235,14 @@ export function registerHistoryRoutes(
         }
 
         const row = updateRes.rows[0]!;
-        return reply.code(200).type("application/json").send({
-          id: row.id,
-          revisionNo: Number(row.revision_no),
-          label: row.label,
-        });
+        return reply
+          .code(200)
+          .type("application/json")
+          .send({
+            id: row.id,
+            revisionNo: Number(row.revision_no),
+            label: row.label,
+          });
       } catch (error) {
         return handleHistoryError(error, reply, request.id);
       }

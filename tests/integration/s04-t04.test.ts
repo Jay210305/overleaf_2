@@ -1,7 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  TabSessionManager,
-} from "../../apps/web/src/features/editor/editor-tabs.js";
+import { TabSessionManager } from "../../apps/web/src/features/editor/editor-tabs.js";
 
 describe("S04-T04 File tabs and navigation integration", () => {
   it("switches files repeatedly without losing buffer, selection, or undo state", () => {

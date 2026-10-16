@@ -111,7 +111,11 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
         placeholder={detail.title}
         onChange={(event) => setTitle(event.target.value)}
       />
-      <button data-testid="template-instantiate" disabled={pending} onClick={() => void instantiate()}>
+      <button
+        data-testid="template-instantiate"
+        disabled={pending}
+        onClick={() => void instantiate()}
+      >
         {pending ? "Creating…" : "Use template"}
       </button>
     </div>

@@ -56,7 +56,7 @@ export async function cleanupExpiredArtifactSets(
 
   for (const set of expiredSets) {
     const keysToDelete = [set.pdfKey, set.logKey, set.synctexKey].filter(
-      (k): k is string => Boolean(k) && typeof k === "string"
+      (k): k is string => Boolean(k) && typeof k === "string",
     );
 
     // Delete keys from object storage idempotently
@@ -70,10 +70,7 @@ export async function cleanupExpiredArtifactSets(
     }
 
     // Delete artifact_sets record
-    await db.query(
-      `DELETE FROM artifact_sets WHERE id = $1`,
-      [set.id],
-    );
+    await db.query(`DELETE FROM artifact_sets WHERE id = $1`, [set.id]);
     deletedSets++;
   }
 
@@ -89,15 +86,23 @@ export async function cleanupExpiredArtifactSets(
  * In-memory artifact retention manager for deterministic unit and integration tests.
  */
 export class InMemoryArtifactRetentionManager {
-  private sets = new Map<string, {
-    id: string;
-    projectId: string;
-    keys: string[];
-    expiresAt: number;
-  }>();
+  private sets = new Map<
+    string,
+    {
+      id: string;
+      projectId: string;
+      keys: string[];
+      expiresAt: number;
+    }
+  >();
   private storageObjects = new Set<string>();
 
-  public registerArtifactSet(id: string, projectId: string, keys: string[], expiresAt: number): void {
+  public registerArtifactSet(
+    id: string,
+    projectId: string,
+    keys: string[],
+    expiresAt: number,
+  ): void {
     this.sets.set(id, { id, projectId, keys, expiresAt });
     for (const k of keys) {
       this.storageObjects.add(k);

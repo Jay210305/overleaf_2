@@ -1,16 +1,6 @@
-import {
-  keymap,
-  type KeyBinding,
-} from "@codemirror/view";
-import {
-  undo,
-  redo,
-  indentWithTab,
-} from "@codemirror/commands";
-import {
-  openSearchPanel,
-  closeSearchPanel,
-} from "@codemirror/search";
+import { keymap, type KeyBinding } from "@codemirror/view";
+import { undo, redo, indentWithTab } from "@codemirror/commands";
+import { openSearchPanel, closeSearchPanel } from "@codemirror/search";
 import type { Extension } from "@codemirror/state";
 import * as Y from "yjs";
 
@@ -76,7 +66,11 @@ export function createEditorKeymap(callbacks: EditorShortcutCallbacks = {}): Ext
             const pctIdx = line.text.indexOf("%");
             if (pctIdx >= 0) {
               const removeLen = line.text[pctIdx + 1] === " " ? 2 : 1;
-              changes.push({ from: line.from + pctIdx, to: line.from + pctIdx + removeLen, insert: "" });
+              changes.push({
+                from: line.from + pctIdx,
+                to: line.from + pctIdx + removeLen,
+                insert: "",
+              });
             }
           } else {
             // Add %

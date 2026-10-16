@@ -37,6 +37,8 @@ describe("Regression ACC-07 (S09-T13): Export user data GDPR compliance and secr
     expect(exportBundle.tags.some((t) => t.name === "Stranger Tag")).toBe(false);
 
     // Should not contain stranger's project
-    expect(exportBundle.ownedProjects.some((p) => p.title.includes("Stranger Secret Project"))).toBe(false);
+    expect(
+      exportBundle.ownedProjects.some((p) => p.title.includes("Stranger Secret Project")),
+    ).toBe(false);
   });
 });

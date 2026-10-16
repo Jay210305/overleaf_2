@@ -78,7 +78,10 @@ describe("NFR-06 Artifacts provenance and immutable manifest hash matching (S06-
       `SELECT revision_no FROM project_revisions WHERE id = $1`,
       [sourceRevisionId],
     );
-    const revision = await revisionsRepo.getRevision(projectId, Number(revRow.rows[0]?.revision_no));
+    const revision = await revisionsRepo.getRevision(
+      projectId,
+      Number(revRow.rows[0]?.revision_no),
+    );
     expect(revision).toBeDefined();
     const expectedManifestHash = revision!.manifestHash;
 

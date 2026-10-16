@@ -19,7 +19,10 @@ type Node = {
 };
 
 function encodeFilename(name: string): string {
-  return encodeURIComponent(name).replace(/['()]/g, (part) => `%${part.charCodeAt(0).toString(16)}`);
+  return encodeURIComponent(name).replace(
+    /['()]/g,
+    (part) => `%${part.charCodeAt(0).toString(16)}`,
+  );
 }
 
 function handleDownloadError(error: unknown, reply: FastifyReply, requestId: string) {
@@ -125,8 +128,7 @@ export function registerBinaryDownloadRoutes(
           throw new AuthError(400, "VALIDATION_ERROR");
         }
         const auth = request.projectAuthorization as
-          | { userId: string; projectId: string }
-          | undefined;
+          { userId: string; projectId: string } | undefined;
         if (!auth) throw new AuthError(401, "AUTHENTICATION_REQUIRED");
         const projRes = await options.db.query<{ owner_id: string; status: string }>(
           "SELECT owner_id, status FROM projects WHERE id = $1",

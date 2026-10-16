@@ -14,13 +14,16 @@ export const resolveSuggestionSchema = z.strictObject({
 export type ResolveSuggestionInput = z.infer<typeof resolveSuggestionSchema>;
 
 export const bulkResolveSchema = z.strictObject({
-  items: z.array(
-    z.strictObject({
-      id: z.string().uuid(),
-      decision: resolveDecisionSchema,
-      expectedOldTextHash: z.string().optional(),
-    }),
-  ).min(1).max(100),
+  items: z
+    .array(
+      z.strictObject({
+        id: z.string().uuid(),
+        decision: resolveDecisionSchema,
+        expectedOldTextHash: z.string().optional(),
+      }),
+    )
+    .min(1)
+    .max(100),
 });
 export type BulkResolveInput = z.infer<typeof bulkResolveSchema>;
 
@@ -222,7 +225,8 @@ export function registerResolveRoutes(
       try {
         if (!options.db || !service) throw new AuthError(503, "SERVICE_UNAVAILABLE");
         const { projectId, suggestionId } = request.params;
-        if (!isUUID(projectId) || !isUUID(suggestionId)) throw new AuthError(400, "VALIDATION_ERROR");
+        if (!isUUID(projectId) || !isUUID(suggestionId))
+          throw new AuthError(400, "VALIDATION_ERROR");
 
         const auth = request.projectAuthorization;
         if (!auth) throw new AuthError(401, "AUTHENTICATION_REQUIRED");

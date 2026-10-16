@@ -27,7 +27,9 @@ describe("S06-T16 Verify trusted-release backup and rollback integration", () =>
   let tempBackupDir: string;
 
   const validPdfBytes = new TextEncoder().encode("%PDF-1.5\nBackup test authentic PDF\n%%EOF");
-  const validLogBytes = new TextEncoder().encode("Transcript: backup test compilation completed.\n");
+  const validLogBytes = new TextEncoder().encode(
+    "Transcript: backup test compilation completed.\n",
+  );
 
   beforeAll(async () => {
     fixture = await createSessionFixture();
