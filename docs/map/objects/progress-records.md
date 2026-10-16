@@ -26,7 +26,7 @@ A global log, per-stage task matrices, gap/debt files, feature-parity evidence a
 
 The [S05-T10 report](../../test-reports/s05-t10.md) records transactional ZIP application evidence while the sprint matrix keeps the task in progress until independent review.
 
-The [origin/main integration review](../../test-reports/integration-review-2026-10-13.md) records the no-op pull, fresh local gates and the Redis recovery/browser blockers. GAP-23 and GAP-24 keep the complete browser gate open without changing S05-T10 acceptance.
+The [origin/main integration review](../../test-reports/integration-review-2026-10-13.md) records the no-op pull, fresh local gates and the Redis recovery/browser blockers. GAP-29 and GAP-30 keep the complete browser gate open without changing S05-T10 acceptance.
 
 The [S08-T01 report](../../test-reports/s08-t01.md) records invitation delivery and PostgreSQL denial evidence. [Sprint 8 progress](../../progress/sprint-08.md) records acceptance of S08-T01–T04; G2 remains incomplete.
 

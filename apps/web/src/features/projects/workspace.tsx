@@ -7,6 +7,8 @@ import { FileUploader } from "../files/file-uploader.js";
 import { ShareDialog } from "../sharing/share-dialog.js";
 import { CommentAnchors } from "../review/comment-anchors.js";
 import { ProjectChat } from "../chat/project-chat.js";
+import { ReadOnlyTextDocument } from "../visual/mode-switch.js";
+import { LiveTextDocument } from "../collab/live-document.js";
 import { ProjectSettings } from "./settings.js";
 
 const config = parsePublicConfig(import.meta.env);
@@ -30,6 +32,7 @@ export function ProjectWorkspace({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<ProjectNodeView | null>(null);
+  const [liveFileId, setLiveFileId] = useState<string | null>(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [uploadVersion, setUploadVersion] = useState(0);
@@ -133,13 +136,43 @@ export function ProjectWorkspace({
               apiUrl={apiUrl}
               csrfToken={csrfToken}
               selectedNodeId={selectedNode?.id}
-              onSelectNode={(node) => setSelectedNode(node)}
+              onSelectNode={(node) => {
+                setSelectedNode(node);
+                setLiveFileId(null);
+              }}
               refreshVersion={uploadVersion}
             />
           </aside>
 
           <section className="workspace-content" aria-label="Document view">
-            {selectedNode ? (
+            {selectedNode?.kind === "FILE" && selectedNode.contentKind === "TEXT" ? (
+              <div className="selected-node-panel">
+                <h2>{selectedNode.name}</h2>
+                {liveFileId === selectedNode.id ? (
+                  <LiveTextDocument
+                    key={selectedNode.id}
+                    projectId={projectId}
+                    fileId={selectedNode.id}
+                    fileName={selectedNode.name}
+                    apiUrl={apiUrl}
+                    csrfToken={csrfToken}
+                    onExit={() => setLiveFileId(null)}
+                  />
+                ) : (
+                  <>
+                    <button type="button" onClick={() => setLiveFileId(selectedNode.id)}>
+                      Join live editor
+                    </button>
+                    <ReadOnlyTextDocument
+                      key={selectedNode.id}
+                      projectId={projectId}
+                      fileId={selectedNode.id}
+                      apiUrl={apiUrl}
+                    />
+                  </>
+                )}
+              </div>
+            ) : selectedNode ? (
               <div className="selected-node-panel">
                 <h2>{selectedNode.name}</h2>
                 <dl>

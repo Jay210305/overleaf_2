@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S11-T06]
 requirements: [EDT-13]
 source_task: S11-T07
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S11-T07 — Make code visual switching read-only
 
@@ -65,9 +65,9 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Opening visual and returning to code without edit leaves source bytes/hash unchanged, including parser errors
+- [x] Opening visual and returning to code without edit leaves source bytes/hash unchanged, including parser errors
 - [ ] EDT-13: Supported visual nodes edit canonical source; unsupported syntax has visible non-destructive fallback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 

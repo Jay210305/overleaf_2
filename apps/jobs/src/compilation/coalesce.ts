@@ -37,7 +37,7 @@ export class InMemoryJobCoalescer {
 
   public getActiveJobs(projectId: string): ActiveJobRecord[] {
     return Array.from(this.jobs.values()).filter(
-      (j) => j.projectId === projectId && (j.status === "queued" || j.status === "running")
+      (j) => j.projectId === projectId && (j.status === "queued" || j.status === "running"),
     );
   }
 

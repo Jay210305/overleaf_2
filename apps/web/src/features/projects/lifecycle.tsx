@@ -35,11 +35,15 @@ export function PermanentDeleteDialog({
           Permanently Delete Project
         </h2>
         <p id="perm-delete-desc" className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-          This action <strong>cannot be undone</strong>. All files, revisions, comments, and project settings will be permanently removed.
+          This action <strong>cannot be undone</strong>. All files, revisions, comments, and project
+          settings will be permanently removed.
         </p>
 
         <div className="mt-4">
-          <label htmlFor="confirm-title-input" className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+          <label
+            htmlFor="confirm-title-input"
+            className="block text-xs font-medium text-zinc-700 dark:text-zinc-300"
+          >
             Please type <span className="font-semibold underline">{projectTitle}</span> to confirm:
           </label>
           <input

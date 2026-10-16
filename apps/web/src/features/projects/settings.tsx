@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useState,
-  type FormEvent,
-} from "react";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { parsePublicConfig } from "@latex-collab/config";
 import {
   projectSettingsViewSchema,
@@ -140,7 +135,9 @@ export function ProjectSettings({
 
       if (!res.ok) {
         if (res.status === 400) {
-          setError("Invalid settings: root must be a valid .tex file and compiler must be supported.");
+          setError(
+            "Invalid settings: root must be a valid .tex file and compiler must be supported.",
+          );
         } else if (res.status === 412) {
           setError("Project was updated concurrently. Please refresh.");
         } else if (res.status === 403) {
@@ -194,12 +191,19 @@ export function ProjectSettings({
       )}
 
       {successMessage && (
-        <div role="status" aria-live="polite" style={{ color: "#16a34a", marginBottom: "16px", fontSize: "14px" }}>
+        <div
+          role="status"
+          aria-live="polite"
+          style={{ color: "#16a34a", marginBottom: "16px", fontSize: "14px" }}
+        >
           {successMessage}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+      >
         {/* PRO-07: Root Document */}
         <div>
           <label
@@ -212,7 +216,12 @@ export function ProjectSettings({
             id="root-document-select"
             value={mainFileId ?? "NONE"}
             onChange={(e) => setMainFileId(e.target.value === "NONE" ? null : e.target.value)}
-            style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #d1d5db" }}
+            style={{
+              width: "100%",
+              padding: "8px",
+              borderRadius: "4px",
+              border: "1px solid #d1d5db",
+            }}
           >
             <option value="NONE">-- No root document selected --</option>
             {texFiles.map((f) => (
@@ -238,7 +247,12 @@ export function ProjectSettings({
             id="compiler-engine-select"
             value={compiler}
             onChange={(e) => setCompiler(e.target.value as Compiler)}
-            style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #d1d5db" }}
+            style={{
+              width: "100%",
+              padding: "8px",
+              borderRadius: "4px",
+              border: "1px solid #d1d5db",
+            }}
           >
             <option value="pdflatex">pdfLaTeX (Default)</option>
             <option value="xelatex">XeLaTeX</option>
@@ -260,7 +274,13 @@ export function ProjectSettings({
             type="text"
             value={texliveVersion}
             onChange={(e) => setTexliveVersion(e.target.value)}
-            style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #d1d5db", boxSizing: "border-box" }}
+            style={{
+              width: "100%",
+              padding: "8px",
+              borderRadius: "4px",
+              border: "1px solid #d1d5db",
+              boxSizing: "border-box",
+            }}
           />
         </div>
 
@@ -292,7 +312,13 @@ export function ProjectSettings({
             max={120}
             value={timeoutSeconds}
             onChange={(e) => setTimeoutSeconds(Number.parseInt(e.target.value, 10) || 30)}
-            style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #d1d5db", boxSizing: "border-box" }}
+            style={{
+              width: "100%",
+              padding: "8px",
+              borderRadius: "4px",
+              border: "1px solid #d1d5db",
+              boxSizing: "border-box",
+            }}
           />
           <span style={{ fontSize: "12px", color: "#6b7280" }}>
             Server policy enforces a limit between 5 and 120 seconds.

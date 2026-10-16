@@ -60,10 +60,7 @@ export async function executeAccountDeletion(
     requireSessionCsrf(csrfToken, row.csrf_hash);
 
     // 3. Verify password
-    if (
-      !row.password_hash ||
-      !(await argon2.verify(row.password_hash, passwordToVerify))
-    ) {
+    if (!row.password_hash || !(await argon2.verify(row.password_hash, passwordToVerify))) {
       throw new AuthError(403, "INVALID_CREDENTIALS");
     }
 

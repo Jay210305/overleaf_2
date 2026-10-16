@@ -73,7 +73,9 @@ describe("S07-T07 Coordinate two collaboration replicas integration", () => {
     expect(docOnReplica2.getText("content").toString()).toContain("Written on Replica 1");
 
     // 3. Client makes a second edit on Replica 2
-    docOnReplica2.getText("content").insert(docOnReplica2.getText("content").length, "Written on Replica 2\n");
+    docOnReplica2
+      .getText("content")
+      .insert(docOnReplica2.getText("content").length, "Written on Replica 2\n");
     const update2 = Y.encodeStateAsUpdate(docOnReplica2, Y.encodeStateVector(doc));
     const ack2 = await clientReplica2.sendUpdate(update2);
     expect(ack2.type).toBe("text.durable_ack");

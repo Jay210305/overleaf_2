@@ -5,13 +5,7 @@ export interface FoldRange {
 }
 
 export type CompletionKind =
-  | "command"
-  | "environment"
-  | "label"
-  | "citation"
-  | "file"
-  | "image"
-  | "none";
+  "command" | "environment" | "label" | "citation" | "file" | "image" | "none";
 
 export interface CompletionContext {
   kind: CompletionKind;
@@ -87,10 +81,7 @@ export const STANDARD_COMMANDS: readonly string[] = [
 /**
  * Automatically creates paired \begin{env} ... \end{env} with proper indentation (EDT-05).
  */
-export function autoCloseEnvironment(
-  envName: string,
-  indent = "  ",
-): string {
+export function autoCloseEnvironment(envName: string, indent = "  "): string {
   if (!envName || /[\s}]/.test(envName)) {
     throw new Error(`Invalid environment name: "${envName}"`);
   }
@@ -154,10 +145,7 @@ export function getEnvironmentFoldRanges(text: string): FoldRange[] {
 /**
  * Analyzes the text preceding the cursor to detect the completion context (EDT-06).
  */
-export function getCompletionContext(
-  text: string,
-  cursorOffset: number,
-): CompletionContext {
+export function getCompletionContext(text: string, cursorOffset: number): CompletionContext {
   if (cursorOffset < 0 || cursorOffset > text.length) {
     return { kind: "none", query: "", from: cursorOffset, to: cursorOffset };
   }
@@ -189,7 +177,9 @@ export function getCompletionContext(
   }
 
   // 3. Citation in \cite{...
-  const citeMatch = preceding.match(/\\(cite|citep|citet|autocite|parencite|textcite)\*?\{([^}]*)$/);
+  const citeMatch = preceding.match(
+    /\\(cite|citep|citet|autocite|parencite|textcite)\*?\{([^}]*)$/,
+  );
   if (citeMatch) {
     const keysSoFar = citeMatch[2]!;
     const lastCommaIndex = keysSoFar.lastIndexOf(",");
@@ -261,14 +251,14 @@ export function completeAtCursor(
 
   switch (context.kind) {
     case "environment": {
-      const items: CompletionItem[] = STANDARD_ENVIRONMENTS
-        .filter((env) => env.toLowerCase().includes(q))
-        .map((env) => ({
-          label: env,
-          kind: "environment",
-          detail: `Environment: ${env}`,
-          insertText: env,
-        }));
+      const items: CompletionItem[] = STANDARD_ENVIRONMENTS.filter((env) =>
+        env.toLowerCase().includes(q),
+      ).map((env) => ({
+        label: env,
+        kind: "environment",
+        detail: `Environment: ${env}`,
+        insertText: env,
+      }));
       return { from: context.from, to: context.to, items };
     }
 
@@ -300,8 +290,8 @@ export function completeAtCursor(
     }
 
     case "file": {
-      const files = (options.availableFiles ?? []).filter((f) =>
-        f.endsWith(".tex") || f.endsWith(".sty") || f.endsWith(".cls") || f.endsWith(".bib"),
+      const files = (options.availableFiles ?? []).filter(
+        (f) => f.endsWith(".tex") || f.endsWith(".sty") || f.endsWith(".cls") || f.endsWith(".bib"),
       );
       const items: CompletionItem[] = files
         .filter((f) => f.toLowerCase().includes(q))
@@ -330,14 +320,14 @@ export function completeAtCursor(
     }
 
     case "command": {
-      const items: CompletionItem[] = STANDARD_COMMANDS
-        .filter((cmd) => cmd.toLowerCase().includes(q))
-        .map((cmd) => ({
-          label: cmd,
-          kind: "command",
-          detail: "LaTeX macro",
-          insertText: cmd.replace(/^\\/, ""), // text after backslash
-        }));
+      const items: CompletionItem[] = STANDARD_COMMANDS.filter((cmd) =>
+        cmd.toLowerCase().includes(q),
+      ).map((cmd) => ({
+        label: cmd,
+        kind: "command",
+        detail: "LaTeX macro",
+        insertText: cmd.replace(/^\\/, ""), // text after backslash
+      }));
       return { from: context.from, to: context.to, items };
     }
 

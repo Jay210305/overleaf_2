@@ -1,6 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { checkSpelling, levenshteinDistance } from "@latex-collab/editor";
-import { lookupErrorHelp, searchHelpCatalog, STATIC_ERROR_CATALOG } from "../../apps/web/src/features/help/latex-help.js";
+import {
+  lookupErrorHelp,
+  searchHelpCatalog,
+  STATIC_ERROR_CATALOG,
+} from "../../apps/web/src/features/help/latex-help.js";
 
 describe("S10-T11: Local Spell Checking and Static Error Help", () => {
   it("calculates levenshtein distance correctly", () => {

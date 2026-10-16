@@ -22,7 +22,10 @@ describe("CMP-01 Compiler executor boundary returns typed artifacts (S06-T04)", 
       ],
     }));
 
-    const result = await executor.execute({} as unknown as ExecuteInput, new AbortController().signal);
+    const result = await executor.execute(
+      {} as unknown as ExecuteInput,
+      new AbortController().signal,
+    );
     expect(result.status).toBe("succeeded");
     expect(result.artifacts.some((a) => a.name === "output.pdf")).toBe(true);
     expect(result.diagnostics.length).toBe(1);

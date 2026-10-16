@@ -22,7 +22,10 @@ describe("NFR-01 Zero acknowledged edits lost after server restart (S07-T04)", (
 
     const doc1 = new Y.Doc();
     const text1 = doc1.getText("content");
-    text1.insert(0, "\\documentclass{article}\n\\begin{document}\nDurable content\n\\end{document}\n");
+    text1.insert(
+      0,
+      "\\documentclass{article}\n\\begin{document}\nDurable content\n\\end{document}\n",
+    );
 
     const updateBytes = Y.encodeStateAsUpdate(doc1);
     const ack = await client1.sendUpdate(updateBytes);

@@ -3,9 +3,12 @@ import { AutoCompileController } from "../../../apps/web/src/features/compilatio
 
 describe("Regression EDT-12: Engine selection, root file, and server policy bounded timeout", () => {
   it("enforces bounded timeout per server policy (cannot exceed 60000ms)", () => {
-    const controller = new AutoCompileController({
-      maxTimeoutMs: 120000, // Client tries to request 120s
-    }, vi.fn());
+    const controller = new AutoCompileController(
+      {
+        maxTimeoutMs: 120000, // Client tries to request 120s
+      },
+      vi.fn(),
+    );
 
     expect(controller.getConfig().maxTimeoutMs).toBe(60000); // Clamped to 60s
   });
@@ -19,10 +22,13 @@ describe("Regression EDT-12: Engine selection, root file, and server policy boun
   });
 
   it("supports engine and root file configuration updates", () => {
-    const controller = new AutoCompileController({
-      compiler: "pdflatex",
-      rootFile: "main.tex",
-    }, vi.fn());
+    const controller = new AutoCompileController(
+      {
+        compiler: "pdflatex",
+        rootFile: "main.tex",
+      },
+      vi.fn(),
+    );
 
     controller.updateConfig({
       compiler: "lualatex",

@@ -64,7 +64,10 @@ describe("S04-T02 Canonical text document service integration", () => {
     const clientDoc = new Y.Doc();
     Y.applyUpdate(clientDoc, Buffer.from(initial.updateBase64, "base64"));
     const ytext = clientDoc.getText("content");
-    ytext.insert(0, "\\documentclass{article}\n\\begin{document}\n¡Hola mundo! 🌟\n\\end{document}");
+    ytext.insert(
+      0,
+      "\\documentclass{article}\n\\begin{document}\n¡Hola mundo! 🌟\n\\end{document}",
+    );
 
     // Compute update diff relative to server's state vector
     const serverVector = Buffer.from(initial.stateVectorBase64, "base64");
@@ -118,10 +121,7 @@ describe("S04-T02 Canonical text document service integration", () => {
     const doc1 = new Y.Doc();
     Y.applyUpdate(doc1, Buffer.from(initial.updateBase64, "base64"));
     doc1.getText("content").insert(0, "Edit 1");
-    const update1 = Y.encodeStateAsUpdate(
-      doc1,
-      Buffer.from(initial.stateVectorBase64, "base64"),
-    );
+    const update1 = Y.encodeStateAsUpdate(doc1, Buffer.from(initial.stateVectorBase64, "base64"));
     await service.apply(projectId, fileId, owner.id, {
       updateBase64: Buffer.from(update1).toString("base64"),
       baseStateVectorBase64: initial.stateVectorBase64,
@@ -131,10 +131,7 @@ describe("S04-T02 Canonical text document service integration", () => {
     const doc2 = new Y.Doc();
     Y.applyUpdate(doc2, Buffer.from(initial.updateBase64, "base64"));
     doc2.getText("content").insert(0, "Racing Edit 2");
-    const update2 = Y.encodeStateAsUpdate(
-      doc2,
-      Buffer.from(initial.stateVectorBase64, "base64"),
-    );
+    const update2 = Y.encodeStateAsUpdate(doc2, Buffer.from(initial.stateVectorBase64, "base64"));
 
     // Stale base vector must throw 409
     await expect(

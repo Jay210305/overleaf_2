@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S11-T09]
 requirements: [PL-05, COL-11, EDT-13]
 source_task: S11-T08
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S11-T11 — Stabilize and review G3 academic workflow
 
@@ -63,11 +63,11 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] History/restore/review/bibliography/SyncTeX tests plus 100 round trips pass; later provider claims remain explicit
-- [ ] PL-05: Walking skeleton and stabilized current-gate release with documented findings. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] COL-11: Restore one file or all content as a new revision without changing current ACLs. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] EDT-13: Supported visual nodes edit canonical source; unsupported syntax has visible non-destructive fallback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] History/restore/review/bibliography/SyncTeX tests plus 100 round trips pass; later provider claims remain explicit
+- [x] PL-05: Walking skeleton and stabilized current-gate release with documented findings. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] COL-11: Restore one file or all content as a new revision without changing current ACLs. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] EDT-13: Supported visual nodes edit canonical source; unsupported syntax has visible non-destructive fallback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -96,9 +96,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

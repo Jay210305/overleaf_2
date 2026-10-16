@@ -28,9 +28,7 @@ export interface PdfToSourceOptions {
 /**
  * Performs forward SyncTeX lookup: code source line -> PDF bounding boxes (CMP-07).
  */
-export async function navigateSourceToPdf(
-  options: SourceToPdfOptions,
-): Promise<ForwardView> {
+export async function navigateSourceToPdf(options: SourceToPdfOptions): Promise<ForwardView> {
   const fetcher = options.fetchImpl ?? fetch;
   const baseUrl = options.baseUrl ?? "/api/v1";
 
@@ -41,16 +39,13 @@ export async function navigateSourceToPdf(
     column: options.column,
   };
 
-  const response = await fetcher(
-    `${baseUrl}/projects/${options.projectId}/synctex/forward`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
+  const response = await fetcher(`${baseUrl}/projects/${options.projectId}/synctex/forward`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify(requestBody),
+  });
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
@@ -66,9 +61,7 @@ export async function navigateSourceToPdf(
 /**
  * Performs inverse SyncTeX lookup: PDF coordinates -> code source position (CMP-07).
  */
-export async function navigatePdfToSource(
-  options: PdfToSourceOptions,
-): Promise<InverseView> {
+export async function navigatePdfToSource(options: PdfToSourceOptions): Promise<InverseView> {
   const fetcher = options.fetchImpl ?? fetch;
   const baseUrl = options.baseUrl ?? "/api/v1";
 
@@ -79,16 +72,13 @@ export async function navigatePdfToSource(
     y: options.y,
   };
 
-  const response = await fetcher(
-    `${baseUrl}/projects/${options.projectId}/synctex/inverse`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
+  const response = await fetcher(`${baseUrl}/projects/${options.projectId}/synctex/inverse`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify(requestBody),
+  });
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));

@@ -121,7 +121,8 @@ describe("S04-T08 Persistent Unicode editing integration", () => {
     expect(recoveredBytes.equals(originalBytes)).toBe(true);
 
     // 6. Append additional Unicode text after restart to verify continuous edit capability
-    const appendedText = "\n% Edición adicional post-reinicio: café y matemática avanzada ∑_{k=0}^{n} k";
+    const appendedText =
+      "\n% Edición adicional post-reinicio: café y matemática avanzada ∑_{k=0}^{n} k";
     recoveredDoc.getText("content").insert(recoveredString.length, appendedText);
     const nextUpdateB64 = Buffer.from(Y.encodeStateAsUpdate(recoveredDoc)).toString("base64");
 

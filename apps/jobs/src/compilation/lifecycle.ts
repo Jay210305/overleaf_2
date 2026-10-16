@@ -29,10 +29,7 @@ const ALLOWED_TRANSITIONS: Readonly<Record<CompileStatus, ReadonlySet<CompileSta
  * cancel_requested -> cancelled | succeeded | failed | timed_out (if already finished)
  * Terminal states cannot transition further.
  */
-export function assertValidStatusTransition(
-  from: CompileStatus,
-  to: CompileStatus,
-): void {
+export function assertValidStatusTransition(from: CompileStatus, to: CompileStatus): void {
   if (from === to) return;
   const allowed = ALLOWED_TRANSITIONS[from];
   if (!allowed || !allowed.has(to)) {

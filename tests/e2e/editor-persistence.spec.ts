@@ -1,22 +1,25 @@
 import { randomUUID } from "node:crypto";
 import { loadEnvFile } from "node:process";
-import argon2 from "argon2";
 import { test, expect } from "@playwright/test";
 import { parseServerConfig } from "@latex-collab/config/server";
 import { DatabaseClient } from "@latex-collab/db";
 import * as Y from "yjs";
+import { AUTH_STATE_PATH, readSharedCsrf } from "./shared-auth.js";
 
 loadEnvFile(".env");
 const config = parseServerConfig(process.env);
 
 test("Unicode editor persistence journey: UTF-8, Spanish, math, emojis, RTL across refresh", async ({
-  request,
+  browser,
 }) => {
   test.setTimeout(60000);
   const db = new DatabaseClient(config.DATABASE_URL);
 
-  const userEmail = `e2e-editor-${randomUUID()}@example.test`;
-  const password = "correct-password-123";
+  // Shared suite session (see auth.setup.ts): one login per run instead of
+  // per-spec logins against the Redis rate-limit window.
+  const context = await browser.newContext({ storageState: AUTH_STATE_PATH });
+  const request = context.request;
+  const { csrf: csrfToken } = readSharedCsrf();
 
   // Check backend readiness
   await expect
@@ -32,24 +35,9 @@ test("Unicode editor persistence journey: UTF-8, Spanish, math, emojis, RTL acro
     )
     .toBe(200);
 
-  // Seed user
-  const passwordHash = await argon2.hash(password, { type: argon2.argon2id });
-  const userRes = await db.query<{ id: string }>(
-    `INSERT INTO users (email_normalized, display_name, password_hash, email_verified_at)
-     VALUES ($1, 'Unicode Editor User', $2, NOW()) RETURNING id`,
-    [userEmail, passwordHash],
-  );
-  expect(userRes.rows[0]?.id).toBeDefined();
+  // Seed data lives in the shared-session project created below.
 
-  // 1. Log in via API
-  const loginRes = await request.post("http://127.0.0.1:3000/api/v1/auth/login", {
-    headers: { origin: "http://127.0.0.1:5173", "x-csrf-token": "login-bootstrap" },
-    data: { email: userEmail, password },
-  });
-  expect(loginRes.status()).toBe(200);
-  const csrfToken = loginRes.headers()["x-csrf-token"] ?? "";
-
-  // 2. Create Project
+  // 1. Create Project with the shared session
   const createProjRes = await request.post("http://127.0.0.1:3000/api/v1/projects", {
     headers: { origin: "http://127.0.0.1:5173", "x-csrf-token": csrfToken },
     data: { title: `Unicode Test ${randomUUID()}` },
@@ -137,5 +125,6 @@ test("Unicode editor persistence journey: UTF-8, Spanish, math, emojis, RTL acro
   expect(recoveredText).toBe(unicodeContent);
   expect(Buffer.from(recoveredText, "utf8").equals(Buffer.from(unicodeContent, "utf8"))).toBe(true);
 
+  await context.close();
   await db.close();
 });

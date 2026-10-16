@@ -325,7 +325,8 @@ export function registerSuggestionRoutes(
       try {
         if (!options.db || !service) throw new AuthError(503, "SERVICE_UNAVAILABLE");
         const { projectId, suggestionId } = request.params;
-        if (!isUUID(projectId) || !isUUID(suggestionId)) throw new AuthError(400, "VALIDATION_ERROR");
+        if (!isUUID(projectId) || !isUUID(suggestionId))
+          throw new AuthError(400, "VALIDATION_ERROR");
 
         const item = await service.getSuggestion(projectId, suggestionId);
         if (!item) throw new AuthError(404, "RESOURCE_NOT_FOUND");

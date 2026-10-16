@@ -6,7 +6,6 @@ export interface BibEntrySummary {
   year?: string | undefined;
 }
 
-
 export interface DuplicateKeyReport {
   key: string;
   count: number;
@@ -181,7 +180,9 @@ export function getCitationQueryAtCursor(
 
   const precedingText = text.slice(0, cursorOffset);
   // Matches \cite, \citep, \citet, \autocite, etc.
-  const match = precedingText.match(/\\(cite|citep|citet|autocite|parencite|textcite)\*?\{([^}]*)$/);
+  const match = precedingText.match(
+    /\\(cite|citep|citet|autocite|parencite|textcite)\*?\{([^}]*)$/,
+  );
   if (!match) {
     return null;
   }
@@ -189,7 +190,8 @@ export function getCitationQueryAtCursor(
   const command = match[1]!;
   const keysSoFar = match[2]!;
   const lastCommaIndex = keysSoFar.lastIndexOf(",");
-  const currentToken = lastCommaIndex >= 0 ? keysSoFar.slice(lastCommaIndex + 1).trimStart() : keysSoFar;
+  const currentToken =
+    lastCommaIndex >= 0 ? keysSoFar.slice(lastCommaIndex + 1).trimStart() : keysSoFar;
 
   const tokenStartOffset = cursorOffset - currentToken.length;
 

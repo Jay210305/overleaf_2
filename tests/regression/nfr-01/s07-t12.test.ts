@@ -23,7 +23,10 @@ describe("NFR-01 Zero acknowledged edits lost after snapshot compaction and rest
 
     const doc1 = new Y.Doc();
     const text1 = doc1.getText("content");
-    text1.insert(0, "\\documentclass{article}\n\\title{Compaction Test}\n\\begin{document}\nInitial.\n\\end{document}\n");
+    text1.insert(
+      0,
+      "\\documentclass{article}\n\\title{Compaction Test}\n\\begin{document}\nInitial.\n\\end{document}\n",
+    );
 
     const ack = await client1.sendUpdate(Y.encodeStateAsUpdate(doc1));
     expect(ack.type).toBe("text.durable_ack");

@@ -114,7 +114,15 @@ export function installProjectGuard(
   app.decorateRequest("projectAuthorization", undefined);
   app.decorateRequest("sessionIdentity", undefined);
   app.addHook("preHandler", async (request, reply) => {
-    if (!request.url.startsWith("/api/v1/projects/")) return;
+    // Session-scoped non-project routes (templates catalogue) share the
+    // session guard; project routes keep the project authorization path.
+    // Every route under these prefixes must declare sessionOnly or a
+    // projectAction, otherwise the guard denies it.
+    if (
+      !request.url.startsWith("/api/v1/projects/") &&
+      !request.url.startsWith("/api/v1/templates")
+    )
+      return;
     try {
       if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
       const config = request.routeOptions.config as

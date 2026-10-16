@@ -105,10 +105,9 @@ describe("Review Concurrency: Accept races, file delete, and stale anchors", () 
     const suggId = await createSuggestion(tempFileId, "temp-hash");
 
     // Soft delete file
-    await fixture.db.query(
-      `UPDATE project_nodes SET deleted_at = NOW() WHERE id = $1`,
-      [tempFileId],
-    );
+    await fixture.db.query(`UPDATE project_nodes SET deleted_at = NOW() WHERE id = $1`, [
+      tempFileId,
+    ]);
 
     const ownerSession = await getSession(owner.email);
     const res = await fixture.app.inject({

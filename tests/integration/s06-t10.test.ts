@@ -89,7 +89,8 @@ describe("S06-T10 Verify genuine compiler fixtures integration", () => {
     // 2. Worker executes valid fixture
     const validExecutor = new TrustedWorkerExecutor({
       runner: async (_cmd, args, options) => {
-        const outDir = args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
+        const outDir =
+          args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
         await writeFile(join(outDir, "main.pdf"), validPdfHeader);
         await writeFile(join(outDir, "main.log"), "Output written on main.pdf (1 page).");
         return { exitCode: 0, stdout: "Latexmk: All targets up to date", stderr: "" };
@@ -136,7 +137,8 @@ describe("S06-T10 Verify genuine compiler fixtures integration", () => {
     // 4. Worker executes syntax error fixture
     const failingExecutor = new TrustedWorkerExecutor({
       runner: async (_cmd, args, options) => {
-        const outDir = args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
+        const outDir =
+          args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
         await writeFile(
           join(outDir, "main.log"),
           "main.tex:22: Undefined control sequence.\nl.22 \\invalidmacro\n!  ==> Fatal error occurred",

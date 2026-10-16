@@ -10,11 +10,14 @@ function redis(action: "stop" | "start") {
 }
 test("a real dependency outage leaves live healthy and readiness recovers", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("status")).toHaveText("Service ready");
+  await expect(page.getByRole("status")).toHaveText("Service ready", { timeout: 15000 });
   try {
     redis("stop");
     expect((await page.request.get("http://127.0.0.1:3000/api/v1/health/live")).status()).toBe(200);
     expect((await page.request.get("http://127.0.0.1:3000/api/v1/health/ready")).status()).toBe(
+      503,
+    );
+    expect((await page.request.get("http://127.0.0.1:3000/api/v1/auth/session")).status()).toBe(
       503,
     );
     await expect(page.getByRole("status")).toContainText("Service unavailable", { timeout: 15000 });
@@ -23,4 +26,12 @@ test("a real dependency outage leaves live healthy and readiness recovers", asyn
   }
   await page.getByRole("button", { name: "Check connection" }).click();
   await expect(page.getByRole("status")).toHaveText("Service ready", { timeout: 15000 });
+  await expect
+    .poll(
+      async () => (await page.request.get("http://127.0.0.1:3000/api/v1/auth/session")).status(),
+      {
+        timeout: 15000,
+      },
+    )
+    .toBe(403);
 });

@@ -32,10 +32,12 @@ export class LiveRevocationManager {
     if (!this.socketsByUser.has(socket.userId)) this.socketsByUser.set(socket.userId, new Set());
     this.socketsByUser.get(socket.userId)!.add(socket);
 
-    if (!this.socketsBySession.has(socket.sessionId)) this.socketsBySession.set(socket.sessionId, new Set());
+    if (!this.socketsBySession.has(socket.sessionId))
+      this.socketsBySession.set(socket.sessionId, new Set());
     this.socketsBySession.get(socket.sessionId)!.add(socket);
 
-    if (!this.socketsByProject.has(socket.projectId)) this.socketsByProject.set(socket.projectId, new Set());
+    if (!this.socketsByProject.has(socket.projectId))
+      this.socketsByProject.set(socket.projectId, new Set());
     this.socketsByProject.get(socket.projectId)!.add(socket);
 
     return () => {

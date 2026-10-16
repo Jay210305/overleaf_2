@@ -11,7 +11,8 @@ describe("S06-T08 Real PDF viewer component integration", () => {
 
   const defaultProps = {
     projectId: "00000000-0000-0000-0000-000000000001",
-    pdfUrl: "/api/v1/projects/00000000-0000-0000-0000-000000000001/compilations/job-1/artifacts/output.pdf",
+    pdfUrl:
+      "/api/v1/projects/00000000-0000-0000-0000-000000000001/compilations/job-1/artifacts/output.pdf",
     sourceRevisionId: "rev-uuid-1234-5678",
     revisionNo: 3,
     totalPages: 5,

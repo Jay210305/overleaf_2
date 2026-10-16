@@ -58,11 +58,7 @@ export class MemoryOfflineStorageProvider implements OfflineStorageProvider {
 /**
  * Calculates exponential backoff delay with jitter to prevent reconnect storm loops.
  */
-export function calculateBackoffDelayMs(
-  attempt: number,
-  baseMs = 500,
-  maxMs = 30_000,
-): number {
+export function calculateBackoffDelayMs(attempt: number, baseMs = 500, maxMs = 30_000): number {
   const exp = Math.min(attempt, 8);
   const factor = Math.pow(2, exp);
   const delay = Math.min(baseMs * factor, maxMs);

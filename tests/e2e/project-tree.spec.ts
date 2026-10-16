@@ -2,24 +2,34 @@ import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { loadEnvFile } from "node:process";
-import argon2 from "argon2";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { parseServerConfig } from "@latex-collab/config/server";
 import { DatabaseClient } from "@latex-collab/db";
+import { AUTH_STATE_PATH, readSharedCsrf } from "./shared-auth.js";
 
 loadEnvFile(".env");
 const config = parseServerConfig(process.env);
 
+// The shared session is loaded explicitly per context below (see auth.setup.ts)
+// so browser journeys share one login instead of consuming the Redis
+// login rate-limit window.
+
 test("project and file tree journey: create, mutate tree, reload persistence, and tenant isolation", async ({
-  page,
   browser,
 }) => {
   test.setTimeout(60000);
   const db = new DatabaseClient(config.DATABASE_URL);
 
-  const userEmail = `e2e-tree-${randomUUID()}@example.test`;
-  const password = "correct-password-123";
+  // Shared session cookies plus the app's sessionStorage CSRF token, so UI
+  // mutations pass the CSRF guard without a per-spec login.
+  const { csrf } = readSharedCsrf();
+  const context = await browser.newContext({ storageState: AUTH_STATE_PATH });
+  await context.addInitScript(
+    (value) => sessionStorage.setItem("csrf_token", value),
+    csrf,
+  );
+  const page = await context.newPage();
 
   // Ensure database migrations and health
   await expect
@@ -55,20 +65,8 @@ test("project and file tree journey: create, mutate tree, reload persistence, an
     ),
   );
 
-  // Seed user
-  const passwordHash = await argon2.hash(password, { type: argon2.argon2id });
-  await db.query(
-    `INSERT INTO users (email_normalized, display_name, password_hash, email_verified_at)
-     VALUES ($1, 'Tree Journey Writer', $2, NOW())`,
-    [userEmail, passwordHash],
-  );
-
-  // 1. SIGN IN
-  await page.goto(`${config.APP_ORIGIN}/login`);
-  await page.getByLabel("Email").fill(userEmail);
-  await page.getByLabel("Password", { exact: true }).fill(password);
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page.getByText(/Signed in as Tree Journey Writer/)).toBeVisible();
+  // 1. Shared session from auth.setup.ts: the dashboard below only renders
+  // for authenticated users, so reaching it proves the session is live.
 
   // 2. NAVIGATE TO DASHBOARD
   await page.goto(`${config.APP_ORIGIN}/dashboard`);

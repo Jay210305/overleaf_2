@@ -1,5 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
-import { lookupErrorHelp, searchHelpCatalog } from "../../../apps/web/src/features/help/latex-help.js";
+import {
+  lookupErrorHelp,
+  searchHelpCatalog,
+} from "../../../apps/web/src/features/help/latex-help.js";
 
 describe("Regression EDT-14: Static error help operates offline without external telemetry", () => {
   it("diagnoses mismatched environment error completely locally", () => {

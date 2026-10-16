@@ -1,7 +1,10 @@
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { TrustedWorkerExecutor, type CommandRunner } from "../../apps/jobs/src/compilation/trusted-worker-executor.js";
+import {
+  TrustedWorkerExecutor,
+  type CommandRunner,
+} from "../../apps/jobs/src/compilation/trusted-worker-executor.js";
 import type { ExecuteInput } from "@latex-collab/contracts";
 
 describe("S06-T13 Trusted worker executor adapter integration", () => {
@@ -100,9 +103,9 @@ describe("S06-T13 Trusted worker executor adapter integration", () => {
     };
 
     const executor = new TrustedWorkerExecutor();
-    await expect(
-      executor.execute(maliciousInput, new AbortController().signal),
-    ).rejects.toThrow("Path traversal rejected");
+    await expect(executor.execute(maliciousInput, new AbortController().signal)).rejects.toThrow(
+      "Path traversal rejected",
+    );
   });
 
   it("rejects unsupported compiler engine with VALIDATION_ERROR", async () => {
@@ -112,8 +115,8 @@ describe("S06-T13 Trusted worker executor adapter integration", () => {
     };
 
     const executor = new TrustedWorkerExecutor();
-    await expect(
-      executor.execute(badEngineInput, new AbortController().signal),
-    ).rejects.toThrow("Unsupported compiler engine");
+    await expect(executor.execute(badEngineInput, new AbortController().signal)).rejects.toThrow(
+      "Unsupported compiler engine",
+    );
   });
 });

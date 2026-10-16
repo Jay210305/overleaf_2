@@ -85,7 +85,9 @@ export async function createTrustedBackup(options: {
     pdf_key: string | null;
     log_key: string | null;
     synctex_key: string | null;
-  }>(`SELECT a.id, a.compile_job_id, a.pdf_key, a.log_key, a.synctex_key FROM artifact_sets a ${artFilter} ORDER BY a.created_at ASC`);
+  }>(
+    `SELECT a.id, a.compile_job_id, a.pdf_key, a.log_key, a.synctex_key FROM artifact_sets a ${artFilter} ORDER BY a.created_at ASC`,
+  );
 
   const dbDump = {
     projects: projectsRes.rows,
@@ -190,7 +192,9 @@ export async function verifyBackupIntegrity(options: {
 
   const referencedKeys = new Set<string>();
 
-  const revFilter = projectId ? `WHERE project_id = '${projectId}' AND manifest_key IS NOT NULL` : `WHERE manifest_key IS NOT NULL`;
+  const revFilter = projectId
+    ? `WHERE project_id = '${projectId}' AND manifest_key IS NOT NULL`
+    : `WHERE manifest_key IS NOT NULL`;
   const revisionsRes = await db.query<{ manifest_key: string | null }>(
     `SELECT manifest_key FROM project_revisions ${revFilter}`,
   );

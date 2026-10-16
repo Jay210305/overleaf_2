@@ -35,7 +35,9 @@ describe("NFR-01 S04-T09 Full state recovery from snapshot and uncompacted updat
     expect(snap.uptoSeq).toBe(1);
 
     // Append updates after snapshot (seq 2 and 3)
-    doc.getText("content").insert(doc.getText("content").length, "\\chapter{Dos}\nTexto adicional.\n");
+    doc
+      .getText("content")
+      .insert(doc.getText("content").length, "\\chapter{Dos}\nTexto adicional.\n");
     await store.appendUpdate(fileId, owner.id, Y.encodeStateAsUpdate(doc));
 
     doc.getText("content").insert(doc.getText("content").length, "Fin del documento.");

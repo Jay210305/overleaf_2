@@ -4,9 +4,9 @@ cluster: runtime-design
 universe: live
 status: verified
 entity: apps/web/src/app/router.tsx
-sources: ["docs/planning/02-architecture.md","docs/planning/03-technical-spec.md","docs/contracts/editing-and-review.md","docs/contracts/collaboration.md","apps/web/src/app/router.tsx","apps/web/src/app/providers.tsx","apps/web/src/features/health/health-panel.tsx","apps/web/src/features/auth/auth-forms.tsx","apps/web/src/features/account/profile.tsx","apps/web/src/features/account/avatar.tsx","apps/web/src/features/editor/latex-code-editor.tsx","apps/web/src/features/files/file-uploader.tsx","apps/web/src/features/projects/workspace.tsx","tests/e2e/walking-skeleton.spec.ts","tests/e2e/auth-forms.spec.ts","tests/e2e/profile.spec.ts","tests/e2e/project-upload.spec.ts","docs/test-reports/s02-t05.md","docs/test-reports/s02-t07.md","docs/test-reports/s02-t11.md","docs/test-reports/s05-t02.md","apps/web/src/features/sharing/share-dialog.tsx","tests/e2e/sharing.spec.ts","tests/regression/col-03/s08-t03.test.tsx","tests/regression/col-04/s08-t03.test.tsx","tests/regression/col-05/s08-t03.test.tsx","docs/test-reports/s08-t03.md","apps/web/src/features/review/comment-anchors.tsx","tests/e2e/comments.spec.ts","docs/test-reports/s08-t09.md"]
+sources: ["docs/planning/02-architecture.md", "docs/planning/03-technical-spec.md", "docs/contracts/editing-and-review.md", "docs/contracts/collaboration.md", "apps/web/src/app/router.tsx", "apps/web/src/app/providers.tsx", "apps/web/src/features/health/health-panel.tsx", "apps/web/src/features/auth/auth-forms.tsx", "apps/web/src/features/account/profile.tsx", "apps/web/src/features/account/avatar.tsx", "apps/web/src/features/editor/latex-code-editor.tsx", "apps/web/src/features/files/file-uploader.tsx", "apps/web/src/features/projects/workspace.tsx", "tests/e2e/mixed-editing.spec.ts", "tests/e2e/walking-skeleton.spec.ts", "tests/e2e/auth-forms.spec.ts", "tests/e2e/profile.spec.ts", "tests/e2e/project-upload.spec.ts", "docs/test-reports/gate-g3-audit.md", "docs/test-reports/s11-t05.md", "docs/test-reports/s11-t09.md", "docs/test-reports/s02-t05.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s05-t02.md", "apps/web/src/features/sharing/share-dialog.tsx", "tests/e2e/sharing.spec.ts", "tests/regression/col-03/s08-t03.test.tsx", "tests/regression/col-04/s08-t03.test.tsx", "tests/regression/col-05/s08-t03.test.tsx", "docs/test-reports/s08-t03.md", "apps/web/src/features/review/comment-anchors.tsx", "tests/e2e/comments.spec.ts", "docs/test-reports/s08-t09.md", "apps/web/src/features/collab/live-document.tsx", "apps/web/src/features/visual/basic-nodes.tsx", "apps/web/src/features/visual/academic-nodes.tsx", "apps/web/src/features/visual/mode-switch.tsx"]
 runtime: implemented
-verified_on: 2026-10-15
+verified_on: 2026-10-16
 snapshot: _meta/file-inventory.json
 ---
 
@@ -14,7 +14,7 @@ snapshot: _meta/file-inventory.json
 
 ## Summary
 
-React/Vite shell, routes, real API readiness, accepted S02-T05 authentication forms, S02-T07 account settings and tested S02-T11 private avatar controls are implemented. The S04 code editor, S05-T02 browser upload control and S08-T03 sharing dialog exist. User-specific theme is loaded from persisted preferences on the settings page. PDF and collaborative editing remain future work.
+React/Vite shell, routes, real API readiness, accepted S02-T05 authentication forms, S02-T07 account settings and tested S02-T11 private avatar controls are implemented. The S04 code editor, S05-T02 browser upload control and S08-T03 sharing dialog exist. The project workspace mounts a Code/Visual projection for selected TEXT files and offers a live Y.Text-backed Code/Visual editor through authorized collaboration tickets (G3 released). User-specific theme is loaded from persisted preferences on the settings page.
 
 ## Why this shape
 
@@ -26,11 +26,13 @@ The SPA uses React Router, TanStack Query, a lazy readiness panel and a browser-
 
 S05-T02 adds a multi-file picker and drop target to the project workspace. It runs files sequentially, computes a browser SHA-256, PUTs to a short-lived signed URL with XHR progress/cancel, and completes with a stable idempotency key. It refreshes the file tree only after the API confirms a durable node. Tests cover keyboard operation and a real Edge upload journey; co-maintainer review remains open.
 
-S08-T03 adds the workspace sharing dialog and invitation/share-link redemption routes. The dialog reads current API member/invitation/link state, exposes owner mutations while other members see a read-only roster, and keeps errors visible with retry. Fragment tokens are cleared immediately, and the one-time link URL stays in component memory. A real Edge journey covers role change, invitation and link redemption; scoped dialog axe passes, while the inherited empty file tree has a whole-page axe finding (GAP-26).
+S08-T03 adds the workspace sharing dialog and invitation/share-link redemption routes. The dialog reads current API member/invitation/link state, exposes owner mutations while other members see a read-only roster, and keeps errors visible with retry. Fragment tokens are cleared immediately, and the one-time link URL stays in component memory. A real Edge journey covers role change, invitation and link redemption; scoped dialog axe passes, while the inherited empty file tree has a whole-page axe finding (GAP-32).
 
 S08-T04 adds a comment thread composer and S08-T09 mounts visible anchor interactions in the workspace. The panel verifies returned offsets against loaded source before highlighting, and its Edge journey covers comment/reply/status actions, keyboard selection and scoped axe. Independent review of T09 is accepted; see [Sprint 8 progress](../../progress/sprint-08.md).
 
 S08-T05 mounts a project chat panel with cursor history and text-only rendering. It refreshes REST history on WSS hints, reconnection, focus and periodic reconciliation. A two-user Edge journey and scoped axe pass; independent review was accepted 2026-10-15.
+
+S11 visual components live under `features/visual/`. `ReadOnlyTextDocument` decodes the authorized Yjs snapshot and renders existing node views through the mode switch. `LiveTextDocument` obtains a scoped write or read ticket, binds CodeMirror and supported Visual patches to canonical Y.Text, and waits for a covering durable acknowledgement before showing saved. `VisualFigure` fetches real image bytes from the project-scoped READ route and shows an authorized preview only after success; failed reads stay unverified. KaTeX typesets compatible inline/display math with an unsupported-macro literal fallback; the compiled PDF remains authoritative. The [S11-T09 test](../../test-reports/s11-t09.md) drives two authenticated Edge pages through persisted convergence and conflict, and [S11-T05](../../test-reports/s11-t05.md) adds a real image preview journey. G3 was released 2026-10-16; see the [G3 audit](../../test-reports/gate-g3-audit.md).
 
 ## Connected to
 
@@ -43,7 +45,7 @@ Consumes HTTP, collaboration and artifact contracts. Visual editing depends on c
 
 ## Surfaces
 
-Browser navigation, theme, keyboard and health/outage/recovery were exercised in earlier S00 checks. S02-T05 auth routes and S02-T07 settings have local Edge end-to-end, axe and automated keyboard evidence in their scoped reports; this host currently lacks the Playwright Chromium executable.
+Browser navigation, theme, keyboard and health/outage/recovery were exercised in earlier S00 checks and the current Chromium/Edge/Firefox G3 runs (34/34 e2e). S02-T05 auth routes and S02-T07 settings have local Edge end-to-end, axe and automated keyboard evidence in their scoped reports.
 
 ## See
 
@@ -66,3 +68,6 @@ Browser navigation, theme, keyboard and health/outage/recovery were exercised in
 - [Project chat](../../../apps/web/src/features/chat/project-chat.tsx)
 - [S08-T05 Edge journey](../../../tests/e2e/chat.spec.ts)
 - [S08-T05 evidence](../../test-reports/s08-t05.md)
+- [Project workspace](../../../apps/web/src/features/projects/workspace.tsx)
+- [Visual figure component](../../../apps/web/src/features/visual/academic-nodes.tsx)
+- [Released G3 audit](../../test-reports/gate-g3-audit.md)

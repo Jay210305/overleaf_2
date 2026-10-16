@@ -32,7 +32,7 @@ The initial full E2E run without the local SMTP settings returned 503 for regist
 
 - Firefox launch failed with `spawn UNKNOWN` even after the pinned binary was installed. This is an execution-host/browser gate blocker; Firefox behavior was not verified.
 - The full browser matrix cannot pass until the Redis recovery issue and Firefox launch problem are resolved. The local SMTP settings must also be supplied for registration E2E.
-- GAP-15 production migration wiring, GAP-16 inherited formatting, GAP-17 revision-reference safety and GAP-20 S05-T10 independent review remain open. S05-T10 project application is present and its scoped tests pass, but its task status remains `IN_PROGRESS`.
+- GAP-15 production migration wiring, GAP-16 inherited formatting, GAP-17 revision-reference safety and GAP-28 S05-T10 independent review remain open. S05-T10 project application is present and its scoped tests pass, but its task status remains `IN_PROGRESS`.
 - The import validation and apply passes are private one-shot commands. No continuous production scheduler or browser ZIP intake UI was verified here; those capabilities remain outside the accepted slice.
 
 ## Disposition

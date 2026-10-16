@@ -22,7 +22,8 @@ describe("Regression EDT-11: Local spell checking leaves LaTeX commands unchange
   });
 
   it("leaves citation keys alone in cite commands", () => {
-    const citation = "According to previous studies \\cite{knuth1984texbook,lamport94latex}, the method holds.";
+    const citation =
+      "According to previous studies \\cite{knuth1984texbook,lamport94latex}, the method holds.";
     const errors = checkSpelling(citation);
     const words = errors.map((e) => e.word);
     expect(words).not.toContain("knuth1984texbook");

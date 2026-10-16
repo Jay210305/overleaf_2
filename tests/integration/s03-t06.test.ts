@@ -113,7 +113,13 @@ describe("S03-T06 Project root and compiler settings integration", () => {
       method: "POST",
       url: `/api/v1/projects/${project1.id}/nodes`,
       headers: { origin, cookie: session.cookie, "x-csrf-token": session.csrf },
-      payload: { name: "figure.png", parentId: null, kind: "FILE", mime: "image/png", contentKind: "BINARY" },
+      payload: {
+        name: "figure.png",
+        parentId: null,
+        kind: "FILE",
+        mime: "image/png",
+        contentKind: "BINARY",
+      },
     });
     const imgFile = imgRes.json();
 

@@ -49,10 +49,7 @@ function handleBulkError(error: unknown, reply: FastifyReply, requestId: string)
 export class BulkProjectService {
   constructor(private readonly db: DatabaseClient) {}
 
-  async executeBulk(
-    userId: string,
-    input: BulkRequestInput,
-  ): Promise<BulkResponse> {
+  async executeBulk(userId: string, input: BulkRequestInput): Promise<BulkResponse> {
     // If tag action, verify tag exists and belongs to userId
     if (input.action === "tag") {
       const tagCheck = await this.db.query<{ id: string }>(
@@ -93,12 +90,7 @@ export class BulkProjectService {
           continue;
         }
 
-        const role =
-          row.owner_id === userId
-            ? "OWNER"
-            : row.revoked_at
-              ? null
-              : row.role;
+        const role = row.owner_id === userId ? "OWNER" : row.revoked_at ? null : row.role;
 
         if (!role) {
           results.push({

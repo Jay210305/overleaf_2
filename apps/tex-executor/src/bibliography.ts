@@ -23,7 +23,10 @@ export function detectBibliographyBackend(sourceText: string): BibliographyBacke
     return "biber";
   }
   // Check for traditional BibTeX commands
-  if (/\\bibliography\{[^}]+\}/i.test(sourceText) || /\\bibliographystyle\{[^}]+\}/i.test(sourceText)) {
+  if (
+    /\\bibliography\{[^}]+\}/i.test(sourceText) ||
+    /\\bibliographystyle\{[^}]+\}/i.test(sourceText)
+  ) {
     return "bibtex";
   }
   return "none";
@@ -41,15 +44,10 @@ export function resolveBibliographyArgv(
   }
 
   if (backend === "biber") {
-    return [
-      `--output-directory=${options.outDir}`,
-      options.baseName,
-    ];
+    return [`--output-directory=${options.outDir}`, options.baseName];
   }
 
-  return [
-    `${options.outDir}/${options.baseName}`,
-  ];
+  return [`${options.outDir}/${options.baseName}`];
 }
 
 /**

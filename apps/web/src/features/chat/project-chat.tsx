@@ -47,7 +47,15 @@ export function ProjectChat({ projectId, apiUrl, csrfToken }: ProjectChatProps) 
     void loadLatest();
     const connect = () => {
       if (!active) return;
-      socket = new WebSocket(`${base.replace(/^http/, "ws")}/events`);
+      try {
+        socket = new WebSocket(`${base.replace(/^http/, "ws")}/events`);
+      } catch {
+        // A relative API base (tests, previews) cannot open a socket; stay
+        // disconnected instead of crashing the surrounding workspace.
+        setConnected(false);
+        if (active) retry = setTimeout(connect, 3000);
+        return;
+      }
       socket.onopen = () => {
         setConnected(true);
         void loadLatest();

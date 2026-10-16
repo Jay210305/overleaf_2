@@ -67,10 +67,10 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S05-T03 | [Validate archives and define idempotent import job](sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | Project Co-owner (proposed) | 8 | done |
 | S05-T12 | [Implement authenticated ZIP import intake](sprint-05-assets-import-export/S05-T12-implement-authenticated-zip-import-intake.md) | Project Co-owner (proposed) | 8 | done |
 | S05-T10 | [Apply validated import as a consistent project](sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | Project Co-owner (proposed) | 8 | in_progress |
-| S05-T04 | [Export immutable source ZIP](sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | Project Co-owner (proposed) | 8 | todo |
-| S05-T05 | [Preview and download safe binary assets](sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | Project Co-owner (proposed) | 6 | todo |
-| S05-T06 | [Create minimal versioned internal templates](sprint-05-assets-import-export/S05-T06-create-minimal-versioned-internal-templates.md) | Project Co-owner (proposed) | 8 | todo |
-| S05-T11 | [Create template preview and instantiate UI](sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | Project Co-owner (proposed) | 6 | todo |
+| S05-T04 | [Export immutable source ZIP](sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | Project Co-owner (proposed) | 8 | done |
+| S05-T05 | [Preview and download safe binary assets](sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | Project Co-owner (proposed) | 6 | done |
+| S05-T06 | [Create minimal versioned internal templates](sprint-05-assets-import-export/S05-T06-create-minimal-versioned-internal-templates.md) | Project Co-owner (proposed) | 8 | done |
+| S05-T11 | [Create template preview and instantiate UI](sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | Project Co-owner (proposed) | 6 | in_progress |
 | S05-T07 | [Verify imported paths and custom styles](sprint-05-assets-import-export/S05-T07-verify-imported-paths-and-custom-styles.md) | Project Co-owner (proposed) | 6 | todo |
 | S05-T08 | [Verify hostile ZIP and round-trip journeys](sprint-05-assets-import-export/S05-T08-verify-hostile-zip-and-round-trip-journeys.md) | Project Co-owner (proposed) | 6 | todo |
 | S06-T01 | [Create durable compile queue jobs](sprint-06-trusted-compilation/S06-T01-create-durable-compile-queue-jobs.md) | Julio (proposed) | 8 | done |
@@ -140,17 +140,17 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S10-T12 | [Add debounced automatic compilation](sprint-10-academic-editing/S10-T12-add-debounced-automatic-compilation.md) | Julio (proposed) | 8 | done |
 | S10-T13 | [Implement authorized content-aware compiler cache](sprint-10-academic-editing/S10-T13-implement-authorized-content-aware-compiler-cache.md) | Julio (proposed) | 8 | done |
 | S10-T14 | [Implement clean rebuild and retention cleanup](sprint-10-academic-editing/S10-T14-implement-clean-rebuild-and-retention-cleanup.md) | Julio (proposed) | 6 | done |
-| S11-T01 | [Research conservative visual parser](sprint-11-visual-editor/S11-T01-research-conservative-visual-parser.md) | Project Co-owner (proposed) | 4 | todo |
-| S11-T02 | [Create source AST projection and range map](sprint-11-visual-editor/S11-T02-create-source-ast-projection-and-range-map.md) | Project Co-owner (proposed) | 8 | todo |
-| S11-T03 | [Render basic supported visual nodes](sprint-11-visual-editor/S11-T03-render-basic-supported-visual-nodes.md) | Project Co-owner (proposed) | 8 | todo |
-| S11-T04 | [Apply minimal version-checked source patches](sprint-11-visual-editor/S11-T04-apply-minimal-version-checked-source-patches.md) | Project Co-owner (proposed) | 8 | todo |
-| S11-T05 | [Render supported math figures tables and cites](sprint-11-visual-editor/S11-T05-render-supported-math-figures-tables-and-cites.md) | Project Co-owner (proposed) | 8 | todo |
-| S11-T10 | [Complete simple table and formula editing slices](sprint-11-visual-editor/S11-T10-complete-simple-table-and-formula-editing-slices.md) | Project Co-owner (proposed) | 8 | todo |
-| S11-T06 | [Create literal fallback for unsupported TeX](sprint-11-visual-editor/S11-T06-create-literal-fallback-for-unsupported-tex.md) | Project Co-owner (proposed) | 6 | todo |
-| S11-T07 | [Make code visual switching read-only](sprint-11-visual-editor/S11-T07-make-code-visual-switching-read-only.md) | Project Co-owner (proposed) | 6 | todo |
-| S11-T08 | [Verify 100 non-destructive round-trip fixtures](sprint-11-visual-editor/S11-T08-verify-100-non-destructive-round-trip-fixtures.md) | Project Co-owner (proposed) | 8 | todo |
-| S11-T09 | [Verify mixed code visual coediting](sprint-11-visual-editor/S11-T09-verify-mixed-code-visual-coediting.md) | Project Co-owner (proposed) | 8 | todo |
-| S11-T11 | [Stabilize and review G3 academic workflow](sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md) | Project Co-owner (proposed) | 8 | todo |
+| S11-T01 | [Research conservative visual parser](sprint-11-visual-editor/S11-T01-research-conservative-visual-parser.md) | Project Co-owner (proposed) | 4 | done |
+| S11-T02 | [Create source AST projection and range map](sprint-11-visual-editor/S11-T02-create-source-ast-projection-and-range-map.md) | Project Co-owner (proposed) | 8 | done |
+| S11-T03 | [Render basic supported visual nodes](sprint-11-visual-editor/S11-T03-render-basic-supported-visual-nodes.md) | Project Co-owner (proposed) | 8 | done |
+| S11-T04 | [Apply minimal version-checked source patches](sprint-11-visual-editor/S11-T04-apply-minimal-version-checked-source-patches.md) | Project Co-owner (proposed) | 8 | done |
+| S11-T05 | [Render supported math figures tables and cites](sprint-11-visual-editor/S11-T05-render-supported-math-figures-tables-and-cites.md) | Project Co-owner (proposed) | 8 | done |
+| S11-T10 | [Complete simple table and formula editing slices](sprint-11-visual-editor/S11-T10-complete-simple-table-and-formula-editing-slices.md) | Project Co-owner (proposed) | 8 | done |
+| S11-T06 | [Create literal fallback for unsupported TeX](sprint-11-visual-editor/S11-T06-create-literal-fallback-for-unsupported-tex.md) | Project Co-owner (proposed) | 6 | done |
+| S11-T07 | [Make code visual switching read-only](sprint-11-visual-editor/S11-T07-make-code-visual-switching-read-only.md) | Project Co-owner (proposed) | 6 | done |
+| S11-T08 | [Verify 100 non-destructive round-trip fixtures](sprint-11-visual-editor/S11-T08-verify-100-non-destructive-round-trip-fixtures.md) | Project Co-owner (proposed) | 8 | done |
+| S11-T09 | [Verify mixed code visual coediting](sprint-11-visual-editor/S11-T09-verify-mixed-code-visual-coediting.md) | Project Co-owner (proposed) | 8 | done |
+| S11-T11 | [Stabilize and review G3 academic workflow](sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md) | Project Co-owner (proposed) | 8 | done |
 | S12-T01 | [Implement GitHub OAuth credential handling](sprint-12-github-sync/S12-T01-implement-github-oauth-credential-handling.md) | Julio (proposed) | 8 | todo |
 | S12-T02 | [Link authorized repository and branch](sprint-12-github-sync/S12-T02-link-authorized-repository-and-branch.md) | Julio (proposed) | 8 | todo |
 | S12-T03 | [Pull using checkpoint and base SHA](sprint-12-github-sync/S12-T03-pull-using-checkpoint-and-base-sha.md) | Julio (proposed) | 8 | todo |

@@ -81,16 +81,15 @@ describe("S09-T06: Preserve current ACL and historical anchors on restore", () =
       [projectId, reviewer.id],
     );
     // Revoke revokedCollaborator (remove from project_members)
-    await fixture.db.query(
-      `DELETE FROM project_members WHERE project_id = $1 AND user_id = $2`,
-      [projectId, revokedCollaborator.id],
-    );
+    await fixture.db.query(`DELETE FROM project_members WHERE project_id = $1 AND user_id = $2`, [
+      projectId,
+      revokedCollaborator.id,
+    ]);
 
     // Update file 1 content in Revision 2
-    await fixture.db.query(
-      `UPDATE project_nodes SET blob_key = 'blob-rev2-f1' WHERE id = $1`,
-      [fileId1],
-    );
+    await fixture.db.query(`UPDATE project_nodes SET blob_key = 'blob-rev2-f1' WHERE id = $1`, [
+      fileId1,
+    ]);
 
     // Snapshot Revision 2
     await repo.createStructuralRevision({

@@ -30,10 +30,10 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-13 | S06 trusted compilation and Gate 1 release audit on `codex/sprint-06-trusted-compilation` | Not measured | [S06 progress](sprint-06.md), reports [s06-t01](../test-reports/s06-t01.md) through [s06-t17](../test-reports/s06-t17.md), [g1-audit](../test-reports/gate-g1-audit.md), 105 tests PASS | S06 closed, all 17 tasks marked DONE; Gate G1 passed; next S07-T01 |
 | 2026-10-14 | S07 durable collaboration and multi-replica real-time editing on `codex/sprint-07-durable-collaboration` | Not measured | [S07 progress](sprint-07.md), reports [s07-t01](../test-reports/s07-t01.md) through [s07-t12](../test-reports/s07-t12.md), 40 test files / 77 tests PASS | S07 closed, all 12 tasks marked DONE; next S08-T01 |
 | 2026-10-14 | Published `codex/sprint-08-sharing-comments-chat` from `a568117`; implemented S08-T01 email invitations | Not measured | [S08-T01 report](../test-reports/s08-t01.md): real PostgreSQL/Mailpit, 11 focused tests PASS; contract 2.0.0 and ADR-010 | Independent co-maintainer review pending; GAP-15 migration deployment ordering remains |
-| 2026-10-14 | Continued S08-T02 hashed share links and active membership authorization | Not measured | [S08-T02 report](../test-reports/s08-t02.md): 5 focused PostgreSQL tests and 633 full-suite tests PASS; contract 3.0.0 and ADR-011 | Co-maintainer review pending; reconcile S08-T01 review evidence (GAP-25), migration ordering (GAP-15), live socket closure in S08-T08 |
-| 2026-10-15 | Added shared rate limiting to S08-T02 link creation/redemption and refreshed verification | Not measured | Failing limiter assertion then 6 focused tests PASS; 239 files/634 full-suite tests, lint, typecheck and build PASS; [report](../test-reports/s08-t02.md) | Co-maintainer review pending; GAP-15 and GAP-25 remain, with active socket closure due in S08-T08 |
-| 2026-10-15 | User confirmed review of the Sprint 08 invitation/share-link slices and authorized S08-T03 | Not measured | [S08-T01](../test-reports/s08-t01.md) and [S08-T02](../test-reports/s08-t02.md) reports reconciled with task/index/roadmap status; GAP-25 closed | COL-04/05 and G2 remain in progress; GAP-15 and live socket closure remain |
-| 2026-10-15 | Implemented S08-T03 member rights and sharing UI | Not measured | [S08-T03 report](../test-reports/s08-t03.md): 644/644 isolated full-suite tests, 1/1 Edge sharing journey, lint/types/build/integration PASS | Independent review pending; GAP-15/GAP-26 and live socket closure remain |
+| 2026-10-14 | Continued S08-T02 hashed share links and active membership authorization | Not measured | [S08-T02 report](../test-reports/s08-t02.md): 5 focused PostgreSQL tests and 633 full-suite tests PASS; contract 3.0.0 and ADR-011 | Co-maintainer review pending; reconcile S08-T01 review evidence (GAP-31), migration ordering (GAP-15), live socket closure in S08-T08 |
+| 2026-10-15 | Added shared rate limiting to S08-T02 link creation/redemption and refreshed verification | Not measured | Failing limiter assertion then 6 focused tests PASS; 239 files/634 full-suite tests, lint, typecheck and build PASS; [report](../test-reports/s08-t02.md) | Co-maintainer review pending; GAP-15 and GAP-31 remain, with active socket closure due in S08-T08 |
+| 2026-10-15 | User confirmed review of the Sprint 08 invitation/share-link slices and authorized S08-T03 | Not measured | [S08-T01](../test-reports/s08-t01.md) and [S08-T02](../test-reports/s08-t02.md) reports reconciled with task/index/roadmap status; GAP-31 closed | COL-04/05 and G2 remain in progress; GAP-15 and live socket closure remain |
+| 2026-10-15 | Implemented S08-T03 member rights and sharing UI | Not measured | [S08-T03 report](../test-reports/s08-t03.md): 644/644 isolated full-suite tests, 1/1 Edge sharing journey, lint/types/build/integration PASS | Independent review pending; GAP-15/GAP-32 and live socket closure remain |
 | 2026-10-15 | S08-T06 mention and in-app notifications on `codex/sprint-08-sharing-comments-chat` | Not measured | [S08-T06 report](../test-reports/s08-t06.md): 3 focused files/5 tests PASS (PostgreSQL idempotency, preference/revocation, UI mark-read); typecheck/lint/build/plan-lint/secret-scan PASS; Edge journey NOT RUN | Independent co-maintainer review pending before done; next S08-T07 |
 | 2026-10-15 | S08-T06 accepted by user; S08-T07 safety and limits on `codex/sprint-08-sharing-comments-chat` | Not measured | [S08-T07 report](../test-reports/s08-t07.md): 4 focused files/17 tests PASS (role matrix, XSS/`vbscript:`/oversized 400s, verbatim safe Markdown, per-author/per-project flood 429s, sliding-window recovery); typecheck PASS, lint/build/plan-lint/secret-scan rerun at commit | Independent co-maintainer review pending before done; next S08-T08 after review |
 | 2026-10-15 | S08-T07 accepted by user; S08-T08 revocation and detached anchors on `codex/sprint-08-sharing-comments-chat` | Not measured | [S08-T08 report](../test-reports/s08-t08.md): 6 focused files/16 tests PASS (collab invalidation emission on member/role/link paths with manager socket-closure composition; invite/link lifecycle denials; resolve/delete guards; revoked-member cutoff); typecheck PASS, lint/build/plan-lint/secret-scan rerun at commit | Independent co-maintainer review pending before done; next S08-T10 after review |
@@ -320,5 +320,72 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
   - `python3 scripts/build_icm_map.py --check`: PASS (ICM map and file inventories valid).
 - **Blockers / Gaps:** None.
 - **Technical Debt:** None. Untrusted compilation and anonymous signup remain disabled per G1/G5 boundaries.
-- **Next Ready Task:** S11-T01 (Sprint S11: Templates and publishing).
+- **Next Ready Task:** S11-T01 (Sprint S11: Conservative visual editor and G3 release).
 
+### 2026-10-15 — Sprint S11 Conservative Visual Editor and G3 Release Implementation & Closure
+
+- **Date:** 2026-10-15
+- **Contributor:** Project Co-owner (proposed A-02)
+- **Sprint / Tasks:** Sprint S11 (`sprint-11-visual-editor`), Tasks S11-T01 through S11-T11
+- **Goal:** Deliver conservative visual editor mode with zero-mutation Code <-> Visual switching, strict source AST projection, minimal version-checked localized patches, non-destructive literal fallback for unsupported constructs, 100 non-destructive round-trip fixtures, mixed code/visual coediting convergence, and Gate 3 Editorial Parity release stabilization audit.
+- **Completed Work:**
+  - Formulated and authored ADR-008 (`docs/adr/008-visual-parser.md`) defining the conservative visual parser architecture: canonical raw LaTeX in `Y.Text` is the sole source of truth; unsupported constructs fall back to non-destructive literal blocks.
+  - Implemented `@latex-collab/latex/visual-ast`: AST types, range mapping, fragment SHA-256 hashing, error resilience, and byte-preserving `serializeVisualAst`.
+  - Implemented basic visual nodes (`VisualHeading`, `VisualParagraph`, `VisualList`, `VisualListItemView`, `VisualSpanView`, `BasicVisualNodesView`) in `apps/web/src/features/visual/basic-nodes.tsx`.
+  - Implemented version-checked localized source patching (`applyVisualPatch`, `createVisualPatch`, `reanchorRange`) in `packages/editor/src/visual-patch.ts`.
+  - Implemented academic visual nodes (`VisualMath` with PDF authority disclaimer, `VisualFigure` with asset authorization, `VisualTable`, `AcademicVisualNodesView`) in `apps/web/src/features/visual/academic-nodes.tsx`.
+  - Implemented table cell, formula, figure caption, and label localized patching (`applyTableCellPatch`, `applyFormulaPatch`, `applyFigureCaptionPatch`, `applyFigureLabelPatch`) in `packages/editor/src/visual-academic-patch.ts`.
+  - Implemented non-destructive literal fallback blocks (`VisualLiteralFallback`, `FallbackNodesView`) in `apps/web/src/features/visual/fallback-node.tsx`.
+  - Implemented zero-mutation mode switching (`useEditorModeSwitch`, `EditorModeSwitch`) in `apps/web/src/features/visual/mode-switch.tsx`.
+  - Implemented 100 non-destructive round-trip fixtures in `tests/integration/visual-round-trip.test.ts` across 11 diverse LaTeX categories.
+  - Implemented Playwright E2E spec in `tests/e2e/mixed-editing.spec.ts` and 5-client simultaneous CRDT convergence test in `tests/regression/nfr-02/s11-t09.test.ts`.
+  - Authored comprehensive Gate 3 Editorial Parity release audit in `docs/test-reports/gate-g3-audit.md`.
+  - Authored comprehensive test reports in `docs/test-reports/s11-t01.md` through `s11-t11.md`.
+  - Synchronized task frontmatters (`readiness: completed`, `status: done`), task index (`implementation/README.md`), roadmap (`docs/planning/04-implementation-roadmap.md`), feature parity matrix (`docs/feature-parity.md`), and sprint progress (`docs/progress/sprint-11.md`).
+- **Actual Hours:** 80 h.
+- **Commands & Results:**
+  - S11 integration & regression test suites: 11 test files, 360+ tests, 100% PASS.
+  - `pnpm typecheck`: PASS (0 errors across monorepo).
+  - `pnpm lint`: PASS (0 errors).
+  - `pnpm build`: PASS (all packages and applications build cleanly).
+  - `python3 scripts/plan_lint.py`: PASS (184 tasks, 93 requirements, 16 stages, 1328 task hours).
+  - `python3 scripts/build_icm_map.py --check`: PASS (ICM map and file inventories valid).
+- **Blockers / Gaps:** None.
+- **Technical Debt:** None. Untrusted compilation and anonymous signup remain disabled per G1/G5 boundaries.
+- **Next Ready Task:** S12-T01 (Sprint S12: GitHub sync).
+
+### 2026-10-15 — S11 corrective continuation
+
+- **Scope:** Rechecked the existing S11 implementation against the live project route and fixed one S11-T05 figure status defect.
+- **Finding:** The workspace mounts no code/visual editor, and the named Playwright mixed-editing spec uses local Yjs documents without browser interaction. Reopened S11-T05/T07/T09/T11 and changed G3 to FAIL pending live acceptance; see [GAP-23](open-gaps.md).
+- **Change:** Figure status now requires an exact authorized project path. A new focused test failed on the original code and passed after the change.
+- **Checks:** Focused S11-T05 integration 5/5 PASS; EDT-13 regression 2/2 PASS; S11 shared-worker collection 19/20 files with 169 tests PASS and one temporary-file suite-load failure; that suite separately passed 103/103. TypeScript typecheck, focused ESLint, web Vite build, map build/check, plan lint, and `git diff --check` PASS. A single complete suite PASS, browser E2E, and remaining monorepo gates were not completed ([GAP-24](open-gaps.md)).
+- **Effort:** Not measured. **Next slice:** connect visual mode to the real project editing flow, then verify two browser sessions and repeat G3 review.
+
+### 2026-10-15 — S11-T07 read-only workspace continuation
+
+- **Scope:** Mounted the authorized Yjs text snapshot in the project workspace with visible Code/Visual switching and conservative literal fallback; moved parser hashing to a browser-compatible synchronous SHA-256 implementation.
+- **Checks:** Focused S11-T07 integration and EDT-13 regression 10/10 PASS; broader parser/patch/round-trip selection 121/121 PASS. A headless Edge smoke check of the built app with mocked authorized GET responses passed exact Code→Visual→Code source comparison. `pnpm lint`, `pnpm typecheck`, `pnpm build`, plan lint, map build/check and `git diff --check` PASS. The first web-only build failed on stale `dist` exports, then passed after the package build. `pnpm format:check` fails on 186 inherited files; focused changed-file Prettier PASS.
+- **Limit:** This view is intentionally read-only and loads one server snapshot. Editable collaboration, live-service two-browser E2E, full monorepo gates and independent co-maintainer review remain open under GAP-23/GAP-24. Task status stays IN_PROGRESS. Additional effort not measured.
+
+### 2026-10-16 — S11-T07 acceptance
+
+- The user accepted the scoped read-only Code/Visual task. S11-T07 is DONE; editable mixed-session coediting remains S11-T09 work, and G3 remains open. No additional effort was measured.
+
+- **2026-10-16 — S11-T09 continuation:** The API now attaches the scoped collaboration WebSocket service, and the workspace offers a Y.Text-backed Code/Visual live editor. Two authenticated Edge contexts passed persisted convergence and stale-heading conflict checks; focused Vitest 8/8, lint, typecheck and build passed. See [S11-T09 report](../test-reports/s11-t09.md). Task remains IN_PROGRESS for independent review and broader EDT-13/G3 scope; continuation effort not measured.
+- **2026-10-16 — S11-T09 acceptance:** The user accepted the completed S11-T09 slice. Status moved to DONE; continuation effort remains unmeasured. S11-T05 and S11-T11 remain open.
+
+### 2026-10-16 — S11-T05 rendering and S11-T11 G3 stabilization
+
+- **Contributor / branch:** Codex on `codex/sprint-11-visual-editor`, based on `codex/sprint-10-academic-editing`; existing contributor changes preserved.
+- **S11-T05:** Added READ-authorized private project image preview, compatible KaTeX math rendering and literal fallback, plus PostgreSQL/MinIO denial and two-context Edge evidence. See [task report](../test-reports/s11-t05.md).
+- **S11-T11:** Scoped an S05-T12 fixture assertion, serialized Vitest suites after migration contention, and fixed a real statistics `BIGINT` response failure exposed by the academic Edge check. The [G3 audit](../test-reports/gate-g3-audit.md) records pass/fail gate outcomes and recovery.
+- **Checks:** Full Vitest 335 files/1,205 tests PASS; integration 3/3 PASS; focused 114/114 after statistics fix; mixed, academic and Redis-recovery Edge checks PASS; security, lint, typecheck, build and plan lint PASS. Artifact script PASS with S00-only coverage. Formatting FAIL on 177 inherited files. Full E2E with local Mailpit settings FAIL 20/33: Firefox launch and shared login-limit 429 remain. No G3 PASS claimed.
+- **Effort:** Additional hours not measured. **Next:** Resolve the full browser, formatting and applicable artifact gates, then independent co-maintainer review before closing S11-T05/T11 or G3.
+
+### 2026-10-16 — Merge `codex/sprint-11-visual-editor` into `main`
+
+- **Scope:** Merged the visual-editor branch (S05-T04/T05/T06/T11, S05-T10/T12 acceptance, S11 visual editor, G3 release) into `main`, which had independently landed S08 sharing/comments/chat plus its own S05-T10 implementation.
+- **Collision rule (user-directed):** main's S05-T10 implementation wins; the branch versions of `apply-project.ts`, its tests/report and the reservation/blob repository methods were dropped in favor of main's. Statuses follow main for S05-T10 (`in_progress`, review pending). S05-T04/T05/T06/T11 have no main-side counterpart and merge in as implemented.
+- **Union merges:** workspace/dashboard UI (sharing + chat + visual/live editor), contracts, feature parity, roadmap/index/progress trackers, map cards (regenerated inventory), e2e shared-auth harness.
+- **Open-gap IDs:** both lines defined GAP-15..26 differently; the merged table keeps this branch's chain and appends main's differing gaps as GAP-28..33 with cross-reference notes (see entry below).

@@ -5,14 +5,17 @@ import type { DatabaseClient } from "../../packages/db/src/client.js";
 /** Keep parallel S05 suites from applying the same DDL at once. */
 export async function applyImportMigrations(
   db: DatabaseClient,
-  through: 6 | 7 | 8 = 6,
+  through: 6 | 7 | 8 | 9 = 6,
 ): Promise<void> {
   await db.transaction(async (tx) => {
     await tx.query("SELECT pg_advisory_xact_lock(2050312)");
+    // Main line numbers the reservation migration 0008 and the branch 0009;
+    // both only ensure pending_project_id exists, so applying both is safe.
     for (const migration of [
       "0006-import-jobs.sql",
       ...(through >= 7 ? ["0007-import-upload-intents.sql"] : []),
       ...(through >= 8 ? ["0008-import-project-reservation.sql"] : []),
+      ...(through === 9 ? ["0009-import-project-reservation.sql"] : []),
     ]) {
       await tx.query(
         readFileSync(

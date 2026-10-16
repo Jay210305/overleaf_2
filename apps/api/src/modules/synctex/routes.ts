@@ -11,11 +11,7 @@ import {
   type InverseView,
   type SynctexBox,
 } from "@latex-collab/contracts";
-import {
-  CompilationsRepository,
-  DatabaseClient,
-  isUUID,
-} from "@latex-collab/db";
+import { CompilationsRepository, DatabaseClient, isUUID } from "@latex-collab/db";
 import type { StorageAdapter } from "@latex-collab/storage";
 import { problem } from "../../plugins/errors.js";
 
@@ -123,9 +119,7 @@ export function forwardLookup(
   line: number,
   _column: number,
 ): ForwardView | null {
-  const matching = records.filter(
-    (r) => r.fileId === fileId && Math.abs(r.line - line) <= 1,
-  );
+  const matching = records.filter((r) => r.fileId === fileId && Math.abs(r.line - line) <= 1);
 
   if (matching.length === 0) {
     // If no exact +/- 1 match, find closest line in file
@@ -308,7 +302,7 @@ export function registerSynctexRoutes(
             line: body.line,
             column: body.column,
             x: 72,
-            y: 72 + (body.line * 14) % 650,
+            y: 72 + ((body.line * 14) % 650),
             width: 400,
             height: 12,
           },

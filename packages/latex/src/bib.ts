@@ -40,7 +40,6 @@ export interface BibSearchFilter {
   doi?: string | undefined;
 }
 
-
 /**
  * Parses BibTeX source without modifying or reformatting the source text (INT-08).
  * Preserves exact text in rawSource.
@@ -248,7 +247,10 @@ export function searchBibEntries(
     if (filter.title && (!e.title || !e.title.toLowerCase().includes(filter.title.toLowerCase()))) {
       return false;
     }
-    if (filter.author && (!e.author || !e.author.toLowerCase().includes(filter.author.toLowerCase()))) {
+    if (
+      filter.author &&
+      (!e.author || !e.author.toLowerCase().includes(filter.author.toLowerCase()))
+    ) {
       return false;
     }
     if (filter.year && (!e.year || !e.year.toLowerCase().includes(filter.year.toLowerCase()))) {
@@ -265,10 +267,7 @@ export function searchBibEntries(
  * Explicit normalization helper (INT-08).
  * Note: Only invoked on explicit user request; opening a .bib file never applies this.
  */
-export function normalizeBibTeX(
-  source: string,
-  options: { sortByKey?: boolean } = {},
-): string {
+export function normalizeBibTeX(source: string, options: { sortByKey?: boolean } = {}): string {
   const result = parseBibTeX(source);
   const sortedEntries = [...result.entries];
   if (options.sortByKey) {

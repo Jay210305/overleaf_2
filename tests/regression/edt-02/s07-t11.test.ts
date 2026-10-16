@@ -1,6 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import * as Y from "yjs";
-import { ClientSaveTracker, createDurableAck } from "../../../apps/collab/src/persistence/durable-ack.js";
+import {
+  ClientSaveTracker,
+  createDurableAck,
+} from "../../../apps/collab/src/persistence/durable-ack.js";
 import { createCollabTestFixture, type CollabTestFixture } from "../../helpers/collab-fixture.js";
 
 describe("EDT-02 Save status display and racing overwrite rejection (S07-T11)", () => {

@@ -29,7 +29,7 @@ G2 covers trusted-compilation handoff (S06, already G1-audited), durable real-ti
 
 ## Known limits and debt carried forward
 
-- Full browser matrix NOT RUN (GAP-23/GAP-24); only scoped Edge journeys and jsdom suites ran. The five-client convergence evidence is protocol-level (S07-T10), not five real browsers.
+- Full browser matrix NOT RUN (GAP-29/GAP-30); only scoped Edge journeys and jsdom suites ran. The five-client convergence evidence is protocol-level (S07-T10), not five real browsers.
 - Playwright E2E (chat, comments/detached, notifications) NOT RUN in this cycle: the full API+web stack was not running. Specs exist and are recorded per task report.
 - Production migration ordering remains GAP-15 (covers the S08 `0009`–`0012` migrations).
 - Session-revocation API→collab propagation is unwired; only sharing-scoped events publish. No session-revocation regression exists at the API level.
@@ -50,4 +50,4 @@ Merge head is `7ee0db8` plus the T10/audit commit on `codex/sprint-08-sharing-co
 | `pnpm build` | PASS (last full build before audit; rerun recorded in `s08-t10.md`) |
 | `python scripts/plan_lint.py` | PASS: 184 tasks, 93 requirements, 16 stages |
 | `node scripts/check-secrets.mjs`; `pnpm audit --audit-level high` | PASS; no known vulnerabilities |
-| `pnpm exec playwright test` (full E2E) | NOT RUN: stack not running; GAP-23/GAP-24 remain open |
+| `pnpm exec playwright test` (full E2E) | NOT RUN: stack not running; GAP-29/GAP-30 remain open |

@@ -10,10 +10,7 @@ import {
   type SearchMatch,
   type SearchView,
 } from "@latex-collab/contracts";
-import {
-  DatabaseClient,
-  isUUID,
-} from "@latex-collab/db";
+import { DatabaseClient, isUUID } from "@latex-collab/db";
 import type { StorageAdapter } from "@latex-collab/storage";
 import { problem } from "../../plugins/errors.js";
 
@@ -52,7 +49,9 @@ export function validateSafeRegex(pattern: string): RegExp {
   }
   // Check for dangerous nested quantifiers like (a+)+, (a*)*, (.*)*
   if (/(\([^)]*[\+\*]\)[*+])|(\[[^\]]*[\+\*]\][*+])/.test(pattern)) {
-    throw new Error("Potentially catastrophic exponential backtracking detected in regular expression");
+    throw new Error(
+      "Potentially catastrophic exponential backtracking detected in regular expression",
+    );
   }
 
   try {

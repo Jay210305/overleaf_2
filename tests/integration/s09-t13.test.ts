@@ -1,7 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createSessionFixture, origin } from "../helpers/s02-session.js";
-import { generateUserExportData, createUserExportArchive } from "../../apps/jobs/src/exports/user-data.js";
+import {
+  generateUserExportData,
+  createUserExportArchive,
+} from "../../apps/jobs/src/exports/user-data.js";
 
 describe("S09-T13: Export authorized user data", () => {
   let fixture: Awaited<ReturnType<typeof createSessionFixture>>;
@@ -59,8 +62,12 @@ describe("S09-T13: Export authorized user data", () => {
     // 1. Account assertions
     expect(exportBundle.account.id).toBe(user.id);
     expect(exportBundle.account.email).toBe(user.email);
-    expect((exportBundle.account as unknown as Record<string, unknown>).password_hash).toBeUndefined();
-    expect((exportBundle.account as unknown as Record<string, unknown>).passwordHash).toBeUndefined();
+    expect(
+      (exportBundle.account as unknown as Record<string, unknown>).password_hash,
+    ).toBeUndefined();
+    expect(
+      (exportBundle.account as unknown as Record<string, unknown>).passwordHash,
+    ).toBeUndefined();
 
     // 2. Preferences assertions
     expect(exportBundle.preferences).toBeDefined();

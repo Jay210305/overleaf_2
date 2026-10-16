@@ -1,11 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createSessionFixture } from "../../helpers/s02-session.js";
-import {
-  canonicalJsonStringify,
-  computeSha256,
-  RevisionsRepository,
-} from "@latex-collab/db";
+import { canonicalJsonStringify, computeSha256, RevisionsRepository } from "@latex-collab/db";
 
 describe("NFR-06 Regression - Manifest integrity and deterministic hashing (S03-T07)", () => {
   let fixture: Awaited<ReturnType<typeof createSessionFixture>>;

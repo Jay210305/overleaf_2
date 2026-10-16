@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T04]
 requirements: [PRO-05, PRO-06, PL-07]
 source_task: S05-T05
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S05-T05 — Preview and download safe binary assets
 
@@ -57,6 +57,7 @@ Each code slice starts with the specified failing assertion; documentation/resea
 ## Deliverables
 
 - `apps/web/src/features/files/binary-preview.tsx`
+- `apps/api/src/modules/files/binary-download.ts` (planned `download`/`export` operations from [http-operations](../../docs/contracts/http-operations.md); required so the component's authorized fetch targets a real READ-checked route instead of UI-only state)
 - `tests/integration/s05-t05.test.ts`
 - `tests/regression/pro-05/s05-t05.test.ts`
 - `tests/regression/pro-06/s05-t05.test.ts`
@@ -67,11 +68,11 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Permitted images/PDF use authorized resources; active HTML/SVG are attachment-only and never execute in trusted UI
-- [ ] PRO-05: Validate permitted TeX/bibliography/style/image/PDF/font uploads with progress and failures. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] PRO-06: Download authorized source ZIP, genuine PDF, logs and permitted artifacts. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] PL-07: Private credentials, no unauthorized code reuse and explicit compiler trust boundary. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Permitted images/PDF use authorized resources; active HTML/SVG are attachment-only and never execute in trusted UI
+- [x] PRO-05: Validate permitted TeX/bibliography/style/image/PDF/font uploads with progress and failures. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] PRO-06: Download authorized source ZIP, genuine PDF, logs and permitted artifacts. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] PL-07: Private credentials, no unauthorized code reuse and explicit compiler trust boundary. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -97,9 +98,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

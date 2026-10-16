@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S11-T02]
 requirements: [EDT-13]
 source_task: S11-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S11-T03 — Render basic supported visual nodes
 

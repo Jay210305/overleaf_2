@@ -46,7 +46,11 @@ export function EditorModeSelector({
               ? "text-gray-400 cursor-not-allowed opacity-60"
               : "text-gray-600 dark:text-gray-300 hover:text-gray-900"
         }`}
-        title={!canDirectEdit ? "Direct editing is only allowed for Owners and Editors" : "Direct Edit Mode"}
+        title={
+          !canDirectEdit
+            ? "Direct editing is only allowed for Owners and Editors"
+            : "Direct Edit Mode"
+        }
       >
         ✏️ Edit
       </button>

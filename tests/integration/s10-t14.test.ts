@@ -103,7 +103,12 @@ describe("S10-T14: Clean Rebuild and Retention Cleanup", () => {
     manager.registerArtifactSet("set-active", "proj-1", ["storage/pdf/active.pdf"], now + 10000);
 
     // Expired set
-    manager.registerArtifactSet("set-expired", "proj-1", ["storage/pdf/expired.pdf", "storage/log/expired.log"], now - 1000);
+    manager.registerArtifactSet(
+      "set-expired",
+      "proj-1",
+      ["storage/pdf/expired.pdf", "storage/log/expired.log"],
+      now - 1000,
+    );
 
     // Run cleanup
     const run1 = manager.cleanupExpired(now);

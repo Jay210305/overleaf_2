@@ -4,7 +4,8 @@ import { myersDiff, compareRevisionManifests } from "@latex-collab/latex";
 describe("Regression COL-10 (S09-T02): Text, tree and binary comparison", () => {
   it("enforces deterministic Myers diff results under identical inputs", () => {
     const docA = "\\section{Intro}\nInitial paragraph here.\n\\subsection{Background}";
-    const docB = "\\section{Introduction}\nInitial paragraph here.\n\\subsection{Background}\nExtra details.";
+    const docB =
+      "\\section{Introduction}\nInitial paragraph here.\n\\subsection{Background}\nExtra details.";
 
     const run1 = myersDiff(docA, docB);
     const run2 = myersDiff(docA, docB);

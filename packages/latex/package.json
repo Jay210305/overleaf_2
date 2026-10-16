@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@latex-collab/contracts": "workspace:*"
+    "@latex-collab/contracts": "workspace:*",
+    "@noble/hashes": "2.2.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"
@@ -17,6 +18,10 @@
     "./parse-log": {
       "types": "./src/parse-log.ts",
       "default": "./dist/parse-log.js"
+    },
+    "./visual-ast": {
+      "types": "./src/visual-ast.ts",
+      "default": "./dist/visual-ast.js"
     },
     "./package.json": "./package.json"
   }

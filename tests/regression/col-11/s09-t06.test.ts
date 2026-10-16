@@ -45,18 +45,15 @@ describe("Regression COL-11 (S09-T06): Restore preserves current ACL and revocat
     });
 
     // In v2: revokedUser is removed, currentEditor added, file updated
-    await fixture.db.query(
-      `DELETE FROM project_members WHERE project_id = $1 AND user_id = $2`,
-      [projectId, revokedUser.id],
-    );
+    await fixture.db.query(`DELETE FROM project_members WHERE project_id = $1 AND user_id = $2`, [
+      projectId,
+      revokedUser.id,
+    ]);
     await fixture.db.query(
       `INSERT INTO project_members (project_id, user_id, role) VALUES ($1, $2, 'EDITOR')`,
       [projectId, currentEditor.id],
     );
-    await fixture.db.query(
-      `UPDATE project_nodes SET blob_key = 'blob-v2' WHERE id = $1`,
-      [fileId],
-    );
+    await fixture.db.query(`UPDATE project_nodes SET blob_key = 'blob-v2' WHERE id = $1`, [fileId]);
 
     await revRepo.createStructuralRevision({
       projectId,

@@ -47,7 +47,10 @@ describe("S07-T10 Convergence failures and recovery integration", () => {
 
     const doc = new Y.Doc();
     const text = doc.getText("content");
-    text.insert(0, "\\documentclass{article}\n\\begin{document}\nFault Tolerance Verified\n\\end{document}\n");
+    text.insert(
+      0,
+      "\\documentclass{article}\n\\begin{document}\nFault Tolerance Verified\n\\end{document}\n",
+    );
 
     const ack = await client1.sendUpdate(Y.encodeStateAsUpdate(doc));
     expect(ack.type).toBe("text.durable_ack");

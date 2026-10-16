@@ -207,9 +207,7 @@ describe("S04-T03 Save status, retries and persistence coordinator integration",
     const updateB64 = Buffer.from(Y.encodeStateAsUpdate(dummyDoc)).toString("base64");
     const vectorB64 = Buffer.from(Y.encodeStateVector(dummyDoc)).toString("base64");
 
-    await expect(
-      coordinator.enqueue(updateB64, vectorB64),
-    ).rejects.toMatchObject({
+    await expect(coordinator.enqueue(updateB64, vectorB64)).rejects.toMatchObject({
       code: "NOT_FOUND",
       status: 404,
     });
@@ -252,9 +250,7 @@ describe("S04-T03 Save status, retries and persistence coordinator integration",
       transport: makeTransport(session.cookie, session.csrf),
     });
 
-    await expect(
-      coord2.enqueue(u1, state.stateVectorBase64),
-    ).rejects.toMatchObject({
+    await expect(coord2.enqueue(u1, state.stateVectorBase64)).rejects.toMatchObject({
       code: "CONFLICT",
       status: 409,
     });

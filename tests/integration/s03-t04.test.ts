@@ -457,10 +457,9 @@ describe("S03-T04 ID-based file tree mutations integration", () => {
     });
     expect(delMain.statusCode).toBe(204);
 
-    const projCheck = await fixture.db.query(
-      `SELECT main_file_id FROM projects WHERE id = $1`,
-      [project.id],
-    );
+    const projCheck = await fixture.db.query(`SELECT main_file_id FROM projects WHERE id = $1`, [
+      project.id,
+    ]);
     expect(projCheck.rows[0]!.main_file_id).toBeNull();
   });
 

@@ -156,10 +156,9 @@ describe("S09-T09: Archive, trash, restore, and permanent deletion", () => {
     expect(resSuccess.statusCode).toBe(204);
 
     // Verify completely purged from database
-    const checkDeleted = await fixture.db.query(
-      `SELECT * FROM projects WHERE id = $1`,
-      [projectId],
-    );
+    const checkDeleted = await fixture.db.query(`SELECT * FROM projects WHERE id = $1`, [
+      projectId,
+    ]);
     expect(checkDeleted.rows.length).toBe(0);
   });
 });

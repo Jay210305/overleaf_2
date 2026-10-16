@@ -3,11 +3,7 @@ import type { ApplyTextUpdateInput, DurableAck } from "@latex-collab/contracts";
 export type SaveStatus = "saved" | "saving" | "offline" | "error";
 
 export type SaveErrorCode =
-  | "FORBIDDEN"
-  | "NOT_FOUND"
-  | "CONFLICT"
-  | "SERVICE_UNAVAILABLE"
-  | "NETWORK_ERROR";
+  "FORBIDDEN" | "NOT_FOUND" | "CONFLICT" | "SERVICE_UNAVAILABLE" | "NETWORK_ERROR";
 
 export interface SaveError {
   code: SaveErrorCode;
@@ -197,7 +193,9 @@ export class TextSaveCoordinator {
         this.setError(classified);
 
         const isClientError =
-          (classified.status !== undefined && classified.status >= 400 && classified.status < 500) ||
+          (classified.status !== undefined &&
+            classified.status >= 400 &&
+            classified.status < 500) ||
           classified.code === "FORBIDDEN" ||
           classified.code === "NOT_FOUND" ||
           classified.code === "CONFLICT";
@@ -263,7 +261,8 @@ export class TextSaveCoordinator {
 
   private classifyError(err: unknown): SaveError {
     if (typeof err === "object" && err !== null) {
-      const maybeStatus = (err as { status?: number; statusCode?: number }).status ??
+      const maybeStatus =
+        (err as { status?: number; statusCode?: number }).status ??
         (err as { status?: number; statusCode?: number }).statusCode;
       const maybeCode = (err as { code?: string }).code;
       const maybeMsg = (err as { message?: string }).message ?? "Save operation failed";

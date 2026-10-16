@@ -43,7 +43,7 @@ S08-T06 adds transactional mention/reply notifications with preference checks, i
 
 ## Risks and Debt
 
-The production migration runner/ordering gap (GAP-15) affects the S08 migrations. Full browser matrix GAP-23/GAP-24 remains separate, and the inherited empty file-tree accessibility finding is GAP-26. Independent review of S08-T01–T05 and T09 was confirmed 2026-10-15. Collaboration-socket closure on link expiry/revocation is now wired through `collab:invalidations` under S08-T08 with review pending. S08-T10 remains unstarted.
+The production migration runner/ordering gap (GAP-15) affects the S08 migrations. Full browser matrix GAP-29/GAP-30 remains separate, and the inherited empty file-tree accessibility finding is GAP-32. Independent review of S08-T01–T05 and T09 was confirmed 2026-10-15. Collaboration-socket closure on link expiry/revocation is now wired through `collab:invalidations` under S08-T08 with review pending. S08-T10 remains unstarted.
 
 ## Next Task
 

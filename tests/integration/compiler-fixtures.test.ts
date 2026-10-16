@@ -10,9 +10,13 @@ describe("Compiler fixtures execution and validation", () => {
   it("compiles standard article document into genuine PDF", async () => {
     const executor = new TrustedWorkerExecutor({
       runner: async (_cmd, args, options) => {
-        const outDir = args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
+        const outDir =
+          args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
         await writeFile(join(outDir, "main.pdf"), genuinePdfHeader);
-        await writeFile(join(outDir, "main.log"), "Output written on main.pdf (1 page, 1234 bytes).");
+        await writeFile(
+          join(outDir, "main.log"),
+          "Output written on main.pdf (1 page, 1234 bytes).",
+        );
         return { exitCode: 0, stdout: "Latexmk: All targets are up to date", stderr: "" };
       },
     });
@@ -56,7 +60,8 @@ describe("Compiler fixtures execution and validation", () => {
   it("compiles article with cross-references and extracts warning diagnostics if unresolved", async () => {
     const executor = new TrustedWorkerExecutor({
       runner: async (_cmd, args, options) => {
-        const outDir = args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
+        const outDir =
+          args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
         await writeFile(join(outDir, "main.pdf"), genuinePdfHeader);
         await writeFile(
           join(outDir, "main.log"),
@@ -102,7 +107,8 @@ describe("Compiler fixtures execution and validation", () => {
   it("fails on syntax error fixture, returns parsed diagnostics, and produces no PDF", async () => {
     const executor = new TrustedWorkerExecutor({
       runner: async (_cmd, args, options) => {
-        const outDir = args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
+        const outDir =
+          args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
         await writeFile(
           join(outDir, "main.log"),
           "main.tex:12: Undefined control sequence.\nl.12 \\badcommand\n!  ==> Fatal error occurred, no output PDF file produced!",

@@ -59,12 +59,14 @@ export class CompilationWorker {
   /**
    * Claims and processes a single compile job.
    */
-  async processNextJob(options: {
-    now?: Date;
-    leaseMs?: number;
-    executor?: CompilerExecutor;
-    storage?: StorageAdapter;
-  } = {}): Promise<{ job: CompileJobRow | null; completed: boolean }> {
+  async processNextJob(
+    options: {
+      now?: Date;
+      leaseMs?: number;
+      executor?: CompilerExecutor;
+      storage?: StorageAdapter;
+    } = {},
+  ): Promise<{ job: CompileJobRow | null; completed: boolean }> {
     const now = options.now ?? new Date();
     const leaseMs = options.leaseMs ?? 5 * 60_000;
     const activeExecutor = options.executor ?? this.executor;
@@ -95,21 +97,24 @@ export class CompilationWorker {
 
     // 4. Set up heartbeat and abort controller
     const abortController = new AbortController();
-    const heartbeatInterval = setInterval(async () => {
-      try {
-        const stillActive = await this.repo.heartbeat(job.id, leaseMs);
-        if (!stillActive) {
-          abortController.abort();
-        } else {
-          const check = await this.repo.getRawJob(job.id);
-          if (check?.status === "cancel_requested") {
+    const heartbeatInterval = setInterval(
+      async () => {
+        try {
+          const stillActive = await this.repo.heartbeat(job.id, leaseMs);
+          if (!stillActive) {
             abortController.abort();
+          } else {
+            const check = await this.repo.getRawJob(job.id);
+            if (check?.status === "cancel_requested") {
+              abortController.abort();
+            }
           }
+        } catch {
+          // Ignore background heartbeat error
         }
-      } catch {
-        // Ignore background heartbeat error
-      }
-    }, Math.min(10_000, Math.max(1_000, Math.floor(leaseMs / 3))));
+      },
+      Math.min(10_000, Math.max(1_000, Math.floor(leaseMs / 3))),
+    );
     heartbeatInterval.unref?.();
 
     try {

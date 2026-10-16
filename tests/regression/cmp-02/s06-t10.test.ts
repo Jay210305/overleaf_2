@@ -8,7 +8,8 @@ describe("CMP-02 Redacted compiler output and parsed file/line diagnostics (S06-
   it("parses syntax error with file and line number and ensures zero secrets appear in diagnostics", async () => {
     const executor = new TrustedWorkerExecutor({
       runner: async (_cmd, args, options) => {
-        const outDir = args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
+        const outDir =
+          args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? join(options.cwd, "../out");
         await writeFile(
           join(outDir, "main.log"),
           "postgres://user:db_secret_pw@db:5432/test\n./main.tex:34: LaTeX Error: Environment quote undefined.",
@@ -32,7 +33,12 @@ describe("CMP-02 Redacted compiler output and parsed file/line diagnostics (S06-
             nodeId: "node-main",
             path: "main.tex",
             kind: "TEXT",
-            object: { key: "node-main-key", sha256: "hash-main", sizeBytes: 10, mime: "text/x-tex" },
+            object: {
+              key: "node-main-key",
+              sha256: "hash-main",
+              sizeBytes: 10,
+              mime: "text/x-tex",
+            },
           },
         ],
       },

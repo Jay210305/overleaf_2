@@ -67,10 +67,10 @@ describe("S07-T08 Apply live role and session revocation integration", () => {
     });
 
     // Remove member
-    await fixture.db.query(
-      `DELETE FROM project_members WHERE project_id = $1 AND user_id = $2`,
-      [fixture.projectId, fixture.editor.id],
-    );
+    await fixture.db.query(`DELETE FROM project_members WHERE project_id = $1 AND user_id = $2`, [
+      fixture.projectId,
+      fixture.editor.id,
+    ]);
 
     const affected = await revocationManager.handleRevocation({
       type: "member_removed",

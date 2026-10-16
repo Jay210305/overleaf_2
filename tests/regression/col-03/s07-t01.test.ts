@@ -24,9 +24,9 @@ describe("COL-03 Role enforcement in collaboration rooms (S07-T01)", () => {
   });
 
   it("strictly denies VIEWER from requesting a write ticket over REST", async () => {
-    await expect(
-      fixture.getTicket(fixture.viewer.email, fixture.fileId, "write"),
-    ).rejects.toThrow(/403/);
+    await expect(fixture.getTicket(fixture.viewer.email, fixture.fileId, "write")).rejects.toThrow(
+      /403/,
+    );
   });
 
   it("strictly denies VIEWER mutation frames over WSS socket", async () => {

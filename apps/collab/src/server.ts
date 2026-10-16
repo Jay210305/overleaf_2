@@ -4,13 +4,21 @@ import * as Y from "yjs";
 import type { DatabaseClient } from "@latex-collab/db";
 import type { DurableAck } from "@latex-collab/contracts";
 import type { TicketStore } from "./auth/ticket.js";
-import { authenticateConnection, AuthenticationError, type AuthenticatedUserContext } from "./auth/authenticate.js";
+import {
+  authenticateConnection,
+  AuthenticationError,
+  type AuthenticatedUserContext,
+} from "./auth/authenticate.js";
 import { UpdateLog } from "./persistence/update-log.js";
 import { createDurableAck } from "./persistence/durable-ack.js";
 import { SnapshotService } from "./persistence/snapshots.js";
 import { TreeEventSynchronizer } from "./tree-events.js";
 import { CollabRedisCoordinator } from "./redis.js";
-import { LiveRevocationManager, type ActiveCollabSocket, type RevocationEvent } from "./auth/revocation.js";
+import {
+  LiveRevocationManager,
+  type ActiveCollabSocket,
+  type RevocationEvent,
+} from "./auth/revocation.js";
 import { CollabDurabilityMetrics } from "./metrics.js";
 
 export interface CollabServerOptions {
@@ -170,6 +178,76 @@ export class CollabServer {
     return this.rooms.get(roomId);
   }
 
+  private async hasCurrentAccess(
+    auth: AuthenticatedUserContext,
+    action: "read" | "write",
+  ): Promise<boolean> {
+    if (!this.options.db) return false;
+    const result = await this.options.db.query<{
+      expires_at: Date;
+      session_created_at: Date;
+      revoked_at: Date | null;
+      disabled_at: Date | null;
+      email_verified_at: Date | null;
+      status: string;
+      owner_id: string;
+      role: string | null;
+      member_revoked_at: Date | null;
+      deleted_at: Date | null;
+      content_kind: string;
+    }>(
+      `SELECT s.expires_at, s.created_at AS session_created_at, s.revoked_at,
+              u.disabled_at, u.email_verified_at, p.status, p.owner_id,
+              pm.role, pm.revoked_at AS member_revoked_at,
+              n.deleted_at, n.content_kind
+       FROM sessions s JOIN users u ON u.id = s.user_id
+       JOIN projects p ON p.id = $3
+       JOIN project_nodes n ON n.id = $4 AND n.project_id = p.id
+       LEFT JOIN project_members pm ON pm.project_id = p.id AND pm.user_id = s.user_id
+       WHERE s.id = $1 AND s.user_id = $2`,
+      [auth.sessionId, auth.userId, auth.projectId, auth.fileId],
+    );
+    const row = result.rows[0];
+    if (
+      !row ||
+      row.revoked_at ||
+      row.disabled_at ||
+      !row.email_verified_at ||
+      row.expires_at.getTime() <= Date.now() ||
+      row.session_created_at.getTime() + 30 * 24 * 60 * 60 * 1000 <= Date.now() ||
+      row.status !== "active" ||
+      row.deleted_at ||
+      row.content_kind !== "TEXT"
+    )
+      return false;
+    const role = row.owner_id === auth.userId ? "OWNER" : row.member_revoked_at ? null : row.role;
+    return !!role && (action === "read" || (role !== "VIEWER" && role !== "REVIEWER"));
+  }
+
+  private async broadcastAuthorized(
+    room: CollabRoom,
+    message: string,
+    excludeWs?: WebSocket,
+  ): Promise<void> {
+    for (const client of room.clients) {
+      if (client.ws === excludeWs || client.ws.readyState !== WebSocket.OPEN) continue;
+      let allowed = false;
+      try {
+        allowed = !!client.auth && (await this.hasCurrentAccess(client.auth, "read"));
+      } catch {
+        client.ws.close(1011, "AUTH_UNAVAILABLE");
+        room.clients.delete(client);
+        continue;
+      }
+      if (!allowed) {
+        client.ws.close(4403, "ACCESS_REVOKED");
+        room.clients.delete(client);
+        continue;
+      }
+      client.ws.send(message);
+    }
+  }
+
   private async getOrCreateRoom(projectId: string, fileId: string): Promise<CollabRoom> {
     const roomId = `project:${projectId}:file:${fileId}`;
     let room = this.rooms.get(roomId);
@@ -186,7 +264,8 @@ export class CollabServer {
             // Apply update from another replica
             Y.applyUpdate(room!.doc, remoteUpdateBytes);
             // Broadcast to local room clients
-            room!.broadcast(
+            void this.broadcastAuthorized(
+              room!,
               JSON.stringify({
                 type: "sync.update",
                 updateBase64: Buffer.from(remoteUpdateBytes).toString("base64"),
@@ -194,7 +273,8 @@ export class CollabServer {
             );
           },
           (remoteAwareness, remoteUserId) => {
-            room!.broadcast(
+            void this.broadcastAuthorized(
+              room!,
               JSON.stringify({
                 type: "awareness",
                 userId: remoteUserId,
@@ -295,6 +375,12 @@ export class CollabServer {
             client.auth = authContext;
             authCompleted = true;
 
+            if (!(await this.hasCurrentAccess(authContext, "read"))) {
+              ws.send(JSON.stringify({ type: "error", code: "PERMISSION_DENIED" }));
+              ws.close(4403, "ACCESS_REVOKED");
+              return;
+            }
+
             // Check if file was deleted
             if (this.treeSynchronizer.isFileDeleted(authContext.fileId)) {
               ws.send(JSON.stringify({ type: "error", code: "RESOURCE_NOT_FOUND" }));
@@ -370,6 +456,30 @@ export class CollabServer {
         // 2. Authenticated Message Processing
         if (!joinedRoom || !client.auth) return;
 
+        let allowed = false;
+        let canReconnectRead = false;
+        try {
+          allowed = await this.hasCurrentAccess(
+            client.auth,
+            msg.type === "sync.update" ? "write" : "read",
+          );
+          if (!allowed && msg.type === "sync.update") {
+            canReconnectRead = await this.hasCurrentAccess(client.auth, "read");
+          }
+        } catch {
+          ws.send(JSON.stringify({ type: "error", code: "DATABASE_UNAVAILABLE" }));
+          ws.close(1011, "AUTH_UNAVAILABLE");
+          return;
+        }
+        if (!allowed) {
+          ws.send(JSON.stringify({ type: "error", code: "PERMISSION_DENIED" }));
+          ws.close(
+            canReconnectRead ? 1012 : 4403,
+            canReconnectRead ? "ROLE_CHANGED" : "ACCESS_REVOKED",
+          );
+          return;
+        }
+
         if (msg.type === "ping") {
           client.isAlive = true;
           ws.send(JSON.stringify({ type: "pong" }));
@@ -379,7 +489,8 @@ export class CollabServer {
         if (msg.type === "awareness") {
           client.isAlive = true;
           // Broadcast awareness to peers and Redis
-          joinedRoom.broadcast(
+          await this.broadcastAuthorized(
+            joinedRoom,
             JSON.stringify({
               type: "awareness",
               userId: client.auth.userId,
@@ -417,58 +528,43 @@ export class CollabServer {
             return;
           }
 
-          const startTime = Date.now();
-
-          // 1. Apply to in-memory room doc
-          Y.applyUpdate(joinedRoom.doc, new Uint8Array(updateBytes));
-
-          // 2. Broadcast immediately to peers in room
-          joinedRoom.broadcast(
-            JSON.stringify({
-              type: "sync.update",
-              updateBase64,
-            }),
-            ws,
-          );
-
-          if (this.redisCoordinator) {
-            void this.redisCoordinator.broadcastUpdate(joinedRoom.roomId, updateBytes);
+          if (!this.updateLog) {
+            ws.send(JSON.stringify({ type: "error", code: "DATABASE_UNAVAILABLE" }));
+            return;
           }
 
-          const broadcastLag = Date.now() - startTime;
-          this.metrics.recordBroadcastLag(broadcastLag);
-
-          // 3. Commit to PostgreSQL under per-file lock
-          if (this.updateLog) {
-            try {
-              const { seq } = await this.updateLog.appendUpdate(
-                client.auth.fileId,
-                client.auth.userId,
-                new Uint8Array(updateBytes),
-              );
-
-              joinedRoom.lastPersistedSeq = seq;
-              const persistenceLag = Date.now() - startTime;
-              this.metrics.recordPersistenceLag(persistenceLag);
-
-              // 4. Send DurableAck ONLY AFTER successful DB commit
-              const ack: DurableAck = createDurableAck(
-                client.auth.fileId,
-                seq,
-                joinedRoom.doc,
-              );
-              ws.send(JSON.stringify(ack));
-            } catch {
-              // DB outage: DO NOT send DurableAck!
-              // Broadcast was sent, but edit is NOT yet durable.
-              ws.send(
-                JSON.stringify({
-                  type: "error",
-                  code: "DATABASE_UNAVAILABLE",
-                  message: "Update pending durability commit",
-                }),
-              );
+          const startTime = Date.now();
+          try {
+            const validationDoc = new Y.Doc();
+            Y.applyUpdate(validationDoc, new Uint8Array(updateBytes));
+            validationDoc.destroy();
+          } catch {
+            ws.send(JSON.stringify({ type: "error", code: "VALIDATION_ERROR" }));
+            return;
+          }
+          try {
+            // A failed commit must not alter the room or reach another client.
+            const { seq } = await this.updateLog.appendUpdate(
+              client.auth.fileId,
+              client.auth.userId,
+              new Uint8Array(updateBytes),
+            );
+            this.metrics.recordPersistenceLag(Date.now() - startTime);
+            Y.applyUpdate(joinedRoom.doc, new Uint8Array(updateBytes));
+            joinedRoom.lastPersistedSeq = Math.max(joinedRoom.lastPersistedSeq, seq);
+            await this.broadcastAuthorized(
+              joinedRoom,
+              JSON.stringify({ type: "sync.update", updateBase64 }),
+              ws,
+            );
+            if (this.redisCoordinator) {
+              void this.redisCoordinator.broadcastUpdate(joinedRoom.roomId, updateBytes);
             }
+            this.metrics.recordBroadcastLag(Date.now() - startTime);
+            const ack: DurableAck = createDurableAck(client.auth.fileId, seq, joinedRoom.doc);
+            ws.send(JSON.stringify(ack));
+          } catch {
+            ws.send(JSON.stringify({ type: "error", code: "DATABASE_UNAVAILABLE" }));
           }
           return;
         }

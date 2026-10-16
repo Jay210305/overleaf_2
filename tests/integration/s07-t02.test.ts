@@ -56,9 +56,7 @@ describe("S07-T02 Single-use WSS tickets integration", () => {
     await client.close();
 
     // Second use of the same ticket must fail atomically
-    await expect(fixture.createClient(ticket)).rejects.toThrow(
-      /TICKET_INVALID_OR_EXPIRED/,
-    );
+    await expect(fixture.createClient(ticket)).rejects.toThrow(/TICKET_INVALID_OR_EXPIRED/);
   });
 
   it("denies connection when Origin header does not match application origin", async () => {

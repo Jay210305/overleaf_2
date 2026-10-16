@@ -211,8 +211,18 @@ export function compareRevisionManifests(
   const added: ManifestItemDiff[] = [];
   const removed: ManifestItemDiff[] = [];
   const renamed: Array<{ nodeId: string; oldPath: string; newPath: string; sha256: string }> = [];
-  const modifiedText: Array<{ nodeId: string; path: string; oldSha256: string; newSha256: string }> = [];
-  const modifiedBinary: Array<{ nodeId: string; path: string; oldSha256: string; newSha256: string }> = [];
+  const modifiedText: Array<{
+    nodeId: string;
+    path: string;
+    oldSha256: string;
+    newSha256: string;
+  }> = [];
+  const modifiedBinary: Array<{
+    nodeId: string;
+    path: string;
+    oldSha256: string;
+    newSha256: string;
+  }> = [];
   const unchanged: ManifestItemDiff[] = [];
 
   for (const [nodeId, targetItem] of targetByNodeId.entries()) {

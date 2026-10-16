@@ -32,9 +32,9 @@ describe("S07-T01 Authenticated Hocuspocus file rooms integration", () => {
 
   it("denies missing, foreign, or expired tickets before reading source", async () => {
     // 1. Missing / invalid ticket
-    await expect(
-      fixture.createClient("invalid-ticket-1234567890"),
-    ).rejects.toThrow(/Auth error: TICKET_INVALID_OR_EXPIRED/);
+    await expect(fixture.createClient("invalid-ticket-1234567890")).rejects.toThrow(
+      /Auth error: TICKET_INVALID_OR_EXPIRED/,
+    );
 
     // 2. Ticket for foreign/non-existent file
     const foreignFileId = randomUUID();
@@ -62,9 +62,9 @@ describe("S07-T01 Authenticated Hocuspocus file rooms integration", () => {
       -1, // expired in the past
     );
 
-    await expect(
-      fixture.createClient(expiredTicket.ticket),
-    ).rejects.toThrow(/TICKET_INVALID_OR_EXPIRED/);
+    await expect(fixture.createClient(expiredTicket.ticket)).rejects.toThrow(
+      /TICKET_INVALID_OR_EXPIRED/,
+    );
   });
 
   it("denies ticket reuse / replay atomically", async () => {
@@ -76,9 +76,7 @@ describe("S07-T01 Authenticated Hocuspocus file rooms integration", () => {
     await client1.close();
 
     // Second use of the EXACT same ticket must fail (atomically consumed)
-    await expect(fixture.createClient(ticket)).rejects.toThrow(
-      /TICKET_INVALID_OR_EXPIRED/,
-    );
+    await expect(fixture.createClient(ticket)).rejects.toThrow(/TICKET_INVALID_OR_EXPIRED/);
   });
 
   it("denies wrong Origin header with 4003 ORIGIN_NOT_ALLOWED", async () => {
@@ -145,9 +143,9 @@ describe("S07-T01 Authenticated Hocuspocus file rooms integration", () => {
   it("denies missing Origin header with 4003 ORIGIN_NOT_ALLOWED when allowedOrigin is configured", async () => {
     const ticket = await fixture.getTicket(fixture.editor.email, fixture.fileId, "write");
 
-    await expect(
-      fixture.createClient(ticket, { origin: "" }),
-    ).rejects.toThrow(/ORIGIN_NOT_ALLOWED/);
+    await expect(fixture.createClient(ticket, { origin: "" })).rejects.toThrow(
+      /ORIGIN_NOT_ALLOWED/,
+    );
   });
 
   it("terminates unresponsive socket during checkHeartbeats if client goes dead", async () => {
@@ -155,7 +153,9 @@ describe("S07-T01 Authenticated Hocuspocus file rooms integration", () => {
     const client = await fixture.createClient(ticket);
 
     // Initial state: client is alive
-    const room = fixture.collabServer.getRoom(`project:${fixture.projectId}:file:${fixture.fileId}`);
+    const room = fixture.collabServer.getRoom(
+      `project:${fixture.projectId}:file:${fixture.fileId}`,
+    );
     expect(room).toBeDefined();
     expect(room!.clients.size).toBeGreaterThanOrEqual(1);
 

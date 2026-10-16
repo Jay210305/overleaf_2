@@ -14,23 +14,28 @@ export const STATIC_ERROR_CATALOG: readonly LatexHelpEntry[] = [
     id: "undefined-control-sequence",
     pattern: /undefined control sequence/i,
     title: "Undefined Control Sequence",
-    explanation: "LaTeX encountered a command that is not recognized. This is usually caused by a spelling mistake in a command name or a missing \\usepackage in your preamble.",
-    suggestedFix: "Check the spelling of the command or add the required package (e.g. \\usepackage{amsmath}) to your preamble.",
+    explanation:
+      "LaTeX encountered a command that is not recognized. This is usually caused by a spelling mistake in a command name or a missing \\usepackage in your preamble.",
+    suggestedFix:
+      "Check the spelling of the command or add the required package (e.g. \\usepackage{amsmath}) to your preamble.",
     category: "syntax",
   },
   {
     id: "missing-dollar-inserted",
     pattern: /missing \$ inserted/i,
     title: "Missing $ Inserted",
-    explanation: "A math-mode character (like _, ^, or a math symbol) was used outside of math mode, or an opening/closing dollar sign was missed.",
-    suggestedFix: "Enclose math characters in single dollar signs $...$ or escape underscores as \\_.",
+    explanation:
+      "A math-mode character (like _, ^, or a math symbol) was used outside of math mode, or an opening/closing dollar sign was missed.",
+    suggestedFix:
+      "Enclose math characters in single dollar signs $...$ or escape underscores as \\_.",
     category: "math",
   },
   {
     id: "mismatched-environment",
     pattern: /\\begin\{([^}]+)\} ended by \\end\{([^}]+)\}/i,
     title: "Mismatched Environment",
-    explanation: "An environment was opened with one name and closed with another name, or environments are improperly nested.",
+    explanation:
+      "An environment was opened with one name and closed with another name, or environments are improperly nested.",
     suggestedFix: "Ensure every \\begin{env} has a matching \\end{env} in proper nested order.",
     category: "environment",
   },
@@ -39,47 +44,58 @@ export const STATIC_ERROR_CATALOG: readonly LatexHelpEntry[] = [
     pattern: /environment ([^ ]+) undefined/i,
     title: "Environment Undefined",
     explanation: "The requested environment does not exist or requires an unimported package.",
-    suggestedFix: "Verify the environment name or import the package providing it (e.g. \\usepackage{tabularx}).",
+    suggestedFix:
+      "Verify the environment name or import the package providing it (e.g. \\usepackage{tabularx}).",
     category: "environment",
   },
   {
     id: "file-not-found",
     pattern: /file `([^']+)' not found/i,
     title: "File Not Found",
-    explanation: "An \\input{...}, \\include{...}, or \\includegraphics{...} command referenced a file that does not exist in the project tree.",
-    suggestedFix: "Verify that the referenced file exists in your project with the correct relative path and extension.",
+    explanation:
+      "An \\input{...}, \\include{...}, or \\includegraphics{...} command referenced a file that does not exist in the project tree.",
+    suggestedFix:
+      "Verify that the referenced file exists in your project with the correct relative path and extension.",
     category: "files",
   },
   {
     id: "overfull-hbox",
     pattern: /overfull \\hbox/i,
     title: "Overfull \\hbox (Line Overflow)",
-    explanation: "Text or a formula extends beyond the right page margin because LaTeX could not find a suitable hyphenation or line break.",
-    suggestedFix: "Reword the sentence, provide explicit hyphenation hints \\-, or place long formulas on separate lines.",
+    explanation:
+      "Text or a formula extends beyond the right page margin because LaTeX could not find a suitable hyphenation or line break.",
+    suggestedFix:
+      "Reword the sentence, provide explicit hyphenation hints \\-, or place long formulas on separate lines.",
     category: "formatting",
   },
   {
     id: "underfull-hbox",
     pattern: /underfull \\hbox/i,
     title: "Underfull \\hbox",
-    explanation: "LaTeX had to stretch spacing excessively to fill a line, often due to manual line breaks (\\\\) used instead of paragraph breaks.",
-    suggestedFix: "Avoid manual line breaks \\\\ in standard paragraphs. Use empty lines for paragraph separation.",
+    explanation:
+      "LaTeX had to stretch spacing excessively to fill a line, often due to manual line breaks (\\\\) used instead of paragraph breaks.",
+    suggestedFix:
+      "Avoid manual line breaks \\\\ in standard paragraphs. Use empty lines for paragraph separation.",
     category: "formatting",
   },
   {
     id: "emergency-stop",
     pattern: /emergency stop/i,
     title: "Emergency Stop",
-    explanation: "LaTeX halted execution because a fatal error occurred, such as a missing end-of-file, unclosed group, or missing mandatory file.",
-    suggestedFix: "Scroll up to the first reported error in the compilation log to identify the root cause before the emergency stop.",
+    explanation:
+      "LaTeX halted execution because a fatal error occurred, such as a missing end-of-file, unclosed group, or missing mandatory file.",
+    suggestedFix:
+      "Scroll up to the first reported error in the compilation log to identify the root cause before the emergency stop.",
     category: "syntax",
   },
   {
     id: "missing-begin-document",
     pattern: /missing \\begin\{document\}/i,
     title: "Missing \\begin{document}",
-    explanation: "Text was placed before \\begin{document}, or the command itself was omitted from the root TeX file.",
-    suggestedFix: "Ensure all printable content appears after \\begin{document} and that only preamble macros precede it.",
+    explanation:
+      "Text was placed before \\begin{document}, or the command itself was omitted from the root TeX file.",
+    suggestedFix:
+      "Ensure all printable content appears after \\begin{document} and that only preamble macros precede it.",
     category: "syntax",
   },
 ];
@@ -108,7 +124,7 @@ export function searchHelpCatalog(query: string): LatexHelpEntry[] {
       e.title.toLowerCase().includes(q) ||
       e.explanation.toLowerCase().includes(q) ||
       e.suggestedFix.toLowerCase().includes(q) ||
-      e.category.toLowerCase().includes(q)
+      e.category.toLowerCase().includes(q),
   );
 }
 
@@ -121,10 +137,7 @@ export interface LatexHelpPanelProps {
  * Offline LaTeX Static Help & Guidance Component (EDT-14).
  * Always serves static advice first; does not make any external network calls.
  */
-export const LatexHelpPanel: React.FC<LatexHelpPanelProps> = ({
-  currentErrorMessage,
-  onClose,
-}) => {
+export const LatexHelpPanel: React.FC<LatexHelpPanelProps> = ({ currentErrorMessage, onClose }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [aiConsentGiven, setAiConsentGiven] = useState(false);
 

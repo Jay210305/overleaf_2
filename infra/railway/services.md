@@ -9,6 +9,7 @@
 ## 1. Architecture Overview
 
 The Gate 1 collaborative LaTeX system runs as a decoupled multi-service staging deployment:
+
 - **Web SPA (`apps/web`)**: Hosted on Vercel with automatic TLS, rewrites managed via `apps/web/vercel.json`.
 - **API Service (`apps/api`)**: Fastify Node.js server hosted on Railway with automatic TLS termination, serving REST and WebSocket endpoints.
 - **Compilation Worker (`apps/jobs`)**: Long-running background worker process hosted on Railway, processing durable compilation jobs with pinned TeX Live runtime.
@@ -48,6 +49,7 @@ The Gate 1 collaborative LaTeX system runs as a decoupled multi-service staging 
 ## 2. Service Definitions & Configuration
 
 ### 2.1 API Service (`apps/api`)
+
 - **Railway Service Name:** `latex-collab-api`
 - **Build Command:** `pnpm --filter @latex-collab/api build`
 - **Start Command:** `pnpm --filter @latex-collab/api start`
@@ -74,6 +76,7 @@ The Gate 1 collaborative LaTeX system runs as a decoupled multi-service staging 
   ```
 
 ### 2.2 Compile Worker Service (`apps/jobs`)
+
 - **Railway Service Name:** `latex-collab-worker`
 - **Build Command:** `pnpm --filter @latex-collab/jobs build`
 - **Start Command:** `pnpm --filter @latex-collab/jobs start`
@@ -100,15 +103,18 @@ The Gate 1 collaborative LaTeX system runs as a decoupled multi-service staging 
   ```
 
 ### 2.3 Managed PostgreSQL (`latex-collab-postgres`)
+
 - **Engine:** PostgreSQL 17
 - **Connection Limit:** 100 connections
 - **Automatic Migration:** Runs as pre-deploy hook via `pnpm --filter @latex-collab/db migrate`.
 
 ### 2.4 Managed Redis (`latex-collab-redis`)
+
 - **Engine:** Redis 7
 - **Persistence:** AOF enabled for lease state safety.
 
 ### 2.5 Vercel Web Client (`apps/web`)
+
 - **Configuration:** Defined in `apps/web/vercel.json`:
   ```json
   { "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/index.html" }] }
@@ -124,7 +130,9 @@ The Gate 1 collaborative LaTeX system runs as a decoupled multi-service staging 
 ## 3. Staging Deployment & Smoke Verification Runbook
 
 ### Step 1: Health Probes Verification
+
 Verify API is live and dependencies are connected:
+
 ```bash
 curl -f https://latex-collab-api.up.railway.app/api/v1/health/live
 # Expected: HTTP 200 {"status":"live"}
@@ -134,7 +142,9 @@ curl -f https://latex-collab-api.up.railway.app/api/v1/health/ready
 ```
 
 ### Step 2: Closed Public Mode Invariant Check
+
 Verify anonymous registration is blocked:
+
 ```bash
 curl -X POST https://latex-collab-api.up.railway.app/api/v1/auth/register \
   -H "Content-Type: application/json" \
@@ -143,7 +153,9 @@ curl -X POST https://latex-collab-api.up.railway.app/api/v1/auth/register \
 ```
 
 ### Step 3: Authenticated Team Login & Project Setup
+
 Login with pre-provisioned team account:
+
 ```bash
 curl -c cookies.txt -X POST https://latex-collab-api.up.railway.app/api/v1/auth/login \
   -H "Content-Type: application/json" \
@@ -151,7 +163,9 @@ curl -c cookies.txt -X POST https://latex-collab-api.up.railway.app/api/v1/auth/
 ```
 
 ### Step 4: Create Document & Enqueue Compilation
+
 Submit a compilation request with mandatory `Idempotency-Key`:
+
 ```bash
 curl -b cookies.txt -X POST https://latex-collab-api.up.railway.app/api/v1/projects/<PROJECT_ID>/compilations \
   -H "Content-Type: application/json" \
@@ -161,7 +175,9 @@ curl -b cookies.txt -X POST https://latex-collab-api.up.railway.app/api/v1/proje
 ```
 
 ### Step 5: Poll Status & Verify Genuine PDF Artifact
+
 Poll job completion:
+
 ```bash
 curl -b cookies.txt https://latex-collab-api.up.railway.app/api/v1/projects/<PROJECT_ID>/compilations/<JOB_ID>
 # Expected: {"status":"succeeded","pdfAvailable":true}
@@ -172,6 +188,7 @@ curl -b cookies.txt https://latex-collab-api.up.railway.app/api/v1/projects/<PRO
 ```
 
 ### Step 6: Negative and Edge Case Verification
+
 1. **Bad Engine / Bad Arguments**:
    ```bash
    curl -b cookies.txt -X POST https://latex-collab-api.up.railway.app/api/v1/projects/<PROJECT_ID>/compilations \

@@ -8,11 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { parsePublicConfig } from "@latex-collab/config";
-import {
-  treeViewSchema,
-  type ProjectNodeView,
-  type TreeView,
-} from "@latex-collab/contracts";
+import { treeViewSchema, type ProjectNodeView, type TreeView } from "@latex-collab/contracts";
 
 const config = parsePublicConfig(import.meta.env);
 const defaultApiUrl = config.VITE_API_URL;
@@ -139,7 +135,10 @@ export function FileTree({
     });
   };
 
-  const openCreateDialog = (kind: "create-file" | "create-folder", parentId: string | null = null) => {
+  const openCreateDialog = (
+    kind: "create-file" | "create-folder",
+    parentId: string | null = null,
+  ) => {
     setActiveDialog(kind);
     setDialogInputName("");
     setDialogTargetParentId(parentId);
@@ -205,7 +204,12 @@ export function FileTree({
           name: trimmed,
           parentId: dialogTargetParentId,
           kind,
-          mime: kind === "FILE" ? (trimmed.endsWith(".tex") ? "application/x-tex" : "text/plain") : "application/octet-stream",
+          mime:
+            kind === "FILE"
+              ? trimmed.endsWith(".tex")
+                ? "application/x-tex"
+                : "text/plain"
+              : "application/octet-stream",
           contentKind: kind === "FILE" ? "TEXT" : "BINARY",
         }),
       });
@@ -505,7 +509,15 @@ export function FileTree({
                   type="button"
                   aria-label={`Add file to ${node.name}`}
                   onClick={() => openCreateDialog("create-file", node.id)}
-                  style={{ minWidth: "24px", minHeight: "24px", padding: "2px", fontSize: "12px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                  style={{
+                    minWidth: "24px",
+                    minHeight: "24px",
+                    padding: "2px",
+                    fontSize: "12px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   +📄
                 </button>
@@ -515,7 +527,15 @@ export function FileTree({
                   type="button"
                   aria-label={`Add folder to ${node.name}`}
                   onClick={() => openCreateDialog("create-folder", node.id)}
-                  style={{ minWidth: "24px", minHeight: "24px", padding: "2px", fontSize: "12px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                  style={{
+                    minWidth: "24px",
+                    minHeight: "24px",
+                    padding: "2px",
+                    fontSize: "12px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   +📁
                 </button>
@@ -524,7 +544,15 @@ export function FileTree({
                 type="button"
                 aria-label={`Rename ${node.name}`}
                 onClick={() => openRenameDialog(node)}
-                style={{ minWidth: "24px", minHeight: "24px", padding: "2px", fontSize: "12px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                style={{
+                  minWidth: "24px",
+                  minHeight: "24px",
+                  padding: "2px",
+                  fontSize: "12px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 ✏️
               </button>
@@ -532,7 +560,15 @@ export function FileTree({
                 type="button"
                 aria-label={`Move ${node.name}`}
                 onClick={() => openMoveDialog(node)}
-                style={{ minWidth: "24px", minHeight: "24px", padding: "2px", fontSize: "12px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                style={{
+                  minWidth: "24px",
+                  minHeight: "24px",
+                  padding: "2px",
+                  fontSize: "12px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 📦
               </button>
@@ -540,7 +576,15 @@ export function FileTree({
                 type="button"
                 aria-label={`Delete ${node.name}`}
                 onClick={() => openDeleteDialog(node)}
-                style={{ minWidth: "24px", minHeight: "24px", padding: "2px", fontSize: "12px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                style={{
+                  minWidth: "24px",
+                  minHeight: "24px",
+                  padding: "2px",
+                  fontSize: "12px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 🗑️
               </button>
@@ -601,7 +645,11 @@ export function FileTree({
       </header>
 
       {/* Breadcrumb / Path status */}
-      <nav role="navigation" aria-label="File path breadcrumb" style={{ padding: "4px 12px", fontSize: "12px", color: "#6b7280" }}>
+      <nav
+        role="navigation"
+        aria-label="File path breadcrumb"
+        style={{ padding: "4px 12px", fontSize: "12px", color: "#6b7280" }}
+      >
         <span>Project Root</span>
         {selectedNodeId && nodes.find((n) => n.id === selectedNodeId) && (
           <span> / {nodes.find((n) => n.id === selectedNodeId)!.name}</span>
@@ -676,7 +724,10 @@ export function FileTree({
             </h3>
 
             {dialogError && (
-              <div role="alert" style={{ color: "#dc2626", marginBottom: "12px", fontSize: "13px" }}>
+              <div
+                role="alert"
+                style={{ color: "#dc2626", marginBottom: "12px", fontSize: "13px" }}
+              >
                 {dialogError}
               </div>
             )}
@@ -688,7 +739,10 @@ export function FileTree({
                 }
               >
                 <div style={{ marginBottom: "12px" }}>
-                  <label htmlFor="node-name-input" style={{ display: "block", marginBottom: "4px", fontSize: "13px" }}>
+                  <label
+                    htmlFor="node-name-input"
+                    style={{ display: "block", marginBottom: "4px", fontSize: "13px" }}
+                  >
                     Name:
                   </label>
                   <input
@@ -715,7 +769,10 @@ export function FileTree({
             {activeDialog === "rename" && (
               <form onSubmit={handleRenameSubmit}>
                 <div style={{ marginBottom: "12px" }}>
-                  <label htmlFor="rename-input" style={{ display: "block", marginBottom: "4px", fontSize: "13px" }}>
+                  <label
+                    htmlFor="rename-input"
+                    style={{ display: "block", marginBottom: "4px", fontSize: "13px" }}
+                  >
                     New name:
                   </label>
                   <input
@@ -742,7 +799,10 @@ export function FileTree({
             {activeDialog === "move" && (
               <form onSubmit={handleMoveSubmit}>
                 <div style={{ marginBottom: "12px" }}>
-                  <label htmlFor="move-dest-select" style={{ display: "block", marginBottom: "4px", fontSize: "13px" }}>
+                  <label
+                    htmlFor="move-dest-select"
+                    style={{ display: "block", marginBottom: "4px", fontSize: "13px" }}
+                  >
                     Destination folder:
                   </label>
                   <select
@@ -775,13 +835,18 @@ export function FileTree({
             {activeDialog === "delete" && (
               <form onSubmit={handleDeleteSubmit}>
                 <p style={{ fontSize: "13px", color: "#4b5563" }}>
-                  Are you sure you want to delete this {targetNode?.kind.toLowerCase()}? This action can be undone only by restoring a revision.
+                  Are you sure you want to delete this {targetNode?.kind.toLowerCase()}? This action
+                  can be undone only by restoring a revision.
                 </p>
                 <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
                   <button type="button" onClick={closeDialog} disabled={isSubmitting}>
                     Cancel
                   </button>
-                  <button type="submit" disabled={isSubmitting} style={{ backgroundColor: "#dc2626", color: "#fff" }}>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    style={{ backgroundColor: "#dc2626", color: "#fff" }}
+                  >
                     {isSubmitting ? "Deleting..." : "Delete"}
                   </button>
                 </div>

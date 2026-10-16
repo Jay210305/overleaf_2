@@ -6,7 +6,9 @@
   "dependencies": {
     "@aws-sdk/client-s3": "3.1149.0",
     "@aws-sdk/s3-request-presigner": "3.1149.0",
-    "@latex-collab/contracts": "workspace:*"
+    "@latex-collab/contracts": "workspace:*",
+    "@latex-collab/db": "workspace:*",
+    "yjs": "13.6.27"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"
@@ -19,6 +21,10 @@
     "./s3": {
       "types": "./src/s3.ts",
       "default": "./dist/s3.js"
+    },
+    "./source-export": {
+      "types": "./src/source-export.ts",
+      "default": "./dist/source-export.js"
     },
     "./package.json": "./package.json"
   }

@@ -6,6 +6,7 @@
   "dependencies": {
     "@latex-collab/contracts": "workspace:*",
     "@latex-collab/config": "workspace:*",
+    "@latex-collab/latex": "workspace:*",
     "@codemirror/autocomplete": "^6.20.3",
     "@codemirror/commands": "^6.11.1",
     "@codemirror/language": "^6.13.1",
@@ -34,6 +35,14 @@
     "./keymap": {
       "types": "./src/keymap.ts",
       "default": "./dist/keymap.js"
+    },
+    "./visual-patch": {
+      "types": "./src/visual-patch.ts",
+      "default": "./dist/visual-patch.js"
+    },
+    "./visual-academic-patch": {
+      "types": "./src/visual-academic-patch.ts",
+      "default": "./dist/visual-academic-patch.js"
     },
     "./package.json": "./package.json"
   }

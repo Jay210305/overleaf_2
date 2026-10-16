@@ -1,7 +1,14 @@
 import { describe, it, expect } from "vitest";
 import { TEX_PROFILES, UnsupportedTeXProfileError } from "../../apps/tex-executor/src/profiles.js";
-import { detectBibliographyBackend, resolveBibliographyArgv } from "../../apps/tex-executor/src/bibliography.js";
-import { parseSynctexData, forwardLookup, inverseLookup } from "../../apps/api/src/modules/synctex/routes.js";
+import {
+  detectBibliographyBackend,
+  resolveBibliographyArgv,
+} from "../../apps/tex-executor/src/bibliography.js";
+import {
+  parseSynctexData,
+  forwardLookup,
+  inverseLookup,
+} from "../../apps/api/src/modules/synctex/routes.js";
 import { createEditorKeymap } from "@latex-collab/editor";
 import { parseBibTeX } from "@latex-collab/latex";
 
@@ -86,10 +93,18 @@ y:0
     let commentToggled = false;
 
     const keymapExt = createEditorKeymap({
-      onSave: () => { saved = true; },
-      onCompile: () => { compiled = true; },
-      onGoToLine: () => { goToLineCalled = true; },
-      onCommentToggle: () => { commentToggled = true; },
+      onSave: () => {
+        saved = true;
+      },
+      onCompile: () => {
+        compiled = true;
+      },
+      onGoToLine: () => {
+        goToLineCalled = true;
+      },
+      onCommentToggle: () => {
+        commentToggled = true;
+      },
     });
 
     expect(keymapExt).toBeDefined();

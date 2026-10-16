@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  type SymbolCategory,
-  searchSymbols,
-  formatSymbolInsertion,
-} from "@latex-collab/editor";
+import { type SymbolCategory, searchSymbols, formatSymbolInsertion } from "@latex-collab/editor";
 
 export interface StoredEditorPreferences {
   theme: "light" | "dark" | "system";

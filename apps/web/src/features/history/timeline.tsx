@@ -115,7 +115,10 @@ export function HistoryTimeline({
   };
 
   return (
-    <div className="history-timeline p-4 bg-white dark:bg-gray-900 border rounded-md" aria-label="Project history timeline">
+    <div
+      className="history-timeline p-4 bg-white dark:bg-gray-900 border rounded-md"
+      aria-label="Project history timeline"
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Project History</h2>
         <div className="flex gap-2">
@@ -237,10 +240,7 @@ export function HistoryTimeline({
               </div>
 
               {editingLabelRevNo === rev.revisionNo && (
-                <div
-                  className="mt-2 flex gap-2"
-                  onClick={(e) => e.stopPropagation()}
-                >
+                <div className="mt-2 flex gap-2" onClick={(e) => e.stopPropagation()}>
                   <input
                     type="text"
                     value={newLabelText}

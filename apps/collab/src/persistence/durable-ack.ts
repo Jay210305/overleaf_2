@@ -10,9 +10,7 @@ export function createDurableAck(
   docOrStateVector: Y.Doc | Uint8Array,
 ): DurableAck {
   const stateVector =
-    docOrStateVector instanceof Y.Doc
-      ? Y.encodeStateVector(docOrStateVector)
-      : docOrStateVector;
+    docOrStateVector instanceof Y.Doc ? Y.encodeStateVector(docOrStateVector) : docOrStateVector;
 
   return {
     type: "text.durable_ack",

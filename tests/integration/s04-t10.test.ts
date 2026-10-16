@@ -86,7 +86,9 @@ describe("S04-T10 REST text state-version contract integration", () => {
     // 2. Prepare client mutation
     const clientDoc = new Y.Doc();
     Y.applyUpdate(clientDoc, Buffer.from(initialState.updateBase64, "base64"));
-    clientDoc.getText("content").insert(0, "\\section{Introducción}\nTexto de prueba en español.\n");
+    clientDoc
+      .getText("content")
+      .insert(0, "\\section{Introducción}\nTexto de prueba en español.\n");
 
     const updateBytes = Y.encodeStateAsUpdate(
       clientDoc,

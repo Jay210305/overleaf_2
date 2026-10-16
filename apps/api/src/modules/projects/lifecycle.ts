@@ -216,7 +216,8 @@ export function registerProjectLifecycleRoutes(
     service?: ProjectLifecycleService | undefined;
   },
 ): void {
-  const service = options.service ?? (options.db ? new ProjectLifecycleService(options.db) : undefined);
+  const service =
+    options.service ?? (options.db ? new ProjectLifecycleService(options.db) : undefined);
 
   // 1. POST /api/v1/projects/:projectId/archive
   app.post(
