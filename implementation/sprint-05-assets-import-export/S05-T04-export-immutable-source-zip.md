@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T10]
 requirements: [PRO-06, NFR-06]
 source_task: S05-T04
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: ready
 ---
 # S05-T04 — Export immutable source ZIP
 
