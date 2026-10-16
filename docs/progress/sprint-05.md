@@ -12,7 +12,7 @@
 | [S05-T03](../../implementation/sprint-05-assets-import-export/S05-T03-validate-archives-and-define-idempotent-import-job.md) | DONE | Not measured | [Scoped test report](../test-reports/s05-t03.md); accepted by the user on 2026-10-13 |
 | [S05-T12](../../implementation/sprint-05-assets-import-export/S05-T12-implement-authenticated-zip-import-intake.md) | DONE | Not measured | [Scoped test report](../test-reports/s05-t12.md); accepted by the user as co-maintainer review on 2026-10-16 |
 | [S05-T10](../../implementation/sprint-05-assets-import-export/S05-T10-apply-validated-import-as-a-consistent-project.md) | DONE | Not recorded | [Report](../test-reports/s05-t10.md) with 20/20 focused tests plus live apply pass; accepted by the user as co-maintainer review on 2026-10-16 |
-| [S05-T04](../../implementation/sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | NOT_STARTED | Not recorded | No implementation evidence |
+| [S05-T04](../../implementation/sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | IN_PROGRESS | Not recorded | Implementation complete 2026-10-16: [report](../test-reports/s05-t04.md) with 6/6 focused tests including import round trip; review pending |
 | [S05-T05](../../implementation/sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S05-T06](../../implementation/sprint-05-assets-import-export/S05-T06-create-minimal-versioned-internal-templates.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S05-T11](../../implementation/sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | NOT_STARTED | Not recorded | No implementation evidence |

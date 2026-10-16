@@ -27,6 +27,7 @@ export class SourceExportError extends Error {
   constructor(code: SourceExportErrorCode) {
     super(code);
     this.name = "SourceExportError";
+    this.code = code;
     this.status = statusFor[code];
   }
 }
@@ -268,7 +269,10 @@ export async function buildSourceZip(
   }
   const bytes = encodeZip([...dirEntries, ...entries]);
   const manifestHash = digest(
-    JSON.stringify(files.map((file) => [file.path, file.sha256, file.sizeBytes])),
+    Buffer.from(
+      JSON.stringify(files.map((file) => [file.path, file.sha256, file.sizeBytes])),
+      "utf8",
+    ),
   );
   return { bytes, revisionNo: input.revisionNo, files, manifestHash };
 }
