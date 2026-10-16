@@ -25,6 +25,7 @@ import { registerBulkProjectRoutes } from "./modules/projects/bulk.js";
 import { registerOwnershipRoutes } from "./modules/projects/ownership.js";
 import { registerTagRoutes } from "./modules/tags/routes.js";
 import { registerTreeRoutes } from "./modules/files/tree.js";
+import { registerFigurePreviewRoute } from "./modules/files/figure-preview.js";
 import { registerTextRoutes } from "./modules/text/routes.js";
 import { registerCheckpointRoutes } from "./modules/history/checkpoint.js";
 import { registerHistoryRoutes } from "./modules/history/routes.js";
@@ -37,8 +38,6 @@ import { registerCompilationRoutes } from "./modules/compilations/routes.js";
 import { registerCollabTicketRoutes, type TicketStore } from "./modules/collab/ticket.js";
 import { registerSynctexRoutes } from "./modules/synctex/routes.js";
 import { registerSearchRoutes } from "./modules/search/routes.js";
-
-
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -208,6 +207,7 @@ export function createServer(options: ServerOptions) {
       origin: options.origin,
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
     });
+    registerFigurePreviewRoute(app, { db: options.db, storage: options.storage });
     registerTextRoutes(app, {
       db: options.db,
       origin: options.origin,

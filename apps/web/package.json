@@ -4,15 +4,16 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@latex-collab/contracts": "workspace:*",
     "@latex-collab/config": "workspace:*",
+    "@latex-collab/contracts": "workspace:*",
     "@latex-collab/editor": "workspace:*",
-    "yjs": "13.6.27",
-    "y-codemirror.next": "0.3.5",
+    "@tanstack/react-query": "5.104.1",
+    "katex": "0.19.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-router-dom": "7.18.4",
-    "@tanstack/react-query": "5.104.1"
+    "y-codemirror.next": "0.3.5",
+    "yjs": "13.6.27"
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1",

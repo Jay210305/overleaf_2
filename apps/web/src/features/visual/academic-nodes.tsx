@@ -1,15 +1,26 @@
-import React, { useState, useEffect } from "react";
-import type {
-  MathDisplayNode,
-  FigureNode,
-  TableNode,
-  VisualBlockNode,
-} from "@latex-collab/editor";
+import React, { useState, useEffect, useRef } from "react";
+import katex from "katex";
+import "katex/dist/katex.min.css";
+import type { MathDisplayNode, FigureNode, TableNode, VisualBlockNode } from "@latex-collab/editor";
+
+export function MathPreview({ formula, displayMode }: { formula: string; displayMode: boolean }) {
+  const element = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    if (!element.current) return;
+    try {
+      katex.render(formula, element.current, { displayMode, throwOnError: true, trust: false });
+    } catch {
+      element.current.textContent = formula;
+    }
+  }, [formula, displayMode]);
+  return <span ref={element}>{formula}</span>;
+}
 
 export interface VisualMathProps {
   node: MathDisplayNode;
   readOnly?: boolean;
-  onFormulaChange?: ((nodeId: string, newFormula: string, expectedHash: string) => void) | undefined;
+  onFormulaChange?:
+    ((nodeId: string, newFormula: string, expectedHash: string) => void) | undefined;
 }
 
 export const VisualMath: React.FC<VisualMathProps> = ({
@@ -19,15 +30,16 @@ export const VisualMath: React.FC<VisualMathProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formula, setFormula] = useState(node.formula);
+  const [base, setBase] = useState({ formula: node.formula, hash: node.hash });
 
   useEffect(() => {
-    setFormula(node.formula);
-  }, [node.formula]);
+    if (!isEditing) setFormula(node.formula);
+  }, [node.formula, isEditing]);
 
   const handleCommit = () => {
     setIsEditing(false);
-    if (formula !== node.formula) {
-      onFormulaChange?.(node.id, formula, node.hash);
+    if (formula !== base.formula) {
+      onFormulaChange?.(node.id, formula, base.hash);
     }
   };
 
@@ -77,18 +89,22 @@ export const VisualMath: React.FC<VisualMathProps> = ({
         <div
           className="cursor-pointer py-2 px-3 text-center font-mono text-base overflow-x-auto hover:bg-purple-100/50 dark:hover:bg-purple-900/30 rounded transition-colors"
           onClick={() => {
-            if (!readOnly) setIsEditing(true);
+            if (!readOnly) {
+              setBase({ formula: node.formula, hash: node.hash });
+              setIsEditing(true);
+            }
           }}
           tabIndex={readOnly ? -1 : 0}
           onKeyDown={(e) => {
             if (!readOnly && (e.key === "Enter" || e.key === " ")) {
               e.preventDefault();
+              setBase({ formula: node.formula, hash: node.hash });
               setIsEditing(true);
             }
           }}
           data-testid="math-preview"
         >
-          {node.formula}
+          <MathPreview formula={node.formula} displayMode />
         </div>
       )}
     </div>
@@ -98,14 +114,21 @@ export const VisualMath: React.FC<VisualMathProps> = ({
 export interface VisualFigureProps {
   node: FigureNode;
   authorizedImagePaths?: string[] | undefined;
+  projectId?: string | undefined;
+  fileId?: string | undefined;
+  apiUrl?: string | undefined;
   readOnly?: boolean;
-  onCaptionChange?: ((nodeId: string, newCaption: string, expectedHash: string) => void) | undefined;
+  onCaptionChange?:
+    ((nodeId: string, newCaption: string, expectedHash: string) => void) | undefined;
   onLabelChange?: ((nodeId: string, newLabel: string, expectedHash: string) => void) | undefined;
 }
 
 export const VisualFigure: React.FC<VisualFigureProps> = ({
   node,
   authorizedImagePaths,
+  projectId,
+  fileId,
+  apiUrl,
   readOnly = false,
   onCaptionChange,
   onLabelChange,
@@ -114,16 +137,49 @@ export const VisualFigure: React.FC<VisualFigureProps> = ({
   const [label, setLabel] = useState(node.label ?? "");
   const [isEditingCaption, setIsEditingCaption] = useState(false);
   const [isEditingLabel, setIsEditingLabel] = useState(false);
+  const [captionBase, setCaptionBase] = useState({ value: node.caption ?? "", hash: node.hash });
+  const [labelBase, setLabelBase] = useState({ value: node.label ?? "", hash: node.hash });
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    setCaption(node.caption ?? "");
-    setLabel(node.label ?? "");
-  }, [node.caption, node.label]);
+    if (!isEditingCaption) setCaption(node.caption ?? "");
+    if (!isEditingLabel) setLabel(node.label ?? "");
+  }, [node.caption, node.label, isEditingCaption, isEditingLabel]);
+
+  useEffect(() => {
+    if (!projectId || !fileId || !apiUrl) return;
+    const controller = new AbortController();
+    let objectUrl: string | null = null;
+    setImageUrl(null);
+    void (async () => {
+      try {
+        const response = await fetch(
+          `${apiUrl}/projects/${projectId}/files/${fileId}/figure?path=${encodeURIComponent(node.imagePath)}`,
+          { credentials: "include", signal: controller.signal },
+        );
+        if (
+          !response.ok ||
+          !["image/png", "image/jpeg", "image/webp"].includes(
+            response.headers.get("content-type") ?? "",
+          )
+        )
+          return;
+        const blob = await response.blob();
+        if (!blob.size || controller.signal.aborted) return;
+        objectUrl = URL.createObjectURL(blob);
+        setImageUrl(objectUrl);
+      } catch {
+        // A missing, revoked or unavailable asset remains visibly unverified.
+      }
+    })();
+    return () => {
+      controller.abort();
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [apiUrl, fileId, node.imagePath, projectId]);
 
   const isAuthorized =
-    !authorizedImagePaths ||
-    authorizedImagePaths.includes(node.imagePath) ||
-    !node.imagePath.includes("..");
+    imageUrl !== null || (authorizedImagePaths?.includes(node.imagePath) ?? false);
 
   return (
     <figure
@@ -147,7 +203,15 @@ export const VisualFigure: React.FC<VisualFigureProps> = ({
 
       <div className="figure-preview-area p-3 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 text-center text-sm font-mono text-gray-600 dark:text-gray-300">
         <div className="py-2">
-          <span>[Image: {node.imagePath}]</span>
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={node.imagePath}
+              className="mx-auto max-w-full max-h-72 object-contain"
+            />
+          ) : (
+            <span>[Image: {node.imagePath}]</span>
+          )}
         </div>
       </div>
 
@@ -162,15 +226,15 @@ export const VisualFigure: React.FC<VisualFigureProps> = ({
               onChange={(e) => setCaption(e.target.value)}
               onBlur={() => {
                 setIsEditingCaption(false);
-                if (caption !== (node.caption ?? "")) {
-                  onCaptionChange?.(node.id, caption, node.hash);
+                if (caption !== captionBase.value) {
+                  onCaptionChange?.(node.id, caption, captionBase.hash);
                 }
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   setIsEditingCaption(false);
-                  if (caption !== (node.caption ?? "")) {
-                    onCaptionChange?.(node.id, caption, node.hash);
+                  if (caption !== captionBase.value) {
+                    onCaptionChange?.(node.id, caption, captionBase.hash);
                   }
                 } else if (e.key === "Escape") {
                   setCaption(node.caption ?? "");
@@ -185,7 +249,10 @@ export const VisualFigure: React.FC<VisualFigureProps> = ({
             <span
               className="cursor-pointer hover:underline"
               onClick={() => {
-                if (!readOnly) setIsEditingCaption(true);
+                if (!readOnly) {
+                  setCaptionBase({ value: node.caption ?? "", hash: node.hash });
+                  setIsEditingCaption(true);
+                }
               }}
               data-testid="figure-caption"
             >
@@ -204,15 +271,15 @@ export const VisualFigure: React.FC<VisualFigureProps> = ({
               onChange={(e) => setLabel(e.target.value)}
               onBlur={() => {
                 setIsEditingLabel(false);
-                if (label !== (node.label ?? "")) {
-                  onLabelChange?.(node.id, label, node.hash);
+                if (label !== labelBase.value) {
+                  onLabelChange?.(node.id, label, labelBase.hash);
                 }
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   setIsEditingLabel(false);
-                  if (label !== (node.label ?? "")) {
-                    onLabelChange?.(node.id, label, node.hash);
+                  if (label !== labelBase.value) {
+                    onLabelChange?.(node.id, label, labelBase.hash);
                   }
                 } else if (e.key === "Escape") {
                   setLabel(node.label ?? "");
@@ -227,7 +294,10 @@ export const VisualFigure: React.FC<VisualFigureProps> = ({
             <span
               className="font-mono bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded cursor-pointer"
               onClick={() => {
-                if (!readOnly) setIsEditingLabel(true);
+                if (!readOnly) {
+                  setLabelBase({ value: node.label ?? "", hash: node.hash });
+                  setIsEditingLabel(true);
+                }
               }}
               data-testid="figure-label"
             >
@@ -243,13 +313,15 @@ export const VisualFigure: React.FC<VisualFigureProps> = ({
 export interface VisualTableProps {
   node: TableNode;
   readOnly?: boolean;
-  onCellChange?: ((
-    nodeId: string,
-    rowIndex: number,
-    colIndex: number,
-    newContent: string,
-    expectedHash: string
-  ) => void) | undefined;
+  onCellChange?:
+    | ((
+        nodeId: string,
+        rowIndex: number,
+        colIndex: number,
+        newContent: string,
+        expectedHash: string,
+      ) => void)
+    | undefined;
 }
 
 export const VisualTable: React.FC<VisualTableProps> = ({
@@ -257,12 +329,14 @@ export const VisualTable: React.FC<VisualTableProps> = ({
   readOnly = false,
   onCellChange,
 }) => {
-  const [editingCell, setEditingCell] = useState<{ row: number; col: number } | null>(null);
+  const [editingCell, setEditingCell] = useState<{ row: number; col: number; hash: string } | null>(
+    null,
+  );
   const [cellValue, setCellValue] = useState("");
 
-  const handleCommitCell = (row: number, col: number, expectedHash: string) => {
+  const handleCommitCell = (row: number, col: number) => {
     setEditingCell(null);
-    onCellChange?.(node.id, row, col, cellValue, expectedHash);
+    if (editingCell) onCellChange?.(node.id, row, col, cellValue, editingCell.hash);
   };
 
   return (
@@ -272,13 +346,19 @@ export const VisualTable: React.FC<VisualTableProps> = ({
       data-node-id={node.id}
     >
       <div className="text-xs text-gray-500 mb-2 font-mono flex items-center justify-between">
-        <span>Table ({node.environment}) — Alignment: {node.alignment}</span>
+        <span>
+          Table ({node.environment}) — Alignment: {node.alignment}
+        </span>
       </div>
 
       <table className="w-full border-collapse border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
         <tbody>
           {node.rows.map((row) => (
-            <tr key={row.rowIndex} className="border-b border-gray-200 dark:border-gray-700" data-testid="table-row">
+            <tr
+              key={row.rowIndex}
+              className="border-b border-gray-200 dark:border-gray-700"
+              data-testid="table-row"
+            >
               {row.cells.map((cell) => {
                 const isEditing =
                   editingCell?.row === cell.rowIndex && editingCell?.col === cell.colIndex;
@@ -294,10 +374,10 @@ export const VisualTable: React.FC<VisualTableProps> = ({
                         type="text"
                         value={cellValue}
                         onChange={(e) => setCellValue(e.target.value)}
-                        onBlur={() => handleCommitCell(cell.rowIndex, cell.colIndex, cell.hash)}
+                        onBlur={() => handleCommitCell(cell.rowIndex, cell.colIndex)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
-                            handleCommitCell(cell.rowIndex, cell.colIndex, cell.hash);
+                            handleCommitCell(cell.rowIndex, cell.colIndex);
                           } else if (e.key === "Escape") {
                             setEditingCell(null);
                           }
@@ -311,7 +391,11 @@ export const VisualTable: React.FC<VisualTableProps> = ({
                         className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-1 py-0.5 rounded block"
                         onClick={() => {
                           if (!readOnly) {
-                            setEditingCell({ row: cell.rowIndex, col: cell.colIndex });
+                            setEditingCell({
+                              row: cell.rowIndex,
+                              col: cell.colIndex,
+                              hash: cell.hash,
+                            });
                             setCellValue(cell.content);
                           }
                         }}
@@ -333,6 +417,9 @@ export const VisualTable: React.FC<VisualTableProps> = ({
 export interface AcademicVisualNodesViewProps {
   nodes: VisualBlockNode[];
   authorizedImagePaths?: string[];
+  projectId?: string | undefined;
+  fileId?: string | undefined;
+  apiUrl?: string | undefined;
   readOnly?: boolean;
   onFormulaChange?: (nodeId: string, newFormula: string, expectedHash: string) => void;
   onCaptionChange?: (nodeId: string, newCaption: string, expectedHash: string) => void;
@@ -342,13 +429,16 @@ export interface AcademicVisualNodesViewProps {
     rowIndex: number,
     colIndex: number,
     newContent: string,
-    expectedHash: string
+    expectedHash: string,
   ) => void;
 }
 
 export const AcademicVisualNodesView: React.FC<AcademicVisualNodesViewProps> = ({
   nodes,
   authorizedImagePaths,
+  projectId,
+  fileId,
+  apiUrl,
   readOnly = false,
   onFormulaChange,
   onCaptionChange,
@@ -374,6 +464,9 @@ export const AcademicVisualNodesView: React.FC<AcademicVisualNodesViewProps> = (
                 key={node.id}
                 node={node}
                 authorizedImagePaths={authorizedImagePaths}
+                projectId={projectId}
+                fileId={fileId}
+                apiUrl={apiUrl}
                 readOnly={readOnly}
                 onCaptionChange={onCaptionChange}
                 onLabelChange={onLabelChange}

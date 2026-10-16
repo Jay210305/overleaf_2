@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S11-T04]
 requirements: [EDT-13]
 source_task: S11-T05
-status: done
-readiness: completed
+status: in_progress
+readiness: ready
 ---
 # S11-T05 — Render supported math figures tables and cites
 
@@ -66,9 +66,9 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Only declared simple nodes edit; previews use authorized assets and compatible math while compiled PDF remains final rendering
+- [x] Only declared simple nodes edit; previews use authorized assets and compatible math while compiled PDF remains final rendering. Scoped checks are in [S11-T05 report](../../docs/test-reports/s11-t05.md); final acceptance awaits G3 gates and independent review.
 - [ ] EDT-13: Supported visual nodes edit canonical source; unsupported syntax has visible non-destructive fallback. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim. Real PostgreSQL/MinIO denial and two-context browser checks are recorded in the report.
 
 ## Verification
 

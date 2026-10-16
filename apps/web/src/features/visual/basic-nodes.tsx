@@ -7,6 +7,7 @@ import type {
   VisualSpan,
   VisualBlockNode,
 } from "@latex-collab/editor";
+import { MathPreview } from "./academic-nodes.js";
 
 export interface VisualHeadingProps {
   node: HeadingNode;
@@ -21,15 +22,16 @@ export const VisualHeading: React.FC<VisualHeadingProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(node.title);
+  const [base, setBase] = useState({ title: node.title, hash: node.hash });
 
   useEffect(() => {
-    setTitle(node.title);
-  }, [node.title]);
+    if (!isEditing) setTitle(node.title);
+  }, [node.title, isEditing]);
 
   const handleCommit = () => {
     setIsEditing(false);
-    if (title !== node.title) {
-      onTitleChange?.(node.id, title, node.hash);
+    if (title !== base.title) {
+      onTitleChange?.(node.id, title, base.hash);
     }
   };
 
@@ -72,12 +74,16 @@ export const VisualHeading: React.FC<VisualHeadingProps> = ({
         <Tag
           className={`${headingClasses[node.level]} cursor-pointer group-hover:bg-gray-50 dark:group-hover:bg-gray-800/50 px-2 py-1 rounded transition-colors`}
           onClick={() => {
-            if (!readOnly) setIsEditing(true);
+            if (!readOnly) {
+              setBase({ title: node.title, hash: node.hash });
+              setIsEditing(true);
+            }
           }}
           tabIndex={readOnly ? -1 : 0}
           onKeyDown={(e) => {
             if (!readOnly && (e.key === "Enter" || e.key === " ")) {
               e.preventDefault();
+              setBase({ title: node.title, hash: node.hash });
               setIsEditing(true);
             }
           }}
@@ -109,7 +115,7 @@ export const VisualSpanView: React.FC<VisualSpanViewProps> = ({ span }) => {
           className="font-mono bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 px-1 py-0.5 rounded text-sm mx-0.5 border border-purple-200 dark:border-purple-800"
           data-testid="visual-span-math"
         >
-          ${span.formula}$
+          <MathPreview formula={span.formula} displayMode={false} />
         </span>
       );
     case "citation":
@@ -131,7 +137,9 @@ export const VisualSpanView: React.FC<VisualSpanViewProps> = ({ span }) => {
         </span>
       );
     case "rawInline":
-      return <code className="text-xs bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">{span.raw}</code>;
+      return (
+        <code className="text-xs bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">{span.raw}</code>
+      );
   }
 };
 
@@ -148,15 +156,16 @@ export const VisualParagraph: React.FC<VisualParagraphProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(node.text);
+  const [base, setBase] = useState({ text: node.text, hash: node.hash });
 
   useEffect(() => {
-    setText(node.text);
-  }, [node.text]);
+    if (!isEditing) setText(node.text);
+  }, [node.text, isEditing]);
 
   const handleCommit = () => {
     setIsEditing(false);
-    if (text !== node.text) {
-      onTextChange?.(node.id, text, node.hash);
+    if (text !== base.text) {
+      onTextChange?.(node.id, text, base.hash);
     }
   };
 
@@ -181,12 +190,16 @@ export const VisualParagraph: React.FC<VisualParagraphProps> = ({
         <p
           className="text-gray-800 dark:text-gray-200 leading-relaxed font-serif px-2 py-1 rounded cursor-text group-hover:bg-gray-50 dark:group-hover:bg-gray-800/40 transition-colors"
           onClick={() => {
-            if (!readOnly) setIsEditing(true);
+            if (!readOnly) {
+              setBase({ text: node.text, hash: node.hash });
+              setIsEditing(true);
+            }
           }}
           tabIndex={readOnly ? -1 : 0}
           onKeyDown={(e) => {
             if (!readOnly && e.key === "Enter") {
               e.preventDefault();
+              setBase({ text: node.text, hash: node.hash });
               setIsEditing(true);
             }
           }}
@@ -213,15 +226,16 @@ export const VisualListItemView: React.FC<VisualListItemProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(item.content);
+  const [base, setBase] = useState({ content: item.content, hash: item.hash });
 
   useEffect(() => {
-    setContent(item.content);
-  }, [item.content]);
+    if (!isEditing) setContent(item.content);
+  }, [item.content, isEditing]);
 
   const handleCommit = () => {
     setIsEditing(false);
-    if (content !== item.content) {
-      onChange?.(item.index, content, item.hash);
+    if (content !== base.content) {
+      onChange?.(item.index, content, base.hash);
     }
   };
 
@@ -253,12 +267,16 @@ export const VisualListItemView: React.FC<VisualListItemProps> = ({
         <span
           className="cursor-pointer px-1 py-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           onClick={() => {
-            if (!readOnly) setIsEditing(true);
+            if (!readOnly) {
+              setBase({ content: item.content, hash: item.hash });
+              setIsEditing(true);
+            }
           }}
           tabIndex={readOnly ? -1 : 0}
           onKeyDown={(e) => {
             if (!readOnly && e.key === "Enter") {
               e.preventDefault();
+              setBase({ content: item.content, hash: item.hash });
               setIsEditing(true);
             }
           }}
@@ -273,19 +291,22 @@ export const VisualListItemView: React.FC<VisualListItemProps> = ({
 export interface VisualListProps {
   node: ListNode;
   readOnly?: boolean;
-  onItemChange?: ((nodeId: string, itemIndex: number, newContent: string, expectedHash: string) => void) | undefined;
+  onItemChange?:
+    | ((nodeId: string, itemIndex: number, newContent: string, expectedHash: string) => void)
+    | undefined;
 }
 
-export const VisualList: React.FC<VisualListProps> = ({
-  node,
-  readOnly = false,
-  onItemChange,
-}) => {
+export const VisualList: React.FC<VisualListProps> = ({ node, readOnly = false, onItemChange }) => {
   const ListTag = node.listKind === "enumerate" ? "ol" : "ul";
-  const listClass = node.listKind === "enumerate" ? "list-decimal list-inside" : "list-disc list-inside";
+  const listClass =
+    node.listKind === "enumerate" ? "list-decimal list-inside" : "list-disc list-inside";
 
   return (
-    <div className="visual-list-container my-3 px-2" data-testid={`visual-list-${node.listKind}`} data-node-id={node.id}>
+    <div
+      className="visual-list-container my-3 px-2"
+      data-testid={`visual-list-${node.listKind}`}
+      data-node-id={node.id}
+    >
       <ListTag className={`${listClass} space-y-1`}>
         {node.items.map((item) => (
           <VisualListItemView
@@ -307,7 +328,12 @@ export interface BasicVisualNodesViewProps {
   readOnly?: boolean;
   onHeadingChange?: (nodeId: string, newTitle: string, expectedHash: string) => void;
   onParagraphChange?: (nodeId: string, newText: string, expectedHash: string) => void;
-  onListItemChange?: (nodeId: string, itemIndex: number, newContent: string, expectedHash: string) => void;
+  onListItemChange?: (
+    nodeId: string,
+    itemIndex: number,
+    newContent: string,
+    expectedHash: string,
+  ) => void;
 }
 
 export const BasicVisualNodesView: React.FC<BasicVisualNodesViewProps> = ({
@@ -318,7 +344,10 @@ export const BasicVisualNodesView: React.FC<BasicVisualNodesViewProps> = ({
   onListItemChange,
 }) => {
   return (
-    <div className="basic-visual-nodes-container space-y-2 p-4" data-testid="basic-visual-nodes-view">
+    <div
+      className="basic-visual-nodes-container space-y-2 p-4"
+      data-testid="basic-visual-nodes-view"
+    >
       {nodes.map((node) => {
         switch (node.kind) {
           case "heading":
