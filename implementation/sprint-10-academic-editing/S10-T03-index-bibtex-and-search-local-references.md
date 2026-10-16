@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S10-T02]
 requirements: [INT-01, INT-02, INT-08]
 source_task: S10-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T03 — Index BibTeX and search local references
 

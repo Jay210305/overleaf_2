@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S10-T04]
 requirements: [EDT-09]
 source_task: S10-T05
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T05 — Create valid academic insertion snippets
 

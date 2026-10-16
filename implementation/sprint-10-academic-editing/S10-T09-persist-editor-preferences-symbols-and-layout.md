@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S10-T08]
 requirements: [ACC-05, EDT-10]
 source_task: S10-T09
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T09 — Persist editor preferences symbols and layout
 

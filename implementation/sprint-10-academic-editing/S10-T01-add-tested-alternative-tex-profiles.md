@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T17, S09-T14]
 requirements: [CMP-05]
 source_task: S10-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T01 — Add tested alternative TeX profiles
 

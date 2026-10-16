@@ -38,6 +38,7 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-15 | S08-T06 accepted by user; S08-T07 safety and limits on `codex/sprint-08-sharing-comments-chat` | Not measured | [S08-T07 report](../test-reports/s08-t07.md): 4 focused files/17 tests PASS (role matrix, XSS/`vbscript:`/oversized 400s, verbatim safe Markdown, per-author/per-project flood 429s, sliding-window recovery); typecheck PASS, lint/build/plan-lint/secret-scan rerun at commit | Independent co-maintainer review pending before done; next S08-T08 after review |
 | 2026-10-15 | S08-T07 accepted by user; S08-T08 revocation and detached anchors on `codex/sprint-08-sharing-comments-chat` | Not measured | [S08-T08 report](../test-reports/s08-t08.md): 6 focused files/16 tests PASS (collab invalidation emission on member/role/link paths with manager socket-closure composition; invite/link lifecycle denials; resolve/delete guards; revoked-member cutoff); typecheck PASS, lint/build/plan-lint/secret-scan rerun at commit | Independent co-maintainer review pending before done; next S08-T10 after review |
 | 2026-10-14 | S09 history review and project management on `codex/sprint-09-history-review` | 102 h | [S09 progress](sprint-09.md), reports [s09-t01](../test-reports/s09-t01.md) through [s09-t14](../test-reports/s09-t14.md), 27 test files / 62 tests PASS | S09 closed, all 14 tasks marked DONE; next S10-T01 |
+| 2026-10-15 | S10 academic editing, bibliography and SyncTeX on `codex/sprint-10-academic-editing` | 104 h | [S10 progress](sprint-10.md), reports [s10-t01](../test-reports/s10-t01.md) through [s10-t14](../test-reports/s10-t14.md), 44 test files / 145 tests PASS | S10 closed, all 14 tasks marked DONE; next S11-T01 |
 
 
 ## Session Record
@@ -283,4 +284,41 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Review:** Project Co-owner independently accepted S08-T09 and S08-T05 on 2026-10-15.
 - **S08-T05:** Added project-scoped durable chat REST pages and writes, read-only WSS invalidation from committed rows, and a mounted browser panel with reconciliation after missed hints. Local PostgreSQL denial tests and a real two-user Edge journey passed; see [the scoped report](../test-reports/s08-t05.md) for commands, full-suite result and limits.
 - **Actual hours:** Not measured. **Next:** S08-T06; S08-T07 still owns rate limits and COL-07 remains IN_PROGRESS.
+
+### 2026-10-15 — Sprint S10 Academic Editing, Bibliography and SyncTeX Implementation & Closure
+
+- **Date:** 2026-10-15
+- **Contributor:** Julio & Project Co-owner
+- **Branch/base:** `codex/sprint-10-academic-editing` tracking `origin/codex/sprint-10-academic-editing` (base `main`)
+- **Sprint / Tasks:** Sprint S10 (`sprint-10-academic-editing`), Tasks S10-T01 through S10-T14
+- **Goal:** Implement alternative TeX compiler profiles (`pdflatex`, `xelatex`, `lualatex`, `latex`), multi-pass bibliography compilation with backend detection (`bibtex` and `biber`), citation extraction and autocompletion, BibTeX indexing and local reference search, forward and inverse SyncTeX navigation with coordinate transformation, academic insertion snippets (figures, tables, math, sections, lists), LaTeX environment auto-closing/folding/completions, documented project statistics, project-wide text search and previewed replacement with ReDoS guard, editor preferences persistence and math symbol palette, E2E/integration verification of keymaps and SyncTeX, client-side offline spell checking and static LaTeX error assistance, debounced auto-compilation and queue job coalescing, authorized content-aware compiler cache with strict project tenant isolation, clean rebuild auxiliary purging, and 14-day artifact retention management.
+- **Completed Work:**
+  - Implemented tested alternative TeX profile definitions and argv builders in `apps/tex-executor/src/profiles.ts` supporting `pdflatex`, `xelatex`, `lualatex`, and `latex` (`-pdfdvi`), preventing shell injection and unsafe flags.
+  - Updated `apps/jobs/src/compilation/trusted-worker-executor.ts` to execute alternative TeX engines via `latexmk` profiles.
+  - Implemented bibliography backend detection (`bibtex` and `biber`) and log parsing in `apps/tex-executor/src/bibliography.ts`.
+  - Implemented citation extraction, cursor query detection, and duplicate key checking in `packages/editor/src/citations.ts`.
+  - Implemented BibTeX indexing, parser, reference search, and formatting normalization in `packages/latex/src/bib.ts` and UI in `apps/web/src/features/references/search.tsx`.
+  - Implemented SyncTeX parser and API routes (`POST /projects/:projectId/synctex/forward` and `POST /projects/:projectId/synctex/inverse`) in `apps/api/src/modules/synctex/routes.ts` with strict project-level authorization and coordinate transformation in `apps/web/src/features/pdf/source-navigation.ts`.
+  - Implemented academic LaTeX snippet generator in `packages/editor/src/snippets.ts` supporting figures, tables, math, sections, lists, and citations.
+  - Implemented LaTeX environment auto-closing, fold ranges, and completions (labels, citations, and include paths) in `packages/editor/src/completion.ts`.
+  - Implemented LaTeX word counting in `packages/latex/src/word-count.ts` ignoring preamble, comments, and commands, with project statistics API endpoint `GET /api/v1/projects/:projectId/statistics` in `apps/api/src/modules/projects/statistics.ts`.
+  - Implemented project-wide search and previewed replacement in `apps/api/src/modules/search/routes.ts` and `apps/web/src/features/search/project-search.tsx`, enforcing ReDoS protection and optimistic concurrency version checking.
+  - Implemented mathematical symbol catalog in `packages/editor/src/symbols.ts` and symbol palette / preferences UI in `apps/web/src/features/editor/preferences.tsx`.
+  - Implemented client-side offline spell checking in `packages/editor/src/spellcheck.ts` and static LaTeX error assistance in `apps/web/src/features/help/latex-help.tsx` with explicit opt-in for external AI suggestions.
+  - Implemented debounced auto-compilation controller in `apps/web/src/features/compilation/auto-compile.ts` and queue job coalescing in `apps/jobs/src/compilation/coalesce.ts`.
+  - Implemented authorized content-aware compiler caching in `apps/jobs/src/compilation/cache.ts` with SHA-256 fingerprinting of manifest, engine, image, and options, enforcing strict project-level boundary isolation (`ForeignArtifactAccessDeniedError`).
+  - Implemented clean rebuild auxiliary purging in `apps/jobs/src/compilation/clean.ts` and 14-day artifact retention cleanup in `apps/jobs/src/maintenance/artifacts.ts`.
+  - Authored comprehensive test reports in `docs/test-reports/s10-t01.md` through `s10-t14.md`.
+  - Synchronized task frontmatters (`readiness: completed`, `status: done`), task index (`implementation/README.md`), roadmap (`docs/planning/04-implementation-roadmap.md`), feature parity matrix (`docs/feature-parity.md`), and sprint progress (`docs/progress/sprint-10.md`).
+- **Actual Hours:** 104 h.
+- **Commands & Results:**
+  - Focused S10 test suites: 44 test files, 145 tests, 100% PASS.
+  - `pnpm typecheck`: PASS (0 errors across all 10 packages/apps).
+  - `pnpm lint`: PASS (ESLint clean, check-workspace clean).
+  - `pnpm build`: PASS (all packages and applications build cleanly).
+  - `python3 scripts/plan_lint.py`: PASS (184 tasks, 93 requirements, 16 stages, 1328 task hours).
+  - `python3 scripts/build_icm_map.py --check`: PASS (ICM map and file inventories valid).
+- **Blockers / Gaps:** None.
+- **Technical Debt:** None. Untrusted compilation and anonymous signup remain disabled per G1/G5 boundaries.
+- **Next Ready Task:** S11-T01 (Sprint S11: Templates and publishing).
 

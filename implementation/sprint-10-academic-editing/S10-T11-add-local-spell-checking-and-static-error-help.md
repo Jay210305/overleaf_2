@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S10-T09]
 requirements: [EDT-11, EDT-14]
 source_task: S10-T06
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T11 — Add local spell checking and static error help
 

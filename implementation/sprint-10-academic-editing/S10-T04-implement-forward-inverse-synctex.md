@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S10-T03]
 requirements: [CMP-07]
 source_task: S10-T04
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T04 — Implement forward inverse SyncTeX
 

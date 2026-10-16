@@ -17,7 +17,7 @@
 | [S08-T06](../../implementation/sprint-08-sharing-comments-chat/S08-T06-create-mention-and-in-app-notifications.md) | DONE; user review confirmed 2026-10-15 | Not recorded | [Mention/notification API, idempotency and UI report](../test-reports/s08-t06.md) |
 | [S08-T07](../../implementation/sprint-08-sharing-comments-chat/S08-T07-enforce-comment-chat-safety-and-limits.md) | DONE; user review confirmed 2026-10-15 | Not recorded | [Comment/chat safety, XSS backstop and rate-limit report](../test-reports/s08-t07.md) |
 | [S08-T08](../../implementation/sprint-08-sharing-comments-chat/S08-T08-verify-sharing-revocation-and-detached-anchors.md) | DONE; user review confirmed 2026-10-15 | Not recorded | [Revocation propagation, lifecycle denials and detached-anchor report](../test-reports/s08-t08.md) |
-| [S08-T10](../../implementation/sprint-08-sharing-comments-chat/S08-T10-stabilize-and-review-g2-collaboration.md) | IN_PROGRESS; audit drafted, review pending | Not recorded | [G2 stabilization evidence](test-reports/s08-t10.md) and [gate audit](test-reports/gate-g2-audit.md) |
+| [S08-T10](../../implementation/sprint-08-sharing-comments-chat/S08-T10-stabilize-and-review-g2-collaboration.md) | IN_PROGRESS; audit drafted, review pending | Not recorded | [G2 stabilization evidence](../test-reports/s08-t10.md) and [gate audit](../test-reports/gate-g2-audit.md) |
 
 ## Decisions and Migrations
 

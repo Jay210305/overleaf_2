@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S10-T13]
 requirements: [CMP-10, CMP-09]
 source_task: S06-T05
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S10-T14 — Implement clean rebuild and retention cleanup
 

@@ -715,5 +715,79 @@ export const ownershipViewSchema = z.strictObject({
 });
 export type OwnershipView = z.infer<typeof ownershipViewSchema>;
 
+export const forwardRequestSchema = z.strictObject({
+  jobId: z.string().uuid(),
+  fileId: z.string().uuid(),
+  line: z.number().int().min(1),
+  column: z.number().int().min(1),
+});
+export type ForwardRequest = z.infer<typeof forwardRequestSchema>;
+
+export const synctexBoxSchema = z.strictObject({
+  x: z.number(),
+  y: z.number(),
+  width: z.number(),
+  height: z.number(),
+});
+export type SynctexBox = z.infer<typeof synctexBoxSchema>;
+
+export const forwardViewSchema = z.strictObject({
+  page: z.number().int().min(1),
+  boxes: z.array(synctexBoxSchema).max(2000),
+});
+export type ForwardView = z.infer<typeof forwardViewSchema>;
+
+export const inverseRequestSchema = z.strictObject({
+  jobId: z.string().uuid(),
+  page: z.number().int().min(1),
+  x: z.number().min(0),
+  y: z.number().min(0),
+});
+export type InverseRequest = z.infer<typeof inverseRequestSchema>;
+
+export const inverseViewSchema = z.strictObject({
+  fileId: z.string().uuid(),
+  line: z.number().int().min(1),
+  column: z.number().int().min(1),
+});
+export type InverseView = z.infer<typeof inverseViewSchema>;
+
+export const statisticsSchema = z.strictObject({
+  approximateWords: z.number().int().min(0),
+  sizeBytes: z.number().int().min(0),
+  fileCount: z.number().int().min(0),
+  lastCompilationAt: z.string().datetime().nullable(),
+});
+export type StatisticsView = z.infer<typeof statisticsSchema>;
+
+export const searchMatchSchema = z.strictObject({
+  fileId: z.string().uuid(),
+  path: z.string().min(1).max(10000),
+  line: z.number().int().min(1),
+  text: z.string().max(10000),
+});
+export type SearchMatch = z.infer<typeof searchMatchSchema>;
+
+export const searchViewSchema = z.strictObject({
+  items: z.array(searchMatchSchema).max(2000),
+  nextCursor: z.string().nullable(),
+});
+export type SearchView = z.infer<typeof searchViewSchema>;
+
+export const replaceRequestSchema = z.strictObject({
+  expectedRevision: z.number().int().min(0),
+  query: z.string().min(1).max(10000),
+  replacement: z.string().max(10000),
+  regex: z.boolean().default(false),
+  fileIds: z.array(z.string().uuid()).max(2000).optional(),
+});
+export type ReplaceRequest = z.infer<typeof replaceRequestSchema>;
+
+export const replaceResultSchema = z.strictObject({
+  newRevisionId: z.string().uuid(),
+  replacements: z.number().int().min(0),
+});
+export type ReplaceResult = z.infer<typeof replaceResultSchema>;
+
 export * from "./storage.js";
 export * from "./executor.js";
