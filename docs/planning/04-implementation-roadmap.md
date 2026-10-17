@@ -690,7 +690,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S13: Optional reference and Dropbox providers (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 58 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Project Co-owner (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 58 h (ASSUMPTION A-03) | **Status:** 🔄 IN_PROGRESS | **Owner:** Project Co-owner (proposed A-02)
 **Goal:** Optional reference and Dropbox providers for G4, using independently verified slices.
 
 ### Deliverables
@@ -708,10 +708,10 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S13-T01](../../implementation/sprint-13-reference-providers/S13-T01-define-provider-adapter-and-connection-lifecycle.md) | Define provider adapter and connection lifecycle | 8 | Project Co-owner | ⬜ todo | Typed capability/error model handles connect/disconnect/refresh/revoke and keeps user connection separate from project permission |
-| [S13-T02](../../implementation/sprint-13-reference-providers/S13-T02-import-and-refresh-authorized-zotero-library.md) | Import and refresh authorized Zotero library | 8 | Project Co-owner | ⬜ todo | Credentialed capability check permits library import; read-only linked .bib refresh uses diff and protects local edits |
-| [S13-T03](../../implementation/sprint-13-reference-providers/S13-T03-research-mendeley-papers-access-and-terms.md) | Research Mendeley Papers access and terms | 4 | Project Co-owner | ⬜ todo | Within 4h check permitted current APIs/plans and produce capability matrix; no access means BLOCKED_BY_PROVIDER, not fabricated adapter success |
-| [S13-T07](../../implementation/sprint-13-reference-providers/S13-T07-implement-one-permitted-optional-bibliography-provider.md) | Implement one permitted optional bibliography provider | 8 | Project Co-owner | ⬜ todo | Only capabilities validated by provider spike are implemented and credential-tested; absent access leaves task blocked and no claimed Mendeley/Papers parity |
+| [S13-T01](../../implementation/sprint-13-reference-providers/S13-T01-define-provider-adapter-and-connection-lifecycle.md) | Define provider adapter and connection lifecycle | 8 | Project Co-owner | ✅ done | Typed capability/error model handles connect/disconnect/refresh/revoke and keeps user connection separate from project permission |
+| [S13-T02](../../implementation/sprint-13-reference-providers/S13-T02-import-and-refresh-authorized-zotero-library.md) | Import and refresh authorized Zotero library | 8 | Project Co-owner | ✅ done | Credentialed capability check permits library import; read-only linked .bib refresh uses diff and protects local edits |
+| [S13-T03](../../implementation/sprint-13-reference-providers/S13-T03-research-mendeley-papers-access-and-terms.md) | Research Mendeley Papers access and terms | 4 | Project Co-owner | ✅ done | Within 4h check permitted current APIs/plans and produce capability matrix; no access means BLOCKED_BY_PROVIDER, not fabricated adapter success |
+| [S13-T07](../../implementation/sprint-13-reference-providers/S13-T07-implement-one-permitted-optional-bibliography-provider.md) | Implement one permitted optional bibliography provider | 8 | Project Co-owner | ✅ done | Only capabilities validated by provider spike are implemented and credential-tested; absent access leaves task blocked and no claimed Mendeley/Papers parity |
 | [S13-T04](../../implementation/sprint-13-reference-providers/S13-T04-implement-authorized-manual-dropbox-export.md) | Implement authorized manual Dropbox export | 8 | Project Co-owner | ⬜ todo | Credentialed manual export publishes frozen authorized source and reports provider/revocation errors; bidirectional synchronization is S13-T08 |
 | [S13-T08](../../implementation/sprint-13-reference-providers/S13-T08-add-optional-bidirectional-dropbox-synchronization.md) | Add optional bidirectional Dropbox synchronization | 8 | Project Co-owner | ⬜ todo | Only permitted capabilities use explicit checkpoint/base compare; simultaneous local/remote edit yields visible conflict and audit |
 | [S13-T05](../../implementation/sprint-13-reference-providers/S13-T05-import-editable-individual-references.md) | Import editable individual references | 6 | Project Co-owner | ⬜ todo | Only provider-permitted entries become editable local .bib; safe import preserves source and does not silently normalize |

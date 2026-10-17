@@ -69,11 +69,11 @@ All IDs start NOT_STARTED. Planned paths and written acceptance are not actual i
 | COL-14 | G1 | Must | IN_PROGRESS | [S02-T09 account/session audit scope accepted](test-reports/s02-t09.md); invitation/download/restore actions remain later work |
 | INT-01 | G3 | Should | DONE | [S10-T02 bibliography compilation and citation extraction](test-reports/s10-t02.md); [S10-T03 BibTeX parsing and duplicate key detection](test-reports/s10-t03.md) |
 | INT-02 | G3 | Should | DONE | [S10-T03 BibTeX reference search by key, title, author, DOI, year](test-reports/s10-t03.md) |
-| INT-03 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| INT-04 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| INT-03 | G4 | Could | IN_PROGRESS | [S13-T01 provider adapter contracts & token protection](test-reports/s13-t01.md); [S13-T02 Zotero library import & read-only refresh](test-reports/s13-t02.md) |
+| INT-04 | G4 | Could | IN_PROGRESS | [S13-T01 provider capability error model](test-reports/s13-t01.md); [S13-T03 Mendeley/Papers access research & terms matrix](test-reports/s13-t03.md); [S13-T07 permitted open provider & BLOCKED_BY_PROVIDER enforcement](test-reports/s13-t07.md) |
 | INT-05 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-06 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
-| INT-07 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
+| INT-07 | G4 | Could | IN_PROGRESS | [S13-T01 Dropbox capability model & conflict schema invariants](test-reports/s13-t01.md); export/sync pending S13-T04/T08 |
 | INT-08 | G3 | Should | DONE | [S10-T03 safe BibTeX normalization preserving raw source by default](test-reports/s10-t03.md) |
 | INT-09 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |
 | INT-10 | G4 | Could | NOT_STARTED | [Planned trace](planning/traceability.md) |

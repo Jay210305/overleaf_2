@@ -14,6 +14,10 @@
       "types": "./src/index.ts",
       "default": "./dist/index.js"
     },
+    "./provider": {
+      "types": "./src/provider.ts",
+      "default": "./dist/provider.js"
+    },
     "./package.json": "./package.json"
   }
 }

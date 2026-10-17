@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "0fbd8f84f4014d4bc3f9a1e5165722249ef89de8",
+  "git_baseline": "0bad6662bd731e617b6879168fa6e1282c782bb4",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -216,6 +216,11 @@
       "sha256": "e27516066af57772b9899b01c028465ac0678f77570da2dc97e78e3a6b9348d1"
     },
     {
+      "path": "apps/api/src/modules/integrations/connections.ts",
+      "role": "factory",
+      "sha256": "2ff15d4dcb157ebc10aea910d83d1ebe6adaa40c222b6d55ca101546a6825335"
+    },
+    {
       "path": "apps/api/src/modules/projects/bulk.ts",
       "role": "factory",
       "sha256": "5a859a40d3442907d909f9f1fe897255dbf64e9a257f7dd3829b23093490e9c5"
@@ -318,7 +323,7 @@
     {
       "path": "apps/api/src/plugins/errors.ts",
       "role": "factory",
-      "sha256": "b3467b9005d7922c52ac2a070f1b44f58498608174daba7b19ef0b06b95e2c28"
+      "sha256": "30e37a66ae31931f990659fddc14c6156f6a50faed6f922a2eff2ed488c588ad"
     },
     {
       "path": "apps/api/src/plugins/logging.ts",
@@ -343,7 +348,7 @@
     {
       "path": "apps/api/src/server.ts",
       "role": "factory",
-      "sha256": "0df8af59700ec50354233231af7f1e778e31d5128af3171b0ffce1fda70adb8a"
+      "sha256": "46c596e11d6f66a8434621664aadcfc812d554cede36cfd336f1e66e165c81fd"
     },
     {
       "path": "apps/api/tsconfig.json",
@@ -494,6 +499,16 @@
       "path": "apps/jobs/src/maintenance/storage-gc.ts",
       "role": "factory",
       "sha256": "c44b07cf6566c246b154a1bd1919a6fe9fef4f49c85d49b09ef4060a7a870c65"
+    },
+    {
+      "path": "apps/jobs/src/sync/optional-reference-provider.ts",
+      "role": "factory",
+      "sha256": "9ca61234cf424a51d51176da4101e18bb26da00ba363777fc2dfa8593b3fa57e"
+    },
+    {
+      "path": "apps/jobs/src/sync/zotero.ts",
+      "role": "factory",
+      "sha256": "7efaac9b263884df7957319097d738d9deb9582850166d6bdb23747edaff7c18"
     },
     {
       "path": "apps/jobs/tsconfig.json",
@@ -696,6 +711,11 @@
       "sha256": "383b2a38b55040f14606143c977fbf8e9821c1c57ca91e714e32ed5144d2b0f3"
     },
     {
+      "path": "apps/web/src/features/references/zotero.tsx",
+      "role": "factory",
+      "sha256": "6d5fdb0a197280a4db729823f4f705fc7408b11ab2c917802ccc1cdec22d9467"
+    },
+    {
       "path": "apps/web/src/features/review/mode.tsx",
       "role": "factory",
       "sha256": "9b6cd241edd179c5a526b514a4c532c7942fe1f63ffbbfe7029fa129dc7e9d0d"
@@ -791,6 +811,11 @@
       "sha256": "a6672cb3671b3c4f775addcd2f0c3afa47c929d34ab5c83b07d3f96b0fb1717a"
     },
     {
+      "path": "docs/adr/009-reference-providers.md",
+      "role": "factory",
+      "sha256": "dc8d42747f416d34eae1799ecf887a443272fe1c2dc874be9f3ffefaa716e6b9"
+    },
+    {
       "path": "docs/adr/CONTEXT.md",
       "role": "contract",
       "sha256": "22f86e886d228ed35cf195dc1811a2b81e3ef5245376cc5c471504eaf42dc7b7"
@@ -878,7 +903,7 @@
     {
       "path": "docs/feature-parity.md",
       "role": "product",
-      "sha256": "4d37e52a61aed3ed25dd1503cf94e7d46849bc97f218b462b4b6c43d108d0c83"
+      "sha256": "bbe2a427175e27c8d8425700b9049ad613ee24d1e04432b1ba053ba2bb3143c4"
     },
     {
       "path": "docs/map/CLAUDE.md",
@@ -1048,7 +1073,7 @@
     {
       "path": "docs/planning/04-implementation-roadmap.md",
       "role": "factory",
-      "sha256": "049a3ed9f4523a6f9fe561235e9626d0e38f5b76012b98d871ef43339c73a2a3"
+      "sha256": "21eab6eb3b2d3a17a8ff82ce3115fb08065746b28be9fc24ce0eaf7d5529ea98"
     },
     {
       "path": "docs/planning/05-testing.md",
@@ -1138,7 +1163,7 @@
     {
       "path": "docs/progress/progress-log.md",
       "role": "product",
-      "sha256": "dfbbca15a5aacb9c4be482244db5c9eb5487a364108a21bfb0afb810e2f07676"
+      "sha256": "97a995178033169dbc5dff93ad3dc6f5b187084e996b603b876606b1178f3b2f"
     },
     {
       "path": "docs/progress/repository-audit.md",
@@ -1213,7 +1238,7 @@
     {
       "path": "docs/progress/sprint-13.md",
       "role": "product",
-      "sha256": "f76c6fef8e1f20e6e05fa0c993e8ed2290afb200bae0f8d1fd3c074c65e98706"
+      "sha256": "e2bd44e9f10f56f37641aaa5f37b7562e66a3c875f91b5c1943a811a028a9020"
     },
     {
       "path": "docs/progress/sprint-14.md",
@@ -1911,6 +1936,26 @@
       "sha256": "72395d69bc59837461c86b707ce35158435e29055d37c54e5663771dcdaca5d5"
     },
     {
+      "path": "docs/test-reports/s13-t01.md",
+      "role": "factory",
+      "sha256": "cdfe6da65d45a4eacde35539bfb2e89deaad2759b736cb926a14fab567de9552"
+    },
+    {
+      "path": "docs/test-reports/s13-t02.md",
+      "role": "factory",
+      "sha256": "b98cfe91a3fe0cb05d47b1badc13224b358946c11d572b69e8b719e9badaf4f4"
+    },
+    {
+      "path": "docs/test-reports/s13-t03.md",
+      "role": "factory",
+      "sha256": "dffedc3d08ddbc2826f79f2424d0074235dc0ee94e661abd37126716d7734359"
+    },
+    {
+      "path": "docs/test-reports/s13-t07.md",
+      "role": "factory",
+      "sha256": "5a062d7f48124646e22030f5c50b4134ae252de06eac232beae973b8a9d02d9e"
+    },
+    {
       "path": "eslint.config.js",
       "role": "factory",
       "sha256": "f259d21a7ef0efe32df87f94ef650f1df2a7226c91cdf3220f3b5c681193a5a0"
@@ -1923,7 +1968,7 @@
     {
       "path": "implementation/README.md",
       "role": "catalog",
-      "sha256": "fab703b6b012c090afa627cbfc8d49f31b24cdde644b4149276e00dc4d20dba7"
+      "sha256": "316869a3db7f05a09b20ed3a62c11bec79073443553249b27628d0a802f442f6"
     },
     {
       "path": "implementation/sprint-00-bootstrap/CONTEXT.md",
@@ -2748,17 +2793,17 @@
     {
       "path": "implementation/sprint-13-reference-providers/S13-T01-define-provider-adapter-and-connection-lifecycle.md",
       "role": "contract",
-      "sha256": "1bed55e6c07415702998beab270f6514d6179535234ffaf1c319d15657df9fa6"
+      "sha256": "2e7c8ec96a51dd64880be629825a8df7eae947bdcc3036ffac3e030a8622d017"
     },
     {
       "path": "implementation/sprint-13-reference-providers/S13-T02-import-and-refresh-authorized-zotero-library.md",
       "role": "contract",
-      "sha256": "fc0a144aae49299731a90437fbd1459512c947d4a6ed81620c4286bda65407fb"
+      "sha256": "54dad829588b4c0856037f6c7a7c0d74d82fc5efa89ae80d71318ad8f87601bf"
     },
     {
       "path": "implementation/sprint-13-reference-providers/S13-T03-research-mendeley-papers-access-and-terms.md",
       "role": "contract",
-      "sha256": "ac702f29f2c434142fa1fe19550f7a4523a245af05c540dd2d3afe3c86f2c304"
+      "sha256": "7fbf4094208ae411020963d3cc07a05099823f39b9e663d1632201425706e37f"
     },
     {
       "path": "implementation/sprint-13-reference-providers/S13-T04-implement-authorized-manual-dropbox-export.md",
@@ -2778,7 +2823,7 @@
     {
       "path": "implementation/sprint-13-reference-providers/S13-T07-implement-one-permitted-optional-bibliography-provider.md",
       "role": "contract",
-      "sha256": "bdc845961edbbacc4b02bad97714dbdb1c9b9eae22473aee8b4b97f85225c13a"
+      "sha256": "b430c36d965471e879de15bfc610cd2316c64a576a3d5efbb36473948c3760f9"
     },
     {
       "path": "implementation/sprint-13-reference-providers/S13-T08-add-optional-bidirectional-dropbox-synchronization.md",
@@ -3003,7 +3048,7 @@
     {
       "path": "packages/contracts/package.json",
       "role": "factory",
-      "sha256": "6ae6727485d441c0014af955e22f8a0075354ff63ae9999c7dfbe05e6ca9055c"
+      "sha256": "b545516ac39bc4b667876eab8d339aa1d9044d6b024325ecb625872cf65bd7c5"
     },
     {
       "path": "packages/contracts/src/executor.ts",
@@ -3013,7 +3058,12 @@
     {
       "path": "packages/contracts/src/index.ts",
       "role": "factory",
-      "sha256": "f8a4ac97288f485d720f15f71e36665db821fc9d7d65c0ac909c4cac8b8aaed5"
+      "sha256": "0879f1b8b5f6f1d34065ab68eacab74455fec629f7b401bb1366e093729b600e"
+    },
+    {
+      "path": "packages/contracts/src/provider.ts",
+      "role": "factory",
+      "sha256": "c0cd33378169bc78fdd4a88a6ac9ad8844ae4926d7d9419bda2ba28415c4c7b1"
     },
     {
       "path": "packages/contracts/src/storage.ts",
@@ -4006,6 +4056,21 @@
       "sha256": "e9d1b228bbc15739dfdbf835807e30cc5a1574234eace2062fc7f777b5cdd034"
     },
     {
+      "path": "tests/integration/s13-t01.test.ts",
+      "role": "factory",
+      "sha256": "34728cff37f2f8cf842be04872cf93a3890388210a34f07dbf75c1c6b1b591e0"
+    },
+    {
+      "path": "tests/integration/s13-t02.test.ts",
+      "role": "factory",
+      "sha256": "6843906dba6852bdd808708ffd6053cecfe1da2419dda6462bff9a339b349db3"
+    },
+    {
+      "path": "tests/integration/s13-t07.test.ts",
+      "role": "factory",
+      "sha256": "8eb0debadcc9c57c99745150fcdcffdbd0fe61349316dd706eec8657e696c66b"
+    },
+    {
       "path": "tests/integration/tree-races.test.ts",
       "role": "factory",
       "sha256": "85f38c14b652667f74f3fe0131ff235bc3eb1256cdb6f72a94132b63ff882226"
@@ -4601,6 +4666,31 @@
       "sha256": "20bc78c8cd2a2e3649b4028f9c4a885f1a7e8a2e6e8e0d521ee2d7e383bab0b0"
     },
     {
+      "path": "tests/regression/int-03/s13-t01.test.ts",
+      "role": "factory",
+      "sha256": "f71a31ce31f39410c2a5a01793607b2f9d3a439659f2826f39ec9564e2872a67"
+    },
+    {
+      "path": "tests/regression/int-03/s13-t02.test.ts",
+      "role": "factory",
+      "sha256": "e703dfcf1ebd023c0e16437f590123a0b98cd67e84ecc9ad0fbdf44a5f828eb1"
+    },
+    {
+      "path": "tests/regression/int-04/s13-t01.test.ts",
+      "role": "factory",
+      "sha256": "27196ee4546bc744dd4051cbcdc945f5474393332e8663fe4148a006e0e994ec"
+    },
+    {
+      "path": "tests/regression/int-04/s13-t07.test.ts",
+      "role": "factory",
+      "sha256": "c36ab8d624ddd6640d7f0ab2eddaa134efdd564524b575a4679ad257fc8322d7"
+    },
+    {
+      "path": "tests/regression/int-07/s13-t01.test.ts",
+      "role": "factory",
+      "sha256": "85b4c915b68e3a6e1d2e88359a336ea6cb47b854651458f0e590111f5363773f"
+    },
+    {
       "path": "tests/regression/int-08/s10-t03.test.ts",
       "role": "factory",
       "sha256": "808d8a224a8673480b01ce080d6589411747ca466ff8bfe8001b0ce64d41de14"
@@ -5098,7 +5188,7 @@
     {
       "path": "vitest.config.ts",
       "role": "factory",
-      "sha256": "4824c08577385f5313f2e387d428d90de06d8a1e31533dcac56433889cde0c22"
+      "sha256": "c91324276f1bf512eae64a72152594d9ac597ebcbcda8888ecc2e1e90017f7aa"
     },
     {
       "path": "vitest.integration.config.ts",

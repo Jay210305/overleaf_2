@@ -20,6 +20,10 @@ export default defineConfig({
         replacement: fileURLToPath(new URL("./packages/contracts/src/storage.ts", import.meta.url)),
       },
       {
+        find: "@latex-collab/contracts/provider",
+        replacement: fileURLToPath(new URL("./packages/contracts/src/provider.ts", import.meta.url)),
+      },
+      {
         find: "@latex-collab/contracts",
         replacement: fileURLToPath(new URL("./packages/contracts/src/index.ts", import.meta.url)),
       },

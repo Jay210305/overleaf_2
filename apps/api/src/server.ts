@@ -37,8 +37,7 @@ import { registerCompilationRoutes } from "./modules/compilations/routes.js";
 import { registerCollabTicketRoutes, type TicketStore } from "./modules/collab/ticket.js";
 import { registerSynctexRoutes } from "./modules/synctex/routes.js";
 import { registerSearchRoutes } from "./modules/search/routes.js";
-
-
+import { registerIntegrationRoutes } from "./modules/integrations/connections.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -247,6 +246,11 @@ export function createServer(options: ServerOptions) {
     registerSearchRoutes(app, {
       db: options.db,
       storage: options.storage,
+    });
+    registerIntegrationRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
     });
   }
   return app;

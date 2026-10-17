@@ -629,6 +629,7 @@ export type VisualPatchResult = z.infer<typeof visualPatchResultSchema>;
 
 export * from "./storage.js";
 export * from "./executor.js";
+export * from "./provider.js";
 
 
 

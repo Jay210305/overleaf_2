@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S13-T02]
 requirements: [INT-04]
 source_task: S13-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S13-T03 — Research Mendeley Papers access and terms
 
