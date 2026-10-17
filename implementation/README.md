@@ -179,20 +179,20 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S14-T11 | [Implement optional TOTP challenge and recovery slice](sprint-14-git-and-optional-features/S14-T11-implement-optional-totp-challenge-and-recovery-slice.md) | Julio (proposed) | 8 | done |
 | S14-T08 | [Verify real Git protocol and token revocation](sprint-14-git-and-optional-features/S14-T08-verify-real-git-protocol-and-token-revocation.md) | Julio (proposed) | 8 | done |
 | S14-T12 | [Stabilize and review supported G4 integrations](sprint-14-git-and-optional-features/S14-T12-stabilize-and-review-supported-g4-integrations.md) | Julio (proposed) | 8 | done |
-| S15-T01 | [Research verified public isolation primitives](sprint-15-public-hardening/S15-T01-research-verified-public-isolation-primitives.md) | Project Co-owner (proposed) | 4 | todo |
-| S15-T13 | [Provision verified isolated executor adapter](sprint-15-public-hardening/S15-T13-provision-verified-isolated-executor-adapter.md) | Project Co-owner (proposed) | 8 | todo |
-| S15-T02 | [Audit TeX escape and resource attacks](sprint-15-public-hardening/S15-T02-audit-tex-escape-and-resource-attacks.md) | Project Co-owner (proposed) | 8 | todo |
-| S15-T03 | [Route public mode through verified executor](sprint-15-public-hardening/S15-T03-route-public-mode-through-verified-executor.md) | Project Co-owner (proposed) | 6 | todo |
-| S15-T04 | [Verify multi-replica API and collab deployment](sprint-15-public-hardening/S15-T04-verify-multi-replica-api-and-collab-deployment.md) | Project Co-owner (proposed) | 8 | todo |
-| S15-T05 | [Measure REST WS and compile load](sprint-15-public-hardening/S15-T05-measure-rest-ws-and-compile-load.md) | Project Co-owner (proposed) | 8 | todo |
-| S15-T06 | [Automate complete backup and restore](sprint-15-public-hardening/S15-T06-automate-complete-backup-and-restore.md) | Project Co-owner (proposed) | 8 | todo |
-| S15-T07 | [Create privacy-preserving telemetry and alerts](sprint-15-public-hardening/S15-T07-create-privacy-preserving-telemetry-and-alerts.md) | Project Co-owner (proposed) | 8 | todo |
-| S15-T08 | [Audit delivered API WSS files and integrations](sprint-15-public-hardening/S15-T08-audit-delivered-api-wss-files-and-integrations.md) | Project Co-owner (proposed) | 8 | todo |
-| S15-T09 | [Enforce abuse quotas flags and admin permissions](sprint-15-public-hardening/S15-T09-enforce-abuse-quotas-flags-and-admin-permissions.md) | Project Co-owner (proposed) | 8 | todo |
-| S15-T10 | [Review accessibility browsers and operating docs](sprint-15-public-hardening/S15-T10-review-accessibility-browsers-and-operating-docs.md) | Project Co-owner (proposed) | 8 | todo |
-| S15-T11 | [Audit every feature ID and claim](sprint-15-public-hardening/S15-T11-audit-every-feature-id-and-claim.md) | Project Co-owner (proposed) | 6 | todo |
-| S15-T14 | [Stabilize public candidate and review release evidence](sprint-15-public-hardening/S15-T14-stabilize-public-candidate-and-review-release-evidence.md) | Project Co-owner (proposed) | 8 | todo |
-| S15-T12 | [Approve and enable optional public signup](sprint-15-public-hardening/S15-T12-approve-and-enable-optional-public-signup.md) | Project Co-owner (proposed) | 4 | todo |
+| S15-T01 | [Research verified public isolation primitives](sprint-15-public-hardening/S15-T01-research-verified-public-isolation-primitives.md) | Project Co-owner (proposed) | 4 | done |
+| S15-T13 | [Provision verified isolated executor adapter](sprint-15-public-hardening/S15-T13-provision-verified-isolated-executor-adapter.md) | Project Co-owner (proposed) | 8 | done |
+| S15-T02 | [Audit TeX escape and resource attacks](sprint-15-public-hardening/S15-T02-audit-tex-escape-and-resource-attacks.md) | Project Co-owner (proposed) | 8 | done |
+| S15-T03 | [Route public mode through verified executor](sprint-15-public-hardening/S15-T03-route-public-mode-through-verified-executor.md) | Project Co-owner (proposed) | 6 | done |
+| S15-T04 | [Verify multi-replica API and collab deployment](sprint-15-public-hardening/S15-T04-verify-multi-replica-api-and-collab-deployment.md) | Project Co-owner (proposed) | 8 | done |
+| S15-T05 | [Measure REST WS and compile load](sprint-15-public-hardening/S15-T05-measure-rest-ws-and-compile-load.md) | Project Co-owner (proposed) | 8 | done |
+| S15-T06 | [Automate complete backup and restore](sprint-15-public-hardening/S15-T06-automate-complete-backup-and-restore.md) | Project Co-owner (proposed) | 8 | done |
+| S15-T07 | [Create privacy-preserving telemetry and alerts](sprint-15-public-hardening/S15-T07-create-privacy-preserving-telemetry-and-alerts.md) | Project Co-owner (proposed) | 8 | done |
+| S15-T08 | [Audit delivered API WSS files and integrations](sprint-15-public-hardening/S15-T08-audit-delivered-api-wss-files-and-integrations.md) | Project Co-owner (proposed) | 8 | done |
+| S15-T09 | [Enforce abuse quotas flags and admin permissions](sprint-15-public-hardening/S15-T09-enforce-abuse-quotas-flags-and-admin-permissions.md) | Project Co-owner (proposed) | 8 | done |
+| S15-T10 | [Review accessibility browsers and operating docs](sprint-15-public-hardening/S15-T10-review-accessibility-browsers-and-operating-docs.md) | Project Co-owner (proposed) | 8 | done |
+| S15-T11 | [Audit every feature ID and claim](sprint-15-public-hardening/S15-T11-audit-every-feature-id-and-claim.md) | Project Co-owner (proposed) | 6 | done |
+| S15-T14 | [Stabilize public candidate and review release evidence](sprint-15-public-hardening/S15-T14-stabilize-public-candidate-and-review-release-evidence.md) | Project Co-owner (proposed) | 8 | done |
+| S15-T12 | [Approve and enable optional public signup](sprint-15-public-hardening/S15-T12-approve-and-enable-optional-public-signup.md) | Project Co-owner (proposed) | 4 | done |
 
 ## Critical Path
 

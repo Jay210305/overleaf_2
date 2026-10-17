@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S06-T17, S07-T10, S11-T11, S14-T12]
 requirements: [PL-07]
 source_task: S15-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S15-T01 — Research verified public isolation primitives
 

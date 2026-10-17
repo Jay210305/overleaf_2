@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S15-T11]
 requirements: [PL-05, NFR-09, NFR-08]
 source_task: S15-T11
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S15-T14 — Stabilize public candidate and review release evidence
 

@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S15-T08]
 requirements: [INT-11, NFR-07]
 source_task: S15-T09
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S15-T09 — Enforce abuse quotas flags and admin permissions
 

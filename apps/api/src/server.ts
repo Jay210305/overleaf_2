@@ -11,6 +11,7 @@ import type { SendVerification } from "./modules/auth/register.js";
 import type { SendPasswordReset } from "./modules/auth/password-reset.js";
 import { installProjectGuard } from "./plugins/require-session.js";
 import { safeLoggerOptions } from "./plugins/logging.js";
+import { installTelemetryHooks } from "./plugins/telemetry.js";
 import type { AuthRateLimiter } from "./plugins/rate-limit.js";
 import { registerProfileRoutes } from "./modules/account/profile.js";
 import { registerPasswordChangeRoute } from "./modules/account/password-change.js";
@@ -42,6 +43,7 @@ import { registerReferenceImportRoutes } from "./modules/references/import.js";
 import { registerAssistanceRoutes } from "./modules/assistance/routes.js";
 import { registerOAuthRoutes, type OAuthProfileResolver } from "./modules/auth/oauth.js";
 import { registerMfaRoutes } from "./modules/auth/mfa.js";
+import { registerAdminRoutes } from "./modules/admin/routes.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -87,6 +89,7 @@ export function createServer(options: ServerOptions) {
     requestTimeout: 5000,
   });
   registerErrors(app);
+  installTelemetryHooks(app);
   if (options.origin)
     void app.register(cors, {
       origin: options.origin,
@@ -98,8 +101,10 @@ export function createServer(options: ServerOptions) {
         "x-registration-invite",
         "if-match",
         "idempotency-key",
+        "x-request-id",
+        "x-trace-id",
       ],
-      exposedHeaders: ["x-csrf-token", "x-request-id", "retry-after", "etag"],
+      exposedHeaders: ["x-csrf-token", "x-request-id", "x-trace-id", "retry-after", "etag"],
     });
   app.addHook("onRequest", async (request, reply) => {
     const scope = `${request.method} ${request.routeOptions.url ?? ""}`;
@@ -274,6 +279,11 @@ export function createServer(options: ServerOptions) {
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
     });
     registerAssistanceRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+    registerAdminRoutes(app, {
       db: options.db,
       origin: options.origin,
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
