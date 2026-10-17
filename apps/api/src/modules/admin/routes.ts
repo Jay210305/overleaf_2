@@ -122,7 +122,10 @@ export function registerAdminRoutes(
     "/api/v1/admin/flags",
     { preHandler: requireAdmin },
     async (request, reply) => {
-      if (request.body.untrustedCompileEnabled && !process.env.G5_ISOLATION_VERIFIED) {
+      if (
+        (request.body.untrustedCompileEnabled || request.body.publicSignupEnabled) &&
+        !process.env.G5_ISOLATION_VERIFIED
+      ) {
         return reply
           .code(400)
           .type("application/problem+json")

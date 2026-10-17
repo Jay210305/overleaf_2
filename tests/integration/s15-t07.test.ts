@@ -21,8 +21,8 @@ describe("S15-T07: Privacy-preserving telemetry and alerts integration", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.headers["x-trace-id"]).toBe(customTraceId);
-    expect(res.headers["x-request-id"]).toBe(customTraceId);
-    expect(res.json().requestId).toBe(customTraceId);
+    expect(res.headers["x-request-id"]).toBeDefined();
+    expect(res.json().requestId).toBe(res.headers["x-request-id"]);
 
     await app.close();
   });

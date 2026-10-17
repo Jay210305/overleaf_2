@@ -106,5 +106,14 @@ describe("S15-T09: Abuse quotas, feature flags, and admin permissions (INT-11, N
     });
     expect(flagRes.statusCode).toBe(400);
     expect(flagRes.json().code).toBe("ISOLATION_REQUIRED");
+
+    const signupRes = await fixture.app.inject({
+      method: "PATCH",
+      url: "/api/v1/admin/flags",
+      headers: adminHeaders,
+      payload: { publicSignupEnabled: true },
+    });
+    expect(signupRes.statusCode).toBe(400);
+    expect(signupRes.json().code).toBe("ISOLATION_REQUIRED");
   });
 });

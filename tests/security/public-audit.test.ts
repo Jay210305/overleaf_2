@@ -70,7 +70,9 @@ describe("S15-T08 Public Security Audit: IDOR, CSRF, SSRF, Ticket, ZIP protectio
       "http://127.0.0.1:8080/internal",
       "http://localhost:5432",
       "http://169.254.169.254/latest/meta-data/",
+      "http://metadata.google.internal/computeMetadata/v1/",
       "http://[::1]:80",
+      "http://[fd00::1]:8080",
       "http://0.0.0.0/",
     ];
 
@@ -84,9 +86,11 @@ describe("S15-T08 Public Security Audit: IDOR, CSRF, SSRF, Ticket, ZIP protectio
   it("blocks ZIP slip attacks: Directory traversal entries are rejected", () => {
     const dangerousPaths = [
       "../../etc/passwd",
+      "..\\parent.tex",
       "../parent.tex",
       "/absolute/path/file.tex",
       "sub/../../root.tex",
+      "sub\\..\\..\\root.tex",
     ];
 
     for (const p of dangerousPaths) {

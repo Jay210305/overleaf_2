@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -149,5 +149,24 @@ describe("S15-T06 Disaster Recovery: Complete automated backup and restore (NFR-
     // 4. Verify object is readable and identical
     const restoredPdf = await storage.get(pdfKey);
     expect(new TextDecoder().decode(restoredPdf)).toContain("Disaster recovery test authentic PDF");
+
+    // 5. Corrupted blob integrity test (tampered backup payload)
+    const blobToCorrupt = backupResult.manifest.blobs.find((b) => b.key === pdfKey) ?? backupResult.manifest.blobs[0]!;
+    await storage.delete(blobToCorrupt.key);
+    const corruptedBlobPath = join(tempBackupDir, "blobs", `${blobToCorrupt.sha256}.bin`);
+    const originalBytes = await readFile(corruptedBlobPath);
+    try {
+      await writeFile(corruptedBlobPath, Buffer.concat([originalBytes, Buffer.from("corrupted-extra-data")]));
+      await expect(
+        executeAutomatedRestore({
+          db: fixture.db,
+          storage,
+          backupDir: tempBackupDir,
+          projectId,
+        }),
+      ).rejects.toThrowError(/Corrupted backup blob/i);
+    } finally {
+      await writeFile(corruptedBlobPath, originalBytes);
+    }
   });
 });

@@ -170,9 +170,10 @@ export class IsolatedCompilerExecutor implements CompilerExecutor {
       await mkdir(outDir, { recursive: true });
 
       // Materialize input files while verifying against directory traversal
+      const normalizedInputRoot = inputDir.endsWith("/") ? inputDir : `${inputDir}/`;
       for (const item of input.manifest.items) {
         const resolvedPath = resolve(inputDir, item.path);
-        if (!resolvedPath.startsWith(inputDir) || resolvedPath.includes("..")) {
+        if (!resolvedPath.startsWith(normalizedInputRoot)) {
           throw new Error(`Directory traversal attempt rejected: ${item.path}`);
         }
 

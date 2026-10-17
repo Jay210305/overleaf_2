@@ -62,12 +62,30 @@ export function AdminDashboard() {
     },
   });
 
+  async function fetchCsrfToken(): Promise<string> {
+    try {
+      const stored = sessionStorage.getItem("csrf_token");
+      if (stored) return stored;
+      const res = await fetch(`${config.VITE_API_URL}/auth/session`, { credentials: "include" });
+      const token = res.headers.get("x-csrf-token");
+      if (token) {
+        sessionStorage.setItem("csrf_token", token);
+        return token;
+      }
+    } catch {}
+    return "";
+  }
+
   const disableUserMutation = useMutation({
     mutationFn: async ({ userId, disabled }: { userId: string; disabled: boolean }) => {
+      const csrf = await fetchCsrfToken();
       const res = await fetch(`${config.VITE_API_URL}/admin/users/${userId}/disable`, {
         method: "PATCH",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(csrf ? { "x-csrf-token": csrf } : {}),
+        },
         body: JSON.stringify({ disabled }),
       });
       if (!res.ok) throw new Error("Failed to update user moderation status");

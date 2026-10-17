@@ -60,24 +60,28 @@ export async function createTrustedBackup(options: {
   const blobsDir = join(outputDir, "blobs");
   await mkdir(blobsDir, { recursive: true });
 
-  const projectFilter = projectId ? `WHERE id = '${projectId}'` : "";
-  const revProjectFilter = projectId ? `WHERE project_id = '${projectId}'` : "";
+  const queryParams = projectId ? [projectId] : [];
+  const projectFilter = projectId ? `WHERE id = $1` : "";
+  const revProjectFilter = projectId ? `WHERE project_id = $1` : "";
   const artFilter = projectId
-    ? `JOIN compile_jobs c ON a.compile_job_id = c.id WHERE c.project_id = '${projectId}'`
+    ? `JOIN compile_jobs c ON a.compile_job_id = c.id WHERE c.project_id = $1`
     : "";
 
   const projectsRes = await db.query<{ id: string; title: string }>(
     `SELECT id, title FROM projects ${projectFilter} ORDER BY created_at ASC`,
+    queryParams,
   );
   const revisionsRes = await db.query<{ id: string; project_id: string; manifest_key: string }>(
     `SELECT id, project_id, manifest_key FROM project_revisions ${revProjectFilter} ORDER BY created_at ASC`,
+    queryParams,
   );
   const revisionItemsRes = await db.query<{ blob_key: string }>(
     `SELECT r.blob_key FROM revision_items r ${
       projectId
-        ? `JOIN project_revisions pr ON r.revision_id = pr.id WHERE pr.project_id = '${projectId}' AND r.blob_key IS NOT NULL`
+        ? `JOIN project_revisions pr ON r.revision_id = pr.id WHERE pr.project_id = $1 AND r.blob_key IS NOT NULL`
         : `WHERE r.blob_key IS NOT NULL`
     }`,
+    queryParams,
   );
   const artifactSetsRes = await db.query<{
     id: string;
@@ -85,7 +89,10 @@ export async function createTrustedBackup(options: {
     pdf_key: string | null;
     log_key: string | null;
     synctex_key: string | null;
-  }>(`SELECT a.id, a.compile_job_id, a.pdf_key, a.log_key, a.synctex_key FROM artifact_sets a ${artFilter} ORDER BY a.created_at ASC`);
+  }>(
+    `SELECT a.id, a.compile_job_id, a.pdf_key, a.log_key, a.synctex_key FROM artifact_sets a ${artFilter} ORDER BY a.created_at ASC`,
+    queryParams,
+  );
 
   const dbDump = {
     projects: projectsRes.rows,
@@ -162,6 +169,12 @@ export async function restoreTrustedBackup(options: {
     const existing = await getObjectSafe(storage, blobMeta.key);
     if (!existing) {
       const bytes = await readFile(join(blobsDir, `${blobMeta.sha256}.bin`));
+      const actualHash = createHash("sha256").update(bytes).digest("hex");
+      if (actualHash !== blobMeta.sha256) {
+        throw new Error(
+          `Corrupted backup blob for key ${blobMeta.key}: expected hash ${blobMeta.sha256}, got ${actualHash}`,
+        );
+      }
       await storage.put(
         blobMeta.key,
         bytes,
@@ -189,31 +202,33 @@ export async function verifyBackupIntegrity(options: {
   const { db, storage, projectId } = options;
 
   const referencedKeys = new Set<string>();
+  const queryParams = projectId ? [projectId] : [];
 
-  const revFilter = projectId ? `WHERE project_id = '${projectId}' AND manifest_key IS NOT NULL` : `WHERE manifest_key IS NOT NULL`;
+  const revFilter = projectId ? `WHERE project_id = $1 AND manifest_key IS NOT NULL` : `WHERE manifest_key IS NOT NULL`;
   const revisionsRes = await db.query<{ manifest_key: string | null }>(
     `SELECT manifest_key FROM project_revisions ${revFilter}`,
+    queryParams,
   );
   for (const row of revisionsRes.rows) {
     if (row.manifest_key) referencedKeys.add(row.manifest_key);
   }
 
   const itemsQuery = projectId
-    ? `SELECT r.blob_key FROM revision_items r JOIN project_revisions pr ON r.revision_id = pr.id WHERE pr.project_id = '${projectId}' AND r.blob_key IS NOT NULL`
+    ? `SELECT r.blob_key FROM revision_items r JOIN project_revisions pr ON r.revision_id = pr.id WHERE pr.project_id = $1 AND r.blob_key IS NOT NULL`
     : `SELECT blob_key FROM revision_items WHERE blob_key IS NOT NULL`;
-  const revisionItemsRes = await db.query<{ blob_key: string | null }>(itemsQuery);
+  const revisionItemsRes = await db.query<{ blob_key: string | null }>(itemsQuery, queryParams);
   for (const row of revisionItemsRes.rows) {
     if (row.blob_key) referencedKeys.add(row.blob_key);
   }
 
   const artQuery = projectId
-    ? `SELECT a.pdf_key, a.log_key, a.synctex_key FROM artifact_sets a JOIN compile_jobs c ON a.compile_job_id = c.id WHERE c.project_id = '${projectId}'`
+    ? `SELECT a.pdf_key, a.log_key, a.synctex_key FROM artifact_sets a JOIN compile_jobs c ON a.compile_job_id = c.id WHERE c.project_id = $1`
     : `SELECT pdf_key, log_key, synctex_key FROM artifact_sets`;
   const artifactsRes = await db.query<{
     pdf_key: string | null;
     log_key: string | null;
     synctex_key: string | null;
-  }>(artQuery);
+  }>(artQuery, queryParams);
   for (const row of artifactsRes.rows) {
     if (row.pdf_key) referencedKeys.add(row.pdf_key);
     if (row.log_key) referencedKeys.add(row.log_key);

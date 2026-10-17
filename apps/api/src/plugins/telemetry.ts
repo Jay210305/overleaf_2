@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 
 export interface AlertEvaluation {
@@ -116,13 +115,17 @@ export function scanLogForLeakage(
   };
 }
 
+const VALID_TRACE_ID_REGEX = /^[a-zA-Z0-9_\-.]{1,64}$/;
+
 export function installTelemetryHooks(app: FastifyInstance): void {
   app.addHook("onRequest", async (request: FastifyRequest, reply: FastifyReply) => {
-    const incomingReqId = request.headers["x-request-id"] || request.headers["x-trace-id"];
-    const traceId = Array.isArray(incomingReqId) ? incomingReqId[0] : incomingReqId || randomUUID();
+    const rawTraceId = request.headers["x-trace-id"];
+    const incomingTrace = Array.isArray(rawTraceId) ? rawTraceId[0] : rawTraceId;
+    const traceId =
+      typeof incomingTrace === "string" && VALID_TRACE_ID_REGEX.test(incomingTrace)
+        ? incomingTrace
+        : request.id;
 
-    Object.defineProperty(request, "id", { value: traceId, configurable: true, writable: true });
-    reply.header("x-request-id", traceId);
     reply.header("x-trace-id", traceId);
   });
 }

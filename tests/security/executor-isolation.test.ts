@@ -97,6 +97,21 @@ describe("Security: TeX Executor Sandboxing and Adversarial Attack Containment",
         policyVersion: "1.0",
         limits: defaultLimits,
       },
+      {
+        jobId: "adv-02-traversal-sibling",
+        compiler: "pdflatex",
+        manifest: createTestManifest("proj-sec", [
+          {
+            nodeId: "n-sibling",
+            path: "../input-sibling/malicious.tex",
+            kind: "TEXT",
+            object: { key: "b-sib", sha256: "hsib", sizeBytes: 50, mime: "text/plain" },
+          },
+        ]),
+        imageDigest: "texlive:2024",
+        policyVersion: "1.0",
+        limits: defaultLimits,
+      },
     ];
 
     for (const input of traversalInputs) {
