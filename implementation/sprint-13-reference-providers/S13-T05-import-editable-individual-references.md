@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S13-T08]
 requirements: [INT-01, INT-08, INT-03]
 source_task: S13-T05
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S13-T05 — Import editable individual references
 

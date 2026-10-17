@@ -163,10 +163,10 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S13-T02 | [Import and refresh authorized Zotero library](sprint-13-reference-providers/S13-T02-import-and-refresh-authorized-zotero-library.md) | Project Co-owner (proposed) | 8 | done |
 | S13-T03 | [Research Mendeley Papers access and terms](sprint-13-reference-providers/S13-T03-research-mendeley-papers-access-and-terms.md) | Project Co-owner (proposed) | 4 | done |
 | S13-T07 | [Implement one permitted optional bibliography provider](sprint-13-reference-providers/S13-T07-implement-one-permitted-optional-bibliography-provider.md) | Project Co-owner (proposed) | 8 | done |
-| S13-T04 | [Implement authorized manual Dropbox export](sprint-13-reference-providers/S13-T04-implement-authorized-manual-dropbox-export.md) | Project Co-owner (proposed) | 8 | todo |
-| S13-T08 | [Add optional bidirectional Dropbox synchronization](sprint-13-reference-providers/S13-T08-add-optional-bidirectional-dropbox-synchronization.md) | Project Co-owner (proposed) | 8 | todo |
-| S13-T05 | [Import editable individual references](sprint-13-reference-providers/S13-T05-import-editable-individual-references.md) | Project Co-owner (proposed) | 6 | todo |
-| S13-T06 | [Verify provider contract and real connectivity](sprint-13-reference-providers/S13-T06-verify-provider-contract-and-real-connectivity.md) | Project Co-owner (proposed) | 8 | todo |
+| S13-T04 | [Implement authorized manual Dropbox export](sprint-13-reference-providers/S13-T04-implement-authorized-manual-dropbox-export.md) | Project Co-owner (proposed) | 8 | done |
+| S13-T08 | [Add optional bidirectional Dropbox synchronization](sprint-13-reference-providers/S13-T08-add-optional-bidirectional-dropbox-synchronization.md) | Project Co-owner (proposed) | 8 | done |
+| S13-T05 | [Import editable individual references](sprint-13-reference-providers/S13-T05-import-editable-individual-references.md) | Project Co-owner (proposed) | 6 | done |
+| S13-T06 | [Verify provider contract and real connectivity](sprint-13-reference-providers/S13-T06-verify-provider-contract-and-real-connectivity.md) | Project Co-owner (proposed) | 8 | done |
 | S14-T01 | [Research Git HTTP implementation and mapping](sprint-14-git-and-optional-features/S14-T01-research-git-http-implementation-and-mapping.md) | Julio (proposed) | 4 | todo |
 | S14-T02 | [Create authenticated Git bridge service](sprint-14-git-and-optional-features/S14-T02-create-authenticated-git-bridge-service.md) | Julio (proposed) | 8 | todo |
 | S14-T03 | [Implement actual clone fetch and push](sprint-14-git-and-optional-features/S14-T03-implement-actual-clone-fetch-and-push.md) | Julio (proposed) | 8 | todo |

@@ -137,3 +137,37 @@ export const linkProjectIntegrationRequestSchema = z.strictObject({
   branch: z.string().optional(),
 });
 export type LinkProjectIntegrationRequest = z.infer<typeof linkProjectIntegrationRequestSchema>;
+
+export const importReferenceEntrySchema = z.strictObject({
+  key: z.string().min(1),
+  rawSource: z.string().min(1),
+  type: z.string().optional(),
+  title: z.string().optional(),
+  author: z.string().optional(),
+  year: z.string().optional(),
+  doi: z.string().optional(),
+  journal: z.string().optional(),
+  fields: z.record(z.string(), z.string()).optional(),
+});
+export type ImportReferenceEntry = z.infer<typeof importReferenceEntrySchema>;
+
+export const importReferencesRequestSchema = z.strictObject({
+  connectionId: z.string().uuid().optional(),
+  provider: z.string().min(1),
+  targetFileId: z.string().uuid().optional(),
+  targetFilePath: z.string().optional(),
+  entries: z.array(importReferenceEntrySchema).min(1),
+  normalize: z.boolean().optional().default(false),
+});
+export type ImportReferencesRequest = z.infer<typeof importReferencesRequestSchema>;
+
+export const importReferencesResponseSchema = z.strictObject({
+  success: z.boolean(),
+  importedCount: z.number().int().nonnegative(),
+  keys: z.array(z.string()),
+  targetFileId: z.string().uuid().optional(),
+  duplicates: z.array(z.string()).optional(),
+  newContent: z.string().optional(),
+});
+export type ImportReferencesResponse = z.infer<typeof importReferencesResponseSchema>;
+

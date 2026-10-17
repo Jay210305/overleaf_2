@@ -33,6 +33,7 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-15 | S10 academic editing, bibliography and SyncTeX on `codex/sprint-10-academic-editing` | 104 h | [S10 progress](sprint-10.md), reports [s10-t01](../test-reports/s10-t01.md) through [s10-t14](../test-reports/s10-t14.md), 44 test files / 145 tests PASS | S10 closed, all 14 tasks marked DONE; next S11-T01 |
 | 2026-10-15 | S11 visual editor, AST projection and G3 release audit on `codex/sprint-11-visual-editor` | 80 h | [S11 progress](sprint-11.md), reports [s11-t01](../test-reports/s11-t01.md) through [s11-t11](../test-reports/s11-t11.md), 11 test files / 360+ tests PASS | S11 closed, all 11 tasks marked DONE; Gate G3 passed; S12 skipped; next S13-T01 |
 | 2026-10-16 | S13 reference providers first half on `codex/sprint-13-reference-providers` | 28 h | [S13 progress](sprint-13.md), reports [s13-t01](../test-reports/s13-t01.md), [s13-t02](../test-reports/s13-t02.md), [s13-t03](../test-reports/s13-t03.md), [s13-t07](../test-reports/s13-t07.md), ADR-009, 8 test files / 45 tests PASS | S13 first half delivered (4 of 8 tasks DONE); next S13-T04 |
+| 2026-10-17 | S13 reference providers second half and closure on `codex/sprint-13-reference-providers` | 30 h | [S13 progress](sprint-13.md), reports [s13-t04](../test-reports/s13-t04.md), [s13-t08](../test-reports/s13-t08.md), [s13-t05](../test-reports/s13-t05.md), [s13-t06](../test-reports/s13-t06.md); 21 test files / 112 tests PASS | Sprint 13 closed, all 8 tasks DONE; next S14-T01 |
 
 
 ## Session Record
