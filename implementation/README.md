@@ -173,12 +173,12 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S14-T04 | [Apply Git imports through canonical mutation service](sprint-14-git-and-optional-features/S14-T04-apply-git-imports-through-canonical-mutation-service.md) | Julio (proposed) | 8 | done |
 | S14-T05 | [Deliver preference-controlled email notifications](sprint-14-git-and-optional-features/S14-T05-deliver-preference-controlled-email-notifications.md) | Julio (proposed) | 8 | done |
 | S14-T06 | [Add optional private writing assistance](sprint-14-git-and-optional-features/S14-T06-add-optional-private-writing-assistance.md) | Julio (proposed) | 8 | done |
-| S14-T07 | [Implement safe social OAuth account linking](sprint-14-git-and-optional-features/S14-T07-implement-safe-social-oauth-account-linking.md) | Julio (proposed) | 8 | todo |
-| S14-T09 | [Profile additional compiler packages and fonts](sprint-14-git-and-optional-features/S14-T09-profile-additional-compiler-packages-and-fonts.md) | Julio (proposed) | 6 | todo |
-| S14-T10 | [Implement SSRF-safe permitted remote resource import](sprint-14-git-and-optional-features/S14-T10-implement-ssrf-safe-permitted-remote-resource-import.md) | Julio (proposed) | 8 | todo |
-| S14-T11 | [Implement optional TOTP challenge and recovery slice](sprint-14-git-and-optional-features/S14-T11-implement-optional-totp-challenge-and-recovery-slice.md) | Julio (proposed) | 8 | todo |
-| S14-T08 | [Verify real Git protocol and token revocation](sprint-14-git-and-optional-features/S14-T08-verify-real-git-protocol-and-token-revocation.md) | Julio (proposed) | 8 | todo |
-| S14-T12 | [Stabilize and review supported G4 integrations](sprint-14-git-and-optional-features/S14-T12-stabilize-and-review-supported-g4-integrations.md) | Julio (proposed) | 8 | todo |
+| S14-T07 | [Implement safe social OAuth account linking](sprint-14-git-and-optional-features/S14-T07-implement-safe-social-oauth-account-linking.md) | Julio (proposed) | 8 | done |
+| S14-T09 | [Profile additional compiler packages and fonts](sprint-14-git-and-optional-features/S14-T09-profile-additional-compiler-packages-and-fonts.md) | Julio (proposed) | 6 | done |
+| S14-T10 | [Implement SSRF-safe permitted remote resource import](sprint-14-git-and-optional-features/S14-T10-implement-ssrf-safe-permitted-remote-resource-import.md) | Julio (proposed) | 8 | done |
+| S14-T11 | [Implement optional TOTP challenge and recovery slice](sprint-14-git-and-optional-features/S14-T11-implement-optional-totp-challenge-and-recovery-slice.md) | Julio (proposed) | 8 | done |
+| S14-T08 | [Verify real Git protocol and token revocation](sprint-14-git-and-optional-features/S14-T08-verify-real-git-protocol-and-token-revocation.md) | Julio (proposed) | 8 | done |
+| S14-T12 | [Stabilize and review supported G4 integrations](sprint-14-git-and-optional-features/S14-T12-stabilize-and-review-supported-g4-integrations.md) | Julio (proposed) | 8 | done |
 | S15-T01 | [Research verified public isolation primitives](sprint-15-public-hardening/S15-T01-research-verified-public-isolation-primitives.md) | Project Co-owner (proposed) | 4 | todo |
 | S15-T13 | [Provision verified isolated executor adapter](sprint-15-public-hardening/S15-T13-provision-verified-isolated-executor-adapter.md) | Project Co-owner (proposed) | 8 | todo |
 | S15-T02 | [Audit TeX escape and resource attacks](sprint-15-public-hardening/S15-T02-audit-tex-escape-and-resource-attacks.md) | Project Co-owner (proposed) | 8 | todo |

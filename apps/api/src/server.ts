@@ -40,6 +40,8 @@ import { registerSearchRoutes } from "./modules/search/routes.js";
 import { registerIntegrationRoutes } from "./modules/integrations/connections.js";
 import { registerReferenceImportRoutes } from "./modules/references/import.js";
 import { registerAssistanceRoutes } from "./modules/assistance/routes.js";
+import { registerOAuthRoutes, type OAuthProfileResolver } from "./modules/auth/oauth.js";
+import { registerMfaRoutes } from "./modules/auth/mfa.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -74,6 +76,7 @@ export interface ServerOptions {
   secureCookies?: boolean | undefined;
   rateLimiter?: AuthRateLimiter | undefined;
   ticketStore?: TicketStore | undefined;
+  profileResolver?: OAuthProfileResolver | undefined;
 }
 export function createServer(options: ServerOptions) {
   const app = Fastify({
@@ -170,6 +173,17 @@ export function createServer(options: ServerOptions) {
   registerAvatarRoutes(app, {
     db: options.db,
     storage: options.storage,
+    origin: options.origin,
+    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+  });
+  registerOAuthRoutes(app, {
+    db: options.db,
+    origin: options.origin,
+    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    profileResolver: options.profileResolver,
+  });
+  registerMfaRoutes(app, {
+    db: options.db,
     origin: options.origin,
     secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
   });

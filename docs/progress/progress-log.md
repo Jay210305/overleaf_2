@@ -404,4 +404,36 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Actual Hours:** 44 h (S14-T01: 4h, S14-T02: 8h, S14-T03: 8h, S14-T04: 8h, S14-T05: 8h, S14-T06: 8h).
 - **Next Ready Task:** S14-T07 (Sprint S14: Safe social OAuth account linking).
 
+### 2026-10-17 — Sprint S14 Git and Optional Features (Full Sprint & Gate 4 Completion)
+
+- **Date:** 2026-10-17
+- **Contributor:** Julio & Project Co-owner
+- **Branch/base:** `codex/sprint-14-git-and-optional-features` tracking `origin/codex/sprint-14-git-and-optional-features` (base `codex/sprint-13-reference-providers`)
+- **Sprint / Tasks:** Sprint S14 (`sprint-14-git-and-optional-features`), Tasks S14-T07, S14-T09, S14-T10, S14-T11, S14-T08, S14-T12 (100% of Sprint 14 complete; Gate 4 passed)
+- **Goal:** Complete the remaining 6 tasks of Sprint 14 and conduct the Gate 4 Ecosystem Integrations release audit:
+  - S14-T07: Implement safe social OAuth account linking.
+  - S14-T09: Profile additional compiler packages and fonts.
+  - S14-T10: Implement SSRF-safe permitted remote resource import.
+  - S14-T11: Implement optional TOTP challenge and recovery slice.
+  - S14-T08: Verify real Git protocol and token revocation.
+  - S14-T12: Stabilize and review supported G4 integrations (Gate 4 Audit).
+- **Completed Work:**
+  - Implemented safe OAuth account linking/unlinking (`apps/api/src/modules/auth/oauth.ts`) with PKCE, state validation, collision detection, and last auth method preservation.
+  - Implemented RFC 6238 TOTP two-factor authentication (`apps/api/src/modules/auth/mfa.ts`, `totp.ts`) with QR/base32 setup, TOTP challenge on login, single-use recovery code consumption, and challenge-based disable with session invalidation.
+  - Created TeX compiler package catalog (`apps/tex-executor/package-manifest.json`) profiling packages and fonts across TeX engines with verified licensing and security restrictions.
+  - Implemented SSRF-safe remote resource importer (`apps/jobs/src/imports/remote-resource.ts`) blocking private IPs, cloud metadata endpoints, multi-hop DNS rebinding, and untrusted MIME types.
+  - Verified Git Smart HTTP protocol over HTTP/REST using authentic Linux Git CLI with token revocation, expiry, Unicode, binary assets, and repeated sync (`tests/integration/git-cli.test.ts`, `tests/integration/s14-t08.test.ts`, `tests/regression/int-06/s14-t08.test.ts`).
+  - Authored test reports `docs/test-reports/s14-t07.md`, `s14-t09.md`, `s14-t10.md`, `s14-t11.md`, `s14-t08.md`, `s14-t12.md`, and Gate 4 Audit `docs/test-reports/gate-g4-audit.md`.
+  - Updated task frontmatters, roadmap, task index, and sprint progress.
+- **Actual Hours:** 46 h (S14-T07: 8h, S14-T09: 6h, S14-T10: 8h, S14-T11: 8h, S14-T08: 8h, S14-T12: 8h; sprint total: 90 h).
+- **Commands & Results:**
+  - `pnpm exec vitest run tests/integration/s14-*.test.ts`: PASS (10 files, 47 tests).
+  - `pnpm exec vitest run tests/integration/git-cli.test.ts`: PASS (5 tests).
+  - `pnpm typecheck`: PASS.
+  - `pnpm lint`: PASS.
+  - `pnpm build`: PASS.
+  - `python3 scripts/plan_lint.py`: PASS.
+- **Blockers / Gaps:** None for G4. Public signup and untrusted compilation remain disabled per G5 boundary.
+- **Next Ready Sprint:** Sprint S15 (`sprint-15-public-hardening`): Public hardening, trusted executor isolation, rate limiting, and Gate 5 sign-off.
+
 

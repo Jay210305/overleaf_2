@@ -1,12 +1,14 @@
 import { createHash } from "node:crypto";
 
 export class AuthError extends Error {
+  readonly statusCode: number;
   constructor(
     readonly status: number,
     readonly code: string,
   ) {
     super(code);
     this.name = "AuthError";
+    this.statusCode = status;
   }
 }
 

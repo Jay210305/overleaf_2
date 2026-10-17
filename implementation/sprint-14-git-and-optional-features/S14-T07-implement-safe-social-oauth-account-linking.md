@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S14-T06]
 requirements: [ACC-04, ACC-06]
 source_task: S14-T07
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S14-T07 — Implement safe social OAuth account linking
 

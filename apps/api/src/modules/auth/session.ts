@@ -5,6 +5,7 @@ import { writeAuditEvent, type DatabaseClient, type TransactionContext } from "@
 import { AuthError, tokenHash } from "./errors.js";
 import { normalizeEmail } from "./register.js";
 import { requireSessionCsrf } from "../../plugins/csrf.js";
+import { challengeMfaLogin } from "./totp.js";
 
 const idleMs = 7 * 24 * 60 * 60 * 1000;
 const absoluteMs = 30 * 24 * 60 * 60 * 1000;
@@ -72,6 +73,7 @@ export async function login(
     parsed.data.password,
   );
   if (!valid || !account?.password_hash) throw new AuthError(401, "AUTHENTICATION_REQUIRED");
+  await challengeMfaLogin(db, account.id, parsed.data.code);
   const token = newSecret();
   const csrf = newSecret();
   const now = new Date();
@@ -180,3 +182,35 @@ export function readSessionCookie(header: string | undefined, secure: boolean): 
   if (matches.length !== 1) throw new AuthError(401, "AUTHENTICATION_REQUIRED");
   return matches[0]!.slice(name.length + 1);
 }
+
+export async function createSessionForUserId(
+  db: DatabaseClient,
+  userId: string,
+  requestId: string,
+): Promise<SessionIssue> {
+  const token = newSecret();
+  const csrf = newSecret();
+  const now = new Date();
+  const expiresAt = expiry(now, now);
+  return db.transaction(async (tx) => {
+    const current = await tx.query<AccountRow>(
+      "SELECT id, email_normalized, display_name, password_hash, email_verified_at, disabled_at, created_at FROM users WHERE id = $1 FOR UPDATE",
+      [userId],
+    );
+    const locked = current.rows[0];
+    if (!locked) throw new AuthError(404, "RESOURCE_NOT_FOUND");
+    if (locked.disabled_at) throw new AuthError(403, "ACCOUNT_DISABLED");
+    const session = await tx.query<{ id: string }>(
+      "INSERT INTO sessions (user_id, token_hash, csrf_hash, expires_at, last_seen_at, device_label) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+      [locked.id, tokenHash(token), tokenHash(csrf), expiresAt, now, "Browser"],
+    );
+    await writeAuditEvent(tx, {
+      action: "session.login",
+      actorId: locked.id,
+      targetId: session.rows[0]!.id,
+      requestId,
+    });
+    return { user: view(locked), token, csrf, expiresAt };
+  });
+}
+
