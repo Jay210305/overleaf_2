@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S12-T06]
 requirements: [INT-05]
 source_task: S12-T07
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: ready
 ---
 # S12-T07 — Verify GitHub failure concurrency cases
 
@@ -61,15 +61,16 @@ Each code slice starts with the specified failing assertion; documentation/resea
 - `tests/integration/github-sync.test.ts`
 - `tests/integration/s12-t07.test.ts`
 - `tests/regression/int-05/s12-t07.test.ts`
+- `tests/integration/s12-t07-live.test.ts`
 - `docs/test-reports/s12-t07.md`
 
 Update existing feature evidence and sprint progress entries for the IDs listed below. These are future implementation paths; no application code/test is created by this planning task file.
 
 ## Acceptance Criteria
 
-- [ ] Credentialed test repo proves push/pull; expired token/non-fast-forward/edit-during-sync never overwrite silently
-- [ ] INT-05: GitHub OAuth links repo/branch and guards pull/push against overwrite and conflicts. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Credentialed test repo proves push/pull; expired token/non-fast-forward/edit-during-sync never overwrite silently
+- [x] INT-05: GitHub OAuth links repo/branch and guards pull/push against overwrite and conflicts. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -95,9 +96,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

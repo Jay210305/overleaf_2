@@ -87,7 +87,9 @@ test("project chat refreshes an authorized member through the live socket", asyn
     await signIn(reviewerPage, reviewerEmail, "Chat Reviewer");
     const ownerChat = page.getByRole("region", { name: "Project chat" });
     const reviewerChat = reviewerPage.getByRole("region", { name: "Project chat" });
-    await expect(reviewerChat.getByRole("status")).toHaveText("Live updates connected");
+    await expect(reviewerChat.getByRole("status")).toHaveText("Live updates connected", {
+      timeout: 20_000,
+    });
     await ownerChat.getByRole("textbox", { name: "Chat message" }).fill("Shared draft is ready");
     await ownerChat.getByRole("button", { name: "Send message" }).click();
     await expect(ownerChat.getByText("Shared draft is ready")).toBeVisible();

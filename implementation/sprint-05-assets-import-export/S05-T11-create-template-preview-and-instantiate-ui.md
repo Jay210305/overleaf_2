@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S05-T06]
 requirements: [PRO-11, PRO-02]
 source_task: S05-T06
-status: in_progress
-readiness: ready
+status: done
+readiness: completed
 ---
 # S05-T11 — Create template preview and instantiate UI
 
@@ -66,10 +66,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Catalogue filter/detail and instantiate use real versioned manifest; preview assets authorized and new project is independent
-- [ ] PRO-11: Versioned internal-template catalogue supports filters, preview and instantiation; minimal template is in G1. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] PRO-02: Create blank, minimal example, internal-template and ZIP projects. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Catalogue filter/detail and instantiate use real versioned manifest; preview assets authorized and new project is independent
+- [x] PRO-11: Versioned internal-template catalogue supports filters, preview and instantiation; minimal template is in G1. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] PRO-02: Create blank, minimal example, internal-template and ZIP projects. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -95,9 +95,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

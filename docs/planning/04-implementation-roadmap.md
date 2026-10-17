@@ -306,7 +306,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 | [S05-T04](../../implementation/sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | Export immutable source ZIP | 8 | Project Co-owner | ✅ done | ZIP contains only authorized manifest paths at one frozen revision; hashes survive import round trip |
 | [S05-T05](../../implementation/sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | Preview and download safe binary assets | 6 | Project Co-owner | ✅ done | Permitted images/PDF use authorized resources; active HTML/SVG are attachment-only and never execute in trusted UI |
 | [S05-T06](../../implementation/sprint-05-assets-import-export/S05-T06-create-minimal-versioned-internal-templates.md) | Create minimal versioned internal templates | 8 | Project Co-owner | ✅ done | Two original templates have versioned manifests; instantiate produces editable main.tex and no copied external authorization |
-| [S05-T11](../../implementation/sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | Create template preview and instantiate UI | 6 | Project Co-owner | 🟨 in_progress | Catalogue filter/detail and instantiate use real versioned manifest; preview assets authorized and new project is independent |
+| [S05-T11](../../implementation/sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | Create template preview and instantiate UI | 6 | Project Co-owner | ✅ done | Catalogue filter/detail and instantiate use real versioned manifest; preview assets authorized and new project is independent |
 | [S05-T07](../../implementation/sprint-05-assets-import-export/S05-T07-verify-imported-paths-and-custom-styles.md) | Verify imported paths and custom styles | 6 | Project Co-owner | ⬜ todo | Nested .tex/.sty/.cls/image fixture preserves paths and bytes; active-name collisions report explicit conflict |
 | [S05-T08](../../implementation/sprint-05-assets-import-export/S05-T08-verify-hostile-zip-and-round-trip-journeys.md) | Verify hostile ZIP and round-trip journeys | 6 | Project Co-owner | ⬜ todo | Malicious ZIP/oversize/invalid format reject; E2E-005/006 return equivalent source trees and hashes |
 
@@ -651,7 +651,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S12: GitHub and versioned exports (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 62 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Julio (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 62 h (ASSUMPTION A-03) | **Status:** 🟨 IN_PROGRESS | **Owner:** Julio (proposed A-02)
 **Goal:** GitHub and versioned exports for G4, using independently verified slices.
 
 ### Deliverables
@@ -668,13 +668,13 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
 | [S12-T01](../../implementation/sprint-12-github-sync/S12-T01-implement-github-oauth-credential-handling.md) | Implement GitHub OAuth credential handling | 8 | Julio | ✅ done | PKCE/state/replay/revocation and encrypted server-held tokens pass; browser/logs contain no provider token |
-| [S12-T02](../../implementation/sprint-12-github-sync/S12-T02-link-authorized-repository-and-branch.md) | Link authorized repository and branch | 8 | Julio | ⬜ todo | Explicit import-new versus pair-existing compares manifests and records remote ref without destructive initial merge |
-| [S12-T03](../../implementation/sprint-12-github-sync/S12-T03-pull-using-checkpoint-and-base-sha.md) | Pull using checkpoint and base SHA | 8 | Julio | ⬜ todo | Pull validates paths and base, snapshots local state and surfaces concurrent local/remote/binary conflicts |
-| [S12-T08](../../implementation/sprint-12-github-sync/S12-T08-apply-remote-changes-through-live-canonical-service.md) | Apply remote changes through live canonical service | 8 | Julio | ⬜ todo | Pull mutation is authorized through canonical text service, emits invalidations, preserves metadata and reports detached anchors |
-| [S12-T04](../../implementation/sprint-12-github-sync/S12-T04-push-frozen-revision-with-remote-guard.md) | Push frozen revision with remote guard | 8 | Julio | ⬜ todo | Push uses sourceRevision and expectedRemoteSHA; remote branch change yields conflict and no automatic force push |
-| [S12-T05](../../implementation/sprint-12-github-sync/S12-T05-create-sync-status-diff-and-resolution-ui.md) | Create sync status diff and resolution UI | 8 | Julio | ⬜ todo | Users see local/remote/base changes and resolve keep-local/keep-remote/manual without claiming pending action synced |
-| [S12-T06](../../implementation/sprint-12-github-sync/S12-T06-export-authorized-revision-artifacts-and-links.md) | Export authorized revision artifacts and links | 6 | Julio | ⬜ todo | ZIP/PDF/log download and expiring read links select one immutable authorized revision with private access checks |
-| [S12-T07](../../implementation/sprint-12-github-sync/S12-T07-verify-github-failure-concurrency-cases.md) | Verify GitHub failure concurrency cases | 8 | Julio | ⬜ todo | Credentialed test repo proves push/pull; expired token/non-fast-forward/edit-during-sync never overwrite silently |
+| [S12-T02](../../implementation/sprint-12-github-sync/S12-T02-link-authorized-repository-and-branch.md) | Link authorized repository and branch | 8 | Julio | ✅ done | Explicit import-new versus pair-existing compares manifests and records remote ref without destructive initial merge |
+| [S12-T03](../../implementation/sprint-12-github-sync/S12-T03-pull-using-checkpoint-and-base-sha.md) | Pull using checkpoint and base SHA | 8 | Julio | ✅ done | Pull validates paths and base, snapshots local state and surfaces concurrent local/remote/binary conflicts |
+| [S12-T08](../../implementation/sprint-12-github-sync/S12-T08-apply-remote-changes-through-live-canonical-service.md) | Apply remote changes through live canonical service | 8 | Julio | ✅ done | Pull mutation is authorized through canonical text service, emits invalidations, preserves metadata and reports detached anchors |
+| [S12-T04](../../implementation/sprint-12-github-sync/S12-T04-push-frozen-revision-with-remote-guard.md) | Push frozen revision with remote guard | 8 | Julio | ✅ done | Push uses sourceRevision and expectedRemoteSHA; remote branch change yields conflict and no automatic force push |
+| [S12-T05](../../implementation/sprint-12-github-sync/S12-T05-create-sync-status-diff-and-resolution-ui.md) | Create sync status diff and resolution UI | 8 | Julio | ✅ done | Users see local/remote/base changes and resolve keep-local/keep-remote/manual without claiming pending action synced |
+| [S12-T06](../../implementation/sprint-12-github-sync/S12-T06-export-authorized-revision-artifacts-and-links.md) | Export authorized revision artifacts and links | 6 | Julio | 🔄 in_progress | ZIP/PDF/log download and expiring read links select one immutable authorized revision with private access checks |
+| [S12-T07](../../implementation/sprint-12-github-sync/S12-T07-verify-github-failure-concurrency-cases.md) | Verify GitHub failure concurrency cases | 8 | Julio | ✅ done | Credentialed test repo proves push/pull; expired token/non-fast-forward/edit-during-sync never overwrite silently |
 
 ### DoD
 

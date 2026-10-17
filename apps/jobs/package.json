@@ -3,6 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "exports": {
+    "./sync/github-pull": {
+      "types": "./src/sync/github-pull.ts",
+      "default": "./dist/sync/github-pull.js"
+    },
+    "./sync/apply-changes": {
+      "types": "./src/sync/apply-changes.ts",
+      "default": "./dist/sync/apply-changes.js"
+    },
+    "./sync/github-push": {
+      "types": "./src/sync/github-push.ts",
+      "default": "./dist/sync/github-push.js"
+    }
+  },
   "dependencies": {
     "@latex-collab/config": "workspace:*",
     "@latex-collab/contracts": "workspace:*",

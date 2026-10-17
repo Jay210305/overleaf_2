@@ -1,5 +1,4 @@
 import { createHash } from "node:crypto";
-import * as Y from "yjs";
 import { assertUUID, type DatabaseClient } from "@latex-collab/db";
 import { maxArchiveNodes, maxExpandedBytes, maxFileBytes } from "./content-policy.js";
 import type { StorageAdapter } from "@latex-collab/contracts";
@@ -138,30 +137,12 @@ function digest(bytes: Uint8Array): string {
   return createHash("sha256").update(bytes).digest("hex");
 }
 
-async function replayText(db: DatabaseClient, fileId: string): Promise<Buffer> {
-  const updates = await db.query<{ payload_bytes: Buffer }>(
-    "SELECT payload_bytes FROM crdt_updates WHERE file_id = $1 ORDER BY seq ASC",
-    [fileId],
-  );
-  const doc = new Y.Doc();
-  try {
-    for (const row of updates.rows) {
-      Y.applyUpdate(doc, new Uint8Array(row.payload_bytes));
-    }
-    return Buffer.from(doc.getText("content").toString(), "utf8");
-  } finally {
-    doc.destroy();
-  }
-}
-
 /**
  * Builds a deterministic immutable source ZIP for one frozen revision. Only
  * authorized manifest paths are included: the tree comes from the revision
- * row, TEXT bytes from canonical Yjs replay and BINARY bytes from verified
+ * row, TEXT bytes frozen on that revision and BINARY bytes from verified
  * content-addressed objects. Foreign, trashed or missing projects and
- * unknown revisions read as 404; the revision's text reflects canonical
- * state observed during export (single-actor G1 flow; concurrent
- * modification between checkpoint and export is out of scope).
+ * unknown revisions read as 404.
  */
 export async function buildSourceZip(
   db: DatabaseClient,
@@ -199,18 +180,19 @@ export async function buildSourceZip(
   const revision = revRes.rows[0];
   if (!revision) throw new SourceExportError("NOT_FOUND");
 
-  const itemsRes = await db.query<{ node_id: string; path: string; blob_key: string }>(
-    `SELECT node_id, path, blob_key FROM revision_items
+  const itemsRes = await db.query<{
+    path: string;
+    blob_key: string;
+    sha256: string;
+    size_bytes: string | null;
+    content_kind: string | null;
+    text_bytes: Buffer | null;
+  }>(
+    `SELECT path, blob_key, sha256, size_bytes, content_kind, text_bytes FROM revision_items
       WHERE revision_id = $1 AND deleted = FALSE ORDER BY path ASC`,
     [revision.id],
   );
   if (itemsRes.rows.length > maxArchiveNodes) throw new SourceExportError("LIMIT_EXCEEDED");
-
-  const nodeRes = await db.query<{ id: string; content_kind: string; mime: string }>(
-    "SELECT id, content_kind, mime FROM project_nodes WHERE project_id = $1",
-    [input.projectId],
-  );
-  const kinds = new Map(nodeRes.rows.map((row) => [row.id, row]));
 
   const entries: ZipEntry[] = [];
   const files: SourceExportFile[] = [];
@@ -219,13 +201,13 @@ export async function buildSourceZip(
 
   for (const item of itemsRes.rows) {
     checkExportPath(item.path);
-    const node = kinds.get(item.node_id);
-    if (!node || (node.content_kind !== "TEXT" && node.content_kind !== "BINARY")) {
+    if (item.content_kind !== "TEXT" && item.content_kind !== "BINARY") {
       throw new SourceExportError("INVALID_STATE");
     }
     let data: Buffer;
-    if (node.content_kind === "TEXT") {
-      data = await replayText(db, item.node_id);
+    if (item.content_kind === "TEXT") {
+      if (item.text_bytes === null) throw new SourceExportError("INVALID_STATE");
+      data = item.text_bytes;
     } else {
       let raw: Uint8Array;
       try {
@@ -243,6 +225,8 @@ export async function buildSourceZip(
     totalBytes += data.length;
     if (totalBytes > maxExpandedBytes) throw new SourceExportError("LIMIT_EXCEEDED");
     const sha256 = digest(data);
+    if (sha256 !== item.sha256 || data.length !== Number(item.size_bytes))
+      throw new SourceExportError("INVALID_STATE");
     entries.push({ name: Buffer.from(item.path, "utf8"), data });
     files.push({ path: item.path, sha256, sizeBytes: data.length });
     const parts = item.path.split("/").slice(0, -1);

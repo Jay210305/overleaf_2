@@ -6,7 +6,8 @@
   "dependencies": {
     "@latex-collab/contracts": "workspace:*",
     "drizzle-orm": "^0.45.4",
-    "pg": "8.23.1"
+    "pg": "8.23.1",
+    "yjs": "13.6.27"
   },
   "devDependencies": {
     "@types/pg": "8.23.1"

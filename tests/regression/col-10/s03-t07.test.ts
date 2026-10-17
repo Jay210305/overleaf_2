@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createSessionFixture } from "../../helpers/s02-session.js";
 import { RevisionsRepository } from "@latex-collab/db";
+import { DefaultTextDocumentService } from "../../../apps/api/src/modules/text/text-document-service.js";
+import { buildReplacementUpdate } from "../../../apps/jobs/src/sync/apply-changes.js";
 
 describe("COL-10 Regression - Revision history comparison (S03-T07)", () => {
   let fixture: Awaited<ReturnType<typeof createSessionFixture>>;
@@ -35,6 +37,18 @@ describe("COL-10 Regression - Revision history comparison (S03-T07)", () => {
               ($3, $2, NULL, 'old.tex', 'FILE', 'application/x-tex', 'TEXT', 'blobOld')`,
       [file1Id, projectId, file2Id],
     );
+    const text = new DefaultTextDocumentService(fixture.db);
+    const replace = async (fileId: string, content: string) => {
+      const state = await text.load(projectId, fileId, author.id);
+      await text.apply(
+        projectId,
+        fileId,
+        author.id,
+        buildReplacementUpdate(state.updateBase64, content)!,
+      );
+    };
+    await replace(file1Id, "intro v1");
+    await replace(file2Id, "old file");
 
     const rev1 = await repo.createStructuralRevision({
       projectId,
@@ -43,12 +57,9 @@ describe("COL-10 Regression - Revision history comparison (S03-T07)", () => {
       label: "Revision 1",
     });
 
-    // Mutate state: delete old.tex, add conclusion.tex, modify intro.tex (new blob_key)
+    // Mutate canonical state: delete old.tex, add conclusion.tex, edit intro.tex.
     await fixture.db.query(`UPDATE project_nodes SET deleted_at = now() WHERE id = $1`, [file2Id]);
-
-    await fixture.db.query(`UPDATE project_nodes SET blob_key = 'blob1_updated' WHERE id = $1`, [
-      file1Id,
-    ]);
+    await replace(file1Id, "intro v2");
 
     const file3Id = randomUUID();
     await fixture.db.query(
@@ -56,6 +67,7 @@ describe("COL-10 Regression - Revision history comparison (S03-T07)", () => {
        VALUES ($1, $2, NULL, 'conclusion.tex', 'FILE', 'application/x-tex', 'TEXT', 'blob3')`,
       [file3Id, projectId],
     );
+    await replace(file3Id, "conclusion");
 
     const rev2 = await repo.createStructuralRevision({
       projectId,

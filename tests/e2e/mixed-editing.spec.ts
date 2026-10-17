@@ -124,7 +124,7 @@ test("two browser editors converge through the persistent collaboration socket",
     );
     const [codePage, visualPage] = pages;
     await visualPage!.getByTestId("mode-visual-btn").click();
-    await visualPage!.getByText("Initial Title").click();
+    await visualPage!.getByTestId("live-visual-document").getByText("Initial Title").click();
     await visualPage!.getByTestId("heading-input").fill("Shared Title");
     await visualPage!.getByTestId("heading-input").press("Enter");
     await expect(visualPage!.getByTestId("live-save-status")).toHaveText("saved");
@@ -151,10 +151,10 @@ test("two browser editors converge through the persistent collaboration socket",
     await expect(visualPage!.getByTestId("figure-asset-status")).toHaveText("Asset Authorized");
     await expect(visualPage!.getByRole("img", { name: "private.png" })).toBeVisible();
 
-    await visualPage!.getByText("First paragraph.").click();
+    await visualPage!.getByTestId("live-visual-document").getByText("First paragraph.").click();
     await visualPage!.getByTestId("paragraph-textarea").fill("Changed paragraph.\n");
     await visualPage!.getByTestId("paragraph-textarea").blur();
-    await visualPage!.getByText("Alpha").click();
+    await visualPage!.getByTestId("live-visual-document").getByText("Alpha").click();
     await visualPage!.getByTestId("list-item-input").fill("Beta");
     await visualPage!.getByTestId("list-item-input").press("Enter");
     await visualPage!.getByTestId("math-preview").click();
@@ -194,7 +194,7 @@ test("two browser editors converge through the persistent collaboration socket",
     expect(savedDoc.getText("content").toString()).toContain("% code peer");
 
     await visualPage!.getByTestId("mode-visual-btn").click();
-    await visualPage!.getByText("Shared Title").click();
+    await visualPage!.getByTestId("live-visual-document").getByText("Shared Title").click();
     await visualPage!.getByTestId("heading-input").fill("Stale Title");
     await codePage!.locator(".cm-content").click();
     await codePage!.keyboard.press("ControlOrMeta+Home");

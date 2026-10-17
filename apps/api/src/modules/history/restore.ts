@@ -1,9 +1,13 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { DatabaseClient, RevisionsRepository, isUUID } from "@latex-collab/db";
+import {
+  DatabaseClient,
+  RevisionsRepository,
+  detachAnchorsForChangedNodes,
+  isUUID,
+} from "@latex-collab/db";
 import { AuthError } from "../auth/errors.js";
 import { problem } from "../../plugins/errors.js";
-import { detachAnchorsForChangedNodes } from "./restore-metadata.js";
 
 export const restoreInputSchema = z
   .object({

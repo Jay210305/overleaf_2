@@ -70,7 +70,7 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S05-T04 | [Export immutable source ZIP](sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | Project Co-owner (proposed) | 8 | done |
 | S05-T05 | [Preview and download safe binary assets](sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | Project Co-owner (proposed) | 6 | done |
 | S05-T06 | [Create minimal versioned internal templates](sprint-05-assets-import-export/S05-T06-create-minimal-versioned-internal-templates.md) | Project Co-owner (proposed) | 8 | done |
-| S05-T11 | [Create template preview and instantiate UI](sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | Project Co-owner (proposed) | 6 | in_progress |
+| S05-T11 | [Create template preview and instantiate UI](sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | Project Co-owner (proposed) | 6 | done |
 | S05-T07 | [Verify imported paths and custom styles](sprint-05-assets-import-export/S05-T07-verify-imported-paths-and-custom-styles.md) | Project Co-owner (proposed) | 6 | todo |
 | S05-T08 | [Verify hostile ZIP and round-trip journeys](sprint-05-assets-import-export/S05-T08-verify-hostile-zip-and-round-trip-journeys.md) | Project Co-owner (proposed) | 6 | todo |
 | S06-T01 | [Create durable compile queue jobs](sprint-06-trusted-compilation/S06-T01-create-durable-compile-queue-jobs.md) | Julio (proposed) | 8 | done |
@@ -152,13 +152,13 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S11-T09 | [Verify mixed code visual coediting](sprint-11-visual-editor/S11-T09-verify-mixed-code-visual-coediting.md) | Project Co-owner (proposed) | 8 | done |
 | S11-T11 | [Stabilize and review G3 academic workflow](sprint-11-visual-editor/S11-T11-stabilize-and-review-g3-academic-workflow.md) | Project Co-owner (proposed) | 8 | done |
 | S12-T01 | [Implement GitHub OAuth credential handling](sprint-12-github-sync/S12-T01-implement-github-oauth-credential-handling.md) | Julio (proposed) | 8 | done |
-| S12-T02 | [Link authorized repository and branch](sprint-12-github-sync/S12-T02-link-authorized-repository-and-branch.md) | Julio (proposed) | 8 | todo |
-| S12-T03 | [Pull using checkpoint and base SHA](sprint-12-github-sync/S12-T03-pull-using-checkpoint-and-base-sha.md) | Julio (proposed) | 8 | todo |
-| S12-T08 | [Apply remote changes through live canonical service](sprint-12-github-sync/S12-T08-apply-remote-changes-through-live-canonical-service.md) | Julio (proposed) | 8 | todo |
-| S12-T04 | [Push frozen revision with remote guard](sprint-12-github-sync/S12-T04-push-frozen-revision-with-remote-guard.md) | Julio (proposed) | 8 | todo |
-| S12-T05 | [Create sync status diff and resolution UI](sprint-12-github-sync/S12-T05-create-sync-status-diff-and-resolution-ui.md) | Julio (proposed) | 8 | todo |
-| S12-T06 | [Export authorized revision artifacts and links](sprint-12-github-sync/S12-T06-export-authorized-revision-artifacts-and-links.md) | Julio (proposed) | 6 | todo |
-| S12-T07 | [Verify GitHub failure concurrency cases](sprint-12-github-sync/S12-T07-verify-github-failure-concurrency-cases.md) | Julio (proposed) | 8 | todo |
+| S12-T02 | [Link authorized repository and branch](sprint-12-github-sync/S12-T02-link-authorized-repository-and-branch.md) | Julio (proposed) | 8 | done |
+| S12-T03 | [Pull using checkpoint and base SHA](sprint-12-github-sync/S12-T03-pull-using-checkpoint-and-base-sha.md) | Julio (proposed) | 8 | done |
+| S12-T08 | [Apply remote changes through live canonical service](sprint-12-github-sync/S12-T08-apply-remote-changes-through-live-canonical-service.md) | Julio (proposed) | 8 | done |
+| S12-T04 | [Push frozen revision with remote guard](sprint-12-github-sync/S12-T04-push-frozen-revision-with-remote-guard.md) | Julio (proposed) | 8 | done |
+| S12-T05 | [Create sync status diff and resolution UI](sprint-12-github-sync/S12-T05-create-sync-status-diff-and-resolution-ui.md) | Julio (proposed) | 8 | done |
+| S12-T06 | [Export authorized revision artifacts and links](sprint-12-github-sync/S12-T06-export-authorized-revision-artifacts-and-links.md) | Julio (proposed) | 6 | in_progress |
+| S12-T07 | [Verify GitHub failure concurrency cases](sprint-12-github-sync/S12-T07-verify-github-failure-concurrency-cases.md) | Julio (proposed) | 8 | done |
 | S13-T01 | [Define provider adapter and connection lifecycle](sprint-13-reference-providers/S13-T01-define-provider-adapter-and-connection-lifecycle.md) | Project Co-owner (proposed) | 8 | todo |
 | S13-T02 | [Import and refresh authorized Zotero library](sprint-13-reference-providers/S13-T02-import-and-refresh-authorized-zotero-library.md) | Project Co-owner (proposed) | 8 | todo |
 | S13-T03 | [Research Mendeley Papers access and terms](sprint-13-reference-providers/S13-T03-research-mendeley-papers-access-and-terms.md) | Project Co-owner (proposed) | 4 | todo |

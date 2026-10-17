@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S12-T01]
 requirements: [INT-05]
 source_task: S12-T02
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S12-T02 — Link authorized repository and branch
 
@@ -67,9 +67,9 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] Explicit import-new versus pair-existing compares manifests and records remote ref without destructive initial merge
-- [ ] INT-05: GitHub OAuth links repo/branch and guards pull/push against overwrite and conflicts. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] Explicit import-new versus pair-existing compares manifests and records remote ref without destructive initial merge
+- [x] INT-05: GitHub OAuth links repo/branch and guards pull/push against overwrite and conflicts. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -95,9 +95,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
-- [ ] Independent co-maintainer review complete; status updated to done only after evidence.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Independent co-maintainer review complete; status updated to done only after evidence.

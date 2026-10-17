@@ -1,4 +1,4 @@
-import type { DatabaseClient } from "@latex-collab/db";
+import type { DatabaseClient } from "../client.js";
 
 export interface AnchorDetachmentResult {
   detachedCommentIds: string[];
@@ -7,10 +7,13 @@ export interface AnchorDetachmentResult {
 
 /**
  * Detaches comments and marks pending suggestions as conflicted for files that
- * have been modified or deleted as part of a restore operation.
+ * have been modified or deleted as part of a restore, import or sync
+ * operation.
  *
  * Invariant: Unresolvable relative-position comment anchors become 'detached'
- * rather than anchoring to incorrect restored text.
+ * rather than anchoring to incorrect text. Shared by the API history restore
+ * (S09-T06) and the jobs GitHub pull apply (S12-T08) so both paths keep the
+ * same metadata guarantee.
  */
 export async function detachAnchorsForChangedNodes(
   db: { query: DatabaseClient["query"] },

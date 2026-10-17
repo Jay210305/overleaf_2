@@ -27,6 +27,8 @@ Connections belong to users; linking to a project separately requires current pr
 
 Manual explicit sync first. Freeze/checkpoint before sync; compare local revision and common remote base. Pull validates remote paths/sizes and resolves keep-local/keep-remote/manual merge explicitly; binary conflicts always need a choice. Apply authorized canonical Yjs mutations, not direct DB snapshot replacement, so live clients receive events. Push uses frozen source and expectedRemoteSHA; remote advancement yields conflict, never automatic force push. Audit actor/base/source/result and preserve comments or report detached anchors.
 
+The S12-T05 GitHub HTTP adapter uses the linked repository and branch stored on the server. `POST .../status` creates the immutable checkpoint and returns the three-way plan; `POST .../sync` validates the expected commit SHA and resolution set before applying canonical changes or writing a non-force Git ref. A durable idempotency row prevents a repeated request from repeating an already completed mutation. Production wiring uses the fixed GitHub API host and Redis room updates/file-deletion invalidations; provider redirects are rejected.
+
 GitHub link distinguishes import as new project versus pair current project and compares initial manifests. Ignore .git, output artifacts and secrets explicitly. Test revocation, remote force push, rename, binary and two-editor changes.
 
 ## Git HTTP

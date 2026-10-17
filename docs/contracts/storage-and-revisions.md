@@ -2,6 +2,8 @@
 
 ## Adapter
 
+S12-T06 revision exports look up one project-scoped `project_revisions` row. Source ZIP is built from that frozen revision; PDF/log require an exact compile job whose `source_revision_id` is that revision and a retained artifact set with a server-owned key. Revision export links bind project, revision, kind and optional compile job in PostgreSQL for one hour. A link is usable only with current project authorization, and source access remains OWNER/EDITOR only. The object key and source contents never appear in link metadata.
+
 ```ts
 type ObjectRef = { key: string; sha256: string; sizeBytes: number; mime: string; lastModified?: Date };
 type ObjectListPage = {
@@ -41,7 +43,7 @@ S02-T11 also permits server-created `avatars/<userId>/<uuid>.png` keys for valid
 
 Tree uses stable node IDs and same-project parent IDs. Names reject slash/backslash, NUL, dot/dot-dot and dangerous normalized paths; proposed UTF-8 NFC normalization applies to names, not source bytes. Unique active sibling names include root nodes with null parent through explicit partial root/non-root indexes. Reject cycles and foreign parents transactionally.
 
-Revision freezes all active file paths, text and binary blobs, hashes, main file and relevant compiler/content settings. Canonical manifest hashing sorts by normalized path then nodeId and uses UTF-8 JSON with fixed key ordering; versioned encoding is shared across producer/consumer tests. Manifest is immutable; revisions increase monotonically on structural mutation/checkpoint. File restore affects only that file; project restore uses a new revision and current ACLs.
+Revision freezes all active file paths, canonical Yjs text bytes and binary blob identities, hashes, main file and relevant compiler/content settings. New revision items hold immutable text bytes and file metadata; the manifest JSON is stored with its hash. Text item keys under the revisions prefix identify these database-backed bytes (older nodes can retain a legacy metadata key), while binary keys identify private content-addressed objects. Git sync and source export reject legacy rows without frozen bytes; push also verifies binary bytes against the stored size/hash. Canonical manifest hashing sorts by normalized path then nodeId and uses UTF-8 JSON with fixed key ordering; versioned encoding is shared across producer/consumer tests. Manifest is immutable; revisions increase monotonically on structural mutation/checkpoint. File restore affects only that file; project restore uses a new revision and current ACLs.
 
 ## Upload / ZIP Limits
 

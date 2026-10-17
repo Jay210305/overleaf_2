@@ -5,9 +5,13 @@ import { createReadiness } from "./readiness.js";
 import { createServer, safeLoggerOptions } from "./server.js";
 import { MemoryTicketStore } from "./modules/collab/ticket.js";
 import { CollabServer } from "@latex-collab/collab";
+import { CollabRedisCoordinator, type RedisClientType } from "@latex-collab/collab";
+import { createClient } from "redis";
 import { createRedisAuthRateLimiter } from "./plugins/rate-limit.js";
 import { createRedisCollabInvalidationPublisher } from "./modules/collab/invalidation.js";
 import { githubAuthConfigFromEnv } from "./modules/integrations/github-auth.js";
+import { createGitHubRestReader } from "./modules/integrations/github-rest.js";
+import { createGitHubRestPushWriter } from "@latex-collab/jobs/sync/github-push";
 import { processAvatarCleanup } from "./modules/account/avatar.js";
 import {
   createSmtpVerificationSender,
@@ -20,6 +24,16 @@ async function main() {
   const db = new DatabaseClient(config.DATABASE_URL);
   const rateLimiter = await createRedisAuthRateLimiter(config.REDIS_URL);
   const collabInvalidation = await createRedisCollabInvalidationPublisher(config.REDIS_URL);
+  const collabPub = createClient({ url: config.REDIS_URL });
+  const collabSub = collabPub.duplicate();
+  collabPub.on("error", () => {});
+  collabSub.on("error", () => {});
+  await Promise.all([collabPub.connect(), collabSub.connect()]);
+  const redisCoordinator = new CollabRedisCoordinator({
+    pubClient: collabPub as unknown as RedisClientType,
+    subClient: collabSub as unknown as RedisClientType,
+  });
+  await redisCoordinator.init();
   const storage = new S3StorageAdapter({
     endpoint: config.S3_ENDPOINT,
     region: config.S3_REGION,
@@ -35,9 +49,29 @@ async function main() {
     db,
     rateLimiter,
     collabInvalidation,
+    githubSyncInvalidations: {
+      async publish(event) {
+        if (event.type === "file_deleted") {
+          await collabPub.publish("collab:invalidations", JSON.stringify(event));
+        } else if (event.updateBase64) {
+          const roomId = `project:${event.projectId}:file:${event.fileId}`;
+          await collabPub.publish(
+            `collab:room:${roomId}:updates`,
+            JSON.stringify({
+              replicaId: "api-sync",
+              roomId,
+              updateBase64: event.updateBase64,
+              timestamp: Date.now(),
+            }),
+          );
+        }
+      },
+    },
+    githubPushWriter: createGitHubRestPushWriter(),
+    githubSyncReader: createGitHubRestReader(),
     storage,
     ticketStore,
-    githubAuth: { config: githubAuthConfigFromEnv(process.env) },
+    githubAuth: { config: githubAuthConfigFromEnv(process.env), reader: createGitHubRestReader() },
     sendVerification:
       config.SMTP_URL && config.EMAIL_FROM
         ? createSmtpVerificationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
@@ -57,6 +91,7 @@ async function main() {
     db,
     ticketStore,
     allowedOrigin: config.APP_ORIGIN,
+    redisCoordinator,
   });
   await collab.start();
   let cleanupRunning = false;
@@ -80,6 +115,7 @@ async function main() {
     await db.close();
     await rateLimiter.close();
     await collabInvalidation.close();
+    await Promise.all([collabPub.quit(), collabSub.quit()]);
   });
   const stop = () => {
     void app.close().catch(() => {

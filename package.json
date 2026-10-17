@@ -8,7 +8,7 @@
     "node": ">=24.0.0 <25"
   },
   "scripts": {
-    "pretest": "pnpm --filter \"./packages/*\" build",
+    "pretest": "pnpm --filter \"./packages/*\" build && pnpm --filter @latex-collab/jobs build",
     "test": "vitest run",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:e2e": "playwright test",
@@ -16,8 +16,8 @@
     "format": "prettier --write apps packages scripts tests *.json *.ts *.js infra .github .prettierrc.json",
     "format:check": "prettier --check apps packages scripts tests *.json *.ts *.js infra .github .prettierrc.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "build": "pnpm --filter \"./packages/*\" build && pnpm --filter @latex-collab/collab build && pnpm --filter @latex-collab/api build && pnpm --filter @latex-collab/jobs build && pnpm --filter @latex-collab/web build && tsc -p tsconfig.build.json",
-    "dev": "pnpm --filter \"./packages/*\" build && tsx scripts/dev.ts",
+    "build": "pnpm --filter \"./packages/*\" build && pnpm --filter @latex-collab/collab build && pnpm --filter @latex-collab/jobs build && pnpm --filter @latex-collab/api build && pnpm --filter @latex-collab/web build && tsc -p tsconfig.build.json",
+    "dev": "pnpm --filter \"./packages/*\" build && pnpm --filter @latex-collab/collab build && pnpm --filter @latex-collab/jobs build && tsx scripts/dev.ts",
     "infra:up": "pnpm --filter \"./packages/*\" build && docker compose --env-file .env -f infra/docker-compose.yml up -d --wait --build && node scripts/init-storage.mjs",
     "infra:down": "docker compose --env-file .env -f infra/docker-compose.yml down",
     "env:init": "node scripts/init-env.mjs",
@@ -45,6 +45,7 @@
     "argon2": "0.45.1",
     "drizzle-orm": "^0.45.4",
     "eslint": "10.12.0",
+    "fastify": "5.12.5",
     "jsdom": "30.1.2",
     "prettier": "3.9.10",
     "react": "19.3.0",

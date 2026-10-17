@@ -29,6 +29,7 @@ import { registerTemplateRoutes } from "./modules/templates/routes.js";
 import { registerTreeRoutes } from "./modules/files/tree.js";
 import { registerFigurePreviewRoute } from "./modules/files/figure-preview.js";
 import { registerBinaryDownloadRoutes } from "./modules/files/binary-download.js";
+import { registerRevisionExportRoutes } from "./modules/exports/routes.js";
 import { registerTextRoutes } from "./modules/text/routes.js";
 import { registerCheckpointRoutes } from "./modules/history/checkpoint.js";
 import { registerHistoryRoutes } from "./modules/history/routes.js";
@@ -57,6 +58,13 @@ import {
   type GitHubOAuthConfig,
   type RevokeToken,
 } from "./modules/integrations/github-auth.js";
+import { registerGitHubLinkRoutes, type RemoteReader } from "./modules/integrations/github-link.js";
+import { registerGitHubSyncRoutes } from "./modules/integrations/github-sync.js";
+import type {
+  GitHubApplyReader,
+  SyncInvalidationPublisher,
+} from "@latex-collab/jobs/sync/apply-changes";
+import type { GitHubPushWriter } from "@latex-collab/jobs/sync/github-push";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -98,11 +106,15 @@ export interface ServerOptions {
   rateLimiter?: AuthRateLimiter | undefined;
   ticketStore?: TicketStore | undefined;
   collabInvalidation?: CollabInvalidationPublisher | undefined;
+  githubSyncInvalidations?: SyncInvalidationPublisher | undefined;
+  githubPushWriter?: GitHubPushWriter | undefined;
+  githubSyncReader?: GitHubApplyReader | undefined;
   githubAuth?:
     | {
         config?: GitHubOAuthConfig | undefined;
         exchangeCode?: ExchangeCode | undefined;
         revokeToken?: RevokeToken | undefined;
+        reader?: RemoteReader | undefined;
       }
     | undefined;
 }
@@ -242,6 +254,7 @@ export function createServer(options: ServerOptions) {
     });
     registerFigurePreviewRoute(app, { db: options.db, storage: options.storage });
     registerBinaryDownloadRoutes(app, { db: options.db, storage: options.storage });
+    registerRevisionExportRoutes(app, { db: options.db, storage: options.storage });
     registerTemplateRoutes(app, { db: options.db });
     registerTextRoutes(app, {
       db: options.db,
@@ -314,6 +327,15 @@ export function createServer(options: ServerOptions) {
       storage: options.storage,
     });
     registerGitHubAuthRoutes(app, { db: options.db, githubAuth: options.githubAuth });
+    registerGitHubLinkRoutes(app, { db: options.db, githubAuth: options.githubAuth });
+    registerGitHubSyncRoutes(app, {
+      db: options.db,
+      storage: options.storage,
+      config: options.githubAuth?.config,
+      reader: options.githubSyncReader,
+      writer: options.githubPushWriter,
+      invalidations: options.githubSyncInvalidations,
+    });
   }
   return app;
 }

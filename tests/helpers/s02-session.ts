@@ -35,6 +35,23 @@ export async function createSessionFixture(
     ),
   );
   await db.query(sessions);
+  await db.transaction(async (tx) => {
+    await tx.query("SELECT pg_advisory_xact_lock(80814)");
+    const frozen = await tx.query<{ exists: boolean }>(
+      `SELECT EXISTS (SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'revision_items' AND column_name = 'text_bytes') AS exists`,
+    );
+    if (frozen.rows[0]?.exists) return;
+    await tx.query(
+      readFileSync(
+        resolve(
+          import.meta.dirname,
+          "../../packages/db/migrations/0014-frozen-revision-content.sql",
+        ),
+        "utf8",
+      ),
+    );
+  });
   // This helper runs in many parallel Vitest workers. Replaying ALTER/VIEW DDL
   // on every fixture can invalidate queries in another worker mid-request.
   await db.transaction(async (tx) => {

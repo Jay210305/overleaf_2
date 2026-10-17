@@ -2,6 +2,7 @@ import {
   bigint,
   boolean,
   check,
+  customType,
   foreignKey,
   index,
   integer,
@@ -14,6 +15,8 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => "bytea" });
 
 export const roles = ["OWNER", "EDITOR", "REVIEWER", "VIEWER"] as const;
 export type Role = (typeof roles)[number];
@@ -420,6 +423,7 @@ export const projectRevisions = pgTable(
     revisionNo: bigint("revision_no", { mode: "number" }).notNull(),
     manifestKey: text("manifest_key").notNull(),
     manifestHash: text("manifest_hash").notNull(),
+    manifestJson: jsonb("manifest_json"),
     authorId: uuid("author_id").references(() => users.id, { onDelete: "set null" }),
     source: text("source").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
@@ -437,12 +441,14 @@ export const revisionItems = pgTable(
     revisionId: uuid("revision_id")
       .notNull()
       .references(() => projectRevisions.id, { onDelete: "cascade" }),
-    nodeId: uuid("node_id")
-      .notNull()
-      .references(() => projectNodes.id, { onDelete: "cascade" }),
+    nodeId: uuid("node_id").notNull(),
     path: text("path").notNull(),
     blobKey: text("blob_key").notNull(),
     sha256: text("sha256").notNull(),
+    contentKind: text("content_kind"),
+    sizeBytes: bigint("size_bytes", { mode: "number" }),
+    mime: text("mime"),
+    textBytes: bytea("text_bytes"),
     deleted: boolean("deleted").notNull().default(false),
   },
   (table) => [primaryKey({ columns: [table.revisionId, table.path] })],
@@ -520,3 +526,20 @@ export const artifactSets = pgTable(
   },
   (table) => [uniqueIndex("artifact_sets_compile_job_id_idx").on(table.compileJobId)],
 );
+
+export const revisionExportLinks = pgTable("revision_export_links", {
+  id: uuid("id").primaryKey(),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  revisionId: uuid("revision_id")
+    .notNull()
+    .references(() => projectRevisions.id, { onDelete: "cascade" }),
+  compileJobId: uuid("compile_job_id").references(() => compileJobs.id, { onDelete: "cascade" }),
+  kind: text("kind").notNull(),
+  createdBy: uuid("created_by")
+    .notNull()
+    .references(() => users.id),
+  expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+});

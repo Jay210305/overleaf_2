@@ -47,7 +47,7 @@ describe("S05-T09 immutable revision retention", () => {
     if (fixture) await fixture.close();
   });
 
-  it("keeps a revision's blob when physical node deletion cascades its item row", async () => {
+  it("keeps a revision's item and blob after physical node deletion", async () => {
     const bytes = Buffer.from("historical binary");
     const hash = createHash("sha256").update(bytes).digest("hex");
     blobKey = `projects/${projectId}/blobs/${hash}`;
@@ -75,7 +75,7 @@ describe("S05-T09 immutable revision retention", () => {
       "SELECT blob_key FROM revision_items WHERE revision_id = $1",
       [revision.rows[0]!.id],
     );
-    expect(items.rows).toEqual([]);
+    expect(items.rows).toEqual([{ blob_key: blobKey }]);
 
     const outcome = await runStorageGc(fixture.db, storage, {
       projectId,

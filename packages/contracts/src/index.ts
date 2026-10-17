@@ -904,5 +904,50 @@ export const githubOAuthStatusSchema = z.strictObject({
 });
 export type GitHubOAuthStatus = z.infer<typeof githubOAuthStatusSchema>;
 
+export const githubRepoSchema = z.strictObject({
+  fullName: z.string().min(1).max(200),
+  defaultBranch: z.string().min(1).max(100),
+  private: z.boolean(),
+});
+export type GitHubRepo = z.infer<typeof githubRepoSchema>;
+
+export const githubLinkInputSchema = z.strictObject({
+  connectionId: z.string().uuid(),
+  mode: z.enum(["import-new", "pair-existing"]),
+  projectId: z.string().uuid().optional(),
+  title: z.string().trim().min(1).max(200).optional(),
+  remoteRef: z
+    .string()
+    .min(1)
+    .max(200)
+    .regex(/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/, "Expected owner/repo"),
+  branch: z.string().min(1).max(100).optional(),
+  expectedRemoteSha: z
+    .string()
+    .regex(/^[a-f0-9]{40}$/)
+    .optional(),
+});
+export type GitHubLinkInput = z.infer<typeof githubLinkInputSchema>;
+
+export const githubManifestDiffSchema = z.strictObject({
+  path: z.string().min(1).max(1000),
+  side: z.enum(["only-local", "only-remote", "differing"]),
+  localKind: z.enum(["file", "folder"]).nullable(),
+  remoteKind: z.enum(["file", "folder"]).nullable(),
+});
+export type GitHubManifestDiff = z.infer<typeof githubManifestDiffSchema>;
+
+export const githubLinkResultSchema = z.strictObject({
+  projectId: z.string().uuid(),
+  connectionId: z.string().uuid(),
+  mode: z.enum(["import-new", "pair-existing"]),
+  remoteRef: z.string().min(1).max(200),
+  branch: z.string().min(1).max(100),
+  remoteSha: z.string().regex(/^[a-f0-9]{40}$/),
+  comparison: z.array(githubManifestDiffSchema),
+  conflict: z.boolean(),
+});
+export type GitHubLinkResult = z.infer<typeof githubLinkResultSchema>;
+
 export * from "./storage.js";
 export * from "./executor.js";

@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
+import * as Y from "yjs";
 import type { DatabaseClient, TransactionContext } from "../client.js";
 
 export function canonicalJsonStringify(obj: unknown): string {
@@ -137,24 +138,77 @@ export class RevisionsRepository {
 
       // 4. For FILE nodes, construct manifest items
       const fileNodes = nodesRes.rows.filter((n) => n.kind === "FILE");
-      const emptySha256 = computeSha256("");
-
-      const manifestItems: ManifestItem[] = fileNodes.map((n) => {
+      const manifestItems: ManifestItem[] = [];
+      const textBytes = new Map<string, Buffer>();
+      for (const n of fileNodes) {
         const path = getCanonicalPath(n.id);
-        const itemSha256 = n.blob_key ? computeSha256(n.blob_key) : emptySha256;
-        const blobKey = n.blob_key ?? `projects/${params.projectId}/blobs/${itemSha256}`;
-        return {
+        let itemSha256: string;
+        let sizeBytes: number;
+        let blobKey: string;
+        if (n.content_kind === "TEXT") {
+          // Serialize with canonical writers on this file. The resulting bytes
+          // are stored on the revision row and never read from the live log.
+          await tx.query(
+            `INSERT INTO text_documents (file_id, project_id, last_persisted_seq)
+             VALUES ($1, $2, 0) ON CONFLICT (file_id) DO NOTHING`,
+            [n.id, params.projectId],
+          );
+          const document = await tx.query<{ latest_snapshot_id: string | null }>(
+            "SELECT latest_snapshot_id FROM text_documents WHERE file_id = $1 FOR UPDATE",
+            [n.id],
+          );
+          let uptoSeq = 0;
+          const doc = new Y.Doc();
+          try {
+            const snapshotId = document.rows[0]?.latest_snapshot_id;
+            if (snapshotId) {
+              const snapshot = await tx.query<{ upto_seq: string; state_bytes: Buffer | null }>(
+                "SELECT upto_seq, state_bytes FROM crdt_snapshots WHERE id = $1 AND file_id = $2",
+                [snapshotId, n.id],
+              );
+              const row = snapshot.rows[0];
+              if (!row?.state_bytes) throw new Error(`Canonical snapshot missing for ${n.id}`);
+              Y.applyUpdate(doc, new Uint8Array(row.state_bytes));
+              uptoSeq = Number(row.upto_seq);
+            }
+            const updates = await tx.query<{ payload_bytes: Buffer }>(
+              "SELECT payload_bytes FROM crdt_updates WHERE file_id = $1 AND seq > $2 ORDER BY seq ASC",
+              [n.id, uptoSeq],
+            );
+            for (const row of updates.rows) Y.applyUpdate(doc, new Uint8Array(row.payload_bytes));
+            const bytes = Buffer.from(doc.getText("content").toString(), "utf8");
+            textBytes.set(n.id, bytes);
+            itemSha256 = computeSha256(bytes);
+            sizeBytes = bytes.length;
+          } finally {
+            doc.destroy();
+          }
+          // Keep legacy text blob metadata for older restore callers; the
+          // authoritative revision content is the frozen text_bytes column.
+          blobKey = n.blob_key ?? `projects/${params.projectId}/revisions/${revisionId}/${n.id}`;
+        } else {
+          blobKey = n.blob_key ?? "";
+          const match = new RegExp(`^projects/${params.projectId}/blobs/([a-f0-9]{64})$`).exec(
+            blobKey,
+          );
+          if (!blobKey) throw new Error(`Binary node ${n.id} has no blob`);
+          // Legacy metadata may predate content-addressed uploads. It remains
+          // checkpointable but push/export reject it when bytes cannot verify.
+          itemSha256 = match?.[1] ?? computeSha256(blobKey);
+          sizeBytes = Number(n.size_bytes);
+        }
+        manifestItems.push({
           nodeId: n.id,
           path,
           kind: n.content_kind,
           object: {
             key: blobKey,
             sha256: itemSha256,
-            sizeBytes: Number(n.size_bytes),
+            sizeBytes,
             mime: n.mime,
           },
-        };
-      });
+        });
+      }
 
       // 5. Canonical manifest sorting: sort by normalized path ASC, then nodeId ASC
       manifestItems.sort((a, b) => {
@@ -185,9 +239,9 @@ export class RevisionsRepository {
       }>(
         `INSERT INTO project_revisions (
            id, project_id, revision_no, manifest_key, manifest_hash,
-           author_id, source, label
+           author_id, source, label, manifest_json
          )
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb)
          RETURNING id, created_at`,
         [
           revisionId,
@@ -198,6 +252,7 @@ export class RevisionsRepository {
           params.authorId ?? null,
           params.source,
           params.label ?? null,
+          manifestJson,
         ],
       );
       const createdAt = insertRevRes.rows[0]!.created_at.toISOString();
@@ -205,9 +260,21 @@ export class RevisionsRepository {
       // 7. Insert revision_items
       for (const item of manifestItems) {
         await tx.query(
-          `INSERT INTO revision_items (revision_id, node_id, path, blob_key, sha256, deleted)
-           VALUES ($1, $2, $3, $4, $5, false)`,
-          [revisionId, item.nodeId, item.path, item.object.key, item.object.sha256],
+          `INSERT INTO revision_items
+             (revision_id, node_id, path, blob_key, sha256, deleted,
+              content_kind, size_bytes, mime, text_bytes)
+           VALUES ($1, $2, $3, $4, $5, false, $6, $7, $8, $9)`,
+          [
+            revisionId,
+            item.nodeId,
+            item.path,
+            item.object.key,
+            item.object.sha256,
+            item.kind,
+            item.object.sizeBytes,
+            item.object.mime,
+            item.kind === "TEXT" ? textBytes.get(item.nodeId) : null,
+          ],
         );
       }
 
@@ -265,8 +332,9 @@ export class RevisionsRepository {
       source: string;
       label: string | null;
       created_at: Date;
+      manifest_json: RevisionManifest | null;
     }>(
-      `SELECT id, project_id, revision_no, manifest_key, manifest_hash, author_id, source, label, created_at
+      `SELECT id, project_id, revision_no, manifest_key, manifest_hash, author_id, source, label, created_at, manifest_json
        FROM project_revisions
        WHERE project_id = $1 AND revision_no = $2`,
       [projectId, revisionNo],
@@ -280,8 +348,11 @@ export class RevisionsRepository {
       blob_key: string;
       sha256: string;
       deleted: boolean;
+      content_kind: "TEXT" | "BINARY" | null;
+      size_bytes: string | null;
+      mime: string | null;
     }>(
-      `SELECT node_id, path, blob_key, sha256, deleted
+      `SELECT node_id, path, blob_key, sha256, deleted, content_kind, size_bytes, mime
        FROM revision_items
        WHERE revision_id = $1
        ORDER BY path ASC, node_id ASC`,
@@ -291,16 +362,17 @@ export class RevisionsRepository {
     const manifestItems: ManifestItem[] = itemsRes.rows.map((r) => ({
       nodeId: r.node_id,
       path: r.path,
-      kind: r.path.endsWith(".tex") ? "TEXT" : "BINARY",
+      kind: r.content_kind ?? (r.path.endsWith(".tex") ? "TEXT" : "BINARY"),
       object: {
         key: r.blob_key,
         sha256: r.sha256,
-        sizeBytes: 0,
-        mime: r.path.endsWith(".tex") ? "application/x-tex" : "application/octet-stream",
+        sizeBytes: Number(r.size_bytes ?? 0),
+        mime:
+          r.mime ?? (r.path.endsWith(".tex") ? "application/x-tex" : "application/octet-stream"),
       },
     }));
 
-    const manifest: RevisionManifest = {
+    const manifest: RevisionManifest = rev.manifest_json ?? {
       version: 1,
       projectId: rev.project_id,
       revisionId: rev.id,

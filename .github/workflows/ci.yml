@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
@@ -11,16 +11,17 @@ jobs:
       - run: npm install -g pnpm@11.25.0
       - run: pnpm install --frozen-lockfile
       - run: pnpm env:init
-      - run: pnpm --filter './packages/*' build
+      # `pnpm test` includes the PostgreSQL/MinIO/Redis-backed integration suites,
+      # so the services and build artifacts must exist before the test step.
+      - run: pnpm infra:up
+      - run: pnpm build
       - run: pnpm format:check
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
-      - run: pnpm build
       - run: pnpm security:check
       - run: pnpm artifacts:check
       - run: python scripts/plan_lint.py
-      - run: pnpm infra:up
       - run: pnpm test:integration
       - run: pnpm exec playwright install --with-deps chromium firefox msedge
       - run: pnpm test:e2e

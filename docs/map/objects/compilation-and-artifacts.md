@@ -21,6 +21,7 @@ Execution and artifacts must preserve source identity, authorization and the tru
 ## Shape
 
 Proposed compilation path: `apps/tex-executor` plus future compile handlers in `apps/jobs`. The database has `compile_jobs` and `artifact_sets` tables (`packages/db/migrations/0001-core.sql:234`), and [Private Object Storage](private-object-storage.md) has an S3 adapter, but no compilation execution or PDF generation exists. Pinned TeX Live/latexmk remains S06 work; G1 is trusted execution.
+S12-T06 consumes existing private compile artifacts through `apps/api/src/modules/exports/routes.ts`. It checks the succeeded job's source revision, retained artifact set, project/job object key and bounded PDF bytes before download. Source ZIP comes from frozen revision inputs. This adds no executor path; trusted TeX compilation remains governed by the compilation contract and G5 public-isolation gate.
 
 ## Connected to
 

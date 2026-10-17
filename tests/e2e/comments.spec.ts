@@ -175,6 +175,7 @@ test("deleted comment range shows a detached reason instead of moving", async ({
     await page.getByRole("treeitem", { name: "main.tex (file)" }).click();
     const panel = page.getByRole("region", { name: "Comment anchors" });
     const source = panel.getByRole("textbox", { name: "Source text for comment selection" });
+    await expect(source).toHaveValue("Before target after");
     await source.evaluate((element) => {
       const textarea = element as HTMLTextAreaElement;
       textarea.focus();
@@ -183,7 +184,9 @@ test("deleted comment range shows a detached reason instead of moving", async ({
     });
     await panel.getByRole("textbox", { name: "Comment body" }).fill("Doomed range");
     await panel.getByRole("button", { name: "Add comment" }).click();
-    await expect(panel.getByText("Doomed range")).toBeVisible();
+    // Wait for the persisted comment in the list; matching plain text would also
+    // hit the still-filled body textarea and race the deletion below.
+    await expect(panel.locator("ol li").getByText("Doomed range")).toBeVisible();
 
     doc.getText("content").delete(7, 6);
     await db.query(
@@ -192,7 +195,10 @@ test("deleted comment range shows a detached reason instead of moving", async ({
     );
     await db.query("UPDATE text_documents SET last_persisted_seq = 2 WHERE file_id = $1", [fileId]);
     await page.reload();
-    await expect(panel.getByText("Doomed range")).toBeVisible();
+    // File selection is component state, so reopen the document to mount the
+    // comment panel again before asserting on the detached anchor.
+    await page.getByRole("treeitem", { name: "main.tex (file)" }).click();
+    await expect(panel.locator("ol li").getByText("Doomed range")).toBeVisible();
     await expect(panel.getByText("Anchor unavailable: selected range changed.")).toBeVisible();
     await expect(panel.locator("mark")).toHaveCount(0);
   } finally {

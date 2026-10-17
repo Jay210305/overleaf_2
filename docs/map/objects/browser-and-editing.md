@@ -34,6 +34,8 @@ S08-T05 mounts a project chat panel with cursor history and text-only rendering.
 
 S11 visual components live under `features/visual/`. `ReadOnlyTextDocument` decodes the authorized Yjs snapshot and renders existing node views through the mode switch. `LiveTextDocument` obtains a scoped write or read ticket, binds CodeMirror and supported Visual patches to canonical Y.Text, and waits for a covering durable acknowledgement before showing saved. `VisualFigure` fetches real image bytes from the project-scoped READ route and shows an authorized preview only after success; failed reads stay unverified. KaTeX typesets compatible inline/display math with an unsupported-macro literal fallback; the compiled PDF remains authoritative. The [S11-T09 test](../../test-reports/s11-t09.md) drives two authenticated Edge pages through persisted convergence and conflict, and [S11-T05](../../test-reports/s11-t05.md) adds a real image preview journey. G3 was released 2026-10-16; see the [G3 audit](../../test-reports/gate-g3-audit.md).
 
+S12-T05 adds `features/integrations/github-sync.tsx`: a base/local/remote sync diff with explicit keep-local/keep-remote/manual conflict resolution and a state guard that never labels a pending, failed or manually deferred action as synced. A refreshed plan clears earlier conflict choices and retry identity, and manual merge cannot trigger Apply. The workspace mounts the panel through its GitHub Sync control; the client calls the authorized checkpoint and sync routes with session CSRF. A routed workspace regression covers the mount; see [S12-T05 evidence](../../test-reports/s12-t05.md).
+
 ## Connected to
 
 Consumes HTTP, collaboration and artifact contracts. Visual editing depends on conservative source patches.
@@ -70,4 +72,6 @@ Browser navigation, theme, keyboard and health/outage/recovery were exercised in
 - [S08-T05 evidence](../../test-reports/s08-t05.md)
 - [Project workspace](../../../apps/web/src/features/projects/workspace.tsx)
 - [Visual figure component](../../../apps/web/src/features/visual/academic-nodes.tsx)
+- [GitHub sync panel (S12-T05, not mounted)](../../../apps/web/src/features/integrations/github-sync.tsx)
+- [S12-T05 evidence](../../test-reports/s12-t05.md)
 - [Released G3 audit](../../test-reports/gate-g3-audit.md)

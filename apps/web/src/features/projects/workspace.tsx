@@ -10,6 +10,7 @@ import { ProjectChat } from "../chat/project-chat.js";
 import { ReadOnlyTextDocument } from "../visual/mode-switch.js";
 import { LiveTextDocument } from "../collab/live-document.js";
 import { ProjectSettings } from "./settings.js";
+import { GitHubSyncPanel } from "../integrations/github-sync.js";
 
 const config = parsePublicConfig(import.meta.env);
 const defaultApiUrl = config.VITE_API_URL;
@@ -35,6 +36,7 @@ export function ProjectWorkspace({
   const [liveFileId, setLiveFileId] = useState<string | null>(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
+  const [showGitHubSync, setShowGitHubSync] = useState(false);
   const [uploadVersion, setUploadVersion] = useState(0);
 
   const fetchProject = useCallback(async () => {
@@ -91,6 +93,15 @@ export function ProjectWorkspace({
           <button
             type="button"
             className="btn btn-secondary"
+            onClick={() => setShowGitHubSync((value) => !value)}
+            aria-expanded={showGitHubSync}
+            aria-controls="github-sync-workspace"
+          >
+            GitHub Sync
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
             onClick={() => setShowShareDialog(true)}
             aria-haspopup="dialog"
             aria-label="Share project"
@@ -123,90 +134,95 @@ export function ProjectWorkspace({
       )}
 
       {!loading && !error && (
-        <div className="workspace-layout">
-          <aside className="workspace-sidebar" aria-label="Project files">
-            <FileUploader
-              projectId={projectId}
-              apiUrl={apiUrl}
-              csrfToken={csrfToken}
-              onUploaded={() => setUploadVersion((value) => value + 1)}
-            />
-            <FileTree
-              projectId={projectId}
-              apiUrl={apiUrl}
-              csrfToken={csrfToken}
-              selectedNodeId={selectedNode?.id}
-              onSelectNode={(node) => {
-                setSelectedNode(node);
-                setLiveFileId(null);
-              }}
-              refreshVersion={uploadVersion}
-            />
-          </aside>
+        <>
+          {showGitHubSync && (
+            <div id="github-sync-workspace">
+              <GitHubSyncPanel projectId={projectId} apiUrl={apiUrl} csrfToken={csrfToken} />
+            </div>
+          )}
+          <div className="workspace-layout">
+            <aside className="workspace-sidebar" aria-label="Project files">
+              <FileUploader
+                projectId={projectId}
+                apiUrl={apiUrl}
+                csrfToken={csrfToken}
+                onUploaded={() => setUploadVersion((value) => value + 1)}
+              />
+              <FileTree
+                projectId={projectId}
+                apiUrl={apiUrl}
+                csrfToken={csrfToken}
+                selectedNodeId={selectedNode?.id}
+                onSelectNode={(node) => {
+                  setSelectedNode(node);
+                  setLiveFileId(null);
+                }}
+                refreshVersion={uploadVersion}
+              />
+            </aside>
 
-          <section className="workspace-content" aria-label="Document view">
-            {selectedNode?.kind === "FILE" && selectedNode.contentKind === "TEXT" ? (
-              <div className="selected-node-panel">
-                <h2>{selectedNode.name}</h2>
-                {liveFileId === selectedNode.id ? (
-                  <LiveTextDocument
-                    key={selectedNode.id}
-                    projectId={projectId}
-                    fileId={selectedNode.id}
-                    fileName={selectedNode.name}
-                    apiUrl={apiUrl}
-                    csrfToken={csrfToken}
-                    onExit={() => setLiveFileId(null)}
-                  />
-                ) : (
-                  <>
-                    <button type="button" onClick={() => setLiveFileId(selectedNode.id)}>
-                      Join live editor
-                    </button>
-                    <ReadOnlyTextDocument
+            <section className="workspace-content" aria-label="Document view">
+              {selectedNode?.kind === "FILE" && selectedNode.contentKind === "TEXT" ? (
+                <div className="selected-node-panel">
+                  <h2>{selectedNode.name}</h2>
+                  {liveFileId === selectedNode.id ? (
+                    <LiveTextDocument
                       key={selectedNode.id}
                       projectId={projectId}
                       fileId={selectedNode.id}
+                      fileName={selectedNode.name}
                       apiUrl={apiUrl}
+                      csrfToken={csrfToken}
+                      onExit={() => setLiveFileId(null)}
                     />
-                  </>
-                )}
-              </div>
-            ) : selectedNode ? (
-              <div className="selected-node-panel">
-                <h2>{selectedNode.name}</h2>
-                <dl>
-                  <dt>Kind</dt>
-                  <dd>{selectedNode.kind}</dd>
-                  <dt>MIME</dt>
-                  <dd>{selectedNode.mime}</dd>
-                  <dt>Content Kind</dt>
-                  <dd>{selectedNode.contentKind}</dd>
-                  <dt>Size</dt>
-                  <dd>{selectedNode.sizeBytes} bytes</dd>
-                </dl>
-                {selectedNode.kind === "FILE" && selectedNode.contentKind === "TEXT" && (
+                  ) : (
+                    <>
+                      <button type="button" onClick={() => setLiveFileId(selectedNode.id)}>
+                        Join live editor
+                      </button>
+                      <ReadOnlyTextDocument
+                        key={selectedNode.id}
+                        projectId={projectId}
+                        fileId={selectedNode.id}
+                        apiUrl={apiUrl}
+                      />
+                    </>
+                  )}
                   <CommentAnchors
                     projectId={projectId}
                     fileId={selectedNode.id}
                     apiUrl={apiUrl}
                     csrfToken={csrfToken}
                   />
-                )}
-              </div>
-            ) : (
-              <div className="empty-selection">
-                <p>Select a file in the tree to view details.</p>
-              </div>
-            )}
-            <ProjectChat
-              key={projectId}
-              projectId={projectId}
-              apiUrl={apiUrl}
-              csrfToken={csrfToken}
-            />
-          </section>
-        </div>
+                </div>
+              ) : selectedNode ? (
+                <div className="selected-node-panel">
+                  <h2>{selectedNode.name}</h2>
+                  <dl>
+                    <dt>Kind</dt>
+                    <dd>{selectedNode.kind}</dd>
+                    <dt>MIME</dt>
+                    <dd>{selectedNode.mime}</dd>
+                    <dt>Content Kind</dt>
+                    <dd>{selectedNode.contentKind}</dd>
+                    <dt>Size</dt>
+                    <dd>{selectedNode.sizeBytes} bytes</dd>
+                  </dl>
+                </div>
+              ) : (
+                <div className="empty-selection">
+                  <p>Select a file in the tree to view details.</p>
+                </div>
+              )}
+              <ProjectChat
+                key={projectId}
+                projectId={projectId}
+                apiUrl={apiUrl}
+                csrfToken={csrfToken}
+              />
+            </section>
+          </div>
+        </>
       )}
 
       {showSettingsModal && (

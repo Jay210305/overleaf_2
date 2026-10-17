@@ -20,7 +20,7 @@ Remote synchronization must verify capabilities and expected remote versions wit
 
 ## Shape
 
-Proposed paths: `apps/jobs/src/sync`, `apps/git-bridge`; provider/API choices and credentials remain research gaps. G4 is optional. Live since S12-T01 (in progress): `apps/api/src/modules/integrations/github-auth.ts` handles GitHub OAuth credentials (PKCE/state/replay/revocation, encrypted server-held tokens); no live provider session is asserted.
+The live GitHub slice has encrypted OAuth credentials, a linked repo/branch, checkpoint pull planning, canonical Yjs apply, guarded frozen push, a fixed-host REST reader/writer, authorized HTTP status/sync routes and a mounted workspace diff/resolution panel. `POST .../status` writes the immutable checkpoint; sync uses explicit conflict decisions and persisted idempotency claims. Redis publishes canonical room updates and file deletions across replicas after commit. `apps/git-bridge` remains proposed. Remote reads/writes have fixture coverage but no authorized live GitHub session (GAP-04).
 
 ## Connected to
 
@@ -33,7 +33,7 @@ Consumes immutable revisions and server-held credentials; references browser/API
 
 ## Surfaces
 
-Maintainers research design sources; no live provider session is asserted. The S12-T01 credential-handling slice (`apps/api/src/modules/integrations/github-auth.ts`, contract DTOs, `external_connections` row from S01-T04) is under test-first implementation on `codex/sprint-12-github-sync`.
+The S12 surfaces include `apps/api/src/modules/integrations/{github-auth,github-link,github-rest,github-sync}.ts`, `apps/jobs/src/sync/{github-pull,apply-changes,github-push}.ts`, `apps/web/src/features/integrations/github-sync.tsx`, `external_connections`/`project_integrations`/`github_sync_requests`, and migrations `0013`–`0015`. Anchor detachment is shared with history restore through `packages/db/src/repositories/review-anchors.ts`.
 
 ## See
 
@@ -41,3 +41,9 @@ Maintainers research design sources; no live provider session is asserted. The S
 - [docs/planning/02-architecture.md](../../planning/02-architecture.md)
 - [docs/progress/open-gaps.md](../../progress/open-gaps.md)
 - [docs/planning/04-implementation-roadmap.md](../../planning/04-implementation-roadmap.md)
+- [S12-T01 evidence](../../test-reports/s12-t01.md)
+- [S12-T02 evidence](../../test-reports/s12-t02.md)
+- [S12-T03 evidence](../../test-reports/s12-t03.md)
+- [S12-T08 evidence](../../test-reports/s12-t08.md)
+- [S12-T04 evidence](../../test-reports/s12-t04.md)
+- [S12-T05 evidence](../../test-reports/s12-t05.md)

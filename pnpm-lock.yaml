@@ -99,6 +99,9 @@ importers:
       eslint:
         specifier: 10.12.0
         version: 10.12.0
+      fastify:
+        specifier: 5.12.5
+        version: 5.12.5
       jsdom:
         specifier: 30.1.2
         version: 30.1.2(@noble/hashes@2.2.0)
@@ -156,6 +159,9 @@ importers:
       '@latex-collab/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@latex-collab/jobs':
+        specifier: workspace:*
+        version: link:../jobs
       '@latex-collab/storage':
         specifier: workspace:*
         version: link:../../packages/storage
@@ -302,6 +308,9 @@ importers:
       pg:
         specifier: 8.23.1
         version: 8.23.1
+      yjs:
+        specifier: 13.6.27
+        version: 13.6.27
     devDependencies:
       '@types/pg':
         specifier: 8.23.1

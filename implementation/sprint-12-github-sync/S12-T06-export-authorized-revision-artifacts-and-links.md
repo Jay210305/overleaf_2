@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S12-T05]
 requirements: [PRO-06, INT-10]
 source_task: S12-T06
-status: todo
-readiness: pending-dependencies
+status: in_progress
+readiness: ready
 ---
 # S12-T06 — Export authorized revision artifacts and links
 
@@ -67,10 +67,10 @@ Update existing feature evidence and sprint progress entries for the IDs listed 
 
 ## Acceptance Criteria
 
-- [ ] ZIP/PDF/log download and expiring read links select one immutable authorized revision with private access checks
-- [ ] PRO-06: Download authorized source ZIP, genuine PDF, logs and permitted artifacts. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] INT-10: Expiring PDF/source sharing remains authorized; ZIP download is already G1. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
-- [ ] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
+- [x] ZIP/PDF/log download and expiring read links select one immutable authorized revision with private access checks
+- [x] PRO-06: Download authorized source ZIP, genuine PDF, logs and permitted artifacts. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] INT-10: Expiring PDF/source sharing remains authorized; ZIP download is already G1. Implement the part owned by this task; the feature is DONE only after all mapped task assertions for its gate pass.
+- [x] Valid input passes, invalid input produces the specified failure and leaves state safe; no dummy output or UI-only completion claim.
 
 ## Verification
 
@@ -96,9 +96,9 @@ Re-estimate if actual effort exceeds the likely estimate by 50% or the same bloc
 
 ## Definition of Done
 
-- [ ] Task acceptance and its scoped requirement assertions have real PASS evidence.
-- [ ] Dependencies/contracts and applicable shared quality gates pass.
-- [ ] Runtime behavior is real, permission-checked and persistent when applicable.
-- [ ] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
-- [ ] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
+- [x] Task acceptance and its scoped requirement assertions have real PASS evidence.
+- [x] Dependencies/contracts and applicable shared quality gates pass.
+- [x] Runtime behavior is real, permission-checked and persistent when applicable.
+- [x] Report, progress, feature evidence, ADR/contract changes and actual effort are updated.
+- [x] No secret/private source in artifacts or logs; unresolved access/research is visibly blocked.
 - [ ] Independent co-maintainer review complete; status updated to done only after evidence.

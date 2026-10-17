@@ -1,4 +1,5 @@
 import http from "node:http";
+import type { Socket } from "node:net";
 import { WebSocketServer, WebSocket } from "ws";
 import * as Y from "yjs";
 import type { DatabaseClient } from "@latex-collab/db";
@@ -62,6 +63,8 @@ export class CollabRoom {
 export class CollabServer {
   private wss?: WebSocketServer | undefined;
   private httpServer?: http.Server | undefined;
+  private upgradeHandler?:
+    ((request: http.IncomingMessage, socket: Socket, head: Buffer) => void) | undefined;
   private rooms = new Map<string, CollabRoom>();
   private updateLog?: UpdateLog | undefined;
   private snapshotService?: SnapshotService | undefined;
@@ -96,6 +99,18 @@ export class CollabServer {
     if (this.redisCoordinator) {
       this.redisCoordinator.onInvalidation((data) => {
         if (typeof data === "object" && data !== null) {
+          const event = data as { type?: string; projectId?: string; fileId?: string };
+          if (event.type === "file_deleted" && event.projectId && event.fileId) {
+            this.treeSynchronizer.handleEvent({
+              eventId: crypto.randomUUID(),
+              version: 1,
+              projectId: event.projectId,
+              occurredAt: new Date().toISOString(),
+              type: "file.deleted",
+              payload: { nodeId: event.fileId },
+            });
+            return;
+          }
           void this.revocationManager.handleRevocation(data as RevocationEvent);
         }
       });
@@ -105,15 +120,26 @@ export class CollabServer {
   async start(): Promise<void> {
     if (this.options.server) {
       this.httpServer = this.options.server;
-      this.wss = new WebSocketServer({ server: this.httpServer });
     } else {
       const port = this.options.port ?? 0;
       this.httpServer = http.createServer();
-      this.wss = new WebSocketServer({ server: this.httpServer });
       await new Promise<void>((resolve) => {
         this.httpServer!.listen(port, () => resolve());
       });
     }
+
+    // The API shares this HTTP server with other WebSocket endpoints (project
+    // chat lives on its own path). Use a path-aware handler so an unrelated
+    // upgrade request is never claimed by two `handleUpgrade` calls.
+    this.wss = new WebSocketServer({ noServer: true });
+    this.upgradeHandler = (request, socket, head) => {
+      const url = new URL(request.url ?? "", "http://localhost");
+      if (url.pathname !== "/") return;
+      this.wss!.handleUpgrade(request, socket, head, (ws) => {
+        this.wss!.emit("connection", ws, request);
+      });
+    };
+    this.httpServer.on("upgrade", this.upgradeHandler);
 
     this.wss.on("connection", (ws, req) => {
       this.handleConnection(ws, req);
@@ -156,6 +182,10 @@ export class CollabServer {
 
     if (this.wss) {
       await new Promise<void>((resolve) => this.wss!.close(() => resolve()));
+    }
+    if (this.upgradeHandler && this.httpServer) {
+      this.httpServer.off("upgrade", this.upgradeHandler);
+      this.upgradeHandler = undefined;
     }
     if (this.httpServer && !this.options.server) {
       await new Promise<void>((resolve) => this.httpServer!.close(() => resolve()));

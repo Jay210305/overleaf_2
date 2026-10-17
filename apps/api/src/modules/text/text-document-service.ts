@@ -133,18 +133,26 @@ export class DefaultTextDocumentService implements TextDocumentService {
   /**
    * Loads the current canonical text state for a file.
    */
-  async load(projectId: string, fileId: string, actorId: string): Promise<TextState> {
-    await this.checkAccess(projectId, fileId, actorId, "READ");
+  async load(
+    projectId: string,
+    fileId: string,
+    actorId: string,
+    tx?: TransactionContext,
+  ): Promise<TextState> {
+    const client = tx ?? this.db;
+    await this.checkAccess(projectId, fileId, actorId, "READ", client);
 
     // Ensure text_documents row exists
-    await this.db.query(
+    await client.query(
       `INSERT INTO text_documents (file_id, project_id, last_persisted_seq)
        VALUES ($1, $2, 0)
        ON CONFLICT (file_id) DO NOTHING`,
       [fileId, projectId],
     );
 
-    const { doc, lastPersistedSeq } = await this.reconstructDoc(fileId);
+    if (tx)
+      await tx.query("SELECT file_id FROM text_documents WHERE file_id = $1 FOR UPDATE", [fileId]);
+    const { doc, lastPersistedSeq } = await this.reconstructDoc(fileId, client);
 
     const update = Y.encodeStateAsUpdate(doc);
     const stateVector = Y.encodeStateVector(doc);
@@ -165,6 +173,7 @@ export class DefaultTextDocumentService implements TextDocumentService {
     fileId: string,
     actorId: string,
     input: { updateBase64: string; baseStateVectorBase64: string },
+    txContext?: TransactionContext,
   ): Promise<TextState> {
     // 1. Decode and validate input frame
     const updateBytes = Buffer.from(input.updateBase64, "base64");
@@ -185,7 +194,8 @@ export class DefaultTextDocumentService implements TextDocumentService {
     }
 
     // 2. Perform atomic transaction with row lock
-    return await this.db.transaction(async (tx) => {
+    const run = async (tx: TransactionContext) => {
+      await tx.query("SELECT id FROM projects WHERE id = $1 FOR UPDATE", [projectId]);
       await this.checkAccess(projectId, fileId, actorId, "EDIT", tx);
 
       // Ensure record exists and lock it
@@ -242,7 +252,8 @@ export class DefaultTextDocumentService implements TextDocumentService {
         stateVectorBase64: Buffer.from(updatedVector).toString("base64"),
         persistedSeq: nextSeq,
       };
-    });
+    };
+    return txContext ? run(txContext) : this.db.transaction(run);
   }
 
   /**

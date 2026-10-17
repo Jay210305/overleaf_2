@@ -15,7 +15,7 @@
 | [S05-T04](../../implementation/sprint-05-assets-import-export/S05-T04-export-immutable-source-zip.md) | DONE | Not recorded | [Report](../test-reports/s05-t04.md) with 6/6 focused tests including import round trip; accepted by the user as co-maintainer review on 2026-10-16 |
 | [S05-T05](../../implementation/sprint-05-assets-import-export/S05-T05-preview-and-download-safe-binary-assets.md) | DONE | Not recorded | [Report](../test-reports/s05-t05.md) with 14/14 focused tests (component + live routes + regressions); accepted by the user as co-maintainer review on 2026-10-16 |
 | [S05-T06](../../implementation/sprint-05-assets-import-export/S05-T06-create-minimal-versioned-internal-templates.md) | DONE | Not recorded | [Report](../test-reports/s05-t06.md) with 9/9 focused tests plus S02 guard regression; accepted by the user as co-maintainer review on 2026-10-16 |
-| [S05-T11](../../implementation/sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | IN_PROGRESS | Not recorded | Implementation complete 2026-10-16: [report](../test-reports/s05-t11.md) with 7/7 focused tests; review pending |
+| [S05-T11](../../implementation/sprint-05-assets-import-export/S05-T11-create-template-preview-and-instantiate-ui.md) | DONE | Not recorded | [Report](../test-reports/s05-t11.md) with 7/7 focused tests; accepted by the user as co-maintainer review on 2026-10-16 |
 | [S05-T07](../../implementation/sprint-05-assets-import-export/S05-T07-verify-imported-paths-and-custom-styles.md) | NOT_STARTED | Not recorded | No implementation evidence |
 | [S05-T08](../../implementation/sprint-05-assets-import-export/S05-T08-verify-hostile-zip-and-round-trip-journeys.md) | NOT_STARTED | Not recorded | No implementation evidence |
 
@@ -51,4 +51,4 @@ The [2026-10-13 origin/main integration review](../test-reports/integration-revi
 
 ## Next Task
 
-S05-T10 implementation awaits independent review. S05-T04/T05/T06 are implemented with review recorded on the visual-editor branch; S05-T11 is in progress and S05-T07/T08 remain. GAP-17 still guards GC reclamation.
+S05-T10, S05-T04/T05/T06 and S05-T11 are DONE (user review accepted 2026-10-16); S05-T07 verify imported paths/custom styles and S05-T08 hostile-ZIP/round-trip verification remain. GAP-17 still guards GC reclamation.

@@ -11926,6 +11926,533 @@
           }
         }
       }
+    },
+    "/api/v1/projects/{projectId}/integrations/github/status": {
+      "post": {
+        "operationId": "post_github_sync_status",
+        "summary": "Freeze and inspect GitHub sync status",
+        "description": "Creates a canonical local checkpoint and returns its base/local/remote diff. OWNER or EDITOR, session CSRF and exact Origin required.",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Frozen sync plan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SyncView"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error422"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        },
+        "x-permission": "edit",
+        "x-status": "IN_PROGRESS",
+        "x-invalid-example": {
+          "case": "Malformed UUID, missing session/CSRF, foreign revision/job or expired link",
+          "expectedStatus": 400
+        }
+      }
+    },
+    "/api/v1/projects/{projectId}/integrations/github/sync": {
+      "post": {
+        "operationId": "post_github_sync",
+        "summary": "Apply or push one frozen GitHub revision",
+        "description": "Synchronous guarded sync with durable Idempotency-Key. No force update; unresolved or manual conflicts fail. OWNER or EDITOR, session CSRF and exact Origin required.",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 128
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncRequest"
+              },
+              "examples": {
+                "valid": {
+                  "value": {
+                    "direction": "pull",
+                    "sourceRevisionId": "11111111-1111-4111-8111-111111111111",
+                    "expectedRemoteRevision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "resolutions": []
+                  }
+                },
+                "invalid": {
+                  "value": {
+                    "direction": "force",
+                    "sourceRevisionId": "bad",
+                    "expectedRemoteRevision": "bad"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sync completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "status": {
+                      "const": "succeeded"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "status"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error422"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        },
+        "x-permission": "edit",
+        "x-status": "IN_PROGRESS",
+        "x-invalid-example": {
+          "case": "Malformed UUID, missing session/CSRF, foreign revision/job or expired link",
+          "expectedStatus": 400
+        }
+      }
+    },
+    "/api/v1/projects/{projectId}/revisions/{revisionId}/exports/{kind}": {
+      "get": {
+        "operationId": "get_revision_export",
+        "summary": "Download one frozen revision export",
+        "description": "Source ZIP requires OWNER or EDITOR. Genuine compile PDF/log is bound to this revision and exact compile job. Every read checks current membership and private object key.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "revisionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "source",
+                "pdf",
+                "log"
+              ]
+            }
+          },
+          {
+            "name": "compileJobId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Required for pdf/log; forbidden for source"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ZIP, PDF or plain-text log",
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error422"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        },
+        "x-permission": "read; source requires edit",
+        "x-status": "IN_PROGRESS",
+        "x-invalid-example": {
+          "case": "Malformed UUID, missing session/CSRF, foreign revision/job or expired link",
+          "expectedStatus": 400
+        }
+      }
+    },
+    "/api/v1/projects/{projectId}/revisions/{revisionId}/exports/links": {
+      "post": {
+        "operationId": "post_revision_export_link",
+        "summary": "Create one-hour authorized revision read link",
+        "description": "Creates a scoped, expiring link for a verified frozen revision export. Readers still need a current authorized session.",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "revisionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "source",
+                      "pdf",
+                      "log"
+                    ]
+                  },
+                  "compileJobId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "kind"
+                ],
+                "additionalProperties": false
+              },
+              "examples": {
+                "valid": {
+                  "value": {
+                    "kind": "source"
+                  }
+                },
+                "invalid": {
+                  "value": {
+                    "kind": "unsafe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Authorized link",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "expiresAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "url",
+                    "expiresAt"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error422"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        },
+        "x-permission": "read; source requires edit",
+        "x-status": "IN_PROGRESS",
+        "x-invalid-example": {
+          "case": "Malformed UUID, missing session/CSRF, foreign revision/job or expired link",
+          "expectedStatus": 400
+        }
+      }
+    },
+    "/api/v1/projects/{projectId}/exports/links/{linkId}": {
+      "get": {
+        "operationId": "get_revision_export_link",
+        "summary": "Read an unexpired authorized revision link",
+        "description": "Rechecks current project membership and source-export role on every request; expired links return 410.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "linkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ZIP, PDF or plain-text log",
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error422"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          }
+        },
+        "x-permission": "read; source requires edit",
+        "x-status": "IN_PROGRESS",
+        "x-invalid-example": {
+          "case": "Malformed UUID, missing session/CSRF, foreign revision/job or expired link",
+          "expectedStatus": 400
+        }
+      }
     }
   },
   "components": {
@@ -14922,6 +15449,33 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 10000
+          },
+          "resolutions": {
+            "type": "array",
+            "maxItems": 2000,
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "decision": {
+                  "type": "string",
+                  "enum": [
+                    "keep-local",
+                    "keep-remote",
+                    "manual"
+                  ]
+                }
+              },
+              "required": [
+                "path",
+                "decision"
+              ],
+              "additionalProperties": false
+            }
           }
         },
         "required": [
@@ -14990,6 +15544,24 @@
               "additionalProperties": false
             },
             "maxItems": 2000
+          },
+          "base": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": true
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
           }
         },
         "required": [

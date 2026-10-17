@@ -39,12 +39,37 @@ export const projectIntegrations = pgTable(
     branch: text("branch"),
     lastSyncedRevision: text("last_synced_revision"),
     syncCursor: text("sync_cursor"),
+    syncBaseManifest: jsonb("sync_base_manifest"),
   },
   (table) => [
     uniqueIndex("project_integrations_project_provider_remote_idx").on(
       table.projectId,
       table.provider,
       table.remoteRef,
+    ),
+  ],
+);
+
+export const githubSyncRequests = pgTable(
+  "github_sync_requests",
+  {
+    id: uuid("id").primaryKey(),
+    projectId: uuid("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    actorId: uuid("actor_id")
+      .notNull()
+      .references(() => users.id),
+    idempotencyKey: text("idempotency_key").notNull(),
+    requestHash: text("request_hash").notNull(),
+    resultJson: jsonb("result_json"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("github_sync_requests_actor_key_idx").on(
+      table.projectId,
+      table.actorId,
+      table.idempotencyKey,
     ),
   ],
 );

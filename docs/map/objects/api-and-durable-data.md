@@ -42,6 +42,8 @@ The sample checks the API-to-PostgreSQL-to-object-store path before user-facing 
 
 `modules/chat/routes.ts` stores and pages authorized project chat in `chat_messages`, with transaction-time writer/CSRF rechecks. `modules/chat/events.ts` gives authorized members committed-row WSS invalidation hints and closes a chat socket when its session or membership is revoked. The browser reconciles history through REST; S08-T07 owns rate limits.
 
+`modules/integrations/github-sync.ts` guards GitHub checkpoint/status and exact frozen-revision sync through the project EDIT action and CSRF. `main.ts` supplies the fixed-host GitHub reader/writer and Redis-backed collaboration invalidations. `modules/exports/routes.ts` binds source ZIP or genuine compile PDF/log to one immutable project revision; one-hour PostgreSQL links recheck project membership and export role on every read. See [S12-T05](../../test-reports/s12-t05.md) and [S12-T06](../../test-reports/s12-t06.md).
+
 ## Connected to
 
 Consumes [Data Model and Persistence](data-model-and-persistence.md) for upload intents and nodes and [Private Object Storage](private-object-storage.md) for staged and verified bytes. HTTP contracts cover the implemented upload slice and future routes.
