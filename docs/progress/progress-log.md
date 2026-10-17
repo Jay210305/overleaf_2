@@ -360,5 +360,48 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
   - `python3 scripts/build_icm_map.py --check`: PASS (13 objects, 2 processes).
 - **Blockers / Gaps:** Mendeley and Papers lack public open APIs and their terms restrict consumer mirroring; marked `BLOCKED_BY_PROVIDER` per ADR-009.
 - **Technical Debt:** None. No phantom parity claims.
-- **Next Ready Task:** S13-T04 (Implement authorized manual Dropbox export, starting the second half of Sprint 13).
+### 2026-10-16 — Sprint S13 Reference Providers (Full Sprint Completion)
+
+- **Date:** 2026-10-16
+- **Contributor:** Julio & Project Co-owner
+- **Sprint / Tasks:** Sprint S13 (`sprint-13-reference-providers`), Tasks S13-T04, S13-T08, S13-T05, S13-T06 (100% of Sprint 13 complete)
+- **Goal:** Complete the remaining 4 tasks of Sprint 13:
+  - S13-T04: Implement authorized manual Dropbox export.
+  - S13-T08: Add optional bidirectional Dropbox synchronization.
+  - S13-T05: Import editable individual references into project bibliography.
+  - S13-T06: Verify provider contract and real connectivity.
+- **Completed Work:**
+  - Implemented manual Dropbox export (`apps/jobs/src/sync/dropbox.ts`) and bidirectional Dropbox synchronization with content-hash divergence detection (`apps/jobs/src/sync/dropbox-bidirectional.ts`).
+  - Implemented editable reference import (`apps/api/src/modules/references/import.ts`) with duplicate citation key detection and canonical Yjs CRDT updates.
+  - Comprehensive provider contract verification suite (`tests/integration/provider-contracts.test.ts`).
+  - Authored test reports `docs/test-reports/s13-04.md`, `s13-08.md`, `s13-05.md`, `s13-06.md`.
+  - Full suite verified: 21 test files (112 tests) PASS.
+  - Committed commit `23447a5` and pushed to `origin/codex/sprint-13-reference-providers`.
+
+### 2026-10-17 — Sprint S14 Git and Optional Features (First Half Delivery)
+
+- **Date:** 2026-10-17
+- **Contributor:** Julio (proposed A-02)
+- **Sprint / Tasks:** Sprint S14 (`sprint-14-git-and-optional-features`), Tasks S14-T01 through S14-T06 (~50% of Sprint 14)
+- **Goal:** Implement approximately the first half (6 of 12 tasks) of Sprint 14 in strict dependency order:
+  1. S14-T01: Research Git HTTP implementation and mapping.
+  2. S14-T02: Create authenticated Git bridge service.
+  3. S14-T03: Implement actual clone fetch and push.
+  4. S14-T04: Apply Git imports through canonical mutation service.
+  5. S14-T05: Deliver preference-controlled email notifications.
+  6. S14-T06: Add optional private writing assistance.
+- **Completed Work:**
+  - Published dedicated sprint branch `codex/sprint-14-git-and-optional-features` with upstream tracking on `origin`.
+  - Authored ADR-010 (`docs/adr/010-git-http.md`) establishing Git Smart HTTP architecture, SHA-256 personal access tokens, strict secret redaction, and revision-to-commit mapping.
+  - Built `@latex-collab/git-bridge` package (`apps/git-bridge`) providing authenticated Git Smart HTTP endpoints (`info/refs`, `git-upload-pack`, `git-receive-pack`) with Fastify.
+  - Implemented pure TypeScript Git protocol engine (`apps/git-bridge/src/protocol.ts`) supporting pkt-line framing, object creation (blob/tree/commit), packfile generation, sideband-64k streaming, and non-fast-forward push rejection.
+  - Verified real Git CLI operations (`git clone`, `git push`, non-fast-forward rejection) against the live service in integration tests.
+  - Implemented Git import canonical mutation service (`apps/git-bridge/src/import.ts`) applying incoming text updates through Yjs CRDT mutations, recording project revisions, reporting detached anchors, and converging concurrent edits (COL-12).
+  - Implemented preference-controlled notification email worker (`apps/jobs/src/notifications/email.ts`) and React UI panel (`apps/web/src/features/notifications/preferences.tsx`) with Mailpit transport and replay deduplication.
+  - Implemented private writing assistant contracts (`packages/contracts/src/writing-assistant.ts`) and API routes (`apps/api/src/modules/assistance/routes.ts`) enforcing mandatory user opt-in consent, 4,000 character fragment limits, bounded user quotas, and non-blocking fallback to static LaTeX help.
+  - Authored test reports `docs/test-reports/s14-t01.md` through `s14-t06.md`.
+  - Synchronized roadmap, task index, sprint progress, and feature parity matrices.
+- **Actual Hours:** 44 h (S14-T01: 4h, S14-T02: 8h, S14-T03: 8h, S14-T04: 8h, S14-T05: 8h, S14-T06: 8h).
+- **Next Ready Task:** S14-T07 (Sprint S14: Safe social OAuth account linking).
+
 

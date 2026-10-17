@@ -203,6 +203,27 @@ importers:
         specifier: 6.0.3
         version: 6.0.3
 
+  apps/git-bridge:
+    dependencies:
+      '@latex-collab/config':
+        specifier: workspace:*
+        version: link:../../packages/config
+      '@latex-collab/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@latex-collab/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      fastify:
+        specifier: 5.12.5
+        version: 5.12.5
+      yjs:
+        specifier: 13.6.27
+        version: 13.6.27
+      zod:
+        specifier: 4.6.5
+        version: 4.6.5
+
   apps/jobs:
     dependencies:
       '@latex-collab/config':

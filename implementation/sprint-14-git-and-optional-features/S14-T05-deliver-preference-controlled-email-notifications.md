@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S14-T04]
 requirements: [ACC-08, COL-13]
 source_task: S14-T05
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S14-T05 — Deliver preference-controlled email notifications
 

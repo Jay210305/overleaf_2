@@ -1,36 +1,42 @@
 # S14 — Git HTTP optional features and G4 release
 
-**Status:** NOT_STARTED | **Owner:** Julio (proposed A-02) | **Estimate:** 90 h (A-03)
+**Status:** IN_PROGRESS | **Owner:** Julio (proposed A-02) | **Estimate:** 90 h (A-03)
 
 ## Task Matrix
 
 | ID | Status | Actual hours | Evidence |
 |---|---|---|---|
-| [S14-T01](../../implementation/sprint-14-git-and-optional-features/S14-T01-research-git-http-implementation-and-mapping.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T02](../../implementation/sprint-14-git-and-optional-features/S14-T02-create-authenticated-git-bridge-service.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T03](../../implementation/sprint-14-git-and-optional-features/S14-T03-implement-actual-clone-fetch-and-push.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T04](../../implementation/sprint-14-git-and-optional-features/S14-T04-apply-git-imports-through-canonical-mutation-service.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T05](../../implementation/sprint-14-git-and-optional-features/S14-T05-deliver-preference-controlled-email-notifications.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T06](../../implementation/sprint-14-git-and-optional-features/S14-T06-add-optional-private-writing-assistance.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T07](../../implementation/sprint-14-git-and-optional-features/S14-T07-implement-safe-social-oauth-account-linking.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T09](../../implementation/sprint-14-git-and-optional-features/S14-T09-profile-additional-compiler-packages-and-fonts.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T10](../../implementation/sprint-14-git-and-optional-features/S14-T10-implement-ssrf-safe-permitted-remote-resource-import.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T11](../../implementation/sprint-14-git-and-optional-features/S14-T11-implement-optional-totp-challenge-and-recovery-slice.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T08](../../implementation/sprint-14-git-and-optional-features/S14-T08-verify-real-git-protocol-and-token-revocation.md) | NOT_STARTED | Not recorded | No implementation evidence |
-| [S14-T12](../../implementation/sprint-14-git-and-optional-features/S14-T12-stabilize-and-review-supported-g4-integrations.md) | NOT_STARTED | Not recorded | No implementation evidence |
+| [S14-T01](../../implementation/sprint-14-git-and-optional-features/S14-T01-research-git-http-implementation-and-mapping.md) | DONE | 4 h | [Test report](../test-reports/s14-t01.md), [ADR-010](../adr/010-git-http.md) |
+| [S14-T02](../../implementation/sprint-14-git-and-optional-features/S14-T02-create-authenticated-git-bridge-service.md) | DONE | 8 h | [Test report](../test-reports/s14-t02.md), `tests/integration/s14-t02.test.ts`, `tests/regression/int-06/s14-t02.test.ts`, `tests/regression/acc-02/s14-t02.test.ts` |
+| [S14-T03](../../implementation/sprint-14-git-and-optional-features/S14-T03-implement-actual-clone-fetch-and-push.md) | DONE | 8 h | [Test report](../test-reports/s14-t03.md), `tests/integration/s14-t03.test.ts`, `tests/regression/int-06/s14-t03.test.ts` |
+| [S14-T04](../../implementation/sprint-14-git-and-optional-features/S14-T04-apply-git-imports-through-canonical-mutation-service.md) | DONE | 8 h | [Test report](../test-reports/s14-t04.md), `tests/integration/s14-t04.test.ts`, `tests/regression/int-06/s14-t04.test.ts`, `tests/regression/col-12/s14-t04.test.ts` |
+| [S14-T05](../../implementation/sprint-14-git-and-optional-features/S14-T05-deliver-preference-controlled-email-notifications.md) | DONE | 8 h | [Test report](../test-reports/s14-t05.md), `tests/integration/s14-t05.test.ts`, `tests/regression/acc-08/s14-t05.test.ts`, `tests/regression/col-13/s14-t05.test.ts` |
+| [S14-T06](../../implementation/sprint-14-git-and-optional-features/S14-T06-add-optional-private-writing-assistance.md) | DONE | 8 h | [Test report](../test-reports/s14-t06.md), `tests/integration/s14-t06.test.ts`, `tests/regression/int-09/s14-t06.test.ts`, `tests/regression/edt-14/s14-t06.test.ts` |
+| [S14-T07](../../implementation/sprint-14-git-and-optional-features/S14-T07-implement-safe-social-oauth-account-linking.md) | NOT_STARTED | Not recorded | Planned for second half of S14 |
+| [S14-T09](../../implementation/sprint-14-git-and-optional-features/S14-T09-profile-additional-compiler-packages-and-fonts.md) | NOT_STARTED | Not recorded | Planned for second half of S14 |
+| [S14-T10](../../implementation/sprint-14-git-and-optional-features/S14-T10-implement-ssrf-safe-permitted-remote-resource-import.md) | NOT_STARTED | Not recorded | Planned for second half of S14 |
+| [S14-T11](../../implementation/sprint-14-git-and-optional-features/S14-T11-implement-optional-totp-challenge-and-recovery-slice.md) | NOT_STARTED | Not recorded | Planned for second half of S14 |
+| [S14-T08](../../implementation/sprint-14-git-and-optional-features/S14-T08-verify-real-git-protocol-and-token-revocation.md) | NOT_STARTED | Not recorded | Planned for second half of S14 |
+| [S14-T12](../../implementation/sprint-14-git-and-optional-features/S14-T12-stabilize-and-review-supported-g4-integrations.md) | NOT_STARTED | Not recorded | Planned for second half of S14 |
 
 ## Decisions and Migrations
 
-No implementation decision/migration performed yet. Planning baseline is in the numbered specification and contracts. Record actual changes here when work occurs.
+- Created `apps/git-bridge`: Fastify Smart HTTP Git service supporting clone/fetch/push over HTTP.
+- Designed ADR-010: Personal Access Tokens hashed with SHA-256 in DB, separate `git:read`/`git:write` scopes, instant revocation, zero session cookies in Git responses.
+- Implemented `apps/git-bridge/src/protocol.ts`: Pure TS Git object & packfile builder with packet-line framing, sideband streaming, and non-fast-forward push rejection.
+- Implemented `apps/git-bridge/src/import.ts`: Translates Git tree/text updates into canonical Yjs document mutations, creates project revisions, and reports detached comment anchors.
+- Implemented `apps/jobs/src/notifications/email.ts` and `apps/web/src/features/notifications/preferences.tsx`: Preference-controlled notification emails for mentions/invites/replies with Mailpit and idempotency deduplication.
+- Implemented `packages/contracts/src/writing-assistant.ts` and `apps/api/src/modules/assistance/routes.ts`: Private writing assistance with mandatory user opt-in consent, fragment-only transmission (<=4000 chars), quota limits, and non-blocking fallback to static LaTeX help.
 
 ## Validation
 
-Product checks NOT_RUN. Add command/environment/result/report links after execution; do not prefill PASS.
-
-## Risks and Debt
-
-Track actual findings in Open Gaps and Technical Debt, referencing the task.
+- S14-T01: Research completed; ADR-010 published; plan_lint PASS.
+- S14-T02: `pnpm exec vitest run tests/integration/s14-t02.test.ts tests/regression/int-06/s14-t02.test.ts tests/regression/acc-02/s14-t02.test.ts` PASS (19 tests).
+- S14-T03: `pnpm exec vitest run tests/integration/s14-t03.test.ts tests/regression/int-06/s14-t03.test.ts` PASS (8 tests).
+- S14-T04: `pnpm exec vitest run tests/integration/s14-t04.test.ts tests/regression/int-06/s14-t04.test.ts tests/regression/col-12/s14-t04.test.ts` PASS (5 tests).
+- S14-T05: `pnpm exec vitest run tests/integration/s14-t05.test.ts tests/regression/acc-08/s14-t05.test.ts tests/regression/col-13/s14-t05.test.ts` PASS (9 tests).
+- S14-T06: `pnpm exec vitest run tests/integration/s14-t06.test.ts tests/regression/int-09/s14-t06.test.ts tests/regression/edt-14/s14-t06.test.ts` PASS (8 tests).
 
 ## Next Task
 
-S14-T01, once its YAML prerequisites and contract/environment gates are met.
+S14-T07 (safe social OAuth account linking).

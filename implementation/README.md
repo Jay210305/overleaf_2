@@ -167,12 +167,12 @@ Start with [Discovery](../docs/planning/00-discovery.md) and the [Roadmap](../do
 | S13-T08 | [Add optional bidirectional Dropbox synchronization](sprint-13-reference-providers/S13-T08-add-optional-bidirectional-dropbox-synchronization.md) | Project Co-owner (proposed) | 8 | done |
 | S13-T05 | [Import editable individual references](sprint-13-reference-providers/S13-T05-import-editable-individual-references.md) | Project Co-owner (proposed) | 6 | done |
 | S13-T06 | [Verify provider contract and real connectivity](sprint-13-reference-providers/S13-T06-verify-provider-contract-and-real-connectivity.md) | Project Co-owner (proposed) | 8 | done |
-| S14-T01 | [Research Git HTTP implementation and mapping](sprint-14-git-and-optional-features/S14-T01-research-git-http-implementation-and-mapping.md) | Julio (proposed) | 4 | todo |
-| S14-T02 | [Create authenticated Git bridge service](sprint-14-git-and-optional-features/S14-T02-create-authenticated-git-bridge-service.md) | Julio (proposed) | 8 | todo |
-| S14-T03 | [Implement actual clone fetch and push](sprint-14-git-and-optional-features/S14-T03-implement-actual-clone-fetch-and-push.md) | Julio (proposed) | 8 | todo |
-| S14-T04 | [Apply Git imports through canonical mutation service](sprint-14-git-and-optional-features/S14-T04-apply-git-imports-through-canonical-mutation-service.md) | Julio (proposed) | 8 | todo |
-| S14-T05 | [Deliver preference-controlled email notifications](sprint-14-git-and-optional-features/S14-T05-deliver-preference-controlled-email-notifications.md) | Julio (proposed) | 8 | todo |
-| S14-T06 | [Add optional private writing assistance](sprint-14-git-and-optional-features/S14-T06-add-optional-private-writing-assistance.md) | Julio (proposed) | 8 | todo |
+| S14-T01 | [Research Git HTTP implementation and mapping](sprint-14-git-and-optional-features/S14-T01-research-git-http-implementation-and-mapping.md) | Julio (proposed) | 4 | done |
+| S14-T02 | [Create authenticated Git bridge service](sprint-14-git-and-optional-features/S14-T02-create-authenticated-git-bridge-service.md) | Julio (proposed) | 8 | done |
+| S14-T03 | [Implement actual clone fetch and push](sprint-14-git-and-optional-features/S14-T03-implement-actual-clone-fetch-and-push.md) | Julio (proposed) | 8 | done |
+| S14-T04 | [Apply Git imports through canonical mutation service](sprint-14-git-and-optional-features/S14-T04-apply-git-imports-through-canonical-mutation-service.md) | Julio (proposed) | 8 | done |
+| S14-T05 | [Deliver preference-controlled email notifications](sprint-14-git-and-optional-features/S14-T05-deliver-preference-controlled-email-notifications.md) | Julio (proposed) | 8 | done |
+| S14-T06 | [Add optional private writing assistance](sprint-14-git-and-optional-features/S14-T06-add-optional-private-writing-assistance.md) | Julio (proposed) | 8 | done |
 | S14-T07 | [Implement safe social OAuth account linking](sprint-14-git-and-optional-features/S14-T07-implement-safe-social-oauth-account-linking.md) | Julio (proposed) | 8 | todo |
 | S14-T09 | [Profile additional compiler packages and fonts](sprint-14-git-and-optional-features/S14-T09-profile-additional-compiler-packages-and-fonts.md) | Julio (proposed) | 6 | todo |
 | S14-T10 | [Implement SSRF-safe permitted remote resource import](sprint-14-git-and-optional-features/S14-T10-implement-ssrf-safe-permitted-remote-resource-import.md) | Julio (proposed) | 8 | todo |

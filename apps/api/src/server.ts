@@ -39,6 +39,7 @@ import { registerSynctexRoutes } from "./modules/synctex/routes.js";
 import { registerSearchRoutes } from "./modules/search/routes.js";
 import { registerIntegrationRoutes } from "./modules/integrations/connections.js";
 import { registerReferenceImportRoutes } from "./modules/references/import.js";
+import { registerAssistanceRoutes } from "./modules/assistance/routes.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -254,6 +255,11 @@ export function createServer(options: ServerOptions) {
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
     });
     registerReferenceImportRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+    registerAssistanceRoutes(app, {
       db: options.db,
       origin: options.origin,
       secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,

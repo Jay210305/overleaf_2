@@ -731,7 +731,7 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 ## Sprint S14: Git HTTP optional features and G4 release (weeks not scheduled)
 
-**Duration:** No fixed timebox | **Effort:** 90 h (ASSUMPTION A-03) | **Status:** ⬜ NOT_STARTED | **Owner:** Julio (proposed A-02)
+**Duration:** No fixed timebox | **Effort:** 90 h (ASSUMPTION A-03) | **Status:** 🟨 IN_PROGRESS | **Owner:** Julio (proposed A-02)
 **Goal:** Git HTTP optional features and G4 release for G4, using independently verified slices.
 
 ### Deliverables
@@ -756,12 +756,12 @@ Shared S01 contract deliverable: `packages/contracts/src/storage.ts` (S01-T08).
 
 | ID | Description | Effort (h) | Assignee | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| [S14-T01](../../implementation/sprint-14-git-and-optional-features/S14-T01-research-git-http-implementation-and-mapping.md) | Research Git HTTP implementation and mapping | 4 | Julio | ⬜ todo | Within 4h choose licensed compatible engine and revision-to-commit mapping or record blocked capability |
-| [S14-T02](../../implementation/sprint-14-git-and-optional-features/S14-T02-create-authenticated-git-bridge-service.md) | Create authenticated Git bridge service | 8 | Julio | ⬜ todo | Revocable scoped token authorizes protocol endpoint without DB/API session secrets in exposed response |
-| [S14-T03](../../implementation/sprint-14-git-and-optional-features/S14-T03-implement-actual-clone-fetch-and-push.md) | Implement actual clone fetch and push | 8 | Julio | ⬜ todo | Real CLI clone/fetch/push operates on frozen commits and rejects stale non-fast-forward push |
-| [S14-T04](../../implementation/sprint-14-git-and-optional-features/S14-T04-apply-git-imports-through-canonical-mutation-service.md) | Apply Git imports through canonical mutation service | 8 | Julio | ⬜ todo | Imported tree/text updates enter authorized Yjs mutations, create revision, preserve metadata and report detached anchors |
-| [S14-T05](../../implementation/sprint-14-git-and-optional-features/S14-T05-deliver-preference-controlled-email-notifications.md) | Deliver preference-controlled email notifications | 8 | Julio | ⬜ todo | Mentions/invites/replies respect preferences and current permissions; replay sends once with Mailpit and credentialed staging separately |
-| [S14-T06](../../implementation/sprint-14-git-and-optional-features/S14-T06-add-optional-private-writing-assistance.md) | Add optional private writing assistance | 8 | Julio | ⬜ todo | Without user/project opt-in no text is sent; selected fragment only, bounded quota, disconnect and provider-error fallback preserve editor use |
+| [S14-T01](../../implementation/sprint-14-git-and-optional-features/S14-T01-research-git-http-implementation-and-mapping.md) | Research Git HTTP implementation and mapping | 4 | Julio | ✅ done | Within 4h choose licensed compatible engine and revision-to-commit mapping or record blocked capability |
+| [S14-T02](../../implementation/sprint-14-git-and-optional-features/S14-T02-create-authenticated-git-bridge-service.md) | Create authenticated Git bridge service | 8 | Julio | ✅ done | Revocable scoped token authorizes protocol endpoint without DB/API session secrets in exposed response |
+| [S14-T03](../../implementation/sprint-14-git-and-optional-features/S14-T03-implement-actual-clone-fetch-and-push.md) | Implement actual clone fetch and push | 8 | Julio | ✅ done | Real CLI clone/fetch/push operates on frozen commits and rejects stale non-fast-forward push |
+| [S14-T04](../../implementation/sprint-14-git-and-optional-features/S14-T04-apply-git-imports-through-canonical-mutation-service.md) | Apply Git imports through canonical mutation service | 8 | Julio | ✅ done | Imported tree/text updates enter authorized Yjs mutations, create revision, preserve metadata and report detached anchors |
+| [S14-T05](../../implementation/sprint-14-git-and-optional-features/S14-T05-deliver-preference-controlled-email-notifications.md) | Deliver preference-controlled email notifications | 8 | Julio | ✅ done | Mentions/invites/replies respect preferences and current permissions; replay sends once with Mailpit and credentialed staging separately |
+| [S14-T06](../../implementation/sprint-14-git-and-optional-features/S14-T06-add-optional-private-writing-assistance.md) | Add optional private writing assistance | 8 | Julio | ✅ done | Without user/project opt-in no text is sent; selected fragment only, bounded quota, disconnect and provider-error fallback preserve editor use |
 | [S14-T07](../../implementation/sprint-14-git-and-optional-features/S14-T07-implement-safe-social-oauth-account-linking.md) | Implement safe social OAuth account linking | 8 | Julio | ⬜ todo | Authorized Google/GitHub identity link/unlink checks state/PKCE and protects existing account association; optional TOTP challenge is S14-T11 |
 | [S14-T09](../../implementation/sprint-14-git-and-optional-features/S14-T09-profile-additional-compiler-packages-and-fonts.md) | Profile additional compiler packages and fonts | 6 | Julio | ⬜ todo | Every added class/font/package has license/source manifest and a real fixture; network package install per request remains disabled |
 | [S14-T10](../../implementation/sprint-14-git-and-optional-features/S14-T10-implement-ssrf-safe-permitted-remote-resource-import.md) | Implement SSRF-safe permitted remote resource import | 8 | Julio | ⬜ todo | Allowlisted source, DNS revalidation, private-range/redirect/type/size/time controls reject metadata/internal fetch and import valid authorized object |
