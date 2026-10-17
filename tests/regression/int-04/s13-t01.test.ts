@@ -19,6 +19,14 @@ describe("INT-04 S13-T01: Mendeley/Papers capability constraints and unpermitted
       push: false,
       individualReferenceImport: false,
     });
+
+    const crossrefCaps = getProviderCapabilities("crossref");
+    expect(crossrefCaps).toEqual({
+      list: true,
+      pull: true,
+      push: false,
+      individualReferenceImport: true,
+    });
   });
 
   it("formats BLOCKED_BY_PROVIDER error conforming to provider error contract", () => {

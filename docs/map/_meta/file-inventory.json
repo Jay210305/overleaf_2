@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "0bad6662bd731e617b6879168fa6e1282c782bb4",
+  "git_baseline": "72d4af7bc4bff9f8f6d6748fa23713edd36e4949",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -218,7 +218,7 @@
     {
       "path": "apps/api/src/modules/integrations/connections.ts",
       "role": "factory",
-      "sha256": "2ff15d4dcb157ebc10aea910d83d1ebe6adaa40c222b6d55ca101546a6825335"
+      "sha256": "9686b3735a1fef542480abc45b543c20e26434106c8eed79cd66826da44f39a7"
     },
     {
       "path": "apps/api/src/modules/projects/bulk.ts",
@@ -503,12 +503,12 @@
     {
       "path": "apps/jobs/src/sync/optional-reference-provider.ts",
       "role": "factory",
-      "sha256": "9ca61234cf424a51d51176da4101e18bb26da00ba363777fc2dfa8593b3fa57e"
+      "sha256": "f5318eee3a93ed33f6a3bb6358625af2eb065a19435c70f069f0ef4213f6af70"
     },
     {
       "path": "apps/jobs/src/sync/zotero.ts",
       "role": "factory",
-      "sha256": "7efaac9b263884df7957319097d738d9deb9582850166d6bdb23747edaff7c18"
+      "sha256": "3a2d732e62ce6b41f09aab8b7b9a63f4c75c0d02efc3d118351ee42f77d3ce66"
     },
     {
       "path": "apps/jobs/tsconfig.json",
@@ -1938,12 +1938,12 @@
     {
       "path": "docs/test-reports/s13-t01.md",
       "role": "factory",
-      "sha256": "cdfe6da65d45a4eacde35539bfb2e89deaad2759b736cb926a14fab567de9552"
+      "sha256": "25ebf950845b9f2482641c32ce49de1f4adeaba2386b226de925e51a7d60d198"
     },
     {
       "path": "docs/test-reports/s13-t02.md",
       "role": "factory",
-      "sha256": "b98cfe91a3fe0cb05d47b1badc13224b358946c11d572b69e8b719e9badaf4f4"
+      "sha256": "7b10221e3c93b8f287cc5f6c9e27b19a5e5ecd92fd321209423a91f6c4ec703f"
     },
     {
       "path": "docs/test-reports/s13-t03.md",
@@ -1953,7 +1953,7 @@
     {
       "path": "docs/test-reports/s13-t07.md",
       "role": "factory",
-      "sha256": "5a062d7f48124646e22030f5c50b4134ae252de06eac232beae973b8a9d02d9e"
+      "sha256": "5c1fda256221eec82294aea3febcce9b60e56c0c23ff3d9b93cb0098df921f89"
     },
     {
       "path": "eslint.config.js",
@@ -4058,17 +4058,17 @@
     {
       "path": "tests/integration/s13-t01.test.ts",
       "role": "factory",
-      "sha256": "34728cff37f2f8cf842be04872cf93a3890388210a34f07dbf75c1c6b1b591e0"
+      "sha256": "e1d0fd3917adf7c640fe6712696293863a7a0794956a18c7dd1628949a035b41"
     },
     {
       "path": "tests/integration/s13-t02.test.ts",
       "role": "factory",
-      "sha256": "6843906dba6852bdd808708ffd6053cecfe1da2419dda6462bff9a339b349db3"
+      "sha256": "59acc7733a373086d90f712394069b96e41e7f38a76b15599bd3890f95a7a566"
     },
     {
       "path": "tests/integration/s13-t07.test.ts",
       "role": "factory",
-      "sha256": "8eb0debadcc9c57c99745150fcdcffdbd0fe61349316dd706eec8657e696c66b"
+      "sha256": "16b74cfc958c24e52f20be018bd9d9fc0c96805a535129a3c8a7713ac391612c"
     },
     {
       "path": "tests/integration/tree-races.test.ts",
@@ -4678,7 +4678,7 @@
     {
       "path": "tests/regression/int-04/s13-t01.test.ts",
       "role": "factory",
-      "sha256": "27196ee4546bc744dd4051cbcdc945f5474393332e8663fe4148a006e0e994ec"
+      "sha256": "d4a72a4e0060d1660b05e3cb80769117d81d730d0dcdd509d597b7beae742091"
     },
     {
       "path": "tests/regression/int-04/s13-t07.test.ts",

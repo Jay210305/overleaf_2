@@ -20,11 +20,23 @@ export const OPEN_PROVIDER_CAPABILITIES: ProviderCapabilities = {
   individualReferenceImport: true,
 };
 
+export interface OptionalProviderFetchOptions {
+  fetcher?: (url: string, init?: RequestInit) => Promise<Response>;
+}
+
 export class OptionalReferenceProviderAdapter implements ProviderAdapter {
   private provider: string;
+  private customFetch?: ((url: string, init?: RequestInit) => Promise<Response>) | undefined;
 
-  constructor(provider: string = PERMITTED_OPEN_PROVIDER) {
+  constructor(provider: string = PERMITTED_OPEN_PROVIDER, options?: OptionalProviderFetchOptions) {
     this.provider = provider.toLowerCase();
+    if (options?.fetcher) {
+      this.customFetch = options.fetcher;
+    }
+  }
+
+  private get fetchFn(): (url: string, init?: RequestInit) => Promise<Response> {
+    return this.customFetch ?? globalThis.fetch;
   }
 
   get providerName(): string {
@@ -132,7 +144,59 @@ export class OptionalReferenceProviderAdapter implements ProviderAdapter {
       };
     }
 
-    const canonicalBibContent = `@article{einstein1905electrodynamics,
+    let canonicalBibContent: string;
+
+    if (this.customFetch && input.queryDoi) {
+      try {
+        const url = `https://api.crossref.org/works/${encodeURIComponent(input.queryDoi)}/transform/application/x-bibtex`;
+        const res = await this.fetchFn(url, {
+          headers: { Accept: "application/x-bibtex" },
+        });
+
+        if (res.status === 404) {
+          return {
+            ok: false,
+            error: {
+              code: "PROVIDER_UNAVAILABLE",
+              retryable: false,
+              detail: `DOI not found on Crossref: ${input.queryDoi}`,
+            },
+          };
+        }
+        if (res.status === 429) {
+          return {
+            ok: false,
+            error: {
+              code: "RATE_LIMITED",
+              retryable: true,
+              detail: "Crossref API rate limit exceeded",
+            },
+          };
+        }
+        if (!res.ok) {
+          return {
+            ok: false,
+            error: {
+              code: "PROVIDER_UNAVAILABLE",
+              retryable: res.status >= 500,
+              detail: `Crossref API returned status ${res.status}`,
+            },
+          };
+        }
+
+        canonicalBibContent = await res.text();
+      } catch (err) {
+        return {
+          ok: false,
+          error: {
+            code: "PROVIDER_UNAVAILABLE",
+            retryable: true,
+            detail: err instanceof Error ? err.message : "Failed to fetch reference from Crossref",
+          },
+        };
+      }
+    } else {
+      canonicalBibContent = `@article{einstein1905electrodynamics,
   author = {Albert Einstein},
   title = {Zur Elektrodynamik bewegter K{\\"o}rper},
   journal = {Annalen der Physik},
@@ -142,6 +206,7 @@ export class OptionalReferenceProviderAdapter implements ProviderAdapter {
   year = {1905},
   doi = {10.1002/andp.19053221004}
 }`;
+    }
 
     const remoteRevision = createHash("sha256").update(canonicalBibContent).digest("hex");
 

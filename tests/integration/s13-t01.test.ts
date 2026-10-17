@@ -171,6 +171,57 @@ describe("S13-T01: Provider adapter and connection lifecycle", () => {
       expect(body.refreshedAt).toBeDefined();
     });
 
+    it("connects permitted optional provider crossref with correct capabilities", async () => {
+      const sessionA = await getSession(userA.email);
+      const res = await fixture.app.inject({
+        method: "POST",
+        url: "/api/v1/integrations/connections/crossref/connect",
+        headers: {
+          origin,
+          cookie: sessionA.cookie,
+          "x-csrf-token": sessionA.csrf,
+        },
+        payload: {
+          apiKey: "mailto:researcher@example.test",
+        },
+      });
+
+      expect(res.statusCode).toBe(201);
+      const body = res.json();
+      expect(body.connection.provider).toBe("crossref");
+      expect(body.capabilities).toEqual({
+        list: true,
+        pull: true,
+        push: false,
+        individualReferenceImport: true,
+      });
+    });
+
+    it("handles corrupted credential in database gracefully during refresh", async () => {
+      // Corrupt the encrypted credential in the database for connectionIdA
+      await fixture.db.query(
+        `UPDATE external_connections
+         SET encrypted_credential_ref = 'enc:v1:0123456789abcdef01234567:0123456789abcdef0123456789abcdef:badcipher'
+         WHERE id = $1`,
+        [connectionIdA],
+      );
+
+      const sessionA = await getSession(userA.email);
+      const res = await fixture.app.inject({
+        method: "POST",
+        url: `/api/v1/integrations/connections/${connectionIdA}/refresh`,
+        headers: {
+          origin,
+          cookie: sessionA.cookie,
+          "x-csrf-token": sessionA.csrf,
+        },
+      });
+
+      expect(res.statusCode).toBe(401);
+      const body = res.json();
+      expect(body.code).toBe("TOKEN_EXPIRED");
+    });
+
     it("rejects unauthorized provider access (e.g. Mendeley/Papers without legitimate API)", async () => {
       const sessionA = await getSession(userA.email);
       const res = await fixture.app.inject({

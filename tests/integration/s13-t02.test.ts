@@ -139,6 +139,101 @@ describe("S13-T02: Import and refresh authorized Zotero library", () => {
     });
   });
 
+  describe("Real HTTP integration via fetcher", () => {
+    it("connects and validates API keys via HTTP", async () => {
+      const mockFetch = async (url: string) => {
+        if (url.includes("/keys/valid-key")) {
+          return new Response(JSON.stringify({ key: "valid-key", userId: 12345 }), { status: 200 });
+        }
+        return new Response(JSON.stringify({ message: "Forbidden" }), { status: 403 });
+      };
+
+      const httpAdapter = new ZoteroSyncAdapter({ fetcher: mockFetch });
+      const success = await httpAdapter.connect("valid-key", "state");
+      expect(success.ok).toBe(true);
+
+      const failed = await httpAdapter.connect("bad-key", "state");
+      expect(failed.ok).toBe(false);
+      if (!failed.ok) {
+        expect(failed.error.code).toBe("TOKEN_EXPIRED");
+      }
+    });
+
+    it("fetches remote BibTeX and Last-Modified-Version header over HTTP", async () => {
+      const mockBib = `@article{turing1936computable,
+  author = {Alan M. Turing},
+  title = {On Computable Numbers},
+  year = {1936}
+}`;
+      const mockFetch = async () => {
+        return new Response(mockBib, {
+          status: 200,
+          headers: { "last-modified-version": "zotero-v-987" },
+        });
+      };
+
+      const httpAdapter = new ZoteroSyncAdapter({ fetcher: mockFetch });
+      const result = await httpAdapter.pull("conn-123", {
+        projectId: "123e4567-e89b-12d3-a456-426614174000",
+        sourceRevisionId: "rev-1",
+        expectedRemoteRevision: "",
+        resourceId: "users/12345/items",
+        apiKey: "valid-key",
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe("synced");
+        expect(result.value.remoteRevision).toBe("zotero-v-987");
+      }
+    });
+
+    it("handles HTTP 429 rate limit responses gracefully", async () => {
+      const mockFetch = async () => {
+        return new Response("Too Many Requests", {
+          status: 429,
+          headers: { "retry-after": "30" },
+        });
+      };
+
+      const httpAdapter = new ZoteroSyncAdapter({ fetcher: mockFetch });
+      const result = await httpAdapter.pull("conn-123", {
+        projectId: "123e4567-e89b-12d3-a456-426614174000",
+        sourceRevisionId: "rev-1",
+        expectedRemoteRevision: "",
+        resourceId: "users/12345/items",
+        apiKey: "valid-key",
+      });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.code).toBe("RATE_LIMITED");
+        expect(result.error.retryable).toBe(true);
+      }
+    });
+
+    it("queries user groups over HTTP and parses them into library resources", async () => {
+      const mockGroups = [
+        { id: 999, data: { name: "Distributed Systems Lab" } },
+      ];
+      const mockFetch = async () => {
+        return new Response(JSON.stringify(mockGroups), { status: 200 });
+      };
+
+      const httpAdapter = new ZoteroSyncAdapter({ fetcher: mockFetch });
+      const result = await httpAdapter.listResources("conn-123", undefined, {
+        apiKey: "valid-key",
+        userId: "12345",
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.items.some((i) => i.name === "Distributed Systems Lab")).toBe(true);
+        expect(result.value.items.some((i) => i.id === "groups/999/items")).toBe(true);
+      }
+    });
+  });
+
   describe("ZoteroLibraryPanel UI rendering and authorization", () => {
     it("renders disconnected prompt when account is not connected", () => {
       const html = renderToString(

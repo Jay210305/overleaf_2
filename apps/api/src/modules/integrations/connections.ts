@@ -72,6 +72,13 @@ export function getProviderCapabilities(provider: string): ProviderCapabilities 
         push: false,
         individualReferenceImport: false,
       };
+    case "crossref":
+      return {
+        list: true,
+        pull: true,
+        push: false,
+        individualReferenceImport: true,
+      };
     default:
       return {
         list: false,
@@ -244,7 +251,15 @@ export function registerIntegrationRoutes(
     }
 
     // Rotate token by re-encrypting with fresh IV
-    const decrypted = decryptCredential(row.encrypted_credential_ref);
+    let decrypted: string;
+    try {
+      decrypted = decryptCredential(row.encrypted_credential_ref);
+    } catch {
+      return reply
+        .code(401)
+        .type("application/problem+json")
+        .send(problem(401, "TOKEN_EXPIRED", request.id, "Connection credential cannot be decrypted or authenticated"));
+    }
     const refreshedCipher = encryptCredential(decrypted);
 
     const updateResult = await options.db.query<ExternalConnectionRow>(

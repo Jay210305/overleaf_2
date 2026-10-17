@@ -54,7 +54,42 @@ export class ZoteroSyncAdapter implements ProviderAdapter {
       };
     }
 
-    if (authCode === "invalid-token" || authCode === "expired-token") {
+    if (this.customFetch) {
+      try {
+        const res = await this.fetchFn(`https://api.zotero.org/keys/${encodeURIComponent(authCode)}`, {
+          headers: { "Zotero-API-Version": "3" },
+        });
+        if (res.status === 401 || res.status === 403 || res.status === 404) {
+          return {
+            ok: false,
+            error: {
+              code: "TOKEN_EXPIRED",
+              retryable: false,
+              detail: "Zotero API token has expired or is invalid",
+            },
+          };
+        }
+        if (res.status === 429) {
+          return {
+            ok: false,
+            error: {
+              code: "RATE_LIMITED",
+              retryable: true,
+              detail: "Zotero API rate limit reached, back off and retry",
+            },
+          };
+        }
+      } catch (err) {
+        return {
+          ok: false,
+          error: {
+            code: "PROVIDER_UNAVAILABLE",
+            retryable: true,
+            detail: err instanceof Error ? err.message : "Zotero connection failed",
+          },
+        };
+      }
+    } else if (authCode === "invalid-token" || authCode === "expired-token") {
       return {
         ok: false,
         error: {
@@ -95,7 +130,6 @@ export class ZoteroSyncAdapter implements ProviderAdapter {
       };
     }
 
-    // Default mock/verified resources for testing and live mapping
     const items: Resource[] = [
       {
         id: "users/0/items",
@@ -111,6 +145,60 @@ export class ZoteroSyncAdapter implements ProviderAdapter {
       },
     ];
 
+    if (this.customFetch && apiKey) {
+      try {
+        const res = await this.fetchFn(
+          `https://api.zotero.org/users/${credentials.userId ?? "0"}/groups`,
+          {
+            headers: {
+              "Zotero-API-Key": apiKey,
+              "Zotero-API-Version": "3",
+            },
+          },
+        );
+        if (res.status === 401 || res.status === 403) {
+          return {
+            ok: false,
+            error: {
+              code: "TOKEN_EXPIRED",
+              retryable: false,
+              detail: "Zotero API credentials have expired",
+            },
+          };
+        }
+        if (res.status === 429) {
+          return {
+            ok: false,
+            error: {
+              code: "RATE_LIMITED",
+              retryable: true,
+              detail: "Zotero API rate limit reached",
+            },
+          };
+        }
+        if (res.ok) {
+          const groups = (await res.json()) as Array<{ id: number; data?: { name?: string } }>;
+          for (const g of groups) {
+            items.push({
+              id: `groups/${g.id}/items`,
+              name: g.data?.name ?? `Group Library (${g.id})`,
+              kind: "library",
+              remoteRevision: `zotero-group-${g.id}`,
+            });
+          }
+        }
+      } catch (err) {
+        return {
+          ok: false,
+          error: {
+            code: "PROVIDER_UNAVAILABLE",
+            retryable: true,
+            detail: err instanceof Error ? err.message : "Failed to list Zotero resources",
+          },
+        };
+      }
+    }
+
     return {
       ok: true,
       value: {
@@ -124,30 +212,87 @@ export class ZoteroSyncAdapter implements ProviderAdapter {
     connectionId: string,
     input: SyncInput & { apiKey?: string; existingBibContent?: string },
   ): Promise<ProviderResult<SyncResult>> {
-    if (input.apiKey === "expired-token") {
-      return {
-        ok: false,
-        error: {
-          code: "TOKEN_EXPIRED",
-          retryable: false,
-          detail: "Zotero API token has expired",
-        },
-      };
-    }
+    let remoteBibContent: string;
+    let remoteRevision: string;
 
-    if (input.apiKey === "rate-limited") {
-      return {
-        ok: false,
-        error: {
-          code: "RATE_LIMITED",
-          retryable: true,
-          detail: "Zotero API rate limit reached, back off and retry",
-        },
-      };
-    }
+    if (this.customFetch) {
+      try {
+        const url = `https://api.zotero.org/${input.resourceId}?format=bibtex`;
+        const headers: Record<string, string> = {
+          "Zotero-API-Version": "3",
+        };
+        if (input.apiKey) {
+          headers["Zotero-API-Key"] = input.apiKey;
+        }
 
-    // Generate remote BibTeX representation
-    const remoteBibContent = `@article{knuth1984texbook,
+        const res = await this.fetchFn(url, { headers });
+        if (res.status === 429) {
+          return {
+            ok: false,
+            error: {
+              code: "RATE_LIMITED",
+              retryable: true,
+              detail: "Zotero API rate limit reached, back off and retry",
+            },
+          };
+        }
+        if (res.status === 401 || res.status === 403) {
+          return {
+            ok: false,
+            error: {
+              code: "TOKEN_EXPIRED",
+              retryable: false,
+              detail: "Zotero API token has expired",
+            },
+          };
+        }
+        if (!res.ok) {
+          return {
+            ok: false,
+            error: {
+              code: "PROVIDER_UNAVAILABLE",
+              retryable: res.status >= 500,
+              detail: `Zotero API returned status ${res.status}`,
+            },
+          };
+        }
+
+        remoteBibContent = await res.text();
+        remoteRevision = res.headers.get("last-modified-version") ?? createHash("sha256").update(remoteBibContent).digest("hex");
+      } catch (err) {
+        return {
+          ok: false,
+          error: {
+            code: "PROVIDER_UNAVAILABLE",
+            retryable: true,
+            detail: err instanceof Error ? err.message : "Zotero sync failed",
+          },
+        };
+      }
+    } else {
+      if (input.apiKey === "expired-token") {
+        return {
+          ok: false,
+          error: {
+            code: "TOKEN_EXPIRED",
+            retryable: false,
+            detail: "Zotero API token has expired",
+          },
+        };
+      }
+
+      if (input.apiKey === "rate-limited") {
+        return {
+          ok: false,
+          error: {
+            code: "RATE_LIMITED",
+            retryable: true,
+            detail: "Zotero API rate limit reached, back off and retry",
+          },
+        };
+      }
+
+      remoteBibContent = `@article{knuth1984texbook,
   author = {Donald E. Knuth},
   title = {The TeXbook},
   year = {1984},
@@ -160,8 +305,8 @@ export class ZoteroSyncAdapter implements ProviderAdapter {
   year = {1994},
   publisher = {Addison-Wesley}
 }`;
-
-    const remoteRevision = createHash("sha256").update(remoteBibContent).digest("hex");
+      remoteRevision = createHash("sha256").update(remoteBibContent).digest("hex");
+    }
 
     // Check for local modifications on refresh
     if (input.existingBibContent && input.existingBibContent.trim() !== "") {

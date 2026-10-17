@@ -78,6 +78,81 @@ describe("S13-T07: Implement one permitted optional bibliography provider", () =
         expect(result.error.code).toBe("CAPABILITY_UNSUPPORTED");
       }
     });
+
+    it("resolves DOI to BibTeX via HTTP content negotiation", async () => {
+      const mockBib = `@article{shannon1948mathematical,
+  author = {Claude E. Shannon},
+  title = {A Mathematical Theory of Communication},
+  year = {1948}
+}`;
+      const mockFetch = async (url: string) => {
+        const decoded = decodeURIComponent(url);
+        if (decoded.includes("10.1002/j.1538-7305.1948.tb01338.x")) {
+          return new Response(mockBib, {
+            status: 200,
+            headers: { "content-type": "application/x-bibtex" },
+          });
+        }
+        return new Response("Not Found", { status: 404 });
+      };
+
+      const httpAdapter = new OptionalReferenceProviderAdapter(PERMITTED_OPEN_PROVIDER, {
+        fetcher: mockFetch,
+      });
+
+      const result = await httpAdapter.pull("crossref-conn-1", {
+        projectId: "123e4567-e89b-12d3-a456-426614174000",
+        sourceRevisionId: "rev-1",
+        expectedRemoteRevision: "",
+        resourceId: "works",
+        queryDoi: "10.1002/j.1538-7305.1948.tb01338.x",
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe("synced");
+        expect(result.value.remoteRevision).toBeDefined();
+      }
+
+      // Non-existent DOI
+      const notFoundResult = await httpAdapter.pull("crossref-conn-1", {
+        projectId: "123e4567-e89b-12d3-a456-426614174000",
+        sourceRevisionId: "rev-1",
+        expectedRemoteRevision: "",
+        resourceId: "works",
+        queryDoi: "10.9999/non-existent-doi",
+      });
+
+      expect(notFoundResult.ok).toBe(false);
+      if (!notFoundResult.ok) {
+        expect(notFoundResult.error.code).toBe("PROVIDER_UNAVAILABLE");
+        expect(notFoundResult.error.detail).toContain("not found");
+      }
+    });
+
+    it("handles Crossref HTTP 429 rate limit responses gracefully", async () => {
+      const mockFetch = async () => {
+        return new Response("Too Many Requests", { status: 429 });
+      };
+
+      const httpAdapter = new OptionalReferenceProviderAdapter(PERMITTED_OPEN_PROVIDER, {
+        fetcher: mockFetch,
+      });
+
+      const result = await httpAdapter.pull("crossref-conn-1", {
+        projectId: "123e4567-e89b-12d3-a456-426614174000",
+        sourceRevisionId: "rev-1",
+        expectedRemoteRevision: "",
+        resourceId: "works",
+        queryDoi: "10.1002/andp.19053221004",
+      });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.code).toBe("RATE_LIMITED");
+        expect(result.error.retryable).toBe(true);
+      }
+    });
   });
 
   describe("Enforcement of BLOCKED_BY_PROVIDER on Unpermitted Providers (Mendeley, Papers)", () => {
