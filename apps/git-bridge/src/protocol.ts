@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { deflateSync } from "node:zlib";
+import { deflateSync, inflateSync } from "node:zlib";
 
 export const PKT_FLUSH = Buffer.from("0000", "ascii");
 
@@ -235,4 +235,264 @@ export function buildReceivePackResponse(
 
   lines.push(PKT_FLUSH);
   return Buffer.concat(lines);
+}
+
+export interface GitRawObject {
+  type: number; // 1 = commit, 2 = tree, 3 = blob, 4 = tag
+  raw: Buffer;
+  sha: string;
+}
+
+export interface ParsedTreeEntry {
+  mode: string;
+  name: string;
+  sha: string;
+}
+
+export interface ParsedCommit {
+  sha: string;
+  treeSha: string;
+  parentShas: string[];
+  author: string;
+  message: string;
+}
+
+export interface UnpackedPackfile {
+  objectsBySha: Map<string, GitRawObject>;
+  commits: Map<string, ParsedCommit>;
+  trees: Map<string, ParsedTreeEntry[]>;
+  blobs: Map<string, Buffer>;
+  files: Array<{ path: string; content: string }>;
+}
+
+export function parseTreeObject(buf: Buffer): ParsedTreeEntry[] {
+  const entries: ParsedTreeEntry[] = [];
+  let offset = 0;
+  while (offset < buf.length) {
+    const spaceIdx = buf.indexOf(0x20, offset);
+    if (spaceIdx === -1) break;
+    const mode = buf.subarray(offset, spaceIdx).toString("ascii");
+    const nullIdx = buf.indexOf(0x00, spaceIdx + 1);
+    if (nullIdx === -1) break;
+    const name = buf.subarray(spaceIdx + 1, nullIdx).toString("utf8");
+    const sha = buf.subarray(nullIdx + 1, nullIdx + 21).toString("hex");
+    entries.push({ mode, name, sha });
+    offset = nullIdx + 21;
+  }
+  return entries;
+}
+
+export function parseCommitObject(buf: Buffer): Omit<ParsedCommit, "sha"> {
+  const text = buf.toString("utf8");
+  const lines = text.split("\n");
+  let treeSha = "";
+  const parentShas: string[] = [];
+  let author = "";
+  let messageStart = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!;
+    if (line === "") {
+      messageStart = i + 1;
+      break;
+    }
+    if (line.startsWith("tree ")) {
+      treeSha = line.slice(5).trim();
+    } else if (line.startsWith("parent ")) {
+      parentShas.push(line.slice(7).trim());
+    } else if (line.startsWith("author ")) {
+      author = line.slice(7).trim();
+    }
+  }
+  const message = lines.slice(messageStart).join("\n").trim();
+  return { treeSha, parentShas, author, message };
+}
+
+export function applyGitDelta(base: Buffer, delta: Buffer): Buffer {
+  let pos = 0;
+  let baseSize = 0;
+  let shift = 0;
+  while (pos < delta.length) {
+    const b = delta[pos++]!;
+    baseSize |= (b & 0x7f) << shift;
+    shift += 7;
+    if (!(b & 0x80)) break;
+  }
+  void baseSize;
+  let targetSize = 0;
+  shift = 0;
+  while (pos < delta.length) {
+    const b = delta[pos++]!;
+    targetSize |= (b & 0x7f) << shift;
+    shift += 7;
+    if (!(b & 0x80)) break;
+  }
+  const target = Buffer.alloc(targetSize);
+  let outPos = 0;
+  while (pos < delta.length) {
+    const cmd = delta[pos++]!;
+    if (cmd & 0x80) {
+      let copyOffset = 0;
+      let copyLength = 0;
+      if (cmd & 0x01) copyOffset |= delta[pos++]!;
+      if (cmd & 0x02) copyOffset |= (delta[pos++]! << 8);
+      if (cmd & 0x04) copyOffset |= (delta[pos++]! << 16);
+      if (cmd & 0x08) copyOffset |= (delta[pos++]! << 24);
+      if (cmd & 0x10) copyLength |= delta[pos++]!;
+      if (cmd & 0x20) copyLength |= (delta[pos++]! << 8);
+      if (cmd & 0x40) copyLength |= (delta[pos++]! << 16);
+      if (copyLength === 0) copyLength = 0x10000;
+      base.copy(target, outPos, copyOffset, copyOffset + copyLength);
+      outPos += copyLength;
+    } else if (cmd > 0) {
+      delta.copy(target, outPos, pos, pos + cmd);
+      pos += cmd;
+      outPos += cmd;
+    }
+  }
+  return target;
+}
+
+export function unpackPackfile(
+  packBuf: Buffer,
+  existingObjects?: Map<string, GitRawObject>,
+): UnpackedPackfile {
+  const objectsBySha = new Map<string, GitRawObject>(existingObjects);
+  const objectsByOffset = new Map<number, GitRawObject>();
+  const commits = new Map<string, ParsedCommit>();
+  const trees = new Map<string, ParsedTreeEntry[]>();
+  const blobs = new Map<string, Buffer>();
+
+  if (packBuf.length < 12 || packBuf.subarray(0, 4).toString("ascii") !== "PACK") {
+    return { objectsBySha, commits, trees, blobs, files: [] };
+  }
+
+  const numObjects = packBuf.readUInt32BE(8);
+  let offset = 12;
+
+  interface PendingDelta {
+    objOffset: number;
+    baseType: "ofs" | "ref";
+    baseOffset?: number;
+    baseSha?: string;
+    deltaData: Buffer;
+  }
+  const pendingDeltas: PendingDelta[] = [];
+
+  for (let i = 0; i < numObjects; i++) {
+    const objStart = offset;
+    let b = packBuf[offset++]!;
+    const type = (b >> 4) & 7;
+    let size = b & 0x0f;
+    let shift = 4;
+    while (b & 0x80) {
+      b = packBuf[offset++]!;
+      size |= (b & 0x7f) << shift;
+      shift += 7;
+    }
+    void size;
+
+    if (type >= 1 && type <= 4) {
+      const res = inflateSync(packBuf.subarray(offset), { info: true });
+      offset += (res as unknown as { engine: { bytesWritten: number } }).engine.bytesWritten;
+      const raw = Buffer.from(res.buffer);
+      const typeName = type === 1 ? "commit" : type === 2 ? "tree" : type === 3 ? "blob" : "tag";
+      const header = Buffer.from(`${typeName} ${raw.length}\0`);
+      const sha = createHash("sha1").update(Buffer.concat([header, raw])).digest("hex");
+      const obj: GitRawObject = { type, raw, sha };
+      objectsBySha.set(sha, obj);
+      objectsByOffset.set(objStart, obj);
+    } else if (type === 6) {
+      let byte = packBuf[offset++]!;
+      let relOffset = byte & 0x7f;
+      while (byte & 0x80) {
+        byte = packBuf[offset++]!;
+        relOffset = ((relOffset + 1) << 7) | (byte & 0x7f);
+      }
+      const baseOffset = objStart - relOffset;
+      const res = inflateSync(packBuf.subarray(offset), { info: true });
+      offset += (res as unknown as { engine: { bytesWritten: number } }).engine.bytesWritten;
+      pendingDeltas.push({ objOffset: objStart, baseType: "ofs", baseOffset, deltaData: Buffer.from(res.buffer) });
+    } else if (type === 7) {
+      const baseSha = packBuf.subarray(offset, offset + 20).toString("hex");
+      offset += 20;
+      const res = inflateSync(packBuf.subarray(offset), { info: true });
+      offset += (res as unknown as { engine: { bytesWritten: number } }).engine.bytesWritten;
+      pendingDeltas.push({ objOffset: objStart, baseType: "ref", baseSha, deltaData: Buffer.from(res.buffer) });
+    }
+  }
+
+  let progress = true;
+  while (pendingDeltas.length > 0 && progress) {
+    progress = false;
+    for (let j = 0; j < pendingDeltas.length; j++) {
+      const delta = pendingDeltas[j]!;
+      const base = delta.baseType === "ofs"
+        ? objectsByOffset.get(delta.baseOffset!)
+        : objectsBySha.get(delta.baseSha!);
+      if (base) {
+        const resolvedRaw = applyGitDelta(base.raw, delta.deltaData);
+        const typeName = base.type === 1 ? "commit" : base.type === 2 ? "tree" : base.type === 3 ? "blob" : "tag";
+        const header = Buffer.from(`${typeName} ${resolvedRaw.length}\0`);
+        const sha = createHash("sha1").update(Buffer.concat([header, resolvedRaw])).digest("hex");
+        const resolvedObj: GitRawObject = { type: base.type, raw: resolvedRaw, sha };
+        objectsBySha.set(sha, resolvedObj);
+        objectsByOffset.set(delta.objOffset, resolvedObj);
+        pendingDeltas.splice(j, 1);
+        progress = true;
+        break;
+      }
+    }
+  }
+
+  for (const obj of objectsBySha.values()) {
+    if (obj.type === 1) {
+      const parsed = parseCommitObject(obj.raw);
+      commits.set(obj.sha, { ...parsed, sha: obj.sha });
+    } else if (obj.type === 2) {
+      trees.set(obj.sha, parseTreeObject(obj.raw));
+    } else if (obj.type === 3) {
+      blobs.set(obj.sha, obj.raw);
+    }
+  }
+
+  function collectTreeFiles(treeSha: string, prefix: string = ""): Array<{ path: string; content: string }> {
+    const entries = trees.get(treeSha);
+    if (!entries) return [];
+    const filesList: Array<{ path: string; content: string }> = [];
+    for (const entry of entries) {
+      const fullPath = prefix ? `${prefix}/${entry.name}` : entry.name;
+      if (entry.mode === "40000" || entry.mode === "040000") {
+        filesList.push(...collectTreeFiles(entry.sha, fullPath));
+      } else {
+        const blobBuf = blobs.get(entry.sha);
+        if (blobBuf !== undefined) {
+          filesList.push({ path: fullPath, content: blobBuf.toString("utf8") });
+        }
+      }
+    }
+    return filesList;
+  }
+
+  const files: Array<{ path: string; content: string }> = [];
+  for (const commit of commits.values()) {
+    const commitFiles = collectTreeFiles(commit.treeSha);
+    for (const f of commitFiles) {
+      if (!files.some((x) => x.path === f.path)) {
+        files.push(f);
+      }
+    }
+  }
+
+  if (files.length === 0) {
+    for (const treeSha of trees.keys()) {
+      const treeFiles = collectTreeFiles(treeSha);
+      for (const f of treeFiles) {
+        if (!files.some((x) => x.path === f.path)) {
+          files.push(f);
+        }
+      }
+    }
+  }
+
+  return { objectsBySha, commits, trees, blobs, files };
 }

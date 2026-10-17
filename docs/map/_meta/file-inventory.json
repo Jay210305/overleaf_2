@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "23447a56d5b36c420c90c52e6ebbee903d883d35",
+  "git_baseline": "a83d35dc276870652fded4880dc9b46f10811fe5",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -438,22 +438,22 @@
     {
       "path": "apps/git-bridge/src/auth.ts",
       "role": "factory",
-      "sha256": "18b2a8ebb7703f4b22a2c8944cd7b05e6901ca4d9a34ed4677211c5c0e6f87a8"
+      "sha256": "aff7658521a06a6ac61a6b6051b5505eff7235afedf883612963e945d9fb072b"
     },
     {
       "path": "apps/git-bridge/src/import.ts",
       "role": "factory",
-      "sha256": "1ec763b0f90f4c12c6e8765c0ac21e44277eb70dff2d359610b6633fa5cd7e27"
+      "sha256": "9c5b06c6091c6689a186e9807ff0467e2ebfc32a08f48283078d352a42c8ca50"
     },
     {
       "path": "apps/git-bridge/src/protocol.ts",
       "role": "factory",
-      "sha256": "c04c3adbe5f93dedaea64007b19bc1ab47eeed490c5d5178e3fffd84a086d834"
+      "sha256": "d5793365065d658beb8a8cd5db6c0dec116fb2e0bec409615e3c19e84f016e53"
     },
     {
       "path": "apps/git-bridge/src/server.ts",
       "role": "factory",
-      "sha256": "d9742c0fc737eec06d6b3f757773cbd2cfbbcf314c8da43a03b548662f7e6b0f"
+      "sha256": "2b1157e114244e1652451c0c6d4bea00b34135aea5ec17dbfbe81659c28338b9"
     },
     {
       "path": "apps/git-bridge/tsconfig.json",
@@ -543,7 +543,7 @@
     {
       "path": "apps/jobs/src/notifications/email.ts",
       "role": "factory",
-      "sha256": "8a619f7a324809bdf21c71b3c1c40f234ed92832a01d5bb516bbd2b5b66ac183"
+      "sha256": "f948deaca9a2d2074409bbe7cfa79c8893e712d799a8d48b1e3923db9afb30f8"
     },
     {
       "path": "apps/jobs/src/sync/dropbox-bidirectional.ts",
@@ -2053,12 +2053,12 @@
     {
       "path": "docs/test-reports/s14-t03.md",
       "role": "factory",
-      "sha256": "5f5a7b1c2f592845caab888068145ae4f7cad4f3fec1b726613363b1362ef355"
+      "sha256": "322a33e7dd7ca1399689336d92fd7df9cd440296d7b72e4166c176f647da4c3a"
     },
     {
       "path": "docs/test-reports/s14-t04.md",
       "role": "factory",
-      "sha256": "2fcc1ff0381721925ad4b5efc5f85b3d3dc136b475d806d1bc1d2974a7b5ab99"
+      "sha256": "70ee6276283d48a12e04dd18ae40a1718eb7f15d28009fd20117db926a15b7e4"
     },
     {
       "path": "docs/test-reports/s14-t05.md",
@@ -4223,7 +4223,7 @@
     {
       "path": "tests/integration/s14-t03.test.ts",
       "role": "factory",
-      "sha256": "3af2a89566a9f4720e59c1de9f626c2d69f7877409922f7c3247fa9fa71ccc4a"
+      "sha256": "fbc6742bf5c104fdffb2d060d9a0a37da93c934f291bf5ef99ba111c19d1ed1d"
     },
     {
       "path": "tests/integration/s14-t04.test.ts",
@@ -4908,7 +4908,7 @@
     {
       "path": "tests/regression/int-06/s14-t03.test.ts",
       "role": "factory",
-      "sha256": "49ba28a69cc41934ad1b49030813efbb818f2d2f9466e72a0afda9c349b8e02b"
+      "sha256": "9f299c3d506ca10b01fbd0fde73c38724a7d9d88eb16dc428f8b53f62a44d191"
     },
     {
       "path": "tests/regression/int-06/s14-t04.test.ts",
@@ -5013,7 +5013,7 @@
     {
       "path": "tests/regression/nfr-05/s07-t09.test.ts",
       "role": "factory",
-      "sha256": "15e240cad331d84371a67a6d17d3114a5eed9daa11c66a56e0dfb1441c93165b"
+      "sha256": "cad57051903005cd49043d9dff994a67cd4d9970cc9191991911c8f636d827ed"
     },
     {
       "path": "tests/regression/nfr-06/s03-t07.test.ts",

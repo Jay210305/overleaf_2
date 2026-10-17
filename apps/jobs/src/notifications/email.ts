@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { DatabaseClient } from "@latex-collab/db";
+import { isUUID, type DatabaseClient } from "@latex-collab/db";
 
 export type NotificationType = "mention" | "invite" | "reply";
 
@@ -171,6 +171,15 @@ export async function deliverNotificationEmail(
   // 3. Current Project Permission Check
   // For mentions and replies, the recipient must have current access to the project
   if (options.db && (payload.type === "mention" || payload.type === "reply")) {
+    if (!isUUID(payload.projectId) || !isUUID(payload.recipientUserId)) {
+      return {
+        delivered: false,
+        recipientEmail: payload.recipientEmail,
+        notificationType: payload.type,
+        suppressedReason: "invalid_recipient_or_project_id",
+      };
+    }
+
     const projRes = await options.db.query<{ owner_id: string; status: string }>(
       `SELECT owner_id, status FROM projects WHERE id = $1`,
       [payload.projectId],

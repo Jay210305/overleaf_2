@@ -1,17 +1,20 @@
 import Fastify, { type FastifyInstance, type FastifyReply, type FastifyRequest } from "fastify";
-import type { DatabaseClient } from "@latex-collab/db";
+import { isUUID, type DatabaseClient } from "@latex-collab/db";
 import {
   type GitTokenStore,
   authenticateGitRequest,
   defaultGitTokenStore,
 } from "./auth.js";
+import { applyGitImport } from "./import.js";
 import {
+  buildPackfile,
   buildReceivePackResponse,
   buildRefAdvertisement,
   chunkPackfileSideband,
   encodePktLine,
   generateProjectSnapshotPackfile,
   parseReceivePackCommands,
+  unpackPackfile,
   verifyFastForward,
 } from "./protocol.js";
 
@@ -79,7 +82,7 @@ export function createGitBridgeServer(options: GitBridgeServerOptions = {}): Fas
     const memoryTip = repoTips.get(projectId);
     if (memoryTip) return memoryTip;
 
-    if (options.db) {
+    if (options.db && isUUID(projectId)) {
       const revRes = await options.db.query<{ manifest_hash: string }>(
         `SELECT manifest_hash FROM project_revisions WHERE project_id = $1 ORDER BY revision_no DESC LIMIT 1`,
         [projectId],
@@ -100,6 +103,13 @@ export function createGitBridgeServer(options: GitBridgeServerOptions = {}): Fas
     const { repo } = request.params as { repo: string };
     const { service } = request.query as { service?: string };
     const projectId = extractProjectId(repo);
+
+    if (options.db && !isUUID(projectId)) {
+      return reply
+        .code(404)
+        .header("Content-Type", "text/plain")
+        .send("RESOURCE_NOT_FOUND: Repository not found\n");
+    }
 
     if (service !== "git-upload-pack" && service !== "git-receive-pack") {
       return reply
@@ -139,6 +149,13 @@ export function createGitBridgeServer(options: GitBridgeServerOptions = {}): Fas
   app.post("/git/:repo/git-upload-pack", async (request: FastifyRequest, reply: FastifyReply) => {
     const { repo } = request.params as { repo: string };
     const projectId = extractProjectId(repo);
+
+    if (options.db && !isUUID(projectId)) {
+      return reply
+        .code(404)
+        .header("Content-Type", "text/plain")
+        .send("RESOURCE_NOT_FOUND: Repository not found\n");
+    }
 
     const auth = await authenticateGitRequest({
       db: options.db,
@@ -184,6 +201,13 @@ export function createGitBridgeServer(options: GitBridgeServerOptions = {}): Fas
     const { repo } = request.params as { repo: string };
     const projectId = extractProjectId(repo);
 
+    if (options.db && !isUUID(projectId)) {
+      return reply
+        .code(404)
+        .header("Content-Type", "text/plain")
+        .send("RESOURCE_NOT_FOUND: Repository not found\n");
+    }
+
     const auth = await authenticateGitRequest({
       db: options.db,
       tokenStore,
@@ -206,7 +230,10 @@ export function createGitBridgeServer(options: GitBridgeServerOptions = {}): Fas
       : typeof request.body === "string"
         ? Buffer.from(request.body, "utf8")
         : Buffer.from(String(request.body ?? ""), "utf8");
-    const commands = parseReceivePackCommands(rawBody);
+
+    const packIndex = rawBody.indexOf(Buffer.from("PACK", "ascii"));
+    const pktBuffer = packIndex !== -1 ? rawBody.subarray(0, packIndex) : rawBody;
+    const commands = parseReceivePackCommands(pktBuffer);
 
     if (commands.length === 0) {
       // Check for explicit string pattern in test mocks
@@ -231,7 +258,42 @@ export function createGitBridgeServer(options: GitBridgeServerOptions = {}): Fas
       if (!ffCheck.ok) {
         results.push({ ref: cmd.ref, ok: false, error: ffCheck.error });
       } else {
-        // Fast-forward passed: update local head tip
+        // Fast-forward passed: unpack incoming packfile if present
+        if (packIndex !== -1) {
+          const packData = rawBody.subarray(packIndex);
+          const existingSnapshot = projectSnapshots.get(projectId);
+          const baseUnpacked = existingSnapshot ? unpackPackfile(existingSnapshot.packfile) : undefined;
+          const unpacked = unpackPackfile(packData, baseUnpacked?.objectsBySha);
+          const commitObj = unpacked.commits.get(cmd.newSha) ?? Array.from(unpacked.commits.values())[0];
+          const pushedFiles = unpacked.files;
+
+          if (pushedFiles.length > 0) {
+            // Apply updates canonically through Yjs mutations and record project revision
+            await applyGitImport({
+              db: options.db,
+              projectId,
+              authorUserId: auth.userId,
+              commitSha: cmd.newSha,
+              commitMessage: commitObj?.message ?? "Git push",
+              changes: pushedFiles,
+            });
+
+            // Update project snapshot packfile with all objects for future clones / fetches
+            const allObjects = Array.from(unpacked.objectsBySha.values()).map((o) => ({
+              type: o.type,
+              raw: o.raw,
+            }));
+            const fullPackfile = buildPackfile(allObjects);
+
+            projectSnapshots.set(projectId, {
+              packfile: fullPackfile,
+              commitSha: cmd.newSha,
+              treeSha: commitObj?.treeSha ?? "",
+            });
+          }
+        }
+
+        // Update local head tip
         repoTips.set(projectId, cmd.newSha);
         results.push({ ref: cmd.ref, ok: true });
       }

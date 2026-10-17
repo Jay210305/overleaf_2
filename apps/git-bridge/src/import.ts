@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { DatabaseClient } from "@latex-collab/db";
+import { isUUID, type DatabaseClient } from "@latex-collab/db";
 import * as Y from "yjs";
 
 export interface FileChange {
@@ -134,6 +134,7 @@ export async function applyGitImport(params: GitImportParams): Promise<GitImport
     revisionNo = Number(maxRevRes.rows[0]?.max_rev ?? 0) + 1;
 
     const manifestKey = `projects/${params.projectId}/revisions/rev-${revisionNo}.json`;
+    const authorId = params.authorUserId && isUUID(params.authorUserId) ? params.authorUserId : null;
     await params.db.query(
       `INSERT INTO project_revisions (id, project_id, revision_no, manifest_key, manifest_hash, author_id, source, label, created_at)
        VALUES ($1, $2, $3, $4, $5, $6, 'git', $7, NOW())`,
@@ -143,7 +144,7 @@ export async function applyGitImport(params: GitImportParams): Promise<GitImport
         revisionNo,
         manifestKey,
         params.commitSha,
-        params.authorUserId,
+        authorId,
         params.commitMessage,
       ],
     );

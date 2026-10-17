@@ -97,6 +97,27 @@ describe("S14-T03: Real Git CLI clone, fetch, push, and fast-forward enforcement
 
     const combinedOutput = (pushRes.stdout + "\n" + pushRes.stderr).toLowerCase();
     expect(combinedOutput).toContain("main -> main");
+
+    // Verify DB revision was created by the bridge upon git push
+    const revs = await fixture.db.query<{ revision_no: number; source: string; label: string }>(
+      `SELECT revision_no, source, label FROM project_revisions WHERE project_id = $1 ORDER BY revision_no DESC LIMIT 1`,
+      [project.id],
+    );
+    expect(revs.rows.length).toBe(1);
+    expect(revs.rows[0]!.source).toBe("git");
+    expect(revs.rows[0]!.label).toContain("Push from Git CLI");
+
+    // Perform fresh clone into a second directory and verify round-trip commit integrity
+    const cloneDir2 = path.join(workDir, "cloned-repo-roundtrip");
+    const encodedUser = encodeURIComponent(ownerUser.email);
+    const authedUrl = `${serverUrl.replace("http://", `http://${encodedUser}:${rawToken}@`)}/git/${project.id}.git`;
+
+    await execAsync(`git clone ${authedUrl} ${cloneDir2}`, {
+      env: { ...process.env, GIT_TERMINAL_PROMPT: "0" },
+    });
+
+    const content2 = fs.readFileSync(path.join(cloneDir2, "main.tex"), "utf8");
+    expect(content2).toContain("% Real push test comment");
   });
 
   it("rejects stale non-fast-forward push and leaves remote state intact", async () => {
@@ -131,5 +152,18 @@ describe("S14-T03: Real Git CLI clone, fetch, push, and fast-forward enforcement
       errorOutput.includes("stale base") ||
       errorOutput.includes("rejected"),
     ).toBe(true);
+  });
+
+  it("safely handles non-UUID repository requests returning 404 without database exception", async () => {
+    const res = await server.inject({
+      method: "GET",
+      url: "/git/invalid-non-uuid-repo.git/info/refs?service=git-upload-pack",
+      headers: {
+        authorization: `Basic ${Buffer.from(`${ownerUser.email}:${rawToken}`).toString("base64")}`,
+      },
+    });
+
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toContain("RESOURCE_NOT_FOUND");
   });
 });

@@ -1,5 +1,5 @@
 import { createHash, randomBytes, randomUUID } from "node:crypto";
-import type { DatabaseClient } from "@latex-collab/db";
+import { isUUID, type DatabaseClient } from "@latex-collab/db";
 
 export type GitScope = "git:read" | "git:write";
 
@@ -153,6 +153,15 @@ export async function authenticateGitRequest(params: {
 
   // If DatabaseClient is supplied, check project membership and permissions
   if (params.db) {
+    if (!isUUID(params.projectId)) {
+      return {
+        ok: false,
+        status: 404,
+        code: "RESOURCE_NOT_FOUND",
+        message: "Repository not found",
+      };
+    }
+
     const projRes = await params.db.query<{ owner_id: string; status: string }>(
       `SELECT owner_id, status FROM projects WHERE id = $1`,
       [params.projectId],

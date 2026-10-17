@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  applyGitDelta,
   buildPackfile,
   buildReceivePackResponse,
   buildRefAdvertisement,
@@ -10,6 +11,7 @@ import {
   encodePktLine,
   parsePktLines,
   parseReceivePackCommands,
+  unpackPackfile,
   verifyFastForward,
 } from "../../../apps/git-bridge/src/protocol.js";
 
@@ -106,5 +108,58 @@ describe("Regression INT-06 (S14-T03): Git Smart HTTP protocol framing, packfile
     const okResp = buildReceivePackResponse([{ ref: "refs/heads/main", ok: true }]);
     expect(okResp.toString("utf8")).toContain("unpack ok\n");
     expect(okResp.toString("utf8")).toContain("ok refs/heads/main\n");
+  });
+
+  it("applies Git delta instructions (copy and insert) accurately to reconstruct target object", () => {
+    const base = Buffer.from("Hello World from LaTeX editor");
+    // delta: baseSize=29 (0x1d), targetSize=43 (0x2b)
+    // copy 0..11 ("Hello World"), insert " Collaborative" (14 bytes), copy 11..29 (" from LaTeX editor", 18 bytes)
+    const insertBytes = Buffer.from(" Collaborative");
+    const delta = Buffer.concat([
+      Buffer.from([0x1d, 0x2b]),
+      Buffer.from([0x91, 0x00, 0x0b]),
+      Buffer.from([insertBytes.length]),
+      insertBytes,
+      Buffer.from([0x91, 0x0b, 0x12]),
+    ]);
+
+    const reconstructed = applyGitDelta(base, delta);
+    expect(reconstructed.toString("utf8")).toBe("Hello World Collaborative from LaTeX editor");
+  });
+
+  it("unpacks packfiles into commits, trees, blobs, and extracted file maps", () => {
+    const blob1 = createBlobObject("\\documentclass{article}\n\\begin{document}\nMain\n\\end{document}\n");
+    const blob2 = createBlobObject("% Comments file\n");
+    const tree = createTreeObject([
+      { name: "main.tex", sha: blob1.sha },
+      { name: "notes.txt", sha: blob2.sha },
+    ]);
+    const commit = createCommitObject({
+      treeSha: tree.sha,
+      message: "Test commit for packfile unpacking",
+    });
+
+    const packfile = buildPackfile([
+      { type: 1, raw: commit.raw },
+      { type: 2, raw: tree.raw },
+      { type: 3, raw: blob1.raw },
+      { type: 3, raw: blob2.raw },
+    ]);
+
+    const unpacked = unpackPackfile(packfile);
+    expect(unpacked.objectsBySha.size).toBe(4);
+    expect(unpacked.commits.has(commit.sha)).toBe(true);
+    expect(unpacked.trees.has(tree.sha)).toBe(true);
+    expect(unpacked.blobs.has(blob1.sha)).toBe(true);
+    expect(unpacked.blobs.has(blob2.sha)).toBe(true);
+
+    expect(unpacked.files.length).toBe(2);
+    const mainFile = unpacked.files.find((f) => f.path === "main.tex");
+    expect(mainFile).toBeDefined();
+    expect(mainFile!.content).toContain("Main");
+
+    const notesFile = unpacked.files.find((f) => f.path === "notes.txt");
+    expect(notesFile).toBeDefined();
+    expect(notesFile!.content).toBe("% Comments file\n");
   });
 });
