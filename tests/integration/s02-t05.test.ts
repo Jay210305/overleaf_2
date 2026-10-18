@@ -215,5 +215,38 @@ describe("S02-T05 browser authentication forms", () => {
     const [, init] = forgotCall as [string, RequestInit];
     expect(JSON.parse(String(init.body))).toEqual({ email: "reset-me@example.test" });
   });
+
+  it("trims whitespace from inputs and preloads token synchronously from query string", async () => {
+    const token = "q".repeat(43);
+    history.replaceState(null, "", `/verify-email?token=${token}`);
+    const fetcher = vi.fn().mockResolvedValue(new Response('{"accepted":true}', { status: 200 }));
+    vi.stubGlobal("fetch", fetcher);
+    render(createElement(AuthForms, { mode: "verify" }));
+    expect((screen.getByLabelText("Verification code") as HTMLInputElement).value).toBe(token);
+    fireEvent.click(screen.getByRole("button", { name: "Verify email" }));
+    await screen.findByText(/Email verified/);
+    const [, init] = fetcher.mock.calls[0] as [string, RequestInit];
+    expect(JSON.parse(String(init.body))).toEqual({ token });
+  });
+
+  it("shows distinct validation messages for registration fields and password mismatch", async () => {
+    render(createElement(AuthForms, { mode: "register" }));
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "invalid-email" } });
+    fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "Name" } });
+    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "123" } });
+    fireEvent.click(screen.getByRole("button", { name: "Create account" }));
+    const alert = await screen.findByRole("alert");
+    expect(alert.textContent).toMatch(/Please provide a valid display name/);
+    expect(alert.textContent).not.toMatch(/invitation/i);
+
+    cleanup();
+    render(createElement(AuthForms, { mode: "reset" }));
+    fireEvent.change(screen.getByLabelText("Reset code"), { target: { value: "r".repeat(43) } });
+    fireEvent.change(screen.getByLabelText("New password"), { target: { value: "password-1234" } });
+    fireEvent.change(screen.getByLabelText("Confirm password"), { target: { value: "password-different" } });
+    fireEvent.click(screen.getByRole("button", { name: "Reset password" }));
+    const resetAlert = await screen.findByRole("alert");
+    expect(resetAlert.textContent).toBe("Passwords do not match.");
+  });
 });
 

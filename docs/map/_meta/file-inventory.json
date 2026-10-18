@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "46faca909ad10e3634f71fbb493c1a7800aed59a",
+  "git_baseline": "c9bdbf5d2a52cdbe6ac0bcafaa4b28e42aec7ddc",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -188,7 +188,7 @@
     {
       "path": "apps/api/src/modules/auth/routes.ts",
       "role": "factory",
-      "sha256": "ccaf74b6e2a8fca856580d6c63bc44ec7939eea271e9df3406a80dae783b0964"
+      "sha256": "9df2b4ad997981d8b119cffc38c2a8ce02547bae9eb05d2a786f34091e889899"
     },
     {
       "path": "apps/api/src/modules/auth/session.ts",
@@ -833,7 +833,7 @@
     {
       "path": "apps/web/src/features/auth/auth-forms.tsx",
       "role": "factory",
-      "sha256": "07898b40de29969e85f0135fd0e3212ae728c8e4f8ed33790898d23ea4023ce6"
+      "sha256": "4efdadb71a6412cc8bda373e322a792d67aac9e00b8acf94ce88d2d0029cc2b0"
     },
     {
       "path": "apps/web/src/features/chat/project-chat.tsx",
@@ -4413,7 +4413,7 @@
     {
       "path": "tests/integration/s02-t01.test.ts",
       "role": "factory",
-      "sha256": "b03745139ceb86b9fbc1baf9eb05836b3df57f37c1ff31336b45a9eba91c2212"
+      "sha256": "4f6845e3cdd6184ba91c51c8a6650d18f41b8a04ca5ef10603c50ebc4b8e0713"
     },
     {
       "path": "tests/integration/s02-t02.test.ts",
@@ -4433,7 +4433,7 @@
     {
       "path": "tests/integration/s02-t05.test.ts",
       "role": "factory",
-      "sha256": "29761a858afb59304b28b488f37345bd7dd29a9a69498f9c8719c58cd25218d7"
+      "sha256": "d65356aab86fafa8a5fb9ed209d8f44346f55f2acd74b4a9020173dd26f6998c"
     },
     {
       "path": "tests/integration/s02-t06.test.ts",

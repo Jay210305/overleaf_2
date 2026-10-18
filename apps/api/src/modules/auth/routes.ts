@@ -62,7 +62,10 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
     if (!options.db || !options.sendVerification)
       return reject(reply, request, new AuthError(503, "SERVICE_UNAVAILABLE"));
     const invite = request.headers["x-registration-invite"];
-    if (typeof invite === "string" && invite.length >= 32 && invite.length <= 256) {
+    if (typeof invite === "string" && invite.length > 0) {
+      if (invite.length < 32 || invite.length > 256) {
+        return reject(reply, request, new AuthError(403, "REGISTRATION_DENIED"));
+      }
       try {
         await registerTrustedAccount(
           options.db,

@@ -190,5 +190,27 @@ describe("S02-T01 trusted registration and verification", () => {
       process.env.PUBLIC_SIGNUP_ENABLED = original;
     }
   });
+
+  it("rejects invalid invitation codes even when PUBLIC_SIGNUP_ENABLED is true", async () => {
+    const original = process.env.PUBLIC_SIGNUP_ENABLED;
+    process.env.PUBLIC_SIGNUP_ENABLED = "true";
+    try {
+      const email = `public-short-invite-${randomUUID()}@example.test`;
+      const response = await server.inject({
+        method: "POST",
+        url: "/api/v1/auth/register",
+        headers: {
+          origin,
+          "x-csrf-token": "client-csrf-value",
+          "x-registration-invite": "short-code",
+        },
+        payload: { email, password: "a-strong-password-123", displayName: "Public User" },
+      });
+      expect(response.statusCode).toBe(403);
+      expect(response.json().code).toBe("REGISTRATION_DENIED");
+    } finally {
+      process.env.PUBLIC_SIGNUP_ENABLED = original;
+    }
+  });
 });
 

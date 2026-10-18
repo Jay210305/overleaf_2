@@ -16,29 +16,39 @@ export type AuthMode = "register" | "verify" | "login" | "forgot" | "reset";
 type Message = { kind: "error" | "success"; text: string };
 
 function useFragmentSecret(name: string | null) {
-  const [secret, setSecret] = useState("");
+  const [secret, setSecret] = useState(() => {
+    if (!name || typeof window === "undefined") return "";
+    const fragmentValue = new URLSearchParams(window.location.hash.slice(1)).get(name);
+    const queryValue = new URLSearchParams(window.location.search).get(name);
+    return fragmentValue ?? queryValue ?? "";
+  });
   useEffect(() => {
-    if (!name) return;
+    if (!name || typeof window === "undefined") return;
     const fragmentValue = new URLSearchParams(window.location.hash.slice(1)).get(name);
     const queryValue = new URLSearchParams(window.location.search).get(name);
     const value = fragmentValue ?? queryValue;
-    if (!value) return;
-    setSecret(value);
-    window.history.replaceState(
-      window.history.state,
-      "",
-      window.location.pathname,
-    );
+    if (value) {
+      setSecret(value);
+    }
+    if (window.location.hash || window.location.search) {
+      window.history.replaceState(
+        window.history.state,
+        "",
+        window.location.pathname,
+      );
+    }
   }, [name]);
   return [secret, setSecret] as const;
 }
 
 function errorText(status: number, mode: AuthMode): string {
   if (status === 429) return "Too many attempts. Try again later.";
-  if (status === 503) return "Service unavailable. Try again later.";
+  if (status === 502 || status === 503) return "Service unavailable. Try again later.";
   if (status === 401 && mode === "login") return "Email or password was not accepted.";
   if (status === 401 && mode === "verify") return "Verification link expired or already used.";
   if (status === 401 && mode === "reset") return "Reset link expired or already used.";
+  if (status === 409 && mode === "register") return "An account with this email already exists.";
+  if (status === 409 && mode === "verify") return "This email has already been verified.";
   if (status === 403) return "Request denied. Check your invitation or account status.";
   if (status === 400) return "Please check the fields and try again.";
   return "Request failed. Try again.";
@@ -142,27 +152,42 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
     setMessage(null);
     let path: string;
     let body: object;
+    const cleanEmail = email.trim();
+    const cleanToken = token.trim();
+    const cleanInvite = invitation.trim();
+    const cleanDisplayName = displayName.trim();
+
     if (mode === "register") {
-      const parsed = registerRequestSchema.safeParse({ email, password, displayName });
-      const trimmedInvite = invitation.trim();
-      if (
-        !parsed.success ||
-        (trimmedInvite.length > 0 && (trimmedInvite.length < 32 || trimmedInvite.length > 256))
-      ) {
-        setMessage({ kind: "error", text: "Enter a valid invitation and account details." });
+      if (cleanInvite.length > 0 && (cleanInvite.length < 32 || cleanInvite.length > 256)) {
+        setMessage({
+          kind: "error",
+          text: "Enter a valid invitation code (between 32 and 256 characters) or leave it blank.",
+        });
+        return;
+      }
+      const parsed = registerRequestSchema.safeParse({
+        email: cleanEmail,
+        password,
+        displayName: cleanDisplayName,
+      });
+      if (!parsed.success) {
+        setMessage({
+          kind: "error",
+          text: "Please provide a valid display name, email address, and password (at least 8 characters).",
+        });
         return;
       }
       path = "register";
       body = parsed.data;
     } else if (mode === "verify") {
-      if (token.length < 32 || token.length > 256) {
+      if (cleanToken.length < 32 || cleanToken.length > 256) {
         setMessage({ kind: "error", text: "Enter the verification code from your email." });
         return;
       }
       path = "verify-email";
-      body = { token };
+      body = { token: cleanToken };
     } else if (mode === "login") {
-      const parsed = loginRequestSchema.safeParse({ email, password });
+      const parsed = loginRequestSchema.safeParse({ email: cleanEmail, password });
       if (!parsed.success) {
         setMessage({ kind: "error", text: "Enter a valid email and password." });
         return;
@@ -170,7 +195,7 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
       path = "login";
       body = parsed.data;
     } else if (mode === "forgot") {
-      const parsed = emailRequestSchema.safeParse({ email });
+      const parsed = emailRequestSchema.safeParse({ email: cleanEmail });
       if (!parsed.success) {
         setMessage({ kind: "error", text: "Enter a valid email address." });
         return;
@@ -178,9 +203,17 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
       path = "password/forgot";
       body = parsed.data;
     } else {
-      const parsed = passwordResetRequestSchema.safeParse({ token, password });
-      if (!parsed.success || password !== confirmation) {
-        setMessage({ kind: "error", text: "Enter matching passwords and a valid reset code." });
+      if (cleanToken.length < 32 || cleanToken.length > 256) {
+        setMessage({ kind: "error", text: "Enter the reset code from your email." });
+        return;
+      }
+      if (password !== confirmation) {
+        setMessage({ kind: "error", text: "Passwords do not match." });
+        return;
+      }
+      const parsed = passwordResetRequestSchema.safeParse({ token: cleanToken, password });
+      if (!parsed.success) {
+        setMessage({ kind: "error", text: "Password must be at least 8 characters long." });
         return;
       }
       path = "password/reset";
