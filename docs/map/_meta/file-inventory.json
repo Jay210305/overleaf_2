@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "be5cb43312ac52b4609d2e722b295e5297925c26",
+  "git_baseline": "a3c3ec317119bb092c3f3feecfce8e513ac41e8f",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -41,6 +41,11 @@
       "sha256": "6b1e29fd0ad27445555b1c19053babfdd22e7644b5b55bc6e82d9f9aaea84d4b"
     },
     {
+      "path": ".env.production",
+      "role": "factory",
+      "sha256": "5fa4ec5492fa728ea43301a889782d1418eea7e35fe18432faa70a7148dd5efe"
+    },
+    {
       "path": ".gitattributes",
       "role": "factory",
       "sha256": "d60f352d0db1404c70afb4bb8b2ca3fd1c610572aa40720e8a0b7baa7885418c"
@@ -53,12 +58,12 @@
     {
       "path": ".github/workflows/deploy-pages.yml",
       "role": "factory",
-      "sha256": "6358576092a8c377c82c1421861ecbf3c83bccc6f3fd55a7e68a9026cd61bf69"
+      "sha256": "46ebfbd83674f7a4af6d395586607601d734a1816936b0314802e27722e386a3"
     },
     {
       "path": ".gitignore",
       "role": "factory",
-      "sha256": "c1b0ab604f833da799d670a09bb0cfe40b03122e577d4bf5d09f4ad6288dbe38"
+      "sha256": "809ceb1cb1190748c63bf1b5233e3e50f3e038707fac0cd04c641b49008237f6"
     },
     {
       "path": ".node-version",
@@ -108,7 +113,7 @@
     {
       "path": "apps/api/package.json",
       "role": "factory",
-      "sha256": "1f082556eff42651dfa05f00422c1103e78327b9cb76f083b4ea6915a7a8d816"
+      "sha256": "87e41a8e1ed87a841369a988991d7bcdf873bdfe30b2d814f86514bb1eb0f894"
     },
     {
       "path": "apps/api/src/init-storage.ts",
@@ -118,7 +123,7 @@
     {
       "path": "apps/api/src/main.ts",
       "role": "factory",
-      "sha256": "72afee5633daf798d36c59bd5b3ccdcee6b846258537523c5c0cc7e3ce4f1bd9"
+      "sha256": "f8421858d9a21a3e8c783672a0eef5aa12e04603e4525ad1f63862d4db142de4"
     },
     {
       "path": "apps/api/src/modules/account/avatar.ts",
@@ -168,7 +173,7 @@
     {
       "path": "apps/api/src/modules/auth/oauth.ts",
       "role": "factory",
-      "sha256": "e26d92746445ed770dd2b30eb9415c385e747b883dd20b38ce091e1b7d84c34e"
+      "sha256": "71343a158cdd04a04e69cae78a082fa4f2a8f8720c6f302f6c3ad333cc71369b"
     },
     {
       "path": "apps/api/src/modules/auth/password-reset.ts",
@@ -183,7 +188,7 @@
     {
       "path": "apps/api/src/modules/auth/routes.ts",
       "role": "factory",
-      "sha256": "66822d1eb0e7fff2ffb0d5d45b1b3cdf5e6c98ce61500ff93f554c98b882c6d9"
+      "sha256": "88e7f0f10d0da461c1f4d6e250c24d5d70645655a6928707be240227a6e2615f"
     },
     {
       "path": "apps/api/src/modules/auth/session.ts",
@@ -203,7 +208,7 @@
     {
       "path": "apps/api/src/modules/chat/events.ts",
       "role": "factory",
-      "sha256": "070e78f907524dea0a16f9241c65ed012d76b460280e2c05047b70ad55de5d93"
+      "sha256": "633931dc58d0c760070d9c0bd8c9b1a7b56bc5f88c15223a2eb5212e911109d9"
     },
     {
       "path": "apps/api/src/modules/chat/routes.ts",
@@ -243,7 +248,7 @@
     {
       "path": "apps/api/src/modules/compilations/routes.ts",
       "role": "factory",
-      "sha256": "5992ced94ebe22ea4189635980eb3e2e5a54ab4bbff04f563a8301e8dd23c410"
+      "sha256": "0ef418bb51e083fe4bd85916ebe36698cf1b5dc7cfa55d94fac28c69115f8877"
     },
     {
       "path": "apps/api/src/modules/development/sample.ts",
@@ -463,7 +468,7 @@
     {
       "path": "apps/api/src/plugins/csrf.ts",
       "role": "factory",
-      "sha256": "5cd3930461f2e1dac1c574c43cd6fba1722674b5803b2b8a6e06a8c27b510f49"
+      "sha256": "7796a9f503c6f9413bd9207d5ce950e69a15385e707613e210675f3911ad6332"
     },
     {
       "path": "apps/api/src/plugins/errors.ts",
@@ -483,7 +488,7 @@
     {
       "path": "apps/api/src/plugins/require-session.ts",
       "role": "factory",
-      "sha256": "f8ebeb691fc490c04f0be7f25e8061099e93030d5eb3070346d4cefb5e3f30fb"
+      "sha256": "ff1510c6fea52c02b7a5758a529ddf777973ff1844426f678467f359660b9db6"
     },
     {
       "path": "apps/api/src/plugins/telemetry.ts",
@@ -498,7 +503,7 @@
     {
       "path": "apps/api/src/server.ts",
       "role": "factory",
-      "sha256": "dc4c3ec829dc20e917be0a34d69a4b6fc8cd7d2fe342b9385f68e55eae302c0e"
+      "sha256": "4aaf35a1c4e30d885b82498d9771db63c45b4dce9a8d297b0d2a9363f2a40c37"
     },
     {
       "path": "apps/api/tsconfig.json",
@@ -513,7 +518,7 @@
     {
       "path": "apps/collab/src/auth/authenticate.ts",
       "role": "factory",
-      "sha256": "afb11faea817ab628c9cb517282e15a405050feff9fc5e3cd3b1b0a0532cee28"
+      "sha256": "fe59f9b3c79dcc0d5c5f7b6b352d5d2994a713a866047114843b212ab557d5ce"
     },
     {
       "path": "apps/collab/src/auth/revocation.ts",
@@ -523,7 +528,7 @@
     {
       "path": "apps/collab/src/auth/ticket.ts",
       "role": "factory",
-      "sha256": "741a34a856069031fb18251146580b42b14aa45fffbe2e470236b33356004fc1"
+      "sha256": "a582fc3f557c153c999ae3d2df094947ea6b480d12a1db220c1d160f994ea57f"
     },
     {
       "path": "apps/collab/src/index.ts",
@@ -558,7 +563,7 @@
     {
       "path": "apps/collab/src/server.ts",
       "role": "factory",
-      "sha256": "3d52b4cdb27911667d73e4167868980bd1ed8afee9784f0bbc68c310bc42661a"
+      "sha256": "88210354b8713dfe5592f3965b7d6e9b1343047fdc036cbf34247f9eaff3f095"
     },
     {
       "path": "apps/collab/src/tree-events.ts",
@@ -776,6 +781,11 @@
       "sha256": "034902025faa47db4c33cfb75c1f4c7534c291fbc1952232179cd6779da75a12"
     },
     {
+      "path": "apps/web/.env.production",
+      "role": "factory",
+      "sha256": "5fa4ec5492fa728ea43301a889782d1418eea7e35fe18432faa70a7148dd5efe"
+    },
+    {
       "path": "apps/web/index.html",
       "role": "factory",
       "sha256": "d1a49927616940f62dbdec45f22663b4d4ee77e2c12ffd9cd339c450cd142c68"
@@ -784,6 +794,11 @@
       "path": "apps/web/package.json",
       "role": "factory",
       "sha256": "0a204cea28a0e2f11900416e1bbe5d36e1ea9813c30f1fef48331677ababb6e1"
+    },
+    {
+      "path": "apps/web/public/_redirects",
+      "role": "factory",
+      "sha256": "6036983e5fc00f0169c9e939b1816ed771eee00e27f2fcc517b819041460b9ef"
     },
     {
       "path": "apps/web/src/app/providers.tsx",
@@ -1354,6 +1369,11 @@
       "path": "docs/map/processes/planning-maintenance.md",
       "role": "factory",
       "sha256": "bb5cf221049fdf91f439d51ec5af5ffa08b10632f07b884eda3f269e2a789ff8"
+    },
+    {
+      "path": "docs/operations/cloudflare-github-setup.md",
+      "role": "factory",
+      "sha256": "2a3a70cb6ec3b4255c44581168aed05ab0746a928e3b9dcd1ac2645317d12461"
     },
     {
       "path": "docs/operations/g1-recovery.md",
@@ -3698,7 +3718,7 @@
     {
       "path": "packages/config/src/server.ts",
       "role": "factory",
-      "sha256": "e76292e299495e874d695d8784c72d44132c318cfc364d84f828ebc3b5340c17"
+      "sha256": "24e7448949f2d997f98006e396d6348ef69e44504f88a8df3c0b26b158114e72"
     },
     {
       "path": "packages/config/tsconfig.json",
@@ -4254,6 +4274,11 @@
       "path": "tests/integration/compiler-fixtures.test.ts",
       "role": "factory",
       "sha256": "a06904ef021c974a4761df80689c24a481595d5fead9c3f2c8770fdfd6b365b4"
+    },
+    {
+      "path": "tests/integration/cors-origins.test.ts",
+      "role": "factory",
+      "sha256": "3c5707e7a23c6baaa4936f590b4947d45ef5413bcb7f51d6541845d8018d18b7"
     },
     {
       "path": "tests/integration/database-constraints.test.ts",
