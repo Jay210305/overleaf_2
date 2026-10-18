@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "50699ffa7c59d4d0434fbdd04cc2648104d8b046",
+  "git_baseline": "86cb3203abbb2ae855b468bbf75567b88944f22b",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -38,7 +38,7 @@
     {
       "path": ".env.example",
       "role": "factory",
-      "sha256": "24625c2a1fa7cf0b1112ce0f1c143ca42c514fcbe761aed5659bd4c222943b3d"
+      "sha256": "f3c649ec998ac9832b46907bbd666726d67ef29524e31f101f7ae97d0fe00f40"
     },
     {
       "path": ".env.production",
@@ -833,7 +833,7 @@
     {
       "path": "apps/web/src/features/auth/auth-forms.tsx",
       "role": "factory",
-      "sha256": "667ff484195baceaebdb424a9db65451f842606c1d274057277ec9cbc2caa41f"
+      "sha256": "deffc1e561f349d847d1ff5f3e73fdd4b11e786ec1b27539563c48d02afb773f"
     },
     {
       "path": "apps/web/src/features/chat/project-chat.tsx",
@@ -1033,7 +1033,7 @@
     {
       "path": "apps/web/src/features/sharing/share-dialog.tsx",
       "role": "factory",
-      "sha256": "5875ccedc7817e308bbaff0c9f45ba654e40dd8becf310c30025ca43b1242ab1"
+      "sha256": "e7824ed930d13f640ca6a34d5adbc579af80652ad762a7daaa0d394c9d283bde"
     },
     {
       "path": "apps/web/src/features/templates/catalogue.tsx",
@@ -3723,7 +3723,7 @@
     {
       "path": "packages/config/src/server.ts",
       "role": "factory",
-      "sha256": "25558a5c2b85d045df52e8c3576a379e783e706fd2b0ca72e0343cba9422d48a"
+      "sha256": "744324edb3ba180fde534cb0641e0cf376428466254196557784738b20b33464"
     },
     {
       "path": "packages/config/tsconfig.json",
@@ -4353,7 +4353,7 @@
     {
       "path": "tests/integration/s00-t07.test.ts",
       "role": "factory",
-      "sha256": "1dc1643b4955944ff25be9256c62d7d564917f98dc94cd8e2e928461353d1a9d"
+      "sha256": "fb5fd70a975ab35f311c308b6eeecffdb0b8024aa38bbb0ec3e7886168fdefe8"
     },
     {
       "path": "tests/integration/s00-t12.test.tsx",

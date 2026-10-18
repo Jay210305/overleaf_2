@@ -19,13 +19,15 @@ function useFragmentSecret(name: string | null) {
   const [secret, setSecret] = useState("");
   useEffect(() => {
     if (!name) return;
-    const value = new URLSearchParams(window.location.hash.slice(1)).get(name);
+    const fragmentValue = new URLSearchParams(window.location.hash.slice(1)).get(name);
+    const queryValue = new URLSearchParams(window.location.search).get(name);
+    const value = fragmentValue ?? queryValue;
     if (!value) return;
     setSecret(value);
     window.history.replaceState(
       window.history.state,
       "",
-      window.location.pathname + window.location.search,
+      window.location.pathname,
     );
   }, [name]);
   return [secret, setSecret] as const;

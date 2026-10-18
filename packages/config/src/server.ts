@@ -34,7 +34,7 @@ export const serverConfigSchema = z.object({
 export type ServerConfig = z.infer<typeof serverConfigSchema>;
 export function parseServerConfig(env: Record<string, unknown>): ServerConfig {
   const normalized = { ...env };
-  if (!normalized.SMTP_URL && normalized.SMTP_USER && normalized.SMTP_PASS) {
+  if (normalized.SMTP_USER && normalized.SMTP_PASS) {
     const host = String(normalized.SMTP_HOST || "smtp.gmail.com");
     const isSecure =
       normalized.SMTP_SECURE === "true" ||

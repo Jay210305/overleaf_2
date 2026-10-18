@@ -514,8 +514,10 @@ interface AccessRedemptionProps {
 
 export function AccessRedemption({ kind, apiUrl = defaultApiUrl }: AccessRedemptionProps) {
   const [token] = useState(() => {
-    const value = new URLSearchParams(window.location.hash.slice(1)).get("token") ?? "";
-    window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+    const fragmentValue = new URLSearchParams(window.location.hash.slice(1)).get("token");
+    const queryValue = new URLSearchParams(window.location.search).get("token");
+    const value = fragmentValue ?? queryValue ?? "";
+    window.history.replaceState(null, "", window.location.pathname);
     return value;
   });
   const [busy, setBusy] = useState(false);
