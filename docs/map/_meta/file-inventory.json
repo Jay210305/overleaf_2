@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "e4de8b0f5ec4c8487e047309bc29745aa4dc1311",
+  "git_baseline": "9816128ea4ff0030d07a320338fbc49592d6d440",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -783,7 +783,7 @@
     {
       "path": "apps/web/src/features/chat/project-chat.tsx",
       "role": "factory",
-      "sha256": "2e48e625d20cee25944aa5d319dddd85e490e791fc37b5e4f7da9ba4806d98de"
+      "sha256": "096d5f1cfc0c7f47acac480936cfb5ff197bea2c73605e8125240be9681c3a40"
     },
     {
       "path": "apps/web/src/features/collab/binding.ts",
@@ -1603,7 +1603,7 @@
     {
       "path": "docs/test-reports/merge-s13-s14.md",
       "role": "factory",
-      "sha256": "64d7fcf7494c40baeb90fa9e4ab9cc79345b36a02fdd35706a946bc271afd462"
+      "sha256": "335823bf94aeb1cd3abae559e10128cee49e3c7a0e5abf4e93093553a1095634"
     },
     {
       "path": "docs/test-reports/s00-t01.md",
@@ -3968,12 +3968,12 @@
     {
       "path": "tests/e2e/.auth/csrf.json",
       "role": "factory",
-      "sha256": "ae14c0005fad57c1e3c4cfc23303fee3fe15dcff4ee228f2315cd2b8c4e6c291"
+      "sha256": "3851eaf0bbeec72b81e2ffc2b6f703b6cc9628c94d1fec3995747d1ae98ca463"
     },
     {
       "path": "tests/e2e/.auth/state.json",
       "role": "factory",
-      "sha256": "54782b3a673c86511d2ad5bcfd84a0bc4282197aea8bc886352fb741dfdfd65d"
+      "sha256": "6509182393ae8ed6271344f8ea8f8a6630dbc697f84bd03a49a4a97bc81be35a"
     },
     {
       "path": "tests/e2e/academic-editor.spec.ts",
@@ -3993,7 +3993,7 @@
     {
       "path": "tests/e2e/chat.spec.ts",
       "role": "factory",
-      "sha256": "678a8b8839c4ec4fc1f92b980a40bc238c6a69c48aafda24b8089ace844f5d9d"
+      "sha256": "e25d27d6688aa5e13c4abd85fa7f36bdddb74aade7ba217552d02974bdf49232"
     },
     {
       "path": "tests/e2e/comments.spec.ts",
@@ -5403,7 +5403,7 @@
     {
       "path": "tests/regression/col-07/s08-t05.test.tsx",
       "role": "factory",
-      "sha256": "9f9808d22eed433fa3db1391fd5b4ecef5d695db344280a664ca77e9046ff70e"
+      "sha256": "83299fa7564187d7daec9bb0120fc89fcf2f804c3a2adaf0431d6f242b6ea995"
     },
     {
       "path": "tests/regression/col-07/s08-t07.test.ts",

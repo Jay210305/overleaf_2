@@ -83,13 +83,25 @@ test("project chat refreshes an authorized member through the live socket", asyn
       await expect(target.getByRole("region", { name: "Project chat" })).toBeVisible();
     }
     const reviewerPage = await reviewerContext.newPage();
+    const socketEvents: string[] = [];
+    reviewerPage.on("websocket", (socket) => {
+      socketEvents.push(`opened ${socket.url()}`);
+      socket.on("close", () => socketEvents.push("closed"));
+      socket.on("socketerror", (error) => socketEvents.push(`error ${error}`));
+    });
+    reviewerPage.on("pageerror", (error) => socketEvents.push(`page error ${error.message}`));
     await signIn(page, ownerEmail, "Chat Owner");
     await signIn(reviewerPage, reviewerEmail, "Chat Reviewer");
     const ownerChat = page.getByRole("region", { name: "Project chat" });
     const reviewerChat = reviewerPage.getByRole("region", { name: "Project chat" });
-    await expect(reviewerChat.getByRole("status")).toHaveText("Live updates connected", {
-      timeout: 20_000,
-    });
+    try {
+      await expect(reviewerChat.getByRole("status")).toHaveText("Live updates connected", {
+        timeout: 20_000,
+      });
+    } catch (error) {
+      console.error("Reviewer chat socket events:", socketEvents);
+      throw error;
+    }
     await ownerChat.getByRole("textbox", { name: "Chat message" }).fill("Shared draft is ready");
     await ownerChat.getByRole("button", { name: "Send message" }).click();
     await expect(ownerChat.getByText("Shared draft is ready")).toBeVisible();

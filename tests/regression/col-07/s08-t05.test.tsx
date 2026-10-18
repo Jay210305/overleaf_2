@@ -16,13 +16,17 @@ const message = {
 
 class FakeSocket {
   static latest: FakeSocket;
+  static instances: FakeSocket[] = [];
   onmessage: ((event: MessageEvent) => void) | null = null;
   onopen: (() => void) | null = null;
   onclose: (() => void) | null = null;
   constructor(readonly url: string) {
     FakeSocket.latest = this;
+    FakeSocket.instances.push(this);
   }
-  close() {}
+  close() {
+    this.onclose?.();
+  }
   notify() {
     this.onmessage?.({
       data: JSON.stringify({
@@ -43,6 +47,25 @@ afterEach(() => {
 });
 
 describe("S08-T05 project chat", () => {
+  it("retries a socket whose handshake never opens or closes", async () => {
+    vi.useFakeTimers();
+    FakeSocket.instances = [];
+    vi.stubGlobal("WebSocket", FakeSocket);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: true, json: async () => ({ items: [], nextCursor: null }) })),
+    );
+    try {
+      render(<ProjectChat projectId={projectId} apiUrl="http://api.test/api/v1" />);
+      expect(FakeSocket.instances).toHaveLength(1);
+      await act(async () => vi.advanceTimersByTime(8000));
+      expect(FakeSocket.instances).toHaveLength(2);
+    } finally {
+      cleanup();
+      vi.useRealTimers();
+    }
+  });
+
   it("posts a bounded message and refreshes durable history on invalidation and focus", async () => {
     const requests: string[] = [];
     let items: (typeof message)[] = [];

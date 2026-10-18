@@ -43,6 +43,7 @@ export function ProjectChat({ projectId, apiUrl, csrfToken }: ProjectChatProps) 
     let active = true;
     let socket: WebSocket | undefined;
     let retry: ReturnType<typeof setTimeout> | undefined;
+    let handshake: ReturnType<typeof setTimeout> | undefined;
     const seen = new Set<string>();
     void loadLatest();
     const connect = () => {
@@ -56,7 +57,12 @@ export function ProjectChat({ projectId, apiUrl, csrfToken }: ProjectChatProps) 
         if (active) retry = setTimeout(connect, 3000);
         return;
       }
+      const connection = socket;
+      // A stalled handshake does not fire `close`, so it would otherwise block
+      // reconnects indefinitely.
+      handshake = setTimeout(() => connection.close(), 5000);
       socket.onopen = () => {
+        clearTimeout(handshake);
         setConnected(true);
         void loadLatest();
       };
@@ -79,6 +85,7 @@ export function ProjectChat({ projectId, apiUrl, csrfToken }: ProjectChatProps) 
         }
       };
       socket.onclose = () => {
+        clearTimeout(handshake);
         setConnected(false);
         if (active) retry = setTimeout(connect, 3000);
       };
@@ -90,6 +97,7 @@ export function ProjectChat({ projectId, apiUrl, csrfToken }: ProjectChatProps) 
     return () => {
       active = false;
       clearTimeout(retry);
+      clearTimeout(handshake);
       clearInterval(reconcile);
       window.removeEventListener("focus", onFocus);
       socket?.close();
