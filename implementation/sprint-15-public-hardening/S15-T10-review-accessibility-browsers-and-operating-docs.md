@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S15-T09]
 requirements: [NFR-08, NFR-11]
 source_task: S15-T10
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S15-T10 — Review accessibility browsers and operating docs
 

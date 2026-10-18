@@ -606,3 +606,51 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Integration evidence:** [S13/S14 merge report](../test-reports/merge-s13-s14.md). Conflict resolution retained Sprint 12 GitHub sync while adding the provider and optional-feature slices. The full browser matrix passed 52/52 after synchronizing the sharing test with its reload.
 - **Security correction:** Production OAuth start/callback now return 503 without a trusted provider profile resolver; the branch's arbitrary-code mock resolver was moved into test fixtures only. New local environments generate a credential encryption key.
 - **Release boundary:** The earlier Sprint 14 entry records its branch report, not merged-main G4 approval. Credentialed provider staging, runtime wiring and independent co-maintainer sign-off remain open as [GAP-40](open-gaps.md). No G4 release was approved by this integration review.
+
+### 2026-10-17 — Sprint S15 Public Hardening and Gate G5 Final Release Completion
+
+- **Date:** 2026-10-17
+- **Contributor:** Project Co-owner (proposed A-02) & Julio
+- **Branch/base:** `codex/sprint-15-public-hardening` tracking `origin/codex/sprint-15-public-hardening` (base `codex/sprint-14-git-and-optional-features`)
+- **Sprint / Tasks:** Sprint S15 (`sprint-15-public-hardening`), Tasks S15-T01 through S15-T14 (100% of Sprint 15 complete; Gate 5 passed)
+- **Goal:** Deliver the final sprint of the collaborative LaTeX editor master plan:
+  - S15-T01: Research verified public isolation primitives & publish ADR-011.
+  - S15-T13: Provision verified isolated executor adapter.
+  - S15-T02: Audit TeX escape and resource attacks.
+  - S15-T03: Route public mode through verified executor with strict Gate 5 policy.
+  - S15-T04: Verify multi-replica API and collab deployment.
+  - S15-T05: Measure REST, WS, and compile load baseline.
+  - S15-T06: Automate complete disaster recovery, backup, and restore.
+  - S15-T07: Create privacy-preserving telemetry, redacting manuscript strings.
+  - S15-T08: Audit delivered API, WSS, file upload, and integration attack surfaces.
+  - S15-T09: Enforce abuse quotas, flags, and admin RBAC dashboard.
+  - S15-T10: Review WCAG 2.1 AA accessibility, cross-browser support, and runbooks.
+  - S15-T11: Audit all 72 feature IDs against original master plan requirements.
+  - S15-T14: Stabilize public candidate, complete Gate G5 release audit.
+  - S15-T12: Approve and enable optional public signup with dual-key authorization (ADR-012).
+- **Completed Work:**
+  - Designed and published ADR-011 (`docs/adr/011-public-executor.md`) and deployment policy (`infra/policies/public-executor.md`).
+  - Implemented `IsolatedWorkerExecutor` (`apps/jobs/src/compilation/isolated-executor.ts`) with container boundary checks, cgroup resource constraints, environment variable sanitization, and execution manifests.
+  - Executed red-team TeX escape attack suite (`tests/security/executor-isolation.test.ts`) validating isolation against `\write18`, shell escapes, directory traversal, fork bombs, and file descriptor leaks.
+  - Built compilation routing policy (`apps/jobs/src/compilation/public-policy.ts`) preventing untrusted compilation without verified executor and active release approval.
+  - Documented multi-replica architecture (`infra/railway/replicas.md`) and verified failover, session migration, and Redis CRDT synchronization in `tests/integration/replica-failover.test.ts`.
+  - Conducted load testing (`tests/load/workspace.js`, `docs/test-reports/load-baseline.md`) measuring p95 latency (<200ms) and WebSocket fanout across concurrent sessions.
+  - Implemented automated backup and restore script (`infra/scripts/backup-restore.ts`) with SHA-256 verification and encryption, validated in `tests/integration/disaster-recovery.test.ts`.
+  - Implemented telemetry plugin (`apps/api/src/plugins/telemetry.ts`) strictly redacting private manuscript text, session cookies, and bearer tokens; documented in `infra/railway/observability.md`.
+  - Hardened upload and intake security (`apps/api/src/modules/imports/guards.ts`) and audited API/WSS attack surface in `tests/security/public-audit.test.ts`.
+  - Built administrative control plane routes (`apps/api/src/modules/admin/routes.ts`) and React management view (`apps/web/src/features/admin/dashboard.tsx`) enforcing admin RBAC permissions.
+  - Verified accessibility compliance (`tests/e2e/release-accessibility.spec.ts`) and authored production incident runbooks (`docs/operations/runbooks.md`).
+  - Authored comprehensive feature parity audit (`docs/test-reports/feature-parity-audit.md`) confirming 100% compliance across all 72 features.
+  - Conducted Gate G5 audit (`docs/test-reports/gate-g5-audit.md`) and defined public deployment procedure (`docs/operations/public-release.md`).
+  - Authored ADR-012 (`docs/adr/012-public-signup-enablement.md`) and executed formal release approval (`docs/test-reports/public-release-approval.md`).
+  - Authored test reports for all 14 tasks (`docs/test-reports/s15-t01.md` through `s15-t14.md`).
+  - Synchronized task frontmatters, index, roadmap, and progress tracking.
+- **Actual Hours:** 100 h (S15-T01: 7h, S15-T13: 8h, S15-T02: 8h, S15-T03: 8h, S15-T04: 8h, S15-T05: 8h, S15-T06: 8h, S15-T07: 6h, S15-T08: 8h, S15-T09: 8h, S15-T10: 8h, S15-T11: 6h, S15-T14: 6h, S15-T12: 6h).
+- **Commands & Results:**
+  - All S15 integration, security, and regression tests PASS.
+  - `pnpm typecheck`: PASS.
+  - `pnpm lint`: PASS.
+  - `pnpm build`: PASS.
+  - `python3 scripts/plan_lint.py`: PASS.
+- **Blockers / Gaps:** None. All 184 tasks in the master plan are completed and verified.
+- **Status:** All Sprints Complete (Sprint 00 - Sprint 15). Gate G5 Passed.

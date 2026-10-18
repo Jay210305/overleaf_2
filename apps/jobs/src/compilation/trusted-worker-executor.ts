@@ -109,10 +109,11 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
       await mkdir(outDir, { recursive: true });
 
       // Materialize manifest items into input directory
+      const normalizedInputRoot = inputDir.endsWith("/") ? inputDir : `${inputDir}/`;
       for (const item of input.manifest.items) {
         // Prevent path traversal
         const targetPath = resolve(inputDir, item.path);
-        if (!targetPath.startsWith(inputDir)) {
+        if (!targetPath.startsWith(normalizedInputRoot)) {
           throw new Error(`Path traversal rejected: ${item.path}`);
         }
         await mkdir(resolve(targetPath, ".."), { recursive: true });

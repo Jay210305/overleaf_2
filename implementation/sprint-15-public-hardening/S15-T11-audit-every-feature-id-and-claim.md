@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S15-T10]
 requirements: [PL-03, PL-05]
 source_task: S15-T11
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S15-T11 — Audit every feature ID and claim
 

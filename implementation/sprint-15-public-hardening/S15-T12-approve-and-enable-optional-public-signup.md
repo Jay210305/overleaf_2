@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S15-T14]
 requirements: [PL-07, PL-05]
 source_task: S15-T12
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S15-T12 — Approve and enable optional public signup
 

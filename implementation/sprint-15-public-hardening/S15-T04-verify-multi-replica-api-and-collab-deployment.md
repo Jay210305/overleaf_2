@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S15-T03]
 requirements: [NFR-01, NFR-02]
 source_task: S15-T04
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S15-T04 — Verify multi-replica API and collab deployment
 
