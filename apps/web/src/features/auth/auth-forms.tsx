@@ -53,7 +53,7 @@ const titles: Record<AuthMode, string> = {
 };
 
 const descriptions: Record<AuthMode, string> = {
-  register: "A trusted invitation is required. Public signup is unavailable.",
+  register: "Create your LaTeX Workspace account to start writing.",
   verify: "Use the verification code from your email. It can be used once.",
   login: "Use your verified LaTeX Workspace account.",
   forgot: "We will show the same confirmation whether or not the address is registered.",
@@ -144,7 +144,11 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
     let body: object;
     if (mode === "register") {
       const parsed = registerRequestSchema.safeParse({ email, password, displayName });
-      if (!parsed.success || invitation.length < 32 || invitation.length > 256) {
+      const trimmedInvite = invitation.trim();
+      if (
+        !parsed.success ||
+        (trimmedInvite.length > 0 && (trimmedInvite.length < 32 || trimmedInvite.length > 256))
+      ) {
         setMessage({ kind: "error", text: "Enter a valid invitation and account details." });
         return;
       }
@@ -185,11 +189,12 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
 
     setPending(true);
     try {
+      const trimmedInvite = invitation.trim();
       const response = await post(
         path,
         body,
         anonymousCsrf,
-        mode === "register" ? invitation : undefined,
+        mode === "register" && trimmedInvite ? trimmedInvite : undefined,
       );
       if (!response.ok) {
         setMessage({ kind: "error", text: errorText(response.status, mode) });
@@ -312,7 +317,7 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
                   name="invitation"
                   type="password"
                   autoComplete="off"
-                  required
+                  placeholder="Optional invitation code"
                   value={invitation}
                   onChange={(event) => setInvitation(event.target.value)}
                 />
@@ -324,9 +329,10 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
               {mode === "verify" ? "Verification code" : "Reset code"}
               <input
                 name="token"
-                type="password"
+                type="text"
                 autoComplete="off"
                 required
+                placeholder={mode === "verify" ? "Enter verification code" : "Enter reset code"}
                 value={token}
                 onChange={(event) => setToken(event.target.value)}
               />
@@ -346,6 +352,11 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
                 onChange={(event) => setPassword(event.target.value)}
               />
             </label>
+          )}
+          {mode === "login" && (
+            <div className="auth-helper-row">
+              <a href="/forgot-password">Forgot password?</a>
+            </div>
           )}
           {mode === "reset" && (
             <label>
@@ -377,8 +388,11 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
       )}
       <nav className="auth-links" aria-label="Account options">
         {mode !== "login" && <a href="/login">Sign in</a>}
-        {mode !== "forgot" && <a href="/forgot-password">Forgot password?</a>}
-        {mode !== "register" && <a href="/register">Use invitation</a>}
+        {mode !== "register" && <a href="/register">Create account</a>}
+        {mode !== "forgot" && mode !== "login" && <a href="/forgot-password">Forgot password?</a>}
+        {mode === "forgot" && <a href="/reset-password">Have a reset code?</a>}
+        {mode === "reset" && <a href="/forgot-password">Request new code</a>}
+        {mode !== "verify" && <a href="/verify-email">Verify email</a>}
       </nav>
     </section>
   );

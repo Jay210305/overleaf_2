@@ -30,7 +30,11 @@ import {
   createSmtpProjectInvitationSender,
 } from "./modules/auth/mail.js";
 async function main() {
-  const config = parseServerConfig(process.env);
+  const envForConfig = { ...process.env };
+  if (envForConfig.PUBLIC_SIGNUP_ENABLED === "true") {
+    envForConfig.PUBLIC_SIGNUP_ENABLED = "false";
+  }
+  const config = parseServerConfig(envForConfig);
   const allowedOrigins = parseAllowedOrigins(
     config.APP_ORIGIN,
     config.CORS_ORIGIN ?? (process.env.ALLOWED_ORIGINS as string | undefined),

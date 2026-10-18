@@ -161,4 +161,59 @@ describe("S02-T05 browser authentication forms", () => {
     expect((await screen.findByRole("alert")).textContent).toMatch(/Request denied/);
     expect(screen.queryByText(/Check your email/)).toBeNull();
   });
+
+  it("registers directly without requiring an invitation code", async () => {
+    const fetcher = vi.fn().mockResolvedValue(new Response('{"accepted":true}', { status: 202 }));
+    vi.stubGlobal("fetch", fetcher);
+    render(createElement(AuthForms, { mode: "register" }));
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "public-writer@example.test" } });
+    fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "Public Writer" } });
+    fireEvent.change(screen.getByLabelText("Password"), {
+      target: { value: "secure-password-123" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Create account" }));
+    await screen.findByText(/Check your email/);
+    const [url, init] = fetcher.mock.calls[0] as [string, RequestInit];
+    expect(url).toMatch(/\/auth\/register$/);
+    expect(init.headers).not.toHaveProperty("x-registration-invite");
+    expect(JSON.parse(String(init.body))).toEqual({
+      email: "public-writer@example.test",
+      displayName: "Public Writer",
+      password: "secure-password-123",
+    });
+  });
+
+  it("verifies email with directly entered token", async () => {
+    const token = "v".repeat(43);
+    const fetcher = vi.fn().mockResolvedValue(new Response('{"accepted":true}', { status: 200 }));
+    vi.stubGlobal("fetch", fetcher);
+    render(createElement(AuthForms, { mode: "verify" }));
+    fireEvent.change(screen.getByLabelText("Verification code"), { target: { value: token } });
+    fireEvent.click(screen.getByRole("button", { name: "Verify email" }));
+    await screen.findByText(/Email verified/);
+    const [url, init] = fetcher.mock.calls[0] as [string, RequestInit];
+    expect(url).toMatch(/\/auth\/verify-email$/);
+    expect(JSON.parse(String(init.body))).toEqual({ token });
+  });
+
+  it("shows forgot password link in login form and handles password reset request", async () => {
+    const fetcher = vi.fn().mockResolvedValue(new Response('{"accepted":true}', { status: 202 }));
+    vi.stubGlobal("fetch", fetcher);
+    render(createElement(AuthForms, { mode: "login" }));
+    const forgotLink = screen.getByRole("link", { name: "Forgot password?" });
+    expect(forgotLink.getAttribute("href")).toBe("/forgot-password");
+
+    cleanup();
+    render(createElement(AuthForms, { mode: "forgot" }));
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "reset-me@example.test" } });
+    fireEvent.click(screen.getByRole("button", { name: "Send reset link" }));
+    await screen.findByText(/check your email/i);
+    const forgotCall = fetcher.mock.calls.find(([url]) =>
+      String(url).endsWith("/auth/password/forgot"),
+    );
+    expect(forgotCall).toBeTruthy();
+    const [, init] = forgotCall as [string, RequestInit];
+    expect(JSON.parse(String(init.body))).toEqual({ email: "reset-me@example.test" });
+  });
 });
+

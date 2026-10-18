@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "86cb3203abbb2ae855b468bbf75567b88944f22b",
+  "git_baseline": "46faca909ad10e3634f71fbb493c1a7800aed59a",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -123,7 +123,7 @@
     {
       "path": "apps/api/src/main.ts",
       "role": "factory",
-      "sha256": "f8421858d9a21a3e8c783672a0eef5aa12e04603e4525ad1f63862d4db142de4"
+      "sha256": "68fe990993d3ea37bf34a3e6c7f59df9399f440015e572526cb58415eb9f9d01"
     },
     {
       "path": "apps/api/src/modules/account/avatar.ts",
@@ -183,12 +183,12 @@
     {
       "path": "apps/api/src/modules/auth/register.ts",
       "role": "factory",
-      "sha256": "6c8c68bd604aded63e13b9d6f40ef55a631c26a4af3513a3f524c821b37189c2"
+      "sha256": "62821e593cbde07d55405a282c0d4ea581252a964235270aec2cd4f80f437a27"
     },
     {
       "path": "apps/api/src/modules/auth/routes.ts",
       "role": "factory",
-      "sha256": "88e7f0f10d0da461c1f4d6e250c24d5d70645655a6928707be240227a6e2615f"
+      "sha256": "ccaf74b6e2a8fca856580d6c63bc44ec7939eea271e9df3406a80dae783b0964"
     },
     {
       "path": "apps/api/src/modules/auth/session.ts",
@@ -833,7 +833,7 @@
     {
       "path": "apps/web/src/features/auth/auth-forms.tsx",
       "role": "factory",
-      "sha256": "deffc1e561f349d847d1ff5f3e73fdd4b11e786ec1b27539563c48d02afb773f"
+      "sha256": "07898b40de29969e85f0135fd0e3212ae728c8e4f8ed33790898d23ea4023ce6"
     },
     {
       "path": "apps/web/src/features/chat/project-chat.tsx",
@@ -1073,7 +1073,7 @@
     {
       "path": "apps/web/src/styles.css",
       "role": "factory",
-      "sha256": "0638821c026ceab1295ace167ef6f57648a8df1a1956e5c9afbbbc0d18d5abdd"
+      "sha256": "9d1d2c1314a43804e9432785cace18946536bc79cef561c917b7a78672cb38d5"
     },
     {
       "path": "apps/web/src/vite-env.d.ts",
@@ -4413,7 +4413,7 @@
     {
       "path": "tests/integration/s02-t01.test.ts",
       "role": "factory",
-      "sha256": "62328d0fd8339295d56c8219f8bd9bb58ce2072b08c19efa4618adfdc8b8347d"
+      "sha256": "b03745139ceb86b9fbc1baf9eb05836b3df57f37c1ff31336b45a9eba91c2212"
     },
     {
       "path": "tests/integration/s02-t02.test.ts",
@@ -4433,7 +4433,7 @@
     {
       "path": "tests/integration/s02-t05.test.ts",
       "role": "factory",
-      "sha256": "cb17ac849ce0ea65997294b02b802a93a356e931374d6351f735d7e9c31a4484"
+      "sha256": "29761a858afb59304b28b488f37345bd7dd29a9a69498f9c8719c58cd25218d7"
     },
     {
       "path": "tests/integration/s02-t06.test.ts",

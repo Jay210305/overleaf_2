@@ -4,7 +4,7 @@ import type { DatabaseClient } from "@latex-collab/db";
 import { problem } from "../../plugins/errors.js";
 import { AuthError } from "./errors.js";
 import { isOriginAllowed } from "@latex-collab/config/server";
-import { registerTrustedAccount, type SendVerification } from "./register.js";
+import { registerPublicAccount, registerTrustedAccount, type SendVerification } from "./register.js";
 import { verifyEmail } from "./verify-email.js";
 import { requireAnonymousCsrf, requireExactOrigin } from "../../plugins/csrf.js";
 import { requestPasswordReset, resetPassword, type SendPasswordReset } from "./password-reset.js";
@@ -62,21 +62,38 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
     if (!options.db || !options.sendVerification)
       return reject(reply, request, new AuthError(503, "SERVICE_UNAVAILABLE"));
     const invite = request.headers["x-registration-invite"];
-    if (typeof invite !== "string" || invite.length < 32 || invite.length > 256)
-      return reject(reply, request, new AuthError(403, "REGISTRATION_DENIED"));
-    try {
-      await registerTrustedAccount(
-        options.db,
-        request.body,
-        invite,
-        options.sendVerification,
-        request.id,
-      );
-      return reply.code(202).send({ accepted: true });
-    } catch (error) {
-      if (error instanceof AuthError) return reject(reply, request, error);
-      throw error;
+    if (typeof invite === "string" && invite.length >= 32 && invite.length <= 256) {
+      try {
+        await registerTrustedAccount(
+          options.db,
+          request.body,
+          invite,
+          options.sendVerification,
+          request.id,
+        );
+        return reply.code(202).send({ accepted: true });
+      } catch (error) {
+        if (error instanceof AuthError) return reject(reply, request, error);
+        throw error;
+      }
     }
+
+    if (process.env.PUBLIC_SIGNUP_ENABLED === "true") {
+      try {
+        await registerPublicAccount(
+          options.db,
+          request.body,
+          options.sendVerification,
+          request.id,
+        );
+        return reply.code(202).send({ accepted: true });
+      } catch (error) {
+        if (error instanceof AuthError) return reject(reply, request, error);
+        throw error;
+      }
+    }
+
+    return reject(reply, request, new AuthError(403, "REGISTRATION_DENIED"));
   });
 
   app.post("/api/v1/auth/verify-email", async (request, reply) => {

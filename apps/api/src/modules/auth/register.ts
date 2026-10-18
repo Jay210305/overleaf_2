@@ -176,3 +176,117 @@ export async function registerTrustedAccount(
     throw new AuthError(502, "PROVIDER_UNAVAILABLE");
   }
 }
+
+export async function registerPublicAccount(
+  db: DatabaseClient,
+  rawInput: unknown,
+  sendVerification: SendVerification,
+  requestId: string,
+): Promise<void> {
+  const body = rawInput as Partial<RegisterRequest> | null;
+  const normalized = typeof body?.email === "string" ? normalizeEmail(body.email) : undefined;
+  const parsed = registerRequestSchema.safeParse({ ...body, email: normalized });
+  if (!parsed.success) throw new AuthError(400, "VALIDATION_ERROR");
+
+  const candidate = await db.query<{
+    id: string;
+    password_hash: string | null;
+    disabled_at: Date | null;
+    email_verified_at: Date | null;
+  }>(
+    "SELECT id, password_hash, disabled_at, email_verified_at FROM users WHERE email_normalized = $1",
+    [normalized],
+  );
+  const preliminary = candidate.rows[0];
+  if (preliminary?.disabled_at) throw new AuthError(403, "ACCOUNT_DISABLED");
+  if (preliminary?.password_hash || preliminary?.email_verified_at) {
+    throw new AuthError(409, "ACCOUNT_CONFLICT");
+  }
+
+  const passwordHash = await argon2.hash(parsed.data.password, { type: argon2.argon2id });
+  const verificationToken = randomBytes(32).toString("base64url");
+
+  let registered: { userId: string; isNew: boolean };
+  try {
+    registered = await db.transaction(async (tx) => {
+      const existing = await tx.query<{
+        id: string;
+        password_hash: string | null;
+        disabled_at: Date | null;
+        email_verified_at: Date | null;
+      }>(
+        "SELECT id, password_hash, disabled_at, email_verified_at FROM users WHERE email_normalized = $1 FOR UPDATE",
+        [normalized],
+      );
+      const row = existing.rows[0];
+      if (row?.disabled_at) throw new AuthError(403, "ACCOUNT_DISABLED");
+      if (row?.password_hash || row?.email_verified_at) throw new AuthError(409, "ACCOUNT_CONFLICT");
+
+      let userId: string;
+      let isNew = false;
+      if (row) {
+        userId = row.id;
+        await tx.query("UPDATE users SET password_hash = $1, display_name = $2 WHERE id = $3", [
+          passwordHash,
+          parsed.data.displayName,
+          userId,
+        ]);
+      } else {
+        const inserted = await tx.query<{ id: string }>(
+          "INSERT INTO users (email_normalized, display_name, password_hash) VALUES ($1, $2, $3) RETURNING id",
+          [normalized, parsed.data.displayName, passwordHash],
+        );
+        userId = inserted.rows[0]!.id;
+        isNew = true;
+      }
+
+      await tx.query(
+        "DELETE FROM verification_tokens WHERE user_id = $1 AND purpose = 'email_verify'",
+        [userId],
+      );
+      await tx.query(
+        "INSERT INTO verification_tokens (user_id, purpose, token_hash, expires_at) VALUES ($1, 'email_verify', $2, $3)",
+        [userId, tokenHash(verificationToken), new Date(Date.now() + verificationLifetimeMs)],
+      );
+      await writeAuditEvent(tx, {
+        action: "account.created",
+        actorId: userId,
+        targetId: userId,
+        requestId,
+      });
+      return { userId, isNew };
+    });
+  } catch (error) {
+    if (error instanceof PersistenceError && error.code === "CONSTRAINT_VIOLATION") {
+      throw new AuthError(409, "ACCOUNT_CONFLICT");
+    }
+    throw error;
+  }
+
+  try {
+    await sendVerification(parsed.data.email, verificationToken);
+  } catch (smtpError) {
+    console.error("Failed to deliver registration verification email:", (smtpError as Error)?.message);
+    await db.transaction(async (tx) => {
+      const user = await tx.query<{ email_verified_at: Date | null }>(
+        "SELECT email_verified_at FROM users WHERE id = $1 FOR UPDATE",
+        [registered.userId],
+      );
+      if (user.rows[0]?.email_verified_at) return;
+      await tx.query("DELETE FROM verification_tokens WHERE token_hash = $1 AND used_at IS NULL", [
+        tokenHash(verificationToken),
+      ]);
+      if (registered.isNew) {
+        await tx.query("DELETE FROM users WHERE id = $1", [registered.userId]);
+      } else {
+        await tx.query("UPDATE users SET password_hash = NULL WHERE id = $1", [registered.userId]);
+      }
+      await tx.query(
+        "DELETE FROM audit_events WHERE actor_id = $1 AND target_id = $1 AND action = 'account.created' AND request_id = $2",
+        [registered.userId, requestId],
+      );
+    });
+    throw new AuthError(502, "PROVIDER_UNAVAILABLE");
+  }
+}
+

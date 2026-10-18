@@ -95,6 +95,19 @@ section {
   justify-self: start;
   margin-top: 6px;
 }
+.auth-helper-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -6px;
+  font-size: 14px;
+}
+.auth-helper-row a {
+  color: #28725b;
+  text-decoration: underline;
+}
+.dark .auth-helper-row a {
+  color: #6ed2a8;
+}
 .account-card {
   width: min(680px, 100%);
   margin: 0 auto;

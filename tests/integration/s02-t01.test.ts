@@ -168,4 +168,27 @@ describe("S02-T01 trusted registration and verification", () => {
       inbox.messages.some((message) => message.To.some((recipient) => recipient.Address === email)),
     ).toBe(true);
   });
+
+  it("allows registration without invitation when PUBLIC_SIGNUP_ENABLED is true", async () => {
+    const original = process.env.PUBLIC_SIGNUP_ENABLED;
+    process.env.PUBLIC_SIGNUP_ENABLED = "true";
+    try {
+      const email = `public-${randomUUID()}@example.test`;
+      const response = await server.inject({
+        method: "POST",
+        url: "/api/v1/auth/register",
+        headers: {
+          origin,
+          "x-csrf-token": "client-csrf-value",
+        },
+        payload: { email, password: "a-strong-password-123", displayName: "Public User" },
+      });
+      expect(response.statusCode).toBe(202);
+      expect(response.json()).toEqual({ accepted: true });
+      expect(delivered.at(-1)?.email).toBe(email.toLowerCase());
+    } finally {
+      process.env.PUBLIC_SIGNUP_ENABLED = original;
+    }
+  });
 });
+
