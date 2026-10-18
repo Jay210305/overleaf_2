@@ -151,7 +151,8 @@ export async function registerTrustedAccount(
   });
   try {
     await sendVerification(parsed.data.email, verificationToken);
-  } catch {
+  } catch (smtpError) {
+    console.error("Failed to deliver registration verification email:", (smtpError as Error)?.message);
     // SMTP can fail after the database commit. Restore the unused invitation
     // so the trusted user can retry, and invalidate the undelivered link.
     await db.transaction(async (tx) => {

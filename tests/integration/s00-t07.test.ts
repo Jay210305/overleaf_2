@@ -49,4 +49,33 @@ describe("S00 config trust boundary", () => {
     ).toThrow();
     expect(() => parsePublicConfig({ VITE_API_URL: "file:///secret" })).toThrow();
   });
+  it("derives SMTP_URL and EMAIL_FROM from individual SMTP settings", () => {
+    const config = parseServerConfig({
+      ...input,
+      SMTP_USER: "soporte.rantikuq@gmail.com",
+      SMTP_PASS: "jhlyhokmswqkhqdz",
+    });
+    expect(config.SMTP_URL).toBe(
+      "smtp://soporte.rantikuq%40gmail.com:jhlyhokmswqkhqdz@smtp.gmail.com:587",
+    );
+    expect(config.EMAIL_FROM).toBe("soporte.rantikuq@gmail.com");
+  });
+  it("derives smtps protocol when port 465 is specified", () => {
+    const config = parseServerConfig({
+      ...input,
+      SMTP_USER: "soporte.rantikuq@gmail.com",
+      SMTP_PASS: "jhlyhokmswqkhqdz",
+      SMTP_PORT: 465,
+    });
+    expect(config.SMTP_URL).toBe(
+      "smtps://soporte.rantikuq%40gmail.com:jhlyhokmswqkhqdz@smtp.gmail.com:465",
+    );
+  });
+  it("infers EMAIL_FROM from SMTP_URL username if not explicitly set", () => {
+    const config = parseServerConfig({
+      ...input,
+      SMTP_URL: "smtp://soporte.rantikuq%40gmail.com:jhlyhokmswqkhqdz@smtp.gmail.com:587",
+    });
+    expect(config.EMAIL_FROM).toBe("soporte.rantikuq@gmail.com");
+  });
 });

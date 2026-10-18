@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "a3c3ec317119bb092c3f3feecfce8e513ac41e8f",
+  "git_baseline": "50699ffa7c59d4d0434fbdd04cc2648104d8b046",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -38,7 +38,7 @@
     {
       "path": ".env.example",
       "role": "factory",
-      "sha256": "6b1e29fd0ad27445555b1c19053babfdd22e7644b5b55bc6e82d9f9aaea84d4b"
+      "sha256": "24625c2a1fa7cf0b1112ce0f1c143ca42c514fcbe761aed5659bd4c222943b3d"
     },
     {
       "path": ".env.production",
@@ -113,7 +113,7 @@
     {
       "path": "apps/api/package.json",
       "role": "factory",
-      "sha256": "87e41a8e1ed87a841369a988991d7bcdf873bdfe30b2d814f86514bb1eb0f894"
+      "sha256": "6971fc76934f077fbf6ea0ee4ae0ba8d3da72dd6167f0cb8c04533dd90ca7b4f"
     },
     {
       "path": "apps/api/src/init-storage.ts",
@@ -163,7 +163,7 @@
     {
       "path": "apps/api/src/modules/auth/mail.ts",
       "role": "factory",
-      "sha256": "d78ed76ff4ae795f7a6ad2d3d0b50699ba5baaba3971bdcd9792e6335d07ca79"
+      "sha256": "2f7e2900eccff8643da3c2567e5c2ea42038bcf39529b5313d01ebd8fb69a156"
     },
     {
       "path": "apps/api/src/modules/auth/mfa.ts",
@@ -178,12 +178,12 @@
     {
       "path": "apps/api/src/modules/auth/password-reset.ts",
       "role": "factory",
-      "sha256": "4aa0f87027fbfc072f57beb732459af0408c8d4b1bae7e2b1c5e6b911e1657c6"
+      "sha256": "9dbc5dec4451c9e607d6c0259bb51533048d7ae0e08c587863a7a8f6bb4b58ad"
     },
     {
       "path": "apps/api/src/modules/auth/register.ts",
       "role": "factory",
-      "sha256": "5de73bdf6ac1d0e57fd9311e18731e399ea363f45520ac15b5bf179f8cf95b6b"
+      "sha256": "6c8c68bd604aded63e13b9d6f40ef55a631c26a4af3513a3f524c821b37189c2"
     },
     {
       "path": "apps/api/src/modules/auth/routes.ts",
@@ -464,6 +464,11 @@
       "path": "apps/api/src/operator/invite-trusted.ts",
       "role": "factory",
       "sha256": "9717b272eeca1458bcdca1d9bf9b7f0158d68f43d25389e6e9c97eb17f3b2962"
+    },
+    {
+      "path": "apps/api/src/operator/test-smtp.ts",
+      "role": "factory",
+      "sha256": "7a799a2da3c652608706bc632b67b2f1547df3229c16f9090df13ed5fd73cd11"
     },
     {
       "path": "apps/api/src/plugins/csrf.ts",
@@ -3718,7 +3723,7 @@
     {
       "path": "packages/config/src/server.ts",
       "role": "factory",
-      "sha256": "24e7448949f2d997f98006e396d6348ef69e44504f88a8df3c0b26b158114e72"
+      "sha256": "25558a5c2b85d045df52e8c3576a379e783e706fd2b0ca72e0343cba9422d48a"
     },
     {
       "path": "packages/config/tsconfig.json",
@@ -4301,6 +4306,11 @@
       "sha256": "bd13f3cfcf19728c35df4ebbf1ce093ce814dcb519aa4301bb8f05269ed67b15"
     },
     {
+      "path": "tests/integration/mail.test.ts",
+      "role": "factory",
+      "sha256": "0bfd6a461d02fdf7dadbd5de527adde8f73b64ae935f86080b3ea54d085b9325"
+    },
+    {
       "path": "tests/integration/persisted-sample.test.ts",
       "role": "factory",
       "sha256": "db44b01186e7f9ed571fb1fa469c0692ebc371e24a6e6734992d89b5e298078c"
@@ -4343,7 +4353,7 @@
     {
       "path": "tests/integration/s00-t07.test.ts",
       "role": "factory",
-      "sha256": "670bc9cc0b1c02c391761ca2c00b1ce8c768fe2105a860054f4e192cbb3066cc"
+      "sha256": "1dc1643b4955944ff25be9256c62d7d564917f98dc94cd8e2e928461353d1a9d"
     },
     {
       "path": "tests/integration/s00-t12.test.tsx",

@@ -20,6 +20,11 @@ export const serverConfigSchema = z.object({
   S3_SECRET_ACCESS_KEY: z.string().min(16),
   MAILPIT_URL: urlFor(["http:", "https:"]),
   SMTP_URL: urlFor(["smtp:", "smtps:"]).optional(),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().min(1).max(65535).optional(),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  SMTP_SECURE: z.coerce.boolean().optional(),
   EMAIL_FROM: z.email().optional(),
   PUBLIC_SIGNUP_ENABLED: z.literal("false").default("false"),
   UNTRUSTED_COMPILE_ENABLED: z.literal("false").default("false"),
@@ -28,7 +33,34 @@ export const serverConfigSchema = z.object({
 });
 export type ServerConfig = z.infer<typeof serverConfigSchema>;
 export function parseServerConfig(env: Record<string, unknown>): ServerConfig {
-  const result = serverConfigSchema.safeParse(env);
+  const normalized = { ...env };
+  if (!normalized.SMTP_URL && normalized.SMTP_USER && normalized.SMTP_PASS) {
+    const host = String(normalized.SMTP_HOST || "smtp.gmail.com");
+    const isSecure =
+      normalized.SMTP_SECURE === "true" ||
+      normalized.SMTP_SECURE === true ||
+      normalized.SMTP_PORT === "465" ||
+      normalized.SMTP_PORT === 465;
+    const port = normalized.SMTP_PORT ? Number(normalized.SMTP_PORT) : isSecure ? 465 : 587;
+    const protocol = port === 465 || isSecure ? "smtps:" : "smtp:";
+    normalized.SMTP_URL = `${protocol}//${encodeURIComponent(String(normalized.SMTP_USER))}:${encodeURIComponent(String(normalized.SMTP_PASS))}@${host}:${port}`;
+  }
+  if (!normalized.EMAIL_FROM && normalized.SMTP_USER && typeof normalized.SMTP_USER === "string") {
+    normalized.EMAIL_FROM = normalized.SMTP_USER;
+  } else if (!normalized.EMAIL_FROM && typeof normalized.SMTP_URL === "string") {
+    try {
+      const parsedUrl = new URL(normalized.SMTP_URL);
+      if (parsedUrl.username) {
+        const decoded = decodeURIComponent(parsedUrl.username);
+        if (decoded.includes("@")) {
+          normalized.EMAIL_FROM = decoded;
+        }
+      }
+    } catch {
+      // Ignored; schema validation will flag invalid SMTP_URL.
+    }
+  }
+  const result = serverConfigSchema.safeParse(normalized);
   if (!result.success)
     throw new Error(
       `Invalid configuration fields: ${[...new Set(result.error.issues.map((issue) => issue.path.join(".")))].join(", ")}`,

@@ -44,7 +44,8 @@ export async function requestPasswordReset(
   if (!issued) return;
   try {
     await sendPasswordReset(parsed.data.email, token);
-  } catch {
+  } catch (smtpError) {
+    console.error("Failed to deliver password reset email:", (smtpError as Error)?.message);
     // The public response stays the same for known and unknown addresses.
     // An undelivered token is invalidated so a later request can retry.
     try {
