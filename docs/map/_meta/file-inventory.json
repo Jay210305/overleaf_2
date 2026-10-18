@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "935d7a8fa3d03e369d0ac459b9f772242e8c1315",
+  "git_baseline": "aa6a62c3f2187e611398bc331e7e5a05f8c3beb0",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -3649,6 +3649,11 @@
       "path": "infra/scripts/trusted-backup.ts",
       "role": "factory",
       "sha256": "fe5c6a8c37b2e3a67b4c6d506ae8ac558f456ab69bfc9e5a4056780a96a41a51"
+    },
+    {
+      "path": "nixpacks.toml",
+      "role": "factory",
+      "sha256": "f8624e67a34a4721a7e4e4baa5457c79531357e1e67eb4f26db67e1a31114a7e"
     },
     {
       "path": "package.json",
