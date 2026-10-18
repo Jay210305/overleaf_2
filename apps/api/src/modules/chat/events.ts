@@ -6,6 +6,7 @@ import type { FastifyInstance } from "fastify";
 import { allowsProjectAction } from "@latex-collab/auth";
 import type { Role } from "@latex-collab/contracts";
 import { isUUID, type DatabaseClient } from "@latex-collab/db";
+import { isOriginAllowed } from "@latex-collab/config/server";
 import { tokenHash } from "../auth/errors.js";
 import { readSessionCookie } from "../auth/session.js";
 
@@ -52,7 +53,7 @@ async function canRead(db: DatabaseClient, sessionId: string, projectId: string)
 export function registerChatEvents(
   app: FastifyInstance,
   db: DatabaseClient,
-  origin: string | undefined,
+  origin: string | readonly string[] | undefined,
   secureCookies: boolean,
 ) {
   const wss = new WebSocketServer({ noServer: true });
@@ -61,7 +62,12 @@ export function registerChatEvents(
     const match = /^\/api\/v1\/projects\/([^/]+)\/chat\/events$/.exec(url.pathname);
     if (!match) return;
     const projectId = match[1];
-    if (!origin || request.headers.origin !== origin || url.search || !isUUID(projectId)) {
+    if (
+      !origin ||
+      !isOriginAllowed(request.headers.origin, origin) ||
+      url.search ||
+      !isUUID(projectId)
+    ) {
       socket.destroy();
       return;
     }

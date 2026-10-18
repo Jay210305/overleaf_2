@@ -3,6 +3,7 @@ import { z } from "zod";
 import type { DatabaseClient } from "@latex-collab/db";
 import { problem } from "../../plugins/errors.js";
 import { AuthError } from "./errors.js";
+import { isOriginAllowed } from "@latex-collab/config/server";
 import { registerTrustedAccount, type SendVerification } from "./register.js";
 import { verifyEmail } from "./verify-email.js";
 import { requireAnonymousCsrf, requireExactOrigin } from "../../plugins/csrf.js";
@@ -20,7 +21,7 @@ const verifyRequest = z.strictObject({ token: z.string().min(32).max(256) });
 
 export interface AuthRouteOptions {
   db?: DatabaseClient | undefined;
-  origin?: string | undefined;
+  origin?: string | readonly string[] | undefined;
   sendVerification?: SendVerification | undefined;
   sendPasswordReset?: SendPasswordReset | undefined;
   secureCookies?: boolean | undefined;
@@ -33,11 +34,14 @@ function reject(reply: FastifyReply, request: FastifyRequest, error: AuthError) 
     .send(problem(error.status, error.code, request.id));
 }
 
-function allowMutation(request: FastifyRequest, origin: string | undefined): boolean {
+function allowMutation(
+  request: FastifyRequest,
+  origin: string | readonly string[] | undefined,
+): boolean {
   const csrf = request.headers["x-csrf-token"];
   return (
     !!origin &&
-    request.headers.origin === origin &&
+    isOriginAllowed(request.headers.origin, origin) &&
     typeof csrf === "string" &&
     csrf.length >= 8 &&
     csrf.length <= 256
@@ -45,7 +49,13 @@ function allowMutation(request: FastifyRequest, origin: string | undefined): boo
 }
 
 export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptions): void {
-  const secureCookies = options.secureCookies ?? options.origin?.startsWith("https://") ?? false;
+  const primaryOrigin =
+    typeof options.origin === "string"
+      ? options.origin.split(",")[0]?.trim()
+      : Array.isArray(options.origin)
+        ? options.origin[0]
+        : undefined;
+  const secureCookies = options.secureCookies ?? primaryOrigin?.startsWith("https://") ?? false;
   app.post("/api/v1/auth/register", async (request, reply) => {
     if (!allowMutation(request, options.origin))
       return reject(reply, request, new AuthError(403, "CSRF_DENIED"));

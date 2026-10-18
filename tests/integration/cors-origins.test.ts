@@ -70,12 +70,15 @@ describe("CORS & Origin Validation", () => {
   });
 
   describe("parseAllowedOrigins", () => {
-    it("automatically derives Cloudflare Pages siblings for latex-editor", () => {
+    it("automatically derives Cloudflare Pages siblings for latex-editor without opening to all *.pages.dev", () => {
       const origins = parseAllowedOrigins("https://latex-editor-do7.pages.dev");
       expect(origins).toContain("https://latex-editor-do7.pages.dev");
       expect(origins).toContain("https://latex-editor.pages.dev");
       expect(origins).toContain("https://*.latex-editor.pages.dev");
-      expect(origins).toContain("*.pages.dev");
+      expect(origins).toContain("https://*.latex-editor-do7.pages.dev");
+      // Security invariant: MUST NOT allow arbitrary third-party pages.dev domains!
+      expect(origins).not.toContain("*.pages.dev");
+      expect(isOriginAllowed("https://malicious-attacker.pages.dev", origins)).toBe(false);
     });
 
     it("parses custom CORS_ORIGIN comma-separated list", () => {
@@ -98,6 +101,11 @@ describe("CORS & Origin Validation", () => {
         "http://localhost:5173",
         "https://*.latex-editor.pages.dev",
       ],
+      profileResolver: async () => ({
+        email: "test@example.com",
+        name: "Test",
+        providerSubject: "sub-123",
+      }),
       logger: false,
     });
 
@@ -179,6 +187,57 @@ describe("CORS & Origin Validation", () => {
       expect(res.statusCode).toBe(403);
       expect(res.json().code).toBe("CSRF_DENIED");
       expect(res.headers["access-control-allow-origin"]).toBeUndefined();
+    });
+
+    it("allows POST /api/v1/auth/register from allowed origin without CSRF_DENIED", async () => {
+      const res = await app.inject({
+        method: "POST",
+        url: "/api/v1/auth/register",
+        headers: {
+          origin: "https://latex-editor.pages.dev",
+          "x-csrf-token": "valid-csrf-token-12345",
+          "x-registration-invite": "valid-registration-invite-token-12345678",
+        },
+        payload: {
+          email: "author@example.com",
+          displayName: "Author",
+          password: "Password123!",
+        },
+      });
+      // Should not fail with 403 CSRF_DENIED! (503 is expected when no DB/mailer is configured in test)
+      expect(res.statusCode).not.toBe(403);
+    });
+
+    it("allows POST /api/v1/auth/verify-email from allowed origin without CSRF_DENIED", async () => {
+      const res = await app.inject({
+        method: "POST",
+        url: "/api/v1/auth/verify-email",
+        headers: {
+          origin: "https://latex-editor.pages.dev",
+          "x-csrf-token": "valid-csrf-token-12345",
+        },
+        payload: {
+          token: "valid-email-verification-token-1234567890",
+        },
+      });
+      expect(res.statusCode).not.toBe(403);
+    });
+
+    it("generates correct single-origin OAuth redirect URL when multiple allowed origins are configured", async () => {
+      const res = await app.inject({
+        method: "GET",
+        url: "/api/v1/auth/oauth/google/start",
+        headers: {
+          origin: "https://latex-editor.pages.dev",
+        },
+      });
+      expect(res.statusCode).toBe(200);
+      const url = res.json().redirectUrl as string;
+      expect(url).toBeDefined();
+      // Must NOT contain comma-separated origins in redirect_uri
+      expect(url).not.toContain("%2C");
+      expect(url).not.toContain(",");
+      expect(decodeURIComponent(url)).toContain("https://latex-editor.pages.dev/auth/oauth/google/callback");
     });
   });
 

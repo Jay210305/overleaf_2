@@ -52,7 +52,7 @@ export function setPendingOAuthState(state: string, entry: PendingOAuth): void {
 
 export interface OAuthRoutesOptions {
   db?: DatabaseClient | undefined;
-  origin?: string | undefined;
+  origin?: string | readonly string[] | undefined;
   secureCookies?: boolean | undefined;
   profileResolver?: OAuthProfileResolver | undefined;
 }
@@ -65,7 +65,14 @@ function reject(reply: FastifyReply, request: FastifyRequest, error: AuthError) 
 }
 
 export function registerOAuthRoutes(app: FastifyInstance, options: OAuthRoutesOptions): void {
-  const secureCookies = options.secureCookies ?? options.origin?.startsWith("https://") ?? false;
+  const primaryOrigin = (
+    typeof options.origin === "string"
+      ? options.origin.split(",")[0]?.trim()
+      : Array.isArray(options.origin)
+        ? options.origin[0]
+        : undefined
+  ) ?? "http://127.0.0.1:5173";
+  const secureCookies = options.secureCookies ?? primaryOrigin.startsWith("https://");
   // GET /api/v1/auth/oauth/:provider/start
   app.get("/api/v1/auth/oauth/:provider/start", async (request, reply) => {
     try {
@@ -123,7 +130,7 @@ export function registerOAuthRoutes(app: FastifyInstance, options: OAuthRoutesOp
         expiresAt: Date.now() + 10 * 60 * 1000,
       });
 
-      const redirectUri = `${options.origin ?? "http://127.0.0.1:5173"}/auth/oauth/${normalized}/callback`;
+      const redirectUri = `${primaryOrigin}/auth/oauth/${normalized}/callback`;
       let redirectUrl: string;
 
       if (normalized === "google") {

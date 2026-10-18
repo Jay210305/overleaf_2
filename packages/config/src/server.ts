@@ -116,7 +116,11 @@ export function parseAllowedOrigins(appOrigin: string, corsOrigin?: string | und
     set.add("https://latex-editor.pages.dev");
     set.add("https://latex-editor-do7.pages.dev");
     set.add("https://*.latex-editor.pages.dev");
-    set.add("*.pages.dev");
+    set.add("https://*.latex-editor-do7.pages.dev");
+  }
+  if (appOrigin.includes("localhost") || appOrigin.includes("127.0.0.1")) {
+    set.add("http://localhost:*");
+    set.add("http://127.0.0.1:*");
   }
   return Array.from(set);
 }
