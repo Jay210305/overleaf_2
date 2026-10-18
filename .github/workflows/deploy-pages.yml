@@ -7,6 +7,7 @@ on:
     paths:
       - "apps/web/**"
       - "packages/**"
+      - ".env.production"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
@@ -33,18 +34,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build frontend
-        env:
-          VITE_API_URL: https://latex-api-production-dd00.up.railway.app/api/v1
-          VITE_APP_NAME: LaTeX Workspace
         run: |
           pnpm --filter "./packages/*" build
           pnpm --filter @latex-collab/web build
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.CLOUDFLARE_API_KEY }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: latex-editor-do7
-          directory: apps/web/dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy apps/web/dist --project-name=latex-editor --branch=main
