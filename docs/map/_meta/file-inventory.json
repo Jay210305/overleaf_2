@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "dec671a23e996c3b0b7caba259fea477f58787eb",
+  "git_baseline": "be5cb43312ac52b4609d2e722b295e5297925c26",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -49,6 +49,11 @@
       "path": ".github/workflows/ci.yml",
       "role": "factory",
       "sha256": "ae324ee44c409324d2c09a4693bc52277d78a2db82e32c0bf4cf8a6803e81215"
+    },
+    {
+      "path": ".github/workflows/deploy-pages.yml",
+      "role": "factory",
+      "sha256": "6358576092a8c377c82c1421861ecbf3c83bccc6f3fd55a7e68a9026cd61bf69"
     },
     {
       "path": ".gitignore",

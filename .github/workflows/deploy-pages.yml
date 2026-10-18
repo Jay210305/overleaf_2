@@ -1,0 +1,51 @@
+name: Deploy Frontend to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/**"
+      - "packages/**"
+      - ".github/workflows/deploy-pages.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Install pnpm
+        run: npm install -g pnpm@11.25.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build frontend
+        env:
+          VITE_API_URL: https://latex-api-production-dd00.up.railway.app/api/v1
+          VITE_WS_URL: wss://latex-api-production-dd00.up.railway.app
+          VITE_APP_NAME: LaTeX Workspace
+        run: |
+          pnpm --filter "./packages/*" build
+          pnpm --filter @latex-collab/web build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: latex-editor
+          directory: apps/web/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
