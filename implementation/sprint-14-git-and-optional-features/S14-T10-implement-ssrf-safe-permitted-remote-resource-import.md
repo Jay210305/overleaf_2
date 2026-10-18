@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S14-T09]
 requirements: [PRO-14, PL-07]
 source_task: S05-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S14-T10 — Implement SSRF-safe permitted remote resource import
 

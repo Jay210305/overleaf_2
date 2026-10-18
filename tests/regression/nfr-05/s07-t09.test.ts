@@ -10,7 +10,9 @@ describe("NFR-05 Remote edit propagation latency p95 <= 300ms (S07-T09)", () => 
   });
 
   afterAll(async () => {
-    await fixture.close();
+    if (fixture) {
+      await fixture.close();
+    }
   });
 
   it("propagates remote edits with p95 <= 300ms on the reference network", async () => {

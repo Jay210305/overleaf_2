@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S14-T08]
 requirements: [PL-05, INT-05, INT-06]
 source_task: S14-T08
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S14-T12 — Stabilize and review supported G4 integrations
 

@@ -435,6 +435,7 @@ export type RegisterRequest = z.infer<typeof registerRequestSchema>;
 export const loginRequestSchema = z.strictObject({
   email: z.string().email(),
   password: z.string().min(8).max(128),
+  code: z.string().min(6).max(32).optional(),
 });
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 
@@ -452,6 +453,29 @@ export const passwordChangeRequestSchema = z.strictObject({
   newPassword: z.string().min(8).max(128),
 });
 export type PasswordChangeRequest = z.infer<typeof passwordChangeRequestSchema>;
+
+export const oAuthRedirectSchema = z.strictObject({
+  redirectUrl: z.string().url(),
+});
+export type OAuthRedirect = z.infer<typeof oAuthRedirectSchema>;
+
+export const oAuthCallbackSchema = z.strictObject({
+  code: z.string().min(1).max(10000),
+  state: z.string().min(16).max(2048),
+});
+export type OAuthCallback = z.infer<typeof oAuthCallbackSchema>;
+
+export const mfaSetupViewSchema = z.strictObject({
+  setupId: z.string().uuid(),
+  otpauthUri: z.string().url(),
+});
+export type MfaSetupView = z.infer<typeof mfaSetupViewSchema>;
+
+export const mfaRequestSchema = z.strictObject({
+  setupId: z.string().uuid().optional(),
+  code: z.string().min(6).max(32),
+});
+export type MfaRequest = z.infer<typeof mfaRequestSchema>;
 
 export const deleteAccountRequestSchema = z
   .strictObject({
@@ -952,3 +976,4 @@ export type GitHubLinkResult = z.infer<typeof githubLinkResultSchema>;
 export * from "./storage.js";
 export * from "./executor.js";
 export * from "./provider.js";
+export * from "./writing-assistant.js";

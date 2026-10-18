@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S14-T01]
 requirements: [INT-06, ACC-02]
 source_task: S14-T02
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S14-T02 — Create authenticated Git bridge service
 

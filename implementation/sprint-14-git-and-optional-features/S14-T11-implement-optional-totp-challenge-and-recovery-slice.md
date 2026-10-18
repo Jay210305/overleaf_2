@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S14-T10]
 requirements: [ACC-06, ACC-04]
 source_task: S14-T07
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S14-T11 — Implement optional TOTP challenge and recovery slice
 

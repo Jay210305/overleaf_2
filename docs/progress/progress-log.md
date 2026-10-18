@@ -523,3 +523,86 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **Blockers / Gaps:** Mendeley and Papers lack public open APIs and their terms restrict consumer mirroring; marked `BLOCKED_BY_PROVIDER` per ADR-009.
 - **Technical Debt:** None. No phantom parity claims.
 - **Next Ready Task:** S13-T04 (Implement authorized manual Dropbox export, starting the second half of Sprint 13).
+
+### 2026-10-16 — Sprint S13 Reference Providers (Full Sprint Completion)
+
+- **Date:** 2026-10-16
+- **Contributor:** Julio & Project Co-owner
+- **Sprint / Tasks:** Sprint S13 (`sprint-13-reference-providers`), Tasks S13-T04, S13-T08, S13-T05, S13-T06 (100% of Sprint 13 complete)
+- **Goal:** Complete the remaining 4 tasks of Sprint 13:
+  - S13-T04: Implement authorized manual Dropbox export.
+  - S13-T08: Add optional bidirectional Dropbox synchronization.
+  - S13-T05: Import editable individual references into project bibliography.
+  - S13-T06: Verify provider contract and real connectivity.
+- **Completed Work:**
+  - Implemented manual Dropbox export (`apps/jobs/src/sync/dropbox.ts`) and bidirectional Dropbox synchronization with content-hash divergence detection (`apps/jobs/src/sync/dropbox-bidirectional.ts`).
+  - Implemented editable reference import (`apps/api/src/modules/references/import.ts`) with duplicate citation key detection and canonical Yjs CRDT updates.
+  - Comprehensive provider contract verification suite (`tests/integration/provider-contracts.test.ts`).
+  - Authored test reports `docs/test-reports/s13-04.md`, `s13-08.md`, `s13-05.md`, `s13-06.md`.
+  - Full suite verified: 21 test files (112 tests) PASS.
+  - Committed commit `23447a5` and pushed to `origin/codex/sprint-13-reference-providers`.
+
+### 2026-10-17 — Sprint S14 Git and Optional Features (First Half Delivery)
+
+- **Date:** 2026-10-17
+- **Contributor:** Julio (proposed A-02)
+- **Sprint / Tasks:** Sprint S14 (`sprint-14-git-and-optional-features`), Tasks S14-T01 through S14-T06 (~50% of Sprint 14)
+- **Goal:** Implement approximately the first half (6 of 12 tasks) of Sprint 14 in strict dependency order:
+  1. S14-T01: Research Git HTTP implementation and mapping.
+  2. S14-T02: Create authenticated Git bridge service.
+  3. S14-T03: Implement actual clone fetch and push.
+  4. S14-T04: Apply Git imports through canonical mutation service.
+  5. S14-T05: Deliver preference-controlled email notifications.
+  6. S14-T06: Add optional private writing assistance.
+- **Completed Work:**
+  - Published dedicated sprint branch `codex/sprint-14-git-and-optional-features` with upstream tracking on `origin`.
+  - Authored ADR-010 (`docs/adr/010-git-http.md`) establishing Git Smart HTTP architecture, SHA-256 personal access tokens, strict secret redaction, and revision-to-commit mapping.
+  - Built `@latex-collab/git-bridge` package (`apps/git-bridge`) providing authenticated Git Smart HTTP endpoints (`info/refs`, `git-upload-pack`, `git-receive-pack`) with Fastify.
+  - Implemented pure TypeScript Git protocol engine (`apps/git-bridge/src/protocol.ts`) supporting pkt-line framing, object creation (blob/tree/commit), packfile generation, sideband-64k streaming, and non-fast-forward push rejection.
+  - Verified real Git CLI operations (`git clone`, `git push`, non-fast-forward rejection) against the live service in integration tests.
+  - Implemented Git import canonical mutation service (`apps/git-bridge/src/import.ts`) applying incoming text updates through Yjs CRDT mutations, recording project revisions, reporting detached anchors, and converging concurrent edits (COL-12).
+  - Implemented preference-controlled notification email worker (`apps/jobs/src/notifications/email.ts`) and React UI panel (`apps/web/src/features/notifications/preferences.tsx`) with Mailpit transport and replay deduplication.
+  - Implemented private writing assistant contracts (`packages/contracts/src/writing-assistant.ts`) and API routes (`apps/api/src/modules/assistance/routes.ts`) enforcing mandatory user opt-in consent, 4,000 character fragment limits, bounded user quotas, and non-blocking fallback to static LaTeX help.
+  - Authored test reports `docs/test-reports/s14-t01.md` through `s14-t06.md`.
+  - Synchronized roadmap, task index, sprint progress, and feature parity matrices.
+- **Actual Hours:** 44 h (S14-T01: 4h, S14-T02: 8h, S14-T03: 8h, S14-T04: 8h, S14-T05: 8h, S14-T06: 8h).
+- **Next Ready Task:** S14-T07 (Sprint S14: Safe social OAuth account linking).
+
+### 2026-10-17 — Sprint S14 Git and Optional Features (Full Sprint & Gate 4 Completion)
+
+- **Date:** 2026-10-17
+- **Contributor:** Julio & Project Co-owner
+- **Branch/base:** `codex/sprint-14-git-and-optional-features` tracking `origin/codex/sprint-14-git-and-optional-features` (base `codex/sprint-13-reference-providers`)
+- **Sprint / Tasks:** Sprint S14 (`sprint-14-git-and-optional-features`), Tasks S14-T07, S14-T09, S14-T10, S14-T11, S14-T08, S14-T12 (100% of Sprint 14 complete; Gate 4 passed)
+- **Goal:** Complete the remaining 6 tasks of Sprint 14 and conduct the Gate 4 Ecosystem Integrations release audit:
+  - S14-T07: Implement safe social OAuth account linking.
+  - S14-T09: Profile additional compiler packages and fonts.
+  - S14-T10: Implement SSRF-safe permitted remote resource import.
+  - S14-T11: Implement optional TOTP challenge and recovery slice.
+  - S14-T08: Verify real Git protocol and token revocation.
+  - S14-T12: Stabilize and review supported G4 integrations (Gate 4 Audit).
+- **Completed Work:**
+  - Implemented safe OAuth account linking/unlinking (`apps/api/src/modules/auth/oauth.ts`) with PKCE, state validation, collision detection, and last auth method preservation.
+  - Implemented RFC 6238 TOTP two-factor authentication (`apps/api/src/modules/auth/mfa.ts`, `totp.ts`) with QR/base32 setup, TOTP challenge on login, single-use recovery code consumption, and challenge-based disable with session invalidation.
+  - Created TeX compiler package catalog (`apps/tex-executor/package-manifest.json`) profiling packages and fonts across TeX engines with verified licensing and security restrictions.
+  - Implemented SSRF-safe remote resource importer (`apps/jobs/src/imports/remote-resource.ts`) blocking private IPs, cloud metadata endpoints, multi-hop DNS rebinding, and untrusted MIME types.
+  - Verified Git Smart HTTP protocol over HTTP/REST using authentic Linux Git CLI with token revocation, expiry, Unicode, binary assets, and repeated sync (`tests/integration/git-cli.test.ts`, `tests/integration/s14-t08.test.ts`, `tests/regression/int-06/s14-t08.test.ts`).
+  - Authored test reports `docs/test-reports/s14-t07.md`, `s14-t09.md`, `s14-t10.md`, `s14-t11.md`, `s14-t08.md`, `s14-t12.md`, and Gate 4 Audit `docs/test-reports/gate-g4-audit.md`.
+  - Updated task frontmatters, roadmap, task index, and sprint progress.
+- **Actual Hours:** 46 h (S14-T07: 8h, S14-T09: 6h, S14-T10: 8h, S14-T11: 8h, S14-T08: 8h, S14-T12: 8h; sprint total: 90 h).
+- **Commands & Results:**
+  - `pnpm exec vitest run tests/integration/s14-*.test.ts`: PASS (10 files, 47 tests).
+  - `pnpm exec vitest run tests/integration/git-cli.test.ts`: PASS (5 tests).
+  - `pnpm typecheck`: PASS.
+  - `pnpm lint`: PASS.
+  - `pnpm build`: PASS.
+  - `python3 scripts/plan_lint.py`: PASS.
+- **Blockers / Gaps:** None for G4. Public signup and untrusted compilation remain disabled per G5 boundary.
+- **Next Ready Sprint:** Sprint S15 (`sprint-15-public-hardening`): Public hardening, trusted executor isolation, rate limiting, and Gate 5 sign-off.
+
+### 2026-10-17 — Main integration review of S13 and S14
+
+- **Branch/base:** `main` from `3879f72`; merged `origin/codex/sprint-13-reference-providers` at `23447a5` and then `origin/codex/sprint-14-git-and-optional-features` at `13477df`.
+- **Integration evidence:** [S13/S14 merge report](../test-reports/merge-s13-s14.md). Conflict resolution retained Sprint 12 GitHub sync while adding the provider and optional-feature slices. The full browser matrix passed 52/52 after synchronizing the sharing test with its reload.
+- **Security correction:** Production OAuth start/callback now return 503 without a trusted provider profile resolver; the branch's arbitrary-code mock resolver was moved into test fixtures only. New local environments generate a credential encryption key.
+- **Release boundary:** The earlier Sprint 14 entry records its branch report, not merged-main G4 approval. Credentialed provider staging, runtime wiring and independent co-maintainer sign-off remain open as [GAP-40](open-gaps.md). No G4 release was approved by this integration review.

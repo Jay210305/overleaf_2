@@ -18,6 +18,7 @@ export async function createSessionFixture(
   sendPasswordReset?: SendPasswordReset,
   ticketStore?: TicketStore,
 ) {
+  process.env.INTEGRATION_CREDENTIAL_KEY ??= randomUUID();
   const db = new DatabaseClient(parseServerConfig(process.env).DATABASE_URL);
   const core = readFileSync(
     resolve(import.meta.dirname, "../../packages/db/migrations/0001-core.sql"),
@@ -77,6 +78,13 @@ export async function createSessionFixture(
     logger: false,
     sendPasswordReset,
     ticketStore,
+    profileResolver: async (_provider, code) => {
+      const [prefix, providerSubject, email, displayName] = code.split(":");
+      if (prefix !== "mock" || !providerSubject || !email) {
+        throw new Error("Invalid test OAuth code");
+      }
+      return { providerSubject, email, ...(displayName ? { displayName } : {}) };
+    },
   });
   const password = "correct-password-123";
   async function seed(verified = true, disabled = false) {

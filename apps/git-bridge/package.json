@@ -1,0 +1,17 @@
+{
+  "name": "@latex-collab/git-bridge",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@latex-collab/config": "workspace:*",
+    "@latex-collab/contracts": "workspace:*",
+    "@latex-collab/db": "workspace:*",
+    "fastify": "5.12.5",
+    "yjs": "13.6.27",
+    "zod": "4.6.5"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}

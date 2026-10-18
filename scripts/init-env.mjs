@@ -3,11 +3,13 @@ import { randomBytes } from "node:crypto";
 const password = randomBytes(24).toString("hex");
 const access = randomBytes(12).toString("hex");
 const secret = randomBytes(24).toString("hex");
+const integrationCredentialKey = randomBytes(32).toString("hex");
 const values = {
   POSTGRES_PASSWORD: password,
   DATABASE_URL: `postgresql://latex:${password}@127.0.0.1:55432/latex`,
   S3_ACCESS_KEY_ID: access,
   S3_SECRET_ACCESS_KEY: secret,
+  INTEGRATION_CREDENTIAL_KEY: integrationCredentialKey,
 };
 const lines = readFileSync(".env.example", "utf8")
   .split("\n")

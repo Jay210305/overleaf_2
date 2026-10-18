@@ -14,7 +14,7 @@ console.log(
 for (const path of [
   "apps/jobs/dist/main.js",
   "apps/jobs/dist/imports/worker.js",
-  "apps/jobs/dist/imports/apply.js",
+  "apps/jobs/dist/imports/apply-project.js",
   "packages/db/dist/index.js",
   "packages/storage/dist/source-export.js",
 ]) {

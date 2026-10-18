@@ -95,6 +95,8 @@ test("owner manages a member, invitation and bounded link in the workspace", asy
 
     // Invite the existing trusted account after removing its previous membership.
     await dialog.getByRole("button", { name: "Remove Collaborator" }).click();
+    await expect(dialog.getByText(/Collaborator · VIEWER/)).toHaveCount(0);
+    await expect(dialog.getByRole("button", { name: "Send invitation" })).toBeEnabled();
     await dialog.getByLabel("Email").fill(memberEmail);
     const invitationResponse = page.waitForResponse(
       (response) =>

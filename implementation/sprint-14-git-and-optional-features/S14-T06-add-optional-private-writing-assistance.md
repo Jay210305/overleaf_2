@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S14-T05]
 requirements: [INT-09, EDT-14]
 source_task: S14-T06
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S14-T06 — Add optional private writing assistance
 

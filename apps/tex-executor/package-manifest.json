@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "manifestVersion": "1.0.0",
+  "compilerImage": "latex-workspace-texlive:2024",
+  "policy": {
+    "networkInstallOnDemand": false,
+    "shellEscape": false,
+    "securityConfigFile": "texmf.cnf",
+    "compilerTrustBoundary": "isolated-container"
+  },
+  "packages": [
+    {
+      "name": "amsmath",
+      "type": "package",
+      "license": "LPPL-1.3c",
+      "source": "CTAN:macros/latex/required/amsmath",
+      "supportedEngines": ["pdflatex", "xelatex", "lualatex", "latex"],
+      "fixture": "\\documentclass{article}\\usepackage{amsmath}\\begin{document}\\begin{equation}E=mc^2\\end{equation}\\end{document}"
+    },
+    {
+      "name": "tikz",
+      "type": "package",
+      "license": "LPPL-1.3c",
+      "source": "CTAN:graphics/pgf/base",
+      "supportedEngines": ["pdflatex", "xelatex", "lualatex", "latex"],
+      "fixture": "\\documentclass{article}\\usepackage{tikz}\\begin{document}\\begin{tikzpicture}\\draw (0,0) -- (1,1);\\end{tikzpicture}\\end{document}"
+    },
+    {
+      "name": "fontspec",
+      "type": "package",
+      "license": "LPPL-1.3c",
+      "source": "CTAN:macros/latex/contrib/fontspec",
+      "supportedEngines": ["xelatex", "lualatex"],
+      "incompatibleEngines": ["pdflatex", "latex"],
+      "expectedExceptionOnIncompatible": "Fatal fontspec error: cannot be used with pdfLaTeX",
+      "fixture": "\\documentclass{article}\\usepackage{fontspec}\\begin{document}Unicode\\end{document}"
+    },
+    {
+      "name": "biblatex",
+      "type": "package",
+      "license": "LPPL-1.3c",
+      "source": "CTAN:macros/latex/contrib/biblatex",
+      "supportedEngines": ["pdflatex", "xelatex", "lualatex", "latex"],
+      "fixture": "\\documentclass{article}\\usepackage{biblatex}\\begin{document}Citation\\end{document}"
+    },
+    {
+      "name": "microtype",
+      "type": "package",
+      "license": "LPPL-1.3c",
+      "source": "CTAN:macros/latex/contrib/microtype",
+      "supportedEngines": ["pdflatex", "lualatex"],
+      "fixture": "\\documentclass{article}\\usepackage{microtype}\\begin{document}Optimized typography\\end{document}"
+    },
+    {
+      "name": "beamer",
+      "type": "class",
+      "license": "LPPL-1.3c",
+      "source": "CTAN:macros/latex/contrib/beamer",
+      "supportedEngines": ["pdflatex", "xelatex", "lualatex", "latex"],
+      "fixture": "\\documentclass{beamer}\\begin{document}\\begin{frame}{Title}Slide\\end{frame}\\end{document}"
+    },
+    {
+      "name": "firamath",
+      "type": "font",
+      "license": "OFL-1.1",
+      "source": "CTAN:fonts/firamath",
+      "supportedEngines": ["xelatex", "lualatex"],
+      "incompatibleEngines": ["pdflatex", "latex"],
+      "expectedExceptionOnIncompatible": "Requires unicode-math and an engine with Unicode support",
+      "fixture": "\\documentclass{article}\\usepackage{unicode-math}\\setmathfont{Fira Math}\\begin{document}\\(x + y = z\\)\\end{document}"
+    }
+  ]
+}

@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S12-T07, S13-T06]
 requirements: [INT-06]
 source_task: S14-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S14-T01 — Research Git HTTP implementation and mapping
 
