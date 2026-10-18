@@ -45,9 +45,11 @@ export function createReadiness(config: ServerConfig) {
             abortSignal: AbortSignal.timeout(1500),
           })
           .then(() => true),
-        fetch(`${config.MAILPIT_URL}/livez`, { signal: AbortSignal.timeout(1500) }).then(
-          (response) => response.ok,
-        ),
+        config.NODE_ENV === "production"
+          ? Promise.resolve(true)
+          : fetch(`${config.MAILPIT_URL}/livez`, { signal: AbortSignal.timeout(1500) })
+              .then((response) => response.ok)
+              .catch(() => false),
       ]);
       return results.every((result) => result.status === "fulfilled" && result.value === true);
     },

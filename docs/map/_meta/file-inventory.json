@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "c92020f6d770fbc6ef94839ca4bd81cb90e4f303",
+  "git_baseline": "c49bee7b6d1b5b11522a5c0183f2164cc24c7044",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -488,7 +488,7 @@
     {
       "path": "apps/api/src/readiness.ts",
       "role": "factory",
-      "sha256": "f46e51ba2286e71a04180ec61b282409a675e8d47fb95adb0db44fdce8e8bba2"
+      "sha256": "4dbf450c2efd1afcd052b7cacc9301da0fe602bff01a347203a353c17fc1713e"
     },
     {
       "path": "apps/api/src/server.ts",
