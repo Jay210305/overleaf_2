@@ -1,4 +1,15 @@
+import { loadEnvFile } from "node:process";
+import { existsSync } from "node:fs";
 import { parseServerConfig, parseAllowedOrigins } from "@latex-collab/config/server";
+
+for (const envPath of [".env", "../../.env", "../.env"]) {
+  if (existsSync(envPath)) {
+    try {
+      loadEnvFile(envPath);
+      break;
+    } catch {}
+  }
+}
 import { DatabaseClient } from "@latex-collab/db";
 import { S3StorageAdapter } from "@latex-collab/storage";
 import { createReadiness } from "./readiness.js";
@@ -132,7 +143,7 @@ async function main() {
   await app.listen({ host: "0.0.0.0", port: config.PORT });
   void runAvatarCleanup();
 }
-main().catch(() => {
-  console.error("API startup failed: check required configuration and service availability.");
+main().catch((error) => {
+  console.error("API startup failed: check required configuration and service availability.", error);
   process.exitCode = 1;
 });

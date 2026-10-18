@@ -23,7 +23,7 @@
     "zod": "4.6.5"
   },
   "scripts": {
-    "dev": "tsx src/main.ts",
+    "dev": "node --env-file=../../.env --import tsx src/main.ts",
     "invite:trusted": "node --env-file=../../.env --import tsx src/operator/invite-trusted.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node --env-file=../../.env dist/main.js"
