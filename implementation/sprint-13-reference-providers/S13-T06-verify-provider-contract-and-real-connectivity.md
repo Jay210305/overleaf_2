@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S13-T05]
 requirements: [INT-03, INT-04, INT-07]
 source_task: S13-T06
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S13-T06 — Verify provider contract and real connectivity
 

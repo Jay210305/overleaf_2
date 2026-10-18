@@ -65,6 +65,8 @@ import type {
   SyncInvalidationPublisher,
 } from "@latex-collab/jobs/sync/apply-changes";
 import type { GitHubPushWriter } from "@latex-collab/jobs/sync/github-push";
+import { registerIntegrationRoutes } from "./modules/integrations/connections.js";
+import { registerReferenceImportRoutes } from "./modules/references/import.js";
 
 export { safeLoggerOptions } from "./plugins/logging.js";
 
@@ -335,6 +337,16 @@ export function createServer(options: ServerOptions) {
       reader: options.githubSyncReader,
       writer: options.githubPushWriter,
       invalidations: options.githubSyncInvalidations,
+    });
+    registerIntegrationRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    });
+    registerReferenceImportRoutes(app, {
+      db: options.db,
+      origin: options.origin,
+      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
     });
   }
   return app;

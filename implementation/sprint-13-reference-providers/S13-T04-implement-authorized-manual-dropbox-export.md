@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S13-T07]
 requirements: [INT-07]
 source_task: S13-T04
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S13-T04 — Implement authorized manual Dropbox export
 

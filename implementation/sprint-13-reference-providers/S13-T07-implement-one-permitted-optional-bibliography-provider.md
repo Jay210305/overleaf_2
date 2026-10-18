@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S13-T03]
 requirements: [INT-04]
 source_task: S13-T03
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S13-T07 — Implement one permitted optional bibliography provider
 

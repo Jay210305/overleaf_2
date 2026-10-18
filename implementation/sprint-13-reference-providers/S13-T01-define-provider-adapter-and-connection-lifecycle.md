@@ -8,8 +8,8 @@ estimate_basis: assumption-a-03
 depends_on: [S12-T07]
 requirements: [INT-03, INT-04, INT-07]
 source_task: S13-T01
-status: todo
-readiness: pending-dependencies
+status: done
+readiness: completed
 ---
 # S13-T01 — Define provider adapter and connection lifecycle
 

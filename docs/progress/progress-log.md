@@ -39,6 +39,9 @@ Availability is variable and actual hours have not been measured. Log work-sessi
 | 2026-10-15 | S08-T07 accepted by user; S08-T08 revocation and detached anchors on `codex/sprint-08-sharing-comments-chat` | Not measured | [S08-T08 report](../test-reports/s08-t08.md): 6 focused files/16 tests PASS (collab invalidation emission on member/role/link paths with manager socket-closure composition; invite/link lifecycle denials; resolve/delete guards; revoked-member cutoff); typecheck PASS, lint/build/plan-lint/secret-scan rerun at commit | Independent co-maintainer review pending before done; next S08-T10 after review |
 | 2026-10-14 | S09 history review and project management on `codex/sprint-09-history-review` | 102 h | [S09 progress](sprint-09.md), reports [s09-t01](../test-reports/s09-t01.md) through [s09-t14](../test-reports/s09-t14.md), 27 test files / 62 tests PASS | S09 closed, all 14 tasks marked DONE; next S10-T01 |
 | 2026-10-15 | S10 academic editing, bibliography and SyncTeX on `codex/sprint-10-academic-editing` | 104 h | [S10 progress](sprint-10.md), reports [s10-t01](../test-reports/s10-t01.md) through [s10-t14](../test-reports/s10-t14.md), 44 test files / 145 tests PASS | S10 closed, all 14 tasks marked DONE; next S11-T01 |
+| 2026-10-15 | S11 visual editor, AST projection and G3 release audit on `codex/sprint-11-visual-editor` | 80 h | [S11 progress](sprint-11.md), reports [s11-t01](../test-reports/s11-t01.md) through [s11-t11](../test-reports/s11-t11.md), 11 test files / 360+ tests PASS | S11 closed, all 11 tasks marked DONE; Gate G3 passed; S12 skipped; next S13-T01 |
+| 2026-10-16 | S13 reference providers first half on `codex/sprint-13-reference-providers` | 28 h | [S13 progress](sprint-13.md), reports [s13-t01](../test-reports/s13-t01.md), [s13-t02](../test-reports/s13-t02.md), [s13-t03](../test-reports/s13-t03.md), [s13-t07](../test-reports/s13-t07.md), ADR-009, 8 test files / 45 tests PASS | S13 first half delivered (4 of 8 tasks DONE); next S13-T04 |
+| 2026-10-17 | S13 reference providers second half and closure on `codex/sprint-13-reference-providers` | 30 h | [S13 progress](sprint-13.md), reports [s13-t04](../test-reports/s13-t04.md), [s13-t08](../test-reports/s13-t08.md), [s13-t05](../test-reports/s13-t05.md), [s13-t06](../test-reports/s13-t06.md); 21 test files / 112 tests PASS | Sprint 13 closed, all 8 tasks DONE; next S14-T01 |
 
 
 ## Session Record
@@ -488,3 +491,35 @@ Record date, contributor, task ID, goal, completed work, actual hours, paths, co
 - **S12-T07 credentialed acceptance (supersedes the BLOCKED_BY_CREDENTIALS line above):** The user supplied an authorized disposable repository `Jay210305/test-repo-s12t07` (branch `s12-t07-live`) and a Contents read/write credential through the gitignored `.env.github-test`. The opt-in live suite passed **4/4** against the real GitHub API: real push commit `1d845c12`, remote advance `df269889`, non-fast-forward → 409 `REMOTE_CONFLICT`, invalid token → 401 `TOKEN_EXPIRED`, edit-during-sync → 409 `REVISION_CONFLICT`, token never printed or committed. GAP-04 is partial (production S13 OAuth scopes/accounts still NOT_VERIFIED). Recorded in [s12-t07](../test-reports/s12-t07.md), GAP-37 closed, GAP-38 open (mixed-file pull policy).
 - **Sprint-wide browser fixes for a green e2e gate:** `apps/collab/src/server.ts` no longer claims every HTTP upgrade — it uses `noServer: true` with a root-path-only listener, fixing the chat socket being consumed twice (`handleUpgrade() was called more than once`). The comment-anchor panel is now mounted with the text document in `workspace.tsx`; `comments.spec.ts` scopes the detached-range assertion to the anchor list and re-selects the file after reload; `mixed-editing.spec.ts` scopes visual clicks to `live-visual-document`; `pnpm dev` now builds `@latex-collab/collab` so local e2e runs current sources; `tests/e2e/global-setup.ts` + `rate-limit-flush.ts` clear the `auth:v1:*` counters during the run (production limits unchanged; the limiter stays covered by S02-T06 and the intercepted-429 browser test).
 - **Final full gate (supersedes the earlier 410 files/1,468 and "Browser E2E N/A"):** `pnpm format:check`, `lint`, `typecheck`, `build`, `security:check`, `artifacts:check`, `plan_lint` (184 tasks) and `build_icm_map.py --check` PASS; `pnpm test` **411 files / 1,472 tests** PASS; `pnpm test:integration` 3/3 PASS; `pnpm test:e2e` **52/52** PASS across setup + chromium + firefox + edge. The one-off `col-03/s08-t03` jsdom flake stays GAP-36. **Effort:** Not measured. **Next:** commit the sprint branch, push it, fast-forward `main` and push the merge (user instruction 2026-10-17).
+
+### 2026-10-16 — Sprint S13 Reference Providers (First Half Delivery)
+
+- **Date:** 2026-10-16
+- **Contributor:** Project Co-owner
+- **Sprint / Tasks:** Sprint S13 (`sprint-13-reference-providers`), Tasks S13-T01, S13-T02, S13-T03, S13-T07
+- **Goal:** Implement approximately the first half (4 of 8 tasks) of Sprint 13 in strict dependency order:
+  1. S13-T01: Define provider adapter and connection lifecycle.
+  2. S13-T02: Import and refresh authorized Zotero library.
+  3. S13-T03: Research Mendeley Papers access and terms.
+  4. S13-T07: Implement one permitted optional bibliography provider.
+- **Completed Work:**
+  - Published dedicated sprint branch `codex/sprint-13-reference-providers` with upstream tracking on `origin`.
+  - Authored `packages/contracts/src/provider.ts` exporting typed schemas (`ProviderCapabilities`, `ProviderError`, `Resource`, `SyncInput`, `SyncResult`, `ProviderAdapter`, `ConnectionStatus`, `ExternalConnectionView`, `ProjectIntegrationView`).
+  - Implemented `apps/api/src/modules/integrations/connections.ts` with AES-256-GCM token encryption, user connection isolation, token rotation, and project EDIT role guards preventing unauthorized linking.
+  - Implemented `apps/jobs/src/sync/zotero.ts` with personal/group collection listing, BibTeX pull, line diff conflict protection against silent overwrites, and push rejection.
+  - Implemented `apps/web/src/features/references/zotero.tsx` React component with read-only linked `.bib` indicator, status badges, conflict warnings, and viewer/reviewer restrictions.
+  - Completed research spike and authored `docs/adr/009-reference-providers.md` evaluating Zotero, Mendeley, Papers (ReadCube), Dropbox, and Crossref; designated Mendeley and Papers as `BLOCKED_BY_PROVIDER` per terms of service and lack of public APIs.
+  - Implemented `apps/jobs/src/sync/optional-reference-provider.ts` supporting Crossref open scholarly resolution while strictly enforcing `BLOCKED_BY_PROVIDER` failure for Mendeley and Papers.
+  - Authored comprehensive test reports: `docs/test-reports/s13-t01.md`, `docs/test-reports/s13-t02.md`, `docs/test-reports/s13-t03.md`, `docs/test-reports/s13-t07.md`.
+  - Updated task frontmatters (`status: done`, `readiness: completed`), task index (`implementation/README.md`), roadmap (`docs/planning/04-implementation-roadmap.md`), sprint progress (`docs/progress/sprint-13.md`), and feature matrix (`docs/feature-parity.md`).
+- **Actual Hours:** 28 h (S13-T01: 8h, S13-T02: 8h, S13-T03: 4h, S13-T07: 8h).
+- **Commands & Results:**
+  - Sprint 13 test suites: `pnpm exec vitest run --coverage.enabled=false tests/integration/s13-*.test.ts tests/regression/int-03/s13-*.test.ts tests/regression/int-04/s13-*.test.ts tests/regression/int-07/s13-*.test.ts` (8 test files, 45 tests, 100% PASS).
+  - `pnpm typecheck`: PASS (0 errors).
+  - `pnpm lint`: PASS (0 errors; ESLint and check-workspace boundaries verified).
+  - `pnpm build`: PASS (all packages, apps, and web bundles built cleanly).
+  - `python3 scripts/plan_lint.py`: PASS (184 tasks, 93 requirements, 16 stages, 1328 task hours).
+  - `python3 scripts/build_icm_map.py --check`: PASS (13 objects, 2 processes).
+- **Blockers / Gaps:** Mendeley and Papers lack public open APIs and their terms restrict consumer mirroring; marked `BLOCKED_BY_PROVIDER` per ADR-009.
+- **Technical Debt:** None. No phantom parity claims.
+- **Next Ready Task:** S13-T04 (Implement authorized manual Dropbox export, starting the second half of Sprint 13).

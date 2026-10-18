@@ -1,14 +1,15 @@
 import type { FastifyInstance } from "fastify";
-export function problem(status: number, code: string, requestId: string) {
+export function problem(status: number, code: string, requestId: string, customDetail?: string) {
   return {
     type: `https://latex-workspace.example/errors/${code.toLowerCase()}`,
     title: status >= 500 ? "Service unavailable" : "Request rejected",
     status,
     code,
     detail:
-      status >= 500
+      customDetail ??
+      (status >= 500
         ? "The service is temporarily unavailable."
-        : "The request could not be processed.",
+        : "The request could not be processed."),
     requestId,
   };
 }

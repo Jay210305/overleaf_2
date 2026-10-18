@@ -951,3 +951,4 @@ export type GitHubLinkResult = z.infer<typeof githubLinkResultSchema>;
 
 export * from "./storage.js";
 export * from "./executor.js";
+export * from "./provider.js";
