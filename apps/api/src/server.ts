@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import Fastify, { type FastifyServerOptions } from "fastify";
 import cors from "@fastify/cors";
+import { isOriginAllowed } from "@latex-collab/config/server";
 import { healthSchema } from "@latex-collab/contracts";
 import { registerErrors, problem } from "./plugins/errors.js";
 import { registerDevelopmentSampleRoute } from "./modules/development/sample.js";
@@ -103,7 +104,8 @@ const authScopes = new Set([
 export interface ServerOptions {
   checkReadiness: () => Promise<boolean>;
   logger?: FastifyServerOptions["logger"];
-  origin?: string;
+  origin?: string | readonly string[] | undefined;
+  allowedOrigins?: string | readonly string[] | undefined;
   db?: DatabaseClient | undefined;
   storage?: StorageAdapter | undefined;
   sendVerification?: SendVerification | undefined;
@@ -136,9 +138,42 @@ export function createServer(options: ServerOptions) {
   });
   registerErrors(app);
   installTelemetryHooks(app);
-  if (options.origin)
+
+  const rawOrigins: string[] = [];
+  if (typeof options.origin === "string") {
+    rawOrigins.push(options.origin);
+  } else if (Array.isArray(options.origin)) {
+    rawOrigins.push(...options.origin);
+  }
+  if (typeof options.allowedOrigins === "string") {
+    rawOrigins.push(options.allowedOrigins);
+  } else if (Array.isArray(options.allowedOrigins)) {
+    rawOrigins.push(...options.allowedOrigins);
+  }
+  const allOrigins = rawOrigins
+    .flatMap((item) => item.split(","))
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const primaryOrigin = allOrigins[0];
+  const originsString = allOrigins.join(",");
+  const secureCookies = options.secureCookies ?? primaryOrigin?.startsWith("https://") ?? false;
+  const effectiveOrigin =
+    originsString || (typeof options.origin === "string" ? options.origin : undefined);
+
+  if (allOrigins.length > 0)
     void app.register(cors, {
-      origin: options.origin,
+      origin: (requestOrigin, cb) => {
+        if (!requestOrigin) {
+          cb(null, true);
+          return;
+        }
+        if (isOriginAllowed(requestOrigin, allOrigins)) {
+          cb(null, true);
+        } else {
+          cb(null, false);
+        }
+      },
       credentials: true,
       methods: ["GET", "POST", "PATCH", "DELETE"],
       allowedHeaders: [
@@ -178,8 +213,8 @@ export function createServer(options: ServerOptions) {
   });
   installProjectGuard(app, {
     db: options.db,
-    origin: options.origin,
-    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    origin: effectiveOrigin,
+    secureCookies,
   });
   app.get("/api/v1/health/live", async (request) =>
     healthSchema.parse({ status: "live", requestId: request.id }),
@@ -201,48 +236,48 @@ export function createServer(options: ServerOptions) {
   registerDevelopmentSampleRoute(app, { db: options.db, storage: options.storage });
   registerAuthRoutes(app, {
     db: options.db,
-    origin: options.origin,
+    origin: effectiveOrigin,
     sendVerification: options.sendVerification,
     sendPasswordReset: options.sendPasswordReset,
-    secureCookies: options.secureCookies,
+    secureCookies,
   });
   registerProfileRoutes(app, {
     db: options.db,
-    origin: options.origin,
-    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    origin: effectiveOrigin,
+    secureCookies,
   });
   registerPasswordChangeRoute(app, {
     db: options.db,
-    origin: options.origin,
-    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    origin: effectiveOrigin,
+    secureCookies,
   });
   registerDeleteAccountRoute(app, {
     db: options.db,
-    origin: options.origin,
-    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    origin: effectiveOrigin,
+    secureCookies,
   });
   registerAvatarRoutes(app, {
     db: options.db,
     storage: options.storage,
-    origin: options.origin,
-    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    origin: effectiveOrigin,
+    secureCookies,
   });
   registerOAuthRoutes(app, {
     db: options.db,
-    origin: options.origin,
-    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    origin: effectiveOrigin,
+    secureCookies,
     profileResolver: options.profileResolver,
   });
   registerMfaRoutes(app, {
     db: options.db,
-    origin: options.origin,
-    secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+    origin: effectiveOrigin,
+    secureCookies,
   });
   if (options.db) {
     registerProjectRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
     registerProjectLifecycleRoutes(app, {
       db: options.db,
@@ -252,13 +287,13 @@ export function createServer(options: ServerOptions) {
     });
     registerOwnershipRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
     registerProjectSettingsRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
     registerProjectStatisticsRoutes(app, {
       db: options.db,
@@ -266,13 +301,13 @@ export function createServer(options: ServerOptions) {
 
     registerTagRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
     registerTreeRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
     registerFigurePreviewRoute(app, { db: options.db, storage: options.storage });
     registerBinaryDownloadRoutes(app, { db: options.db, storage: options.storage });
@@ -280,8 +315,8 @@ export function createServer(options: ServerOptions) {
     registerTemplateRoutes(app, { db: options.db });
     registerTextRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
     registerCheckpointRoutes(app, {
       db: options.db,
@@ -303,8 +338,8 @@ export function createServer(options: ServerOptions) {
     registerCompilationRoutes(app, {
       db: options.db,
       storage: options.storage,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
     registerCollabTicketRoutes(app, {
       db: options.db,
@@ -312,14 +347,14 @@ export function createServer(options: ServerOptions) {
     });
     registerProjectInvitationRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
       sendProjectInvitation: options.sendProjectInvitation,
     });
     registerShareLinkRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
       collabInvalidation: options.collabInvalidation,
     });
     registerProjectMemberRoutes(app, {
@@ -328,18 +363,8 @@ export function createServer(options: ServerOptions) {
     });
     registerCommentRoutes(app, options.db);
     registerChatRoutes(app, options.db);
-    registerNotificationRoutes(
-      app,
-      options.db,
-      options.origin,
-      options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
-    );
-    registerChatEvents(
-      app,
-      options.db,
-      options.origin,
-      options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
-    );
+    registerNotificationRoutes(app, options.db, effectiveOrigin, secureCookies);
+    registerChatEvents(app, options.db, effectiveOrigin, secureCookies);
     registerSynctexRoutes(app, {
       db: options.db,
       storage: options.storage,
@@ -360,23 +385,23 @@ export function createServer(options: ServerOptions) {
     });
     registerIntegrationRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
     registerReferenceImportRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
     registerAssistanceRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
     registerAdminRoutes(app, {
       db: options.db,
-      origin: options.origin,
-      secureCookies: options.secureCookies ?? options.origin?.startsWith("https://") ?? false,
+      origin: effectiveOrigin,
+      secureCookies,
     });
   }
   return app;

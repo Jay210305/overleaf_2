@@ -305,7 +305,7 @@ export function registerCompilationRoutes(
         const expiresAtStr = artRow.expires_at
           ? artRow.expires_at.toISOString()
           : new Date(Date.now() + 14 * 86400 * 1000).toISOString();
-        const baseOrigin = options.origin ?? "http://127.0.0.1:54000";
+        const baseOrigin = options.origin?.split(",")[0]?.trim() ?? "http://127.0.0.1:54000";
 
         if (artRow.pdf_key) {
           items.push({

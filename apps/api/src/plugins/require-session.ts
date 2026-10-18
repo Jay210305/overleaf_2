@@ -30,7 +30,7 @@ declare module "fastify" {
 export async function requireSession(
   db: DatabaseClient,
   request: FastifyRequest,
-  origin: string | undefined,
+  origin: string | readonly string[] | undefined,
   secureCookies: boolean,
   mutation = false,
 ): Promise<SessionIdentity> {
@@ -71,7 +71,7 @@ export async function requireSession(
 export async function requireProjectAction(
   db: DatabaseClient,
   request: FastifyRequest,
-  origin: string | undefined,
+  origin: string | readonly string[] | undefined,
   secureCookies: boolean,
   action: unknown,
 ): Promise<ProjectAuthorization> {
@@ -109,7 +109,11 @@ export async function requireProjectAction(
 
 export function installProjectGuard(
   app: FastifyInstance,
-  options: { db?: DatabaseClient | undefined; origin?: string | undefined; secureCookies: boolean },
+  options: {
+    db?: DatabaseClient | undefined;
+    origin?: string | readonly string[] | undefined;
+    secureCookies: boolean;
+  },
 ): void {
   app.decorateRequest("projectAuthorization", undefined);
   app.decorateRequest("sessionIdentity", undefined);

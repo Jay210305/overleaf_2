@@ -25,7 +25,7 @@ import { CollabDurabilityMetrics } from "./metrics.js";
 export interface CollabServerOptions {
   port?: number | undefined;
   server?: http.Server | undefined;
-  allowedOrigin?: string | undefined;
+  allowedOrigin?: string | readonly string[] | undefined;
   db?: DatabaseClient | undefined;
   ticketStore: TicketStore;
   redisCoordinator?: CollabRedisCoordinator | undefined;

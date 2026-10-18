@@ -1,4 +1,4 @@
-import { parseServerConfig } from "@latex-collab/config/server";
+import { parseServerConfig, parseAllowedOrigins } from "@latex-collab/config/server";
 import { DatabaseClient } from "@latex-collab/db";
 import { S3StorageAdapter } from "@latex-collab/storage";
 import { createReadiness } from "./readiness.js";
@@ -20,6 +20,10 @@ import {
 } from "./modules/auth/mail.js";
 async function main() {
   const config = parseServerConfig(process.env);
+  const allowedOrigins = parseAllowedOrigins(
+    config.APP_ORIGIN,
+    config.CORS_ORIGIN ?? (process.env.ALLOWED_ORIGINS as string | undefined),
+  );
   const probes = createReadiness(config);
   const db = new DatabaseClient(config.DATABASE_URL);
   const rateLimiter = await createRedisAuthRateLimiter(config.REDIS_URL);
@@ -45,6 +49,7 @@ async function main() {
   const app = createServer({
     checkReadiness: probes.check,
     origin: config.APP_ORIGIN,
+    allowedOrigins,
     logger: safeLoggerOptions(config.LOG_LEVEL),
     db,
     rateLimiter,
@@ -90,7 +95,7 @@ async function main() {
     server: app.server,
     db,
     ticketStore,
-    allowedOrigin: config.APP_ORIGIN,
+    allowedOrigin: allowedOrigins.join(","),
     redisCoordinator,
   });
   await collab.start();

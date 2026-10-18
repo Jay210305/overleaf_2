@@ -9,6 +9,8 @@ export const serverConfigSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
   APP_ORIGIN: origin,
+  CORS_ORIGIN: z.string().optional(),
+  ALLOWED_ORIGINS: z.string().optional(),
   DATABASE_URL: urlFor(["postgres:", "postgresql:"]),
   REDIS_URL: urlFor(["redis:", "rediss:"]),
   S3_ENDPOINT: urlFor(["http:", "https:"]),
@@ -32,4 +34,89 @@ export function parseServerConfig(env: Record<string, unknown>): ServerConfig {
       `Invalid configuration fields: ${[...new Set(result.error.issues.map((issue) => issue.path.join(".")))].join(", ")}`,
     );
   return result.data;
+}
+
+export function isOriginAllowed(
+  requestOrigin: string | undefined | null,
+  allowedOrigins: string | readonly string[] | undefined | null,
+): boolean {
+  if (!requestOrigin || !allowedOrigins) return false;
+
+  let parsedReq: URL;
+  try {
+    parsedReq = new URL(requestOrigin);
+  } catch {
+    return false;
+  }
+
+  const reqProtocol = parsedReq.protocol.toLowerCase();
+  const reqHost = parsedReq.host.toLowerCase();
+  const reqHostname = parsedReq.hostname.toLowerCase();
+  const normalizedReqOrigin = `${reqProtocol}//${reqHost}`;
+
+  const patterns = (Array.isArray(allowedOrigins) ? allowedOrigins : [allowedOrigins])
+    .flatMap((item) => (typeof item === "string" ? item.split(",") : []))
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  for (const rawPattern of patterns) {
+    const pattern = rawPattern.trim();
+    if (!pattern) continue;
+
+    const normalizedPattern = pattern.replace(/\/+$/, "").toLowerCase();
+    if (normalizedReqOrigin === normalizedPattern) {
+      return true;
+    }
+
+    let expectedProtocol: string | null = null;
+    let hostPattern = normalizedPattern;
+
+    if (normalizedPattern.includes("://")) {
+      const parts = normalizedPattern.split("://");
+      expectedProtocol = `${parts[0]}:`;
+      hostPattern = parts[1] ?? "";
+    }
+
+    if (expectedProtocol && reqProtocol !== expectedProtocol) {
+      continue;
+    }
+
+    if (hostPattern.startsWith("*.")) {
+      const suffix = hostPattern.slice(1);
+      if (reqHostname.endsWith(suffix) && reqHostname.length > suffix.length) {
+        return true;
+      }
+    } else if (hostPattern.endsWith(":*")) {
+      const expectedHostname = hostPattern.slice(0, -2);
+      if (reqHostname === expectedHostname) {
+        return true;
+      }
+    } else if (hostPattern === "*") {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function parseAllowedOrigins(appOrigin: string, corsOrigin?: string | undefined): string[] {
+  const set = new Set<string>();
+  if (appOrigin && appOrigin.trim()) {
+    set.add(appOrigin.trim().replace(/\/+$/, ""));
+  }
+  if (corsOrigin) {
+    for (const item of corsOrigin.split(",")) {
+      const trimmed = item.trim().replace(/\/+$/, "");
+      if (trimmed) {
+        set.add(trimmed);
+      }
+    }
+  }
+  if (appOrigin.includes("latex-editor") && appOrigin.includes(".pages.dev")) {
+    set.add("https://latex-editor.pages.dev");
+    set.add("https://latex-editor-do7.pages.dev");
+    set.add("https://*.latex-editor.pages.dev");
+    set.add("*.pages.dev");
+  }
+  return Array.from(set);
 }

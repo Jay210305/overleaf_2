@@ -1,4 +1,5 @@
 import { createHash, randomBytes } from "node:crypto";
+import { isOriginAllowed } from "@latex-collab/config/server";
 import type { DatabaseClient } from "@latex-collab/db";
 import type { TicketView } from "@latex-collab/contracts";
 
@@ -121,7 +122,7 @@ export const globalMemoryTicketStore = new MemoryTicketStore();
 export interface ValidateTicketOptions {
   ticket: string;
   origin?: string | undefined;
-  allowedOrigin?: string | undefined;
+  allowedOrigin?: string | readonly string[] | undefined;
   ticketStore: TicketStore;
   db?: DatabaseClient | undefined;
 }
@@ -139,14 +140,6 @@ export type ValidateTicketResult =
         | "RESOURCE_NOT_FOUND";
       detail?: string;
     };
-
-function trimTrailingSlashes(value: string): string {
-  let normalized = value;
-  while (normalized.endsWith("/")) {
-    normalized = normalized.slice(0, -1);
-  }
-  return normalized;
-}
 
 /**
  * Validates and atomically consumes a single-use WSS collaboration ticket.
@@ -170,9 +163,7 @@ export async function validateAndConsumeTicket(
     if (!origin) {
       return { ok: false, error: "ORIGIN_NOT_ALLOWED" };
     }
-    const normOrigin = trimTrailingSlashes(origin);
-    const normAllowed = trimTrailingSlashes(allowedOrigin);
-    if (normOrigin !== normAllowed) {
+    if (!isOriginAllowed(origin, allowedOrigin)) {
       return { ok: false, error: "ORIGIN_NOT_ALLOWED" };
     }
   }

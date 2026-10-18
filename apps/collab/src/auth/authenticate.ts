@@ -5,7 +5,7 @@ import { validateAndConsumeTicket, type ValidateTicketResult } from "./ticket.js
 export interface AuthenticateConnectionInput {
   ticket: string;
   origin?: string | undefined;
-  allowedOrigin?: string | undefined;
+  allowedOrigin?: string | readonly string[] | undefined;
   expectedProjectId?: string | undefined;
   expectedFileId?: string | undefined;
 }
