@@ -35,7 +35,6 @@ jobs:
       - name: Build frontend
         env:
           VITE_API_URL: https://latex-api-production-dd00.up.railway.app/api/v1
-          VITE_WS_URL: wss://latex-api-production-dd00.up.railway.app
           VITE_APP_NAME: LaTeX Workspace
         run: |
           pnpm --filter "./packages/*" build
@@ -46,6 +45,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: latex-editor
+          projectName: latex-editor-do7
           directory: apps/web/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
