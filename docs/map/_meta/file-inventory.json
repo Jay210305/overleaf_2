@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "85defdc6e463ffad5c9359a5fd2c37a7f5e92af2",
+  "git_baseline": "935d7a8fa3d03e369d0ac459b9f772242e8c1315",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -4059,6 +4059,11 @@
       "path": "pnpm-workspace.yaml",
       "role": "factory",
       "sha256": "720a20dc62124f720a53bb70df7c864a6f6b22d758e41e1696188942d582ad43"
+    },
+    {
+      "path": "railway.json",
+      "role": "factory",
+      "sha256": "ddecb1ccfabf038d44dbf182ee68b37168fd792b353966187b8b8b93fd69de99"
     },
     {
       "path": "scripts/CONTEXT.md",
