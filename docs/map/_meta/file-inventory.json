@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "9816128ea4ff0030d07a320338fbc49592d6d440",
+  "git_baseline": "6bbc41fcc36f427a44a9baaff36d3bf7b8c8ab49",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -1603,7 +1603,7 @@
     {
       "path": "docs/test-reports/merge-s13-s14.md",
       "role": "factory",
-      "sha256": "335823bf94aeb1cd3abae559e10128cee49e3c7a0e5abf4e93093553a1095634"
+      "sha256": "3dacacc90bd8d6f69d5f073877fd435600e8e726db8a63a5093cc02ba9783284"
     },
     {
       "path": "docs/test-reports/s00-t01.md",
@@ -5318,7 +5318,7 @@
     {
       "path": "tests/regression/col-03/s08-t03.test.tsx",
       "role": "factory",
-      "sha256": "ecc523396e2b7ccb997fae92830a6b9d606f7f86bb40d6e842242a5a8fec3fe0"
+      "sha256": "83dd288e71b01721c86fa75e086cd14c02ac8d6ad8f998cca33397b3183e15db"
     },
     {
       "path": "tests/regression/col-03/s08-t07.test.ts",
@@ -5763,7 +5763,7 @@
     {
       "path": "tests/regression/int-05/s12-t05-mount.test.tsx",
       "role": "factory",
-      "sha256": "05a8ff1fac2fd8ee7e33144d418526f331ee27921efa80288be29f8a465fde54"
+      "sha256": "07bc2bdce82884628c510919d3eda4d19aa277c76497b9c537078809f933d0c3"
     },
     {
       "path": "tests/regression/int-05/s12-t05.test.ts",

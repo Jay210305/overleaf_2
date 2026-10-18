@@ -2,7 +2,8 @@
 import { createElement } from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { Router } from "../../../apps/web/src/app/router.js";
+import { MemoryRouter } from "react-router-dom";
+import { ProjectWorkspace } from "../../../apps/web/src/features/projects/workspace.js";
 import { ShareDialog } from "../../../apps/web/src/features/sharing/share-dialog.js";
 
 vi.mock("../../../apps/web/src/features/files/file-tree.js", () => ({ FileTree: () => null }));
@@ -46,7 +47,6 @@ it("shows members read-only when a non-owner opens sharing", async () => {
 
 it("opens the sharing controls from a loaded project workspace", async () => {
   const projectId = "11111111-1111-4111-8111-111111111111";
-  window.history.replaceState(null, "", `/project/${projectId}`);
   vi.stubGlobal(
     "fetch",
     vi.fn(async (url: string) => {
@@ -55,7 +55,13 @@ it("opens the sharing controls from a loaded project workspace", async () => {
       return Response.json({ items: [], nextCursor: null });
     }),
   );
-  render(createElement(Router));
+  render(
+    createElement(
+      MemoryRouter,
+      null,
+      createElement(ProjectWorkspace, { projectId, apiUrl: "http://api.test/api/v1" }),
+    ),
+  );
   fireEvent.click(await screen.findByRole("button", { name: "Share project" }));
   expect(await screen.findByRole("dialog", { name: "Project sharing" })).toBeTruthy();
 });
