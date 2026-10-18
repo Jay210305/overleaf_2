@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "aa6a62c3f2187e611398bc331e7e5a05f8c3beb0",
+  "git_baseline": "c92020f6d770fbc6ef94839ca4bd81cb90e4f303",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -79,6 +79,11 @@
       "path": "CONTEXT.md",
       "role": "contract",
       "sha256": "eb1ea8772f6fd6753d57b82340db5d842f15518274681b04a4d7551232afc1fa"
+    },
+    {
+      "path": "Dockerfile",
+      "role": "factory",
+      "sha256": "70fcf0d6c02ef9cdccaa516666e9cd88a8cdda90c029b661da134b7cd65822ba"
     },
     {
       "path": "PLANNING_METHODOLOGY.md",
@@ -3651,11 +3656,6 @@
       "sha256": "fe5c6a8c37b2e3a67b4c6d506ae8ac558f456ab69bfc9e5a4056780a96a41a51"
     },
     {
-      "path": "nixpacks.toml",
-      "role": "factory",
-      "sha256": "f8624e67a34a4721a7e4e4baa5457c79531357e1e67eb4f26db67e1a31114a7e"
-    },
-    {
       "path": "package.json",
       "role": "factory",
       "sha256": "653ac3b47ad2dab3a55f86262ce3484766af75d4be7432b4900db3c61d1116d2"
@@ -4064,11 +4064,6 @@
       "path": "pnpm-workspace.yaml",
       "role": "factory",
       "sha256": "720a20dc62124f720a53bb70df7c864a6f6b22d758e41e1696188942d582ad43"
-    },
-    {
-      "path": "railway.json",
-      "role": "factory",
-      "sha256": "ddecb1ccfabf038d44dbf182ee68b37168fd792b353966187b8b8b93fd69de99"
     },
     {
       "path": "scripts/CONTEXT.md",
