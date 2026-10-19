@@ -13,20 +13,32 @@ async function main() {
   const db = new DatabaseClient(config.DATABASE_URL);
   try {
     const token = await createTrustedRegistrationInvitation(db, email, displayName);
-    await createSmtpInvitationSender(
-      config.SMTP_URL,
-      config.EMAIL_FROM,
-      config.APP_ORIGIN,
-    )(normalizeEmail(email), token);
-    console.log("Trusted registration invitation sent.");
+    console.log(`\n========================================`);
+    console.log(`Trusted invitation generated successfully!`);
+    console.log(`Email: ${email}`);
+    console.log(`Display Name: ${displayName}`);
+    console.log(`Invitation Code: ${token}`);
+    console.log(`Direct Registration URL: ${config.APP_ORIGIN}/register#invitation=${token}`);
+    console.log(`========================================\n`);
+
+    try {
+      await createSmtpInvitationSender(
+        config.SMTP_URL,
+        config.EMAIL_FROM,
+        config.APP_ORIGIN,
+      )(normalizeEmail(email), token);
+      console.log("Trusted registration invitation email sent via SMTP.");
+    } catch (err) {
+      console.warn(`(SMTP delivery skipped or failed: ${(err as Error)?.message})`);
+    }
   } finally {
     await db.close();
   }
 }
 
-main().catch(() => {
+main().catch((err) => {
   console.error(
-    "Invitation failed. Check configuration, database, recipient state and mail service.",
+    "Invitation failed:", (err as Error)?.message || err,
   );
   process.exitCode = 1;
 });
