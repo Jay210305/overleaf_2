@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { parsePublicConfig } from "@latex-collab/config";
-import type { ProjectNodeView, ProjectView } from "@latex-collab/contracts";
+import type { CompilationView, ProjectNodeView, ProjectView } from "@latex-collab/contracts";
 import { FileTree } from "../files/file-tree.js";
 import { FileUploader } from "../files/file-uploader.js";
+import { BinaryPreview } from "../files/binary-preview.js";
 import { ShareDialog } from "../sharing/share-dialog.js";
 import { CommentAnchors } from "../review/comment-anchors.js";
 import { ProjectChat } from "../chat/project-chat.js";
@@ -11,6 +12,13 @@ import { ReadOnlyTextDocument } from "../visual/mode-switch.js";
 import { LiveTextDocument } from "../collab/live-document.js";
 import { ProjectSettings } from "./settings.js";
 import { GitHubSyncPanel } from "../integrations/github-sync.js";
+import { CompileControls } from "../compilation/compile-controls.js";
+import { PdfViewer } from "../pdf/pdf-viewer.js";
+import { HistoryTimeline } from "../history/timeline.js";
+import { VersionCompare } from "../history/version-compare.js";
+import { ReferenceSearch } from "../references/search.js";
+import { ZoteroLibraryPanel } from "../references/zotero.js";
+import { ProjectSearch } from "../search/project-search.js";
 
 const config = parsePublicConfig(import.meta.env);
 const defaultApiUrl = config.VITE_API_URL;
@@ -19,12 +27,14 @@ export interface ProjectWorkspaceProps {
   projectId?: string | undefined;
   apiUrl?: string | undefined;
   csrfToken?: string | undefined;
+  defaultShowCompile?: boolean | undefined;
 }
 
 export function ProjectWorkspace({
   projectId: propProjectId,
   apiUrl = defaultApiUrl,
   csrfToken,
+  defaultShowCompile = true,
 }: ProjectWorkspaceProps) {
   const { id: paramProjectId } = useParams<{ id: string }>();
   const projectId = propProjectId ?? paramProjectId ?? "";
@@ -37,6 +47,14 @@ export function ProjectWorkspace({
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showGitHubSync, setShowGitHubSync] = useState(false);
+  const [showPdf, setShowPdf] = useState(defaultShowCompile);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showReferencesModal, setShowReferencesModal] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+  const [compareBaseNo, setCompareBaseNo] = useState<number | null>(null);
+  const [compareTargetNo, setCompareTargetNo] = useState<number | null>(null);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [latestJob, setLatestJob] = useState<CompilationView | null>(null);
   const [uploadVersion, setUploadVersion] = useState(0);
 
   const fetchProject = useCallback(async () => {
@@ -90,6 +108,38 @@ export function ProjectWorkspace({
           <span>{project ? project.title : "Loading…"}</span>
         </nav>
         <div className="workspace-actions">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowPdf((value) => !value)}
+            aria-pressed={showPdf}
+          >
+            {showPdf ? "Hide PDF" : "Show PDF"}
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowSearchModal(true)}
+            aria-haspopup="dialog"
+          >
+            Search
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowReferencesModal(true)}
+            aria-haspopup="dialog"
+          >
+            References
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowHistoryModal(true)}
+            aria-haspopup="dialog"
+          >
+            History
+          </button>
           <button
             type="button"
             className="btn btn-secondary"
@@ -155,7 +205,11 @@ export function ProjectWorkspace({
                 selectedNodeId={selectedNode?.id}
                 onSelectNode={(node) => {
                   setSelectedNode(node);
-                  setLiveFileId(null);
+                  if (node.kind === "FILE" && node.contentKind === "TEXT") {
+                    setLiveFileId(node.id);
+                  } else {
+                    setLiveFileId(null);
+                  }
                 }}
                 refreshVersion={uploadVersion}
               />
@@ -164,7 +218,28 @@ export function ProjectWorkspace({
             <section className="workspace-content" aria-label="Document view">
               {selectedNode?.kind === "FILE" && selectedNode.contentKind === "TEXT" ? (
                 <div className="selected-node-panel">
-                  <h2>{selectedNode.name}</h2>
+                  <div className="node-panel-header">
+                    <h2>{selectedNode.name}</h2>
+                    <div className="node-panel-actions">
+                      {liveFileId === selectedNode.id ? (
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-secondary"
+                          onClick={() => setLiveFileId(null)}
+                        >
+                          View Read-Only
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-primary"
+                          onClick={() => setLiveFileId(selectedNode.id)}
+                        >
+                          Enter Live Editor
+                        </button>
+                      )}
+                    </div>
+                  </div>
                   {liveFileId === selectedNode.id ? (
                     <LiveTextDocument
                       key={selectedNode.id}
@@ -176,23 +251,33 @@ export function ProjectWorkspace({
                       onExit={() => setLiveFileId(null)}
                     />
                   ) : (
-                    <>
-                      <button type="button" onClick={() => setLiveFileId(selectedNode.id)}>
-                        Join live editor
-                      </button>
-                      <ReadOnlyTextDocument
-                        key={selectedNode.id}
-                        projectId={projectId}
-                        fileId={selectedNode.id}
-                        apiUrl={apiUrl}
-                      />
-                    </>
+                    <ReadOnlyTextDocument
+                      key={selectedNode.id}
+                      projectId={projectId}
+                      fileId={selectedNode.id}
+                      apiUrl={apiUrl}
+                    />
                   )}
                   <CommentAnchors
                     projectId={projectId}
                     fileId={selectedNode.id}
                     apiUrl={apiUrl}
                     csrfToken={csrfToken}
+                  />
+                </div>
+              ) : selectedNode?.kind === "FILE" && selectedNode.contentKind === "BINARY" ? (
+                <div className="selected-node-panel">
+                  <h2>{selectedNode.name}</h2>
+                  <BinaryPreview
+                    projectId={projectId}
+                    apiUrl={apiUrl}
+                    node={{
+                      id: selectedNode.id,
+                      name: selectedNode.name,
+                      mime: selectedNode.mime,
+                      contentKind: selectedNode.contentKind,
+                      sizeBytes: selectedNode.sizeBytes,
+                    }}
                   />
                 </div>
               ) : selectedNode ? (
@@ -211,7 +296,7 @@ export function ProjectWorkspace({
                 </div>
               ) : (
                 <div className="empty-selection">
-                  <p>Select a file in the tree to view details.</p>
+                  <p>Select a file in the tree to begin editing or viewing.</p>
                 </div>
               )}
               <ProjectChat
@@ -221,6 +306,40 @@ export function ProjectWorkspace({
                 csrfToken={csrfToken}
               />
             </section>
+
+            {showPdf && (
+              <aside className="workspace-pdf-pane" aria-label="PDF Preview and Compilation">
+                <div className="pdf-pane-header">
+                  <CompileControls
+                    projectId={projectId}
+                    defaultCompiler={project?.compiler ?? "pdflatex"}
+                    apiBaseUrl={apiUrl}
+                    onCompileComplete={(job) => {
+                      setLatestJob(job);
+                      if (job.status === "succeeded") {
+                        setPdfUrl(
+                          `${apiUrl}/projects/${projectId}/compilations/${job.id}/artifacts/output.pdf`,
+                        );
+                      }
+                    }}
+                  />
+                </div>
+                <div className="pdf-pane-body">
+                  <PdfViewer
+                    projectId={projectId}
+                    pdfUrl={pdfUrl}
+                    lastCompileStatus={
+                      latestJob?.status === "cancel_requested"
+                        ? "cancelled"
+                        : (latestJob?.status ?? null)
+                    }
+                    onDownload={() => {
+                      if (pdfUrl) window.open(pdfUrl, "_blank");
+                    }}
+                  />
+                </div>
+              </aside>
+            )}
           </div>
         </>
       )}
@@ -230,35 +349,11 @@ export function ProjectWorkspace({
           role="dialog"
           aria-modal="true"
           aria-label="Project Settings"
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-          }}
+          className="workspace-modal-overlay"
         >
-          <div
-            style={{
-              backgroundColor: "#fff",
-              padding: "24px",
-              borderRadius: "8px",
-              maxWidth: "600px",
-              width: "90%",
-              maxHeight: "90vh",
-              overflowY: "auto",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "16px",
-              }}
-            >
-              <h2 style={{ margin: 0 }}>Project Settings</h2>
+          <div className="workspace-modal-card">
+            <div className="workspace-modal-header">
+              <h2>Project Settings</h2>
               <button
                 type="button"
                 onClick={() => {
@@ -281,6 +376,110 @@ export function ProjectWorkspace({
           </div>
         </div>
       )}
+
+      {showHistoryModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Project History"
+          className="workspace-modal-overlay"
+        >
+          <div className="workspace-modal-card wide">
+            <div className="workspace-modal-header">
+              <h2>Revision History & Diffs</h2>
+              <button type="button" onClick={() => setShowHistoryModal(false)}>
+                Close
+              </button>
+            </div>
+            {compareBaseNo !== null && compareTargetNo !== null ? (
+              <VersionCompare
+                projectId={projectId}
+                baseRevisionNo={compareBaseNo}
+                targetRevisionNo={compareTargetNo}
+                apiUrl={apiUrl}
+                onClose={() => {
+                  setCompareBaseNo(null);
+                  setCompareTargetNo(null);
+                }}
+              />
+            ) : (
+              <HistoryTimeline
+                projectId={projectId}
+                apiUrl={apiUrl}
+                csrfToken={csrfToken}
+                onCompareRevisions={(base, target) => {
+                  setCompareBaseNo(base);
+                  setCompareTargetNo(target);
+                }}
+              />
+            )}
+          </div>
+        </div>
+      )}
+
+      {showReferencesModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="References and Citations"
+          className="workspace-modal-overlay"
+        >
+          <div className="workspace-modal-card wide">
+            <div className="workspace-modal-header">
+              <h2>Academic References & Citations</h2>
+              <button type="button" onClick={() => setShowReferencesModal(false)}>
+                Close
+              </button>
+            </div>
+            <div className="workspace-references-tabs">
+              <section aria-label="BibTeX Search">
+                <h3>BibTeX References</h3>
+                <ReferenceSearch
+                  bibSource=""
+                  onSelectKey={(key) => {
+                    navigator.clipboard?.writeText?.(key);
+                  }}
+                  onInsertCitation={(key) => {
+                    navigator.clipboard?.writeText?.(`\\cite{${key}}`);
+                  }}
+                />
+              </section>
+              <section aria-label="Zotero Integration" style={{ marginTop: "24px" }}>
+                <h3>Zotero Sync</h3>
+                <ZoteroLibraryPanel
+                  projectId={projectId}
+                  userRole="OWNER"
+                  connected={false}
+                />
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSearchModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Project Search"
+          className="workspace-modal-overlay"
+        >
+          <div className="workspace-modal-card">
+            <div className="workspace-modal-header">
+              <h2>Project Search & Replace</h2>
+              <button type="button" onClick={() => setShowSearchModal(false)}>
+                Close
+              </button>
+            </div>
+            <ProjectSearch
+              projectId={projectId}
+              currentRevision={project?.currentRevision ?? 1}
+              baseUrl={apiUrl}
+            />
+          </div>
+        </div>
+      )}
+
       {showShareDialog && (
         <ShareDialog
           projectId={projectId}

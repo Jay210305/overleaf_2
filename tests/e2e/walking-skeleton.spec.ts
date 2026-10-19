@@ -21,7 +21,7 @@ test("browser checks real API, navigation, theme and keyboard", async ({ page })
   );
   await page.getByRole("link", { name: "Projects", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Projects", exact: true })).toBeVisible();
-  await expect(page.getByText("Not implemented yet.", { exact: false })).toBeVisible();
+  await expect(page.getByRole("button", { name: "New Project" })).toBeVisible();
   await page.reload();
   await expect(page.getByRole("heading", { name: "Projects", exact: true })).toBeVisible();
   const results = await new AxeBuilder({ page })

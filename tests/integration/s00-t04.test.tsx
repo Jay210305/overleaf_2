@@ -8,15 +8,14 @@ afterEach(() => {
   localStorage.clear();
   history.replaceState({}, "", "/");
 });
-it("routes explicitly unavailable features and persists theme", () => {
+it("routes workspace features and persists theme", async () => {
   history.replaceState({}, "", "/projects");
   render(
     <Providers>
       <Router />
     </Providers>,
   );
-  expect(screen.getByRole("heading", { name: "Projects" })).toBeTruthy();
-  expect(screen.getByText(/Not implemented yet/)).toBeTruthy();
+  expect(await screen.findByRole("heading", { name: "Projects" })).toBeTruthy();
   fireEvent.click(screen.getByRole("button", { name: "Dark theme" }));
   expect(localStorage.getItem("theme")).toBe("dark");
   cleanup();

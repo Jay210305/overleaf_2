@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "1284b026ca8884a0b963e62c796dff6bdedc42c9",
+  "git_baseline": "42317da1dfae54d00c1675995b2adf56abee1493",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -58,7 +58,7 @@
     {
       "path": ".github/workflows/deploy-pages.yml",
       "role": "factory",
-      "sha256": "46ebfbd83674f7a4af6d395586607601d734a1816936b0314802e27722e386a3"
+      "sha256": "6495a91fdbc1c30183b0f598b10d2408e8597042dc8bac541eed982ab92e7ce4"
     },
     {
       "path": ".gitignore",
@@ -823,7 +823,7 @@
     {
       "path": "apps/web/src/app/router.tsx",
       "role": "factory",
-      "sha256": "504023ef20cdc0554bf238fafaa25d0730e4a6b652d0760d8b053ab8967dc1d3"
+      "sha256": "7e5900991d0db43d00b41d1cc4af141b2580e7ec8caea3cffe073d4295768329"
     },
     {
       "path": "apps/web/src/features/account/avatar.tsx",
@@ -951,6 +951,11 @@
       "sha256": "c28304a31a0b947829569bf2f317aefd50fe083b3690ddf65d56d6272f689a93"
     },
     {
+      "path": "apps/web/src/features/home/home-hub.tsx",
+      "role": "factory",
+      "sha256": "43b472788ea3faa8c8ade283a1c652a2425bd3cd815da5f61adfb2614e4793b1"
+    },
+    {
       "path": "apps/web/src/features/integrations/github-sync.tsx",
       "role": "factory",
       "sha256": "e88f861694b04e0cecf9a2a039c30804eb901d12ebcd591f70eabf43ca443f84"
@@ -1003,7 +1008,7 @@
     {
       "path": "apps/web/src/features/projects/workspace.tsx",
       "role": "factory",
-      "sha256": "1f45f075c2b7ad3f7fd83e06459d69a79916e1a761e96cc76acd5aacda15a343"
+      "sha256": "c0cfffdc9c9be2078249690562b1a385957b413faa4417057e6ccf7a87c95fc1"
     },
     {
       "path": "apps/web/src/features/references/search.tsx",
@@ -1083,7 +1088,7 @@
     {
       "path": "apps/web/src/styles.css",
       "role": "factory",
-      "sha256": "9d1d2c1314a43804e9432785cace18946536bc79cef561c917b7a78672cb38d5"
+      "sha256": "db41ce8468d90ec6da37858a889d4475367eaea3707d7955418c1b253dba1e47"
     },
     {
       "path": "apps/web/src/vite-env.d.ts",
@@ -4243,7 +4248,7 @@
     {
       "path": "tests/e2e/walking-skeleton.spec.ts",
       "role": "factory",
-      "sha256": "1c3a4ba4ef4a94dd6df0df6d75cdd652c34968f8d388fe39d17d2ff379f88745"
+      "sha256": "e2997598ecb63f7619ea90816fedbdd1de6e8b8217c1123111a8429c31c32e77"
     },
     {
       "path": "tests/helpers/collab-fixture.ts",
@@ -4348,7 +4353,7 @@
     {
       "path": "tests/integration/s00-t04.test.tsx",
       "role": "factory",
-      "sha256": "8a7d6ae16f6b248725b10d1387a0cdd8be132b065cdb7a58a5613acec1f39f61"
+      "sha256": "55c1aef83d0e1edadf35aa357a2715105bab6943466300f26abdecdd99940e74"
     },
     {
       "path": "tests/integration/s00-t05.test.ts",
