@@ -9,9 +9,17 @@ interface ProjectChatProps {
   projectId: string;
   apiUrl: string;
   csrfToken?: string | undefined;
+  onClose?: (() => void) | undefined;
+  onMessageCountChange?: ((count: number) => void) | undefined;
 }
 
-export function ProjectChat({ projectId, apiUrl, csrfToken }: ProjectChatProps) {
+export function ProjectChat({
+  projectId,
+  apiUrl,
+  csrfToken,
+  onClose,
+  onMessageCountChange,
+}: ProjectChatProps) {
   const base = `${apiUrl}/projects/${projectId}/chat`;
   const [messages, setMessages] = useState<ChatMessageView[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
@@ -20,6 +28,16 @@ export function ProjectChat({ projectId, apiUrl, csrfToken }: ProjectChatProps) 
   const [busy, setBusy] = useState(false);
   const [connected, setConnected] = useState(false);
   const olderLoaded = useRef(false);
+  const messageListRef = useRef<HTMLOListElement>(null);
+
+  useEffect(() => {
+    onMessageCountChange?.(messages.length);
+  }, [messages.length, onMessageCountChange]);
+
+  useEffect(() => {
+    const list = messageListRef.current;
+    if (list) list.scrollTop = list.scrollHeight;
+  }, [messages]);
 
   const loadLatest = useCallback(async () => {
     try {
@@ -136,6 +154,10 @@ export function ProjectChat({ projectId, apiUrl, csrfToken }: ProjectChatProps) 
   async function send(event: FormEvent) {
     event.preventDefault();
     if (!body.trim() || busy) return;
+    // Keep the composer focused for a conversation flow.
+    if (typeof document !== "undefined") {
+      (document.getElementById("project-chat-body") as HTMLTextAreaElement | null)?.focus();
+    }
     setBusy(true);
     try {
       const response = await fetch(`${base}/messages`, {
@@ -161,32 +183,95 @@ export function ProjectChat({ projectId, apiUrl, csrfToken }: ProjectChatProps) 
 
   return (
     <section aria-label="Project chat" className="project-chat">
-      <h2>Project chat</h2>
-      <p role="status">{connected ? "Live updates connected" : "Checking for new messages"}</p>
-      {error && <p role="alert">{error}</p>}
-      <button type="button" onClick={() => void loadLatest()} disabled={busy}>
-        Refresh chat
-      </button>
-      <ol>
-        {[...messages].reverse().map((message) => (
-          <li key={message.id}>
-            <strong>{message.authorName}</strong>: <span>{message.body}</span>{" "}
-            <time dateTime={message.createdAt}>{new Date(message.createdAt).toLocaleString()}</time>
-          </li>
-        ))}
-      </ol>
-      {cursor && (
-        <button type="button" onClick={() => void loadOlder()} disabled={busy}>
-          Load older messages
-        </button>
-      )}
-      <form onSubmit={(event) => void send(event)}>
-        <label htmlFor="project-chat-body">Chat message</label>
+      <header className="project-chat-header">
+        <div className="project-chat-heading">
+          <h2>Project chat</h2>
+          <p role="status" className="project-chat-status">
+            <span className={connected ? "chat-status-dot online" : "chat-status-dot"} />
+            {connected ? "Live updates connected" : "Checking for new messages"}
+          </p>
+        </div>
+        {onClose && (
+          <button
+            type="button"
+            className="chat-close-btn"
+            aria-label="Close chat"
+            onClick={onClose}
+          >
+            ×
+          </button>
+        )}
+      </header>
+
+      <div className="project-chat-body">
+        <div className="project-chat-tools">
+          <span>
+            {messages.length} message{messages.length === 1 ? "" : "s"}
+          </span>
+          <button
+            type="button"
+            className="btn-chat-ghost"
+            onClick={() => void loadLatest()}
+            disabled={busy}
+          >
+            Refresh chat
+          </button>
+        </div>
+        {error && (
+          <p role="alert" className="project-chat-error">
+            {error}
+          </p>
+        )}
+        <ol className="project-chat-messages" ref={messageListRef}>
+          {messages.length === 0 && (
+            <li className="project-chat-empty">No messages yet. Start the conversation.</li>
+          )}
+          {messages.map((message) => (
+            <li key={message.id} className="project-chat-message">
+              <span className="chat-avatar" aria-hidden="true">
+                {message.authorName.trim().charAt(0).toUpperCase() || "?"}
+              </span>
+              <div className="chat-message-content">
+                <div className="chat-message-meta">
+                  <strong>{message.authorName}</strong>
+                  <time dateTime={message.createdAt}>
+                    {new Date(message.createdAt).toLocaleString()}
+                  </time>
+                </div>
+                <p>{message.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        {cursor && (
+          <button
+            type="button"
+            className="btn-chat-ghost project-chat-older"
+            onClick={() => void loadOlder()}
+            disabled={busy}
+          >
+            Load older messages
+          </button>
+        )}
+      </div>
+
+      <form className="project-chat-composer" onSubmit={(event) => void send(event)}>
+        <label htmlFor="project-chat-body" className="sr-only">
+          Chat message
+        </label>
         <textarea
           id="project-chat-body"
           value={body}
           maxLength={10000}
+          rows={1}
+          placeholder="Write a message…"
           onChange={(event) => setBody(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+              event.preventDefault();
+              event.currentTarget.form?.requestSubmit();
+            }
+          }}
         />
         <button type="submit" disabled={busy || !body.trim()}>
           Send message

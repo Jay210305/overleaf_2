@@ -113,7 +113,7 @@ export function PdfViewer({
   return (
     <div
       data-testid="pdf-viewer"
-      className={`pdf-viewer-container flex flex-col h-full w-full bg-neutral-900 text-neutral-100 ${className}`}
+      className={`pdf-viewer-container ${className}`}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -167,6 +167,8 @@ export function PdfViewer({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "8px",
           padding: "6px 12px",
           backgroundColor: "#262626",
           borderBottom: "1px solid #404040",
@@ -197,6 +199,7 @@ export function PdfViewer({
           <input
             type="number"
             data-testid="page-input"
+            aria-label="Page number"
             min={1}
             max={totalPages}
             value={currentPage}

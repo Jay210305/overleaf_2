@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import * as Y from "yjs";
 import { parsePublicConfig } from "@latex-collab/config";
@@ -20,6 +20,7 @@ import { VersionCompare } from "../history/version-compare.js";
 import { ReferenceSearch } from "../references/search.js";
 import { ZoteroLibraryPanel } from "../references/zotero.js";
 import { ProjectSearch } from "../search/project-search.js";
+import { downloadProjectArchive } from "../files/zip.js";
 
 const config = parsePublicConfig(import.meta.env);
 const defaultApiUrl = config.VITE_API_URL;
@@ -52,6 +53,13 @@ export function ProjectWorkspace({
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [showReferencesModal, setShowReferencesModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [chatMessageCount, setChatMessageCount] = useState(0);
+  const [downloadingZip, setDownloadingZip] = useState(false);
+  const [workspaceStatus, setWorkspaceStatus] = useState<string | null>(null);
+  const [workspaceError, setWorkspaceError] = useState<string | null>(null);
+  const uploadDialogRef = useRef<HTMLDivElement>(null);
   const [compareBaseNo, setCompareBaseNo] = useState<number | null>(null);
   const [compareTargetNo, setCompareTargetNo] = useState<number | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -92,6 +100,40 @@ export function ProjectWorkspace({
   useEffect(() => {
     void fetchProject();
   }, [fetchProject]);
+
+  useEffect(() => {
+    if (!showChat) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setShowChat(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [showChat]);
+
+  const handleDownloadZip = useCallback(async () => {
+    if (!project || downloadingZip) return;
+    setDownloadingZip(true);
+    setWorkspaceError(null);
+    setWorkspaceStatus(null);
+    try {
+      const result = await downloadProjectArchive({
+        apiUrl,
+        projectId,
+        projectTitle: project.title,
+      });
+      setWorkspaceStatus(
+        `Downloaded ${result.fileName} · ${result.fileCount} file${
+          result.fileCount === 1 ? "" : "s"
+        }${result.folderCount > 0 ? ` and ${result.folderCount} folders` : ""}.`,
+      );
+    } catch (cause) {
+      setWorkspaceError(
+        cause instanceof Error ? cause.message : "The project archive could not be downloaded.",
+      );
+    } finally {
+      setDownloadingZip(false);
+    }
+  }, [apiUrl, downloadingZip, project, projectId]);
 
   useEffect(() => {
     if (!showReferencesModal || !projectId) return;
@@ -150,7 +192,7 @@ export function ProjectWorkspace({
         <div className="workspace-actions">
           <button
             type="button"
-            className="btn btn-secondary"
+            className="ws-action"
             onClick={() => setShowPdf((value) => !value)}
             aria-pressed={showPdf}
           >
@@ -158,7 +200,7 @@ export function ProjectWorkspace({
           </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="ws-action"
             onClick={() => setShowSearchModal(true)}
             aria-haspopup="dialog"
           >
@@ -166,7 +208,7 @@ export function ProjectWorkspace({
           </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="ws-action"
             onClick={() => setShowReferencesModal(true)}
             aria-haspopup="dialog"
           >
@@ -174,7 +216,7 @@ export function ProjectWorkspace({
           </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="ws-action"
             onClick={() => setShowHistoryModal(true)}
             aria-haspopup="dialog"
           >
@@ -182,7 +224,7 @@ export function ProjectWorkspace({
           </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="ws-action"
             onClick={() => setShowGitHubSync((value) => !value)}
             aria-expanded={showGitHubSync}
             aria-controls="github-sync-workspace"
@@ -191,7 +233,7 @@ export function ProjectWorkspace({
           </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="ws-action"
             onClick={() => setShowShareDialog(true)}
             aria-haspopup="dialog"
             aria-label="Share project"
@@ -200,12 +242,35 @@ export function ProjectWorkspace({
           </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="ws-action"
             onClick={() => setShowSettingsModal(true)}
             aria-haspopup="dialog"
             aria-label="Open project settings"
           >
             Project Settings
+          </button>
+          <button
+            type="button"
+            className={`ws-action ws-chat-toggle${showChat ? " active" : ""}`}
+            onClick={() => setShowChat((value) => !value)}
+            aria-haspopup="dialog"
+            aria-expanded={showChat}
+            aria-controls="project-chat-drawer"
+          >
+            Chat
+            {chatMessageCount > 0 && (
+              <span className="ws-chat-count" aria-label={`${chatMessageCount} messages`}>
+                {chatMessageCount}
+              </span>
+            )}
+          </button>
+          <button
+            type="button"
+            className="ws-action ws-download-zip"
+            onClick={() => void handleDownloadZip()}
+            disabled={downloadingZip}
+          >
+            {downloadingZip ? "Preparing ZIP…" : "Download ZIP"}
           </button>
         </div>
       </header>
@@ -225,19 +290,21 @@ export function ProjectWorkspace({
 
       {!loading && !error && (
         <>
-          {showGitHubSync && (
-            <div id="github-sync-workspace">
-              <GitHubSyncPanel projectId={projectId} apiUrl={apiUrl} csrfToken={csrfToken} />
-            </div>
-          )}
-          <div className="workspace-layout">
+          <div className="workspace-status-stack">
+            {workspaceStatus && (
+              <p role="status" className="workspace-toast">
+                {workspaceStatus}
+              </p>
+            )}
+            {workspaceError && (
+              <p role="alert" className="workspace-toast error">
+                {workspaceError}
+              </p>
+            )}
+          </div>
+
+          <div className={`workspace-layout${showPdf ? "" : " no-pdf"}`}>
             <aside className="workspace-sidebar" aria-label="Project files">
-              <FileUploader
-                projectId={projectId}
-                apiUrl={apiUrl}
-                csrfToken={csrfToken}
-                onUploaded={() => setUploadVersion((value) => value + 1)}
-              />
               <FileTree
                 projectId={projectId}
                 apiUrl={apiUrl}
@@ -248,10 +315,13 @@ export function ProjectWorkspace({
                   setLiveFileId(null);
                 }}
                 refreshVersion={uploadVersion}
+                onRequestUpload={() => setShowUploadModal(true)}
+                onRequestDownloadZip={() => void handleDownloadZip()}
+                downloadingZip={downloadingZip}
               />
             </aside>
 
-            <section className="workspace-content" aria-label="Document view">
+            <section className="workspace-editor" aria-label="Document view">
               {selectedNode?.kind === "FILE" && selectedNode.contentKind === "TEXT" ? (
                 <div className="selected-node-panel">
                   <div className="node-panel-header">
@@ -332,15 +402,16 @@ export function ProjectWorkspace({
                 </div>
               ) : (
                 <div className="empty-selection">
+                  <div className="empty-selection-mark" aria-hidden="true">
+                    &lt;/&gt;
+                  </div>
                   <p>Select a file in the tree to begin editing or viewing.</p>
+                  <p className="empty-selection-hint">
+                    Open a file from Project Files, or upload sources and ZIP archives to get
+                    started.
+                  </p>
                 </div>
               )}
-              <ProjectChat
-                key={projectId}
-                projectId={projectId}
-                apiUrl={apiUrl}
-                csrfToken={csrfToken}
-              />
             </section>
 
             {showPdf && (
@@ -377,6 +448,99 @@ export function ProjectWorkspace({
               </aside>
             )}
           </div>
+
+          {showGitHubSync && (
+            <>
+              <div
+                className="workspace-drawer-backdrop open"
+                onClick={() => setShowGitHubSync(false)}
+                aria-hidden="true"
+              />
+              <aside
+                id="github-sync-workspace"
+                className="workspace-side-drawer open github-drawer"
+                aria-label="GitHub Sync panel"
+              >
+                <div className="workspace-drawer-header">
+                  <h2>GitHub Sync</h2>
+                  <button
+                    type="button"
+                    className="workspace-drawer-close"
+                    aria-label="Close GitHub Sync"
+                    onClick={() => setShowGitHubSync(false)}
+                  >
+                    ×
+                  </button>
+                </div>
+                <div className="workspace-drawer-scroll">
+                  <GitHubSyncPanel projectId={projectId} apiUrl={apiUrl} csrfToken={csrfToken} />
+                </div>
+              </aside>
+            </>
+          )}
+
+          {showUploadModal && (
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Upload files"
+              className="workspace-modal-overlay"
+              onClick={(event) => {
+                if (event.target === event.currentTarget) setShowUploadModal(false);
+              }}
+            >
+              <div className="workspace-modal-card upload-modal" ref={uploadDialogRef}>
+                <div className="workspace-modal-header">
+                  <div>
+                    <h2>Upload files</h2>
+                    <p className="modal-subtitle">
+                      Add source files, images or a <code>.zip</code> archive. ZIP folders are
+                      restored automatically.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="workspace-drawer-close"
+                    aria-label="Close upload dialog"
+                    onClick={() => setShowUploadModal(false)}
+                  >
+                    ×
+                  </button>
+                </div>
+                <FileUploader
+                  projectId={projectId}
+                  apiUrl={apiUrl}
+                  csrfToken={csrfToken}
+                  onUploaded={() => {
+                    setUploadVersion((value) => value + 1);
+                    setWorkspaceStatus("Project files updated.");
+                    setWorkspaceError(null);
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          <div
+            className={`workspace-drawer-backdrop${showChat ? " open" : ""}`}
+            onClick={() => setShowChat(false)}
+            aria-hidden="true"
+          />
+          <aside
+            id="project-chat-drawer"
+            className={`workspace-side-drawer workspace-chat-drawer${showChat ? " open" : ""}`}
+            aria-label="Chat drawer"
+            inert={!showChat}
+          >
+            <ProjectChat
+              key={projectId}
+              projectId={projectId}
+              apiUrl={apiUrl}
+              csrfToken={csrfToken}
+              onClose={() => setShowChat(false)}
+              onMessageCountChange={setChatMessageCount}
+            />
+          </aside>
         </>
       )}
 
@@ -480,7 +644,12 @@ export function ProjectWorkspace({
                 <div style={{ marginBottom: "12px" }}>
                   <label
                     htmlFor="bibtex-source-input"
-                    style={{ display: "block", fontSize: "12px", fontWeight: "600", marginBottom: "4px" }}
+                    style={{
+                      display: "block",
+                      fontSize: "12px",
+                      fontWeight: "600",
+                      marginBottom: "4px",
+                    }}
                   >
                     BibTeX Source (edit or paste below to search entries & check duplicate keys):
                   </label>
@@ -513,11 +682,7 @@ export function ProjectWorkspace({
               </section>
               <section aria-label="Zotero Integration" style={{ marginTop: "24px" }}>
                 <h3>Zotero Sync</h3>
-                <ZoteroLibraryPanel
-                  projectId={projectId}
-                  userRole="OWNER"
-                  connected={false}
-                />
+                <ZoteroLibraryPanel projectId={projectId} userRole="OWNER" connected={false} />
               </section>
             </div>
           </div>

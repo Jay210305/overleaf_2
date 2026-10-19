@@ -300,6 +300,7 @@ export function LiveTextDocument({
               yText={yText}
               readOnly={!canEdit}
               saveStatus={status}
+              theme="dark"
             />
           ) : (
             <div data-testid="live-visual-document">

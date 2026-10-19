@@ -22,6 +22,57 @@ export interface FileTreeProps {
   selectedNodeId?: string | null | undefined;
   onSelectNode?: ((node: ProjectNodeView) => void) | undefined;
   refreshVersion?: number | undefined;
+  onRequestUpload?: (() => void) | undefined;
+  onRequestDownloadZip?: (() => void) | undefined;
+  downloadingZip?: boolean | undefined;
+}
+
+type IconName =
+  | "chevron-right"
+  | "chevron-down"
+  | "file"
+  | "folder"
+  | "folder-open"
+  | "file-plus"
+  | "folder-plus"
+  | "upload"
+  | "download"
+  | "pencil"
+  | "move"
+  | "trash";
+
+const iconPaths: Record<IconName, string> = {
+  "chevron-right": "M9 18l6-6-6-6",
+  "chevron-down": "M6 9l6 6 6-6",
+  file: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6",
+  folder: "M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
+  "folder-open": "M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v1H3zM3 10h18l-2 9H5z",
+  "file-plus": "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M12 12v6M9 15h6",
+  "folder-plus":
+    "M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 11v6M9 14h6",
+  upload: "M12 16V4M7 9l5-5 5 5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2",
+  download: "M12 4v12M7 11l5 5 5-5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2",
+  pencil: "M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z",
+  move: "M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20",
+  trash: "M3 6h18M8 6V4h8v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6",
+};
+
+function TreeIcon({ name, className = "tree-icon" }: { name: IconName; className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d={iconPaths[name]} />
+    </svg>
+  );
 }
 
 export function FileTree({
@@ -31,6 +82,9 @@ export function FileTree({
   selectedNodeId,
   onSelectNode,
   refreshVersion,
+  onRequestUpload,
+  onRequestDownloadZip,
+  downloadingZip = false,
 }: FileTreeProps) {
   const [nodes, setNodes] = useState<ProjectNodeView[]>([]);
   const [treeVersion, setTreeVersion] = useState<number>(0);
@@ -482,111 +536,82 @@ export function FileTree({
               if (isFolder) toggleFolder(node.id);
               if (onSelectNode) onSelectNode(node);
             }}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "4px 8px",
-              paddingLeft: `${level * 16}px`,
-              background: isSelected ? "#e0e7ff" : "transparent",
-              cursor: "pointer",
-            }}
+            className={`file-tree-row${isSelected ? " selected" : ""}${isFolder ? " is-folder" : ""}`}
+            style={{ paddingLeft: `${level * 14 + 6}px` }}
           >
-            <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span>{isFolder ? (isExpanded ? "📂" : "📁") : "📄"}</span>
-              <span style={{ fontWeight: isFolder ? 600 : 400 }}>{node.name}</span>
+            <span className="file-tree-label">
+              {isFolder ? (
+                <TreeIcon
+                  name={isExpanded ? "chevron-down" : "chevron-right"}
+                  className="tree-chevron"
+                />
+              ) : (
+                <span className="tree-chevron-spacer" aria-hidden="true" />
+              )}
+              <TreeIcon
+                name={isFolder ? (isExpanded ? "folder-open" : "folder") : "file"}
+                className={isFolder ? "tree-icon folder" : "tree-icon"}
+              />
+              <span className="file-tree-name" title={node.name}>
+                {node.name}
+              </span>
             </span>
 
             {/* Actions Context Menu Buttons */}
             <span
               role="group"
               aria-label={`Actions for ${node.name}`}
-              style={{ display: "flex", gap: "4px" }}
+              className="file-tree-actions"
               onClick={(e) => e.stopPropagation()}
             >
               {isFolder && (
                 <button
                   type="button"
                   aria-label={`Add file to ${node.name}`}
+                  title="Add file"
                   onClick={() => openCreateDialog("create-file", node.id)}
-                  style={{
-                    minWidth: "24px",
-                    minHeight: "24px",
-                    padding: "2px",
-                    fontSize: "12px",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+                  className="tree-row-action"
                 >
-                  +📄
+                  <TreeIcon name="file-plus" />
                 </button>
               )}
               {isFolder && (
                 <button
                   type="button"
                   aria-label={`Add folder to ${node.name}`}
+                  title="Add folder"
                   onClick={() => openCreateDialog("create-folder", node.id)}
-                  style={{
-                    minWidth: "24px",
-                    minHeight: "24px",
-                    padding: "2px",
-                    fontSize: "12px",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+                  className="tree-row-action"
                 >
-                  +📁
+                  <TreeIcon name="folder-plus" />
                 </button>
               )}
               <button
                 type="button"
                 aria-label={`Rename ${node.name}`}
+                title="Rename"
                 onClick={() => openRenameDialog(node)}
-                style={{
-                  minWidth: "24px",
-                  minHeight: "24px",
-                  padding: "2px",
-                  fontSize: "12px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+                className="tree-row-action"
               >
-                ✏️
+                <TreeIcon name="pencil" />
               </button>
               <button
                 type="button"
                 aria-label={`Move ${node.name}`}
+                title="Move"
                 onClick={() => openMoveDialog(node)}
-                style={{
-                  minWidth: "24px",
-                  minHeight: "24px",
-                  padding: "2px",
-                  fontSize: "12px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+                className="tree-row-action"
               >
-                📦
+                <TreeIcon name="move" />
               </button>
               <button
                 type="button"
                 aria-label={`Delete ${node.name}`}
+                title="Delete"
                 onClick={() => openDeleteDialog(node)}
-                style={{
-                  minWidth: "24px",
-                  minHeight: "24px",
-                  padding: "2px",
-                  fontSize: "12px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+                className="tree-row-action danger"
               >
-                🗑️
+                <TreeIcon name="trash" />
               </button>
             </span>
           </div>
@@ -602,62 +627,73 @@ export function FileTree({
   };
 
   return (
-    <section
-      role="region"
-      aria-label="File tree panel"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        height: "100%",
-        fontFamily: "system-ui, sans-serif",
-      }}
-    >
-      {/* Header and Toolbar */}
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "8px 12px",
-          borderBottom: "1px solid #e5e7eb",
-        }}
-      >
-        <h2 style={{ margin: 0, fontSize: "14px", fontWeight: 700 }}>Project Files</h2>
-        <div role="toolbar" aria-label="File tree toolbar" style={{ display: "flex", gap: "6px" }}>
+    <section role="region" aria-label="File tree panel" className="file-tree">
+      {/* Compact header with file operations */}
+      <header className="file-tree-header">
+        <div className="file-tree-title-row">
+          <h2>Project Files</h2>
+          <span className="file-tree-count" aria-hidden="true">
+            {nodes.length}
+          </span>
+        </div>
+        <div role="toolbar" aria-label="File tree toolbar" className="file-tree-toolbar">
           <button
             type="button"
             aria-label="New file"
+            title="New file"
             onClick={() => openCreateDialog("create-file", null)}
-            style={{ fontSize: "12px", padding: "4px 8px" }}
+            className="tree-tool-btn"
           >
-            New File
+            <TreeIcon name="file-plus" />
           </button>
           <button
             type="button"
             aria-label="New folder"
+            title="New folder"
             onClick={() => openCreateDialog("create-folder", null)}
-            style={{ fontSize: "12px", padding: "4px 8px" }}
+            className="tree-tool-btn"
           >
-            New Folder
+            <TreeIcon name="folder-plus" />
           </button>
+          {onRequestUpload && (
+            <button
+              type="button"
+              aria-label="Upload files"
+              title="Upload files or a ZIP archive"
+              onClick={onRequestUpload}
+              className="tree-tool-btn"
+            >
+              <TreeIcon name="upload" />
+            </button>
+          )}
+          {onRequestDownloadZip && (
+            <button
+              type="button"
+              aria-label="Download project ZIP"
+              title="Download the project as a ZIP archive"
+              onClick={onRequestDownloadZip}
+              disabled={downloadingZip}
+              className="tree-tool-btn"
+            >
+              <TreeIcon name="download" />
+            </button>
+          )}
         </div>
       </header>
 
       {/* Breadcrumb / Path status */}
-      <nav
-        role="navigation"
-        aria-label="File path breadcrumb"
-        style={{ padding: "4px 12px", fontSize: "12px", color: "#6b7280" }}
-      >
+      <nav role="navigation" aria-label="File path breadcrumb" className="file-tree-breadcrumb">
+        <TreeIcon name="folder-open" />
         <span>Project Root</span>
         {selectedNodeId && nodes.find((n) => n.id === selectedNodeId) && (
-          <span> / {nodes.find((n) => n.id === selectedNodeId)!.name}</span>
+          <span className="file-tree-breadcrumb-current">
+            / {nodes.find((n) => n.id === selectedNodeId)!.name}
+          </span>
         )}
       </nav>
 
       {/* Live announcements */}
-      <div role="status" aria-live="polite" style={{ position: "absolute", left: "-9999px" }}>
+      <div role="status" aria-live="polite" className="sr-only">
         {statusMessage}
       </div>
 
@@ -668,21 +704,16 @@ export function FileTree({
         aria-label="Project files tree"
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: "6px 0",
-          outline: "none",
-        }}
+        className="file-tree-scroll"
       >
-        {loading && <div style={{ padding: "12px", color: "#6b7280" }}>Loading files...</div>}
+        {loading && <div className="file-tree-empty">Loading files...</div>}
         {error && (
-          <div role="alert" style={{ padding: "12px", color: "#dc2626" }}>
+          <div role="alert" className="file-tree-error">
             {error}
           </div>
         )}
         {!loading && !error && nodes.length === 0 && (
-          <div style={{ padding: "12px", color: "#6b7280" }}>No files in project.</div>
+          <div className="file-tree-empty">No files in project.</div>
         )}
         {!loading && !error && renderTreeNodes(null, 1)}
       </div>
@@ -693,29 +724,10 @@ export function FileTree({
           role="dialog"
           aria-modal="true"
           aria-labelledby="dialog-title"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-          }}
+          className="tree-dialog-overlay"
         >
-          <div
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "8px",
-              width: "360px",
-              maxWidth: "90%",
-            }}
-          >
-            <h3 id="dialog-title" style={{ marginTop: 0 }}>
+          <div className="tree-dialog-card">
+            <h3 id="dialog-title">
               {activeDialog === "create-file" && "New File"}
               {activeDialog === "create-folder" && "New Folder"}
               {activeDialog === "rename" && `Rename "${targetNode?.name}"`}
@@ -724,10 +736,7 @@ export function FileTree({
             </h3>
 
             {dialogError && (
-              <div
-                role="alert"
-                style={{ color: "#dc2626", marginBottom: "12px", fontSize: "13px" }}
-              >
+              <div role="alert" className="tree-dialog-error">
                 {dialogError}
               </div>
             )}
@@ -738,13 +747,8 @@ export function FileTree({
                   handleCreateSubmit(e, activeDialog === "create-file" ? "FILE" : "FOLDER")
                 }
               >
-                <div style={{ marginBottom: "12px" }}>
-                  <label
-                    htmlFor="node-name-input"
-                    style={{ display: "block", marginBottom: "4px", fontSize: "13px" }}
-                  >
-                    Name:
-                  </label>
+                <div className="tree-dialog-field">
+                  <label htmlFor="node-name-input">Name:</label>
                   <input
                     id="node-name-input"
                     type="text"
@@ -752,10 +756,9 @@ export function FileTree({
                     onChange={(e) => setDialogInputName(e.target.value)}
                     autoFocus
                     required
-                    style={{ width: "100%", padding: "6px", boxSizing: "border-box" }}
                   />
                 </div>
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+                <div className="tree-dialog-actions">
                   <button type="button" onClick={closeDialog} disabled={isSubmitting}>
                     Cancel
                   </button>
@@ -768,13 +771,8 @@ export function FileTree({
 
             {activeDialog === "rename" && (
               <form onSubmit={handleRenameSubmit}>
-                <div style={{ marginBottom: "12px" }}>
-                  <label
-                    htmlFor="rename-input"
-                    style={{ display: "block", marginBottom: "4px", fontSize: "13px" }}
-                  >
-                    New name:
-                  </label>
+                <div className="tree-dialog-field">
+                  <label htmlFor="rename-input">New name:</label>
                   <input
                     id="rename-input"
                     type="text"
@@ -782,10 +780,9 @@ export function FileTree({
                     onChange={(e) => setDialogInputName(e.target.value)}
                     autoFocus
                     required
-                    style={{ width: "100%", padding: "6px", boxSizing: "border-box" }}
                   />
                 </div>
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+                <div className="tree-dialog-actions">
                   <button type="button" onClick={closeDialog} disabled={isSubmitting}>
                     Cancel
                   </button>
@@ -798,20 +795,14 @@ export function FileTree({
 
             {activeDialog === "move" && (
               <form onSubmit={handleMoveSubmit}>
-                <div style={{ marginBottom: "12px" }}>
-                  <label
-                    htmlFor="move-dest-select"
-                    style={{ display: "block", marginBottom: "4px", fontSize: "13px" }}
-                  >
-                    Destination folder:
-                  </label>
+                <div className="tree-dialog-field">
+                  <label htmlFor="move-dest-select">Destination folder:</label>
                   <select
                     id="move-dest-select"
                     value={dialogTargetParentId ?? "ROOT"}
                     onChange={(e) =>
                       setDialogTargetParentId(e.target.value === "ROOT" ? null : e.target.value)
                     }
-                    style={{ width: "100%", padding: "6px" }}
                   >
                     <option value="ROOT">/ (Root folder)</option>
                     {availableFolders.map((f) => (
@@ -821,7 +812,7 @@ export function FileTree({
                     ))}
                   </select>
                 </div>
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+                <div className="tree-dialog-actions">
                   <button type="button" onClick={closeDialog} disabled={isSubmitting}>
                     Cancel
                   </button>
@@ -834,19 +825,15 @@ export function FileTree({
 
             {activeDialog === "delete" && (
               <form onSubmit={handleDeleteSubmit}>
-                <p style={{ fontSize: "13px", color: "#4b5563" }}>
+                <p className="tree-dialog-note">
                   Are you sure you want to delete this {targetNode?.kind.toLowerCase()}? This action
                   can be undone only by restoring a revision.
                 </p>
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+                <div className="tree-dialog-actions">
                   <button type="button" onClick={closeDialog} disabled={isSubmitting}>
                     Cancel
                   </button>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    style={{ backgroundColor: "#dc2626", color: "#fff" }}
-                  >
+                  <button type="submit" disabled={isSubmitting} className="tree-dialog-danger">
                     {isSubmitting ? "Deleting..." : "Delete"}
                   </button>
                 </div>

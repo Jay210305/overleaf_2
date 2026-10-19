@@ -80,6 +80,7 @@ test("project chat refreshes an authorized member through the live socket", asyn
       await target.getByRole("button", { name: "Sign in" }).click();
       await expect(target.getByText(`Signed in as ${name}`)).toBeVisible();
       await target.goto(`${config.APP_ORIGIN}/project/${projectId}`);
+      await target.getByRole("button", { name: /^Chat/ }).click();
       await expect(target.getByRole("region", { name: "Project chat" })).toBeVisible();
     }
     const reviewerPage = await reviewerContext.newPage();

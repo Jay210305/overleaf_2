@@ -49,8 +49,11 @@ test("signed multi-file upload persists nodes and reports per-file errors", asyn
       compiler: "pdflatex",
     });
     await page.goto(`${config.APP_ORIGIN}/project/${project.id}`);
+    await page.getByRole("button", { name: "Upload files" }).click();
+    await expect(
+      page.getByRole("button", { name: "Drop files here or choose files" }),
+    ).toBeVisible();
     const picker = page.getByLabel("Upload project files");
-    await expect(picker).toBeVisible();
     await picker.setInputFiles([
       {
         name: "references.bib",

@@ -1,5 +1,13 @@
 import { useEffect, useState, lazy, Suspense } from "react";
-import { BrowserRouter, Link, Route, Routes, useNavigate, useParams } from "react-router-dom";
+import {
+  BrowserRouter,
+  Link,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { parsePublicConfig } from "@latex-collab/config";
 import type { AuthMode } from "../features/auth/auth-forms.js";
 
@@ -61,7 +69,8 @@ function TemplatesCatalogueRoute() {
         <p className="eyebrow">Document Starters</p>
         <h1>Templates Catalogue</h1>
         <p className="section-lead">
-          Browse tested templates for articles, theses, reports, and presentations. Select or instantiate any template directly into your workspace.
+          Browse tested templates for articles, theses, reports, and presentations. Select or
+          instantiate any template directly into your workspace.
         </p>
       </header>
       <Suspense fallback={<p role="status">Loading templates catalogue…</p>}>
@@ -104,7 +113,8 @@ function CompilationHubRoute() {
         <p className="eyebrow">TeX Engines & Compilation</p>
         <h1>Project Compilation</h1>
         <p className="section-lead">
-          Select any active project below to open its compilation controls, inspect build diagnostics, and review generated PDFs with SyncTeX navigation.
+          Select any active project below to open its compilation controls, inspect build
+          diagnostics, and review generated PDFs with SyncTeX navigation.
         </p>
       </header>
       <Suspense fallback={<p role="status">Loading projects for compilation…</p>}>
@@ -115,6 +125,8 @@ function CompilationHubRoute() {
 }
 
 function Shell() {
+  const location = useLocation();
+  const isWorkspace = /^\/project\/[^/]+(?:\/compilation)?\/?$/.test(location.pathname);
   const resolvedDark = () => {
     const preference = localStorage.getItem("theme");
     return (
@@ -185,64 +197,66 @@ function Shell() {
   }, []);
 
   return (
-    <div className={dark ? "shell dark" : "shell"}>
+    <div className={`shell${dark ? " dark" : ""}${isWorkspace ? " workspace-shell" : ""}`}>
       <a className="skip" href="#main">
         Skip to content
       </a>
-      <header>
-        <Link to="/" className="shell-logo">
-          LaTeX Workspace
-        </Link>
-        <nav aria-label="Main">
-          <Link to="/projects">Projects</Link>
-          <Link to="/templates">Templates</Link>
-          <Link to="/compilation">Compilation</Link>
-          <Link to="/settings/profile">Settings</Link>
-          <Link to="/admin">Admin</Link>
-          {currentUser ? (
-            <span className="user-auth-indicator">
-              <span className="user-display-name">{currentUser.displayName || "Account"}</span>
-              <button
-                type="button"
-                className="btn-signout"
-                onClick={async () => {
-                  try {
-                    await fetch(`${config.VITE_API_URL}/auth/logout`, {
-                      method: "POST",
-                      credentials: "include",
-                    });
-                  } catch {}
-                  try {
-                    sessionStorage.removeItem("session_token");
-                    sessionStorage.removeItem("csrf_token");
-                    sessionStorage.removeItem("current_user");
-                    window.dispatchEvent(new Event("auth-state-change"));
-                  } catch {}
-                  window.location.href = "/login";
-                }}
-              >
-                Sign out
-              </button>
-            </span>
-          ) : (
-            <span className="guest-auth-links">
-              <Link to="/login">Sign in</Link>
-              <Link to="/register" className="btn-register-link">
-                Create account
-              </Link>
-            </span>
-          )}
-        </nav>
-        <button
-          aria-pressed={dark}
-          onClick={() => {
-            setDark(!dark);
-            localStorage.setItem("theme", dark ? "light" : "dark");
-          }}
-        >
-          Dark theme
-        </button>
-      </header>
+      {!isWorkspace && (
+        <header>
+          <Link to="/" className="shell-logo">
+            LaTeX Workspace
+          </Link>
+          <nav aria-label="Main">
+            <Link to="/projects">Projects</Link>
+            <Link to="/templates">Templates</Link>
+            <Link to="/compilation">Compilation</Link>
+            <Link to="/settings/profile">Settings</Link>
+            <Link to="/admin">Admin</Link>
+            {currentUser ? (
+              <span className="user-auth-indicator">
+                <span className="user-display-name">{currentUser.displayName || "Account"}</span>
+                <button
+                  type="button"
+                  className="btn-signout"
+                  onClick={async () => {
+                    try {
+                      await fetch(`${config.VITE_API_URL}/auth/logout`, {
+                        method: "POST",
+                        credentials: "include",
+                      });
+                    } catch {}
+                    try {
+                      sessionStorage.removeItem("session_token");
+                      sessionStorage.removeItem("csrf_token");
+                      sessionStorage.removeItem("current_user");
+                      window.dispatchEvent(new Event("auth-state-change"));
+                    } catch {}
+                    window.location.href = "/login";
+                  }}
+                >
+                  Sign out
+                </button>
+              </span>
+            ) : (
+              <span className="guest-auth-links">
+                <Link to="/login">Sign in</Link>
+                <Link to="/register" className="btn-register-link">
+                  Create account
+                </Link>
+              </span>
+            )}
+          </nav>
+          <button
+            aria-pressed={dark}
+            onClick={() => {
+              setDark(!dark);
+              localStorage.setItem("theme", dark ? "light" : "dark");
+            }}
+          >
+            Dark theme
+          </button>
+        </header>
+      )}
       <main id="main" tabIndex={-1}>
         <Routes>
           <Route
@@ -352,19 +366,23 @@ function Shell() {
           />
         </Routes>
       </main>
-      <footer className="shell-footer">
-        <div className="footer-content">
-          <p>© {new Date().getFullYear()} LaTeX Workspace · Collaborative Academic Writing Platform</p>
-          <nav aria-label="Footer" className="footer-links">
-            <Link to="/">Home</Link>
-            <Link to="/projects">Projects</Link>
-            <Link to="/templates">Templates</Link>
-            <Link to="/compilation">Compilation</Link>
-            <Link to="/settings/profile">Settings</Link>
-            <Link to="/admin">Admin</Link>
-          </nav>
-        </div>
-      </footer>
+      {!isWorkspace && (
+        <footer className="shell-footer">
+          <div className="footer-content">
+            <p>
+              © {new Date().getFullYear()} LaTeX Workspace · Collaborative Academic Writing Platform
+            </p>
+            <nav aria-label="Footer" className="footer-links">
+              <Link to="/">Home</Link>
+              <Link to="/projects">Projects</Link>
+              <Link to="/templates">Templates</Link>
+              <Link to="/compilation">Compilation</Link>
+              <Link to="/settings/profile">Settings</Link>
+              <Link to="/admin">Admin</Link>
+            </nav>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
