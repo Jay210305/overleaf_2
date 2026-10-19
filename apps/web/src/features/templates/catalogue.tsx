@@ -77,47 +77,81 @@ export const TemplateCatalogue: React.FC<TemplateCatalogueProps> = ({ apiUrl, on
   };
 
   return (
-    <div data-testid="template-catalogue">
-      <label>
-        Category{" "}
-        <select
-          data-testid="template-filter"
-          value={category}
-          onChange={(event) => setCategory(event.target.value)}
-          aria-label="Filter templates by category"
-        >
-          <option value="">All</option>
-          <option value="article">Article</option>
-          <option value="thesis">Thesis</option>
-        </select>
-      </label>
-      {error ? <p data-testid="catalogue-error">{error}</p> : null}
-      <ul>
-        {templates.map((template) => (
-          <li key={template.id} data-testid="template-card">
-            <h3>{template.title}</h3>
-            <p>v{template.version}</p>
-            <p>{template.description}</p>
-            <p>
-              {template.files.length} file{template.files.length === 1 ? "" : "s"} ·{" "}
-              {template.mainPath}
-            </p>
-            <input
-              data-testid="template-title-input"
-              aria-label={`Project title for ${template.title}`}
-              value={titles[template.id] ?? ""}
-              placeholder={template.title}
-              onChange={(event) =>
-                setTitles((current) => ({ ...current, [template.id]: event.target.value }))
-              }
-            />
+    <div className="template-catalogue" data-testid="template-catalogue">
+      <div className="catalogue-toolbar">
+        <div className="category-pills" role="group" aria-label="Template categories">
+          {[
+            { id: "", label: "All templates" },
+            { id: "article", label: "Articles" },
+            { id: "thesis", label: "Theses" },
+          ].map((entry) => (
             <button
-              data-testid="template-instantiate"
-              disabled={pending === template.id}
-              onClick={() => void instantiate(template)}
+              key={entry.id || "all"}
+              type="button"
+              className={`pill${category === entry.id ? " active" : ""}`}
+              aria-pressed={category === entry.id}
+              onClick={() => setCategory(entry.id)}
             >
-              {pending === template.id ? "Creating…" : "Use template"}
+              {entry.label}
             </button>
+          ))}
+        </div>
+        <label className="catalogue-select">
+          <span>Category</span>
+          <select
+            data-testid="template-filter"
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+            aria-label="Filter templates by category"
+          >
+            <option value="">All</option>
+            <option value="article">Article</option>
+            <option value="thesis">Thesis</option>
+          </select>
+        </label>
+      </div>
+      {error ? (
+        <p data-testid="catalogue-error" role="alert" className="error-state">
+          {error}
+        </p>
+      ) : null}
+      {templates.length === 0 && !error ? (
+        <p role="status" className="empty-state">
+          No templates in this category yet.
+        </p>
+      ) : null}
+      <ul className="template-grid">
+        {templates.map((template) => (
+          <li key={template.id} data-testid="template-card" className="template-card">
+            <div className="template-card-head">
+              <h3>{template.title}</h3>
+              <span className="badge badge-version">v{template.version}</span>
+            </div>
+            <p className="template-description">{template.description}</p>
+            <p className="template-meta">
+              {template.files.length} file{template.files.length === 1 ? "" : "s"} ·{" "}
+              <code>{template.mainPath}</code>
+            </p>
+            <div className="template-card-actions">
+              <input
+                data-testid="template-title-input"
+                aria-label={`Project title for ${template.title}`}
+                value={titles[template.id] ?? ""}
+                placeholder={template.title}
+                onChange={(event) =>
+                  setTitles((current) => ({ ...current, [template.id]: event.target.value }))
+                }
+              />
+              <button
+                type="button"
+                data-testid="template-instantiate"
+                className="btn btn-primary btn-sm"
+                disabled={pending === template.id}
+                onClick={() => void instantiate(template)}
+              >
+                {pending === template.id ? "Creating…" : "Use template"}
+              </button>
+            </div>
           </li>
         ))}
       </ul>

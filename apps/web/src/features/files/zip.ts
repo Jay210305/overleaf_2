@@ -32,6 +32,9 @@ const extensionPolicy: Record<string, UploadPolicy> = {
   ".sty": { kind: "TEXT", mime: "application/x-tex" },
   ".cls": { kind: "TEXT", mime: "application/x-tex" },
   ".bst": { kind: "TEXT", mime: "application/x-tex" },
+  ".tikz": { kind: "TEXT", mime: "application/x-tex" },
+  ".txt": { kind: "TEXT", mime: "text/plain" },
+  ".eps": { kind: "BINARY", mime: "application/postscript" },
   ".png": { kind: "BINARY", mime: "image/png" },
   ".jpg": { kind: "BINARY", mime: "image/jpeg" },
   ".jpeg": { kind: "BINARY", mime: "image/jpeg" },
@@ -60,9 +63,44 @@ export interface ZipImportProgress {
   currentPath?: string | undefined;
 }
 
+export interface ZipImportFailure {
+  path: string;
+  message: string;
+}
+
 export interface ZipImportResult {
   uploaded: number;
   skippedExisting: number;
+  /** Entries the server refused or that failed mid-upload; the import continues. */
+  failed: ZipImportFailure[];
+}
+
+const supportedSummary =
+  ".tex, .bib, .sty, .cls, .bst, .tikz, .txt, .png, .jpg, .jpeg, .eps, .pdf, .ttf, .otf";
+
+/**
+ * Overleaf and older desktop editors export TeX sources as UTF-8 or as
+ * Windows-1252/Latin-1. The API only stores strict UTF-8 text, so legacy
+ * bytes are transcoded here instead of being rejected (which used to abort a
+ * whole archive import on the first accented file).
+ */
+function normalizeTextEntry(bytes: Uint8Array): Uint8Array | null {
+  let body = bytes;
+  if (body.length >= 3 && body[0] === 0xef && body[1] === 0xbb && body[2] === 0xbf) {
+    body = body.subarray(3);
+  }
+  let text: string;
+  try {
+    text = new TextDecoder("utf-8", { fatal: true }).decode(body);
+  } catch {
+    try {
+      text = new TextDecoder("windows-1252", { fatal: true }).decode(body);
+    } catch {
+      return null;
+    }
+  }
+  if (text.includes("\0")) return null;
+  return Uint8Array.from(new TextEncoder().encode(text));
 }
 
 export function policyForPath(path: string): UploadPolicy | null {
@@ -73,14 +111,11 @@ export function policyForPath(path: string): UploadPolicy | null {
 }
 
 function normalizeEntryPath(raw: string): string | null {
-  const forward = raw.replace(/\\/g, "/").replace(/^\.\//, "");
+  // macOS archives store decomposed (NFD) names; normalize instead of dropping
+  // accented files produced on a Mac.
+  const forward = raw.replace(/\\/g, "/").replace(/^\.\//, "").normalize("NFC");
   if (!forward || forward.endsWith("/")) return null;
-  if (
-    forward.startsWith("/") ||
-    /^[A-Za-z]:\//.test(forward) ||
-    forward.includes("\0") ||
-    forward !== forward.normalize("NFC")
-  ) {
+  if (forward.startsWith("/") || /^[A-Za-z]:\//.test(forward) || forward.includes("\0")) {
     return null;
   }
   const segments = forward.split("/");
@@ -135,26 +170,36 @@ export function extractArchive(archive: Uint8Array): ExtractedArchive {
   }
 
   const entries = new Map<string, Uint8Array>();
+  let realExpanded = 0;
   for (const [name, bytes] of Object.entries(raw)) {
     const path = normalizeEntryPath(name);
     if (!path) continue;
     const policy = policyForPath(path);
     if (!policy) continue;
-    // Text entries must be strict UTF-8; the server enforces this again.
+    // Central-directory sizes can be omitted by streaming zip writers, so the
+    // byte limits are enforced again on the inflated payload.
+    if (bytes.length > maxFileBytes) {
+      throw new Error(`"${path}" exceeds the 25 MiB per-file limit.`);
+    }
+    realExpanded += bytes.length;
+    if (realExpanded > maxExpandedBytes) {
+      throw new Error("The archive expands beyond the 100 MiB project limit.");
+    }
     if (policy.kind === "TEXT") {
-      try {
-        new TextDecoder("utf-8", { fatal: true }).decode(bytes);
-      } catch {
+      const normalized = normalizeTextEntry(bytes);
+      if (!normalized) {
         skipped.push(path);
         continue;
       }
+      entries.set(path, normalized);
+      continue;
     }
     entries.set(path, bytes);
   }
 
   if (entries.size === 0) {
     throw new Error(
-      "No supported project files were found in this archive. Supported types: .tex, .bib, .sty, .cls, .bst, .png, .jpg, .pdf, .ttf, .otf.",
+      `No supported project files were found in this archive. Supported types: ${supportedSummary}.`,
     );
   }
 
@@ -381,33 +426,60 @@ export async function importArchiveIntoProject(input: {
 
   let uploaded = 0;
   let skippedExisting = 0;
+  let processed = 0;
+  const failed: ZipImportFailure[] = [];
   const total = entries.length;
-  for (const [index, entry] of entries.entries()) {
+  for (const entry of entries) {
     const policy = policyForPath(entry.path);
-    if (!policy) continue;
+    if (!policy) {
+      processed += 1;
+      continue;
+    }
     const parent = parentPath(entry.path);
     const parentId = parent ? (folderIds.get(parent) ?? null) : null;
     const name = entry.path.slice(entry.path.lastIndexOf("/") + 1);
     const existing = fileIdsByParent.get(parentId ?? "__root__");
     if (existing?.has(name)) {
       skippedExisting += 1;
+      processed += 1;
       continue;
     }
     onProgress?.({
       phase: "uploading",
-      completed: index,
+      completed: processed,
       total,
       currentPath: entry.path,
     });
-    await uploadFile(input.apiUrl, input.projectId, csrf, parentId, name, policy.mime, entry.bytes);
-    existing?.add(name);
-    uploaded += 1;
+    try {
+      await uploadFile(
+        input.apiUrl,
+        input.projectId,
+        csrf,
+        parentId,
+        name,
+        policy.mime,
+        entry.bytes,
+      );
+      existing?.add(name);
+      uploaded += 1;
+    } catch (cause) {
+      // One rejected entry (legacy encoding, unsupported signature, quota)
+      // must not discard the rest of an Overleaf export.
+      failed.push({
+        path: entry.path,
+        message: cause instanceof Error ? cause.message : "The file could not be uploaded.",
+      });
+    } finally {
+      processed += 1;
+      onProgress?.({ phase: "uploading", completed: processed, total });
+    }
   }
 
   onProgress?.({ phase: "done", completed: total, total });
   return {
     uploaded,
     skippedExisting,
+    failed,
   };
 }
 
@@ -550,7 +622,9 @@ export async function downloadProjectArchive(input: {
           doc,
           Uint8Array.from(atob(state.updateBase64), (char) => char.charCodeAt(0)),
         );
-        bytes = new TextEncoder().encode(doc.getText("content").toString());
+        // Copy into this realm: fflate's instanceof check rejects foreign
+        // Uint8Arrays (e.g. jsdom), which would zip the text byte-by-byte.
+        bytes = Uint8Array.from(new TextEncoder().encode(doc.getText("content").toString()));
       } finally {
         doc.destroy();
       }

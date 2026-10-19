@@ -48,9 +48,12 @@ export function HomeHub() {
         <section className="hub-authenticated" aria-labelledby="hub-welcome-heading">
           <header className="hub-welcome-header">
             <p className="eyebrow">Academic Workspace</p>
-            <h1 id="hub-welcome-heading">Welcome back, {currentUser.displayName || "Researcher"}.</h1>
+            <h1 id="hub-welcome-heading">
+              Welcome back, {currentUser.displayName || "Researcher"}.
+            </h1>
             <p className="hub-welcome-lead">
-              Continue working on your research documents, start a new paper, or explore pre-configured templates.
+              Continue working on your research documents, start a new paper, or explore
+              pre-configured templates.
             </p>
             <div className="hub-action-buttons">
               <Link to="/projects" className="btn btn-primary">
@@ -70,7 +73,7 @@ export function HomeHub() {
               <h2 id="hub-recent-projects-heading">Recent Projects</h2>
               <Link to="/projects">View all projects →</Link>
             </div>
-            <ProjectsDashboard apiUrl={apiUrl} initialFilter="recent" />
+            <ProjectsDashboard apiUrl={apiUrl} initialFilter="recent" compact />
           </section>
 
           <section className="hub-section" aria-labelledby="hub-templates-heading">
@@ -92,9 +95,9 @@ export function HomeHub() {
             <p className="eyebrow">A workspace for academic writing</p>
             <h1 id="hub-guest-heading">Build your next document.</h1>
             <p className="hub-lead">
-              The collaborative LaTeX platform engineered for researchers and academics. Real-time multiplayer editing,
-              fast cloud compilation with SyncTeX, full version history with Myers visual diffs, citation management, and
-              Git synchronization.
+              The collaborative LaTeX platform engineered for researchers and academics. Real-time
+              multiplayer editing, fast cloud compilation with SyncTeX, full version history with
+              Myers visual diffs, citation management, and Git synchronization.
             </p>
             <div className="hub-action-buttons">
               <Link to="/register" className="btn btn-primary">
@@ -110,34 +113,36 @@ export function HomeHub() {
           </header>
 
           <section className="hub-features" aria-labelledby="hub-features-heading">
-            <h2 id="hub-features-heading" className="sr-only">Features</h2>
+            <h2 id="hub-features-heading" className="sr-only">
+              Features
+            </h2>
             <div className="features-grid">
               <article className="feature-card">
                 <h3>Real-Time Collaboration</h3>
                 <p>
-                  Multi-user conflict-free editing powered by Yjs and durable WebSocket streams. Live collaborator
-                  cursors, inline comment anchors, and dedicated project chat.
+                  Multi-user conflict-free editing powered by Yjs and durable WebSocket streams.
+                  Live collaborator cursors, inline comment anchors, and dedicated project chat.
                 </p>
               </article>
               <article className="feature-card">
                 <h3>Fast Cloud Compilation</h3>
                 <p>
-                  Isolated compilation with pdflatex, xelatex, and lualatex. Direct PDF preview with bidirectional
-                  SyncTeX navigation from code to PDF and back.
+                  Isolated compilation with pdflatex, xelatex, and lualatex. Direct PDF preview with
+                  bidirectional SyncTeX navigation from code to PDF and back.
                 </p>
               </article>
               <article className="feature-card">
                 <h3>Version History & Diffs</h3>
                 <p>
-                  Automatic immutable snapshot timeline. Compare revisions side-by-side with semantic Myers diffs,
-                  label milestones, and safely restore previous versions.
+                  Automatic immutable snapshot timeline. Compare revisions side-by-side with
+                  semantic Myers diffs, label milestones, and safely restore previous versions.
                 </p>
               </article>
               <article className="feature-card">
                 <h3>Citations & Integrations</h3>
                 <p>
-                  Integrated BibTeX search, duplicate citation key analysis, Zotero reference sync, and bi-directional
-                  GitHub repository synchronization.
+                  Integrated BibTeX search, duplicate citation key analysis, Zotero reference sync,
+                  and bi-directional GitHub repository synchronization.
                 </p>
               </article>
             </div>

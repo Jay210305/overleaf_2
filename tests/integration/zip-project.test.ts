@@ -1,12 +1,14 @@
 // @vitest-environment jsdom
 import { createHash } from "node:crypto";
-import { strToU8, zipSync } from "fflate";
+import { strToU8, unzipSync, zipSync } from "fflate";
+import * as Y from "yjs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   extractArchive,
   findNodeIdByPath,
   importArchiveIntoProject,
   pickMainDocument,
+  downloadProjectArchive,
 } from "../../apps/web/src/features/files/zip.js";
 
 const projectId = "11111111-1111-4111-8111-111111111111";
@@ -58,6 +60,14 @@ describe("project ZIP extraction", () => {
     expect(() => extractArchive(archive({ "notes.md": "just notes" }))).toThrow(
       /No supported project files/i,
     );
+  });
+
+  it("normalizes macOS decomposed names instead of dropping accented files", () => {
+    const decomposed = "cafe\u0301.tex";
+    const extracted = extractArchive(
+      zipSync({ [decomposed]: new Uint8Array(strToU8("% caf\u00e9")) }),
+    );
+    expect(extracted.entries.map((entry) => entry.path)).toEqual(["caf\u00e9.tex"]);
   });
 
   it("prefers a root main.tex and otherwise the shallowest TeX document", () => {
@@ -258,5 +268,168 @@ describe("project ZIP import", () => {
     ];
     expect(findNodeIdByPath(nodes, "paper/thesis.tex")).toBe("nested-file");
     expect(findNodeIdByPath(nodes, "missing.tex")).toBeNull();
+  });
+});
+
+describe("Overleaf archive compatibility", () => {
+  it("keeps binary EPS and TXT entries, flattens the root folder and transcodes legacy text", () => {
+    const eps = new Uint8Array([0x25, 0x21, 0x50, 0x53, 0x2d, 0x41, 0x64, 0x6f, 0x62, 0x65]);
+    // "café" encoded as Windows-1252, as older Overleaf projects were saved.
+    const legacyTex = new Uint8Array([0x63, 0x61, 0x66, 0xe9, 0x0a]);
+    const extracted = extractArchive(
+      zipSync({
+        "paper/main.tex": legacyTex,
+        "paper/notes.txt": new Uint8Array(strToU8("notes")),
+        "paper/figures/logo.eps": eps,
+        "paper/__MACOSX/._main.tex": new Uint8Array(strToU8("junk")),
+      }),
+    );
+
+    expect(extracted.strippedRoot).toBe("paper");
+    expect(extracted.entries.map((entry) => entry.path)).toEqual([
+      "figures/logo.eps",
+      "main.tex",
+      "notes.txt",
+    ]);
+    const tex = extracted.entries.find((entry) => entry.path === "main.tex");
+    expect(new TextDecoder().decode(tex!.bytes)).toBe("café\n");
+    const logo = extracted.entries.find((entry) => entry.path === "figures/logo.eps");
+    expect(Array.from(logo!.bytes)).toEqual(Array.from(eps));
+    expect(extracted.entries.some((entry) => entry.path.includes("__MACOSX"))).toBe(false);
+  });
+
+  it("continues importing when a single entry is rejected", async () => {
+    sessionStorage.setItem("csrf_token", "csrf-test-token");
+    const fetcher = vi.fn(async (url: string, init?: RequestInit) => {
+      const method = init?.method ?? "GET";
+      if (url.endsWith(`/projects/${projectId}/nodes`) && method === "GET") {
+        return Response.json({ projectId, treeVersion: 1, items: [] });
+      }
+      if (url.endsWith("/uploads/presign")) {
+        const body = JSON.parse(String(init?.body)) as { fileName: string };
+        if (body.fileName === "broken.eps") {
+          return Response.json({ code: "UNSUPPORTED_CONTENT" }, { status: 422 });
+        }
+        return Response.json({
+          uploadId: crypto.randomUUID(),
+          url: "https://storage.test/object",
+          expiresAt: new Date(Date.now() + 60_000).toISOString(),
+        });
+      }
+      if (url === "https://storage.test/object") return new Response(null, { status: 200 });
+      if (url.endsWith("/uploads/complete")) {
+        return Response.json({ id: crypto.randomUUID() }, { status: 201 });
+      }
+      throw new Error(`Unexpected request ${method} ${url}`);
+    });
+    vi.stubGlobal("fetch", fetcher);
+
+    const result = await importArchiveIntoProject({
+      apiUrl,
+      projectId,
+      entries: [
+        { path: "main.tex", bytes: new Uint8Array(strToU8("\\documentclass{article}")) },
+        { path: "broken.eps", bytes: new Uint8Array([0x25, 0x21, 0x50, 0x53]) },
+      ],
+    });
+
+    expect(result.uploaded).toBe(1);
+    expect(result.failed).toHaveLength(1);
+    expect(result.failed[0]?.path).toBe("broken.eps");
+  });
+});
+
+describe("project ZIP export", () => {
+  it("packs nested folders, canonical text state and binary bytes into <title>.zip", async () => {
+    const tree = {
+      projectId,
+      treeVersion: 4,
+      items: [
+        {
+          id: "33333333-3333-4333-8333-333333333333",
+          projectId,
+          parentId: null,
+          name: "figures",
+          kind: "FOLDER" as const,
+          mime: "application/x-directory",
+          sizeBytes: 0,
+          contentKind: "BINARY" as const,
+          treeVersion: 4,
+          deletedAt: null,
+        },
+        {
+          id: "44444444-4444-4444-8444-444444444444",
+          projectId,
+          parentId: null,
+          name: "main.tex",
+          kind: "FILE" as const,
+          mime: "application/x-tex",
+          sizeBytes: 12,
+          contentKind: "TEXT" as const,
+          treeVersion: 4,
+          deletedAt: null,
+        },
+        {
+          id: "55555555-5555-4555-8555-555555555555",
+          projectId,
+          parentId: "33333333-3333-4333-8333-333333333333",
+          name: "logo.eps",
+          kind: "FILE" as const,
+          mime: "application/postscript",
+          sizeBytes: 6,
+          contentKind: "BINARY" as const,
+          treeVersion: 4,
+          deletedAt: null,
+        },
+      ],
+    };
+    const doc = new Y.Doc();
+    doc.getText("content").insert(0, "\\documentclass{article}");
+    const updateBase64 = Buffer.from(Y.encodeStateAsUpdate(doc)).toString("base64");
+    doc.destroy();
+    const epsBytes = new Uint8Array([0x25, 0x21, 0x50, 0x53, 0x2d, 0x41]);
+
+    const fetcher = vi.fn(async (url: string) => {
+      if (url.endsWith(`/projects/${projectId}/nodes`)) return Response.json(tree);
+      if (url.endsWith("/files/44444444-4444-4444-8444-444444444444/text"))
+        return Response.json({ updateBase64 });
+      if (url.endsWith("/files/55555555-5555-4555-8555-555555555555/download"))
+        return new Response(epsBytes, { status: 200 });
+      throw new Error(`Unexpected request ${url}`);
+    });
+    vi.stubGlobal("fetch", fetcher);
+
+    let captured: Blob | null = null;
+    const createObjectURL = vi
+      .spyOn(URL, "createObjectURL")
+      .mockImplementation((blob: Blob | MediaSource) => {
+        captured = blob as Blob;
+        return "blob:mock";
+      });
+    const revokeObjectURL = vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
+
+    try {
+      const result = await downloadProjectArchive({
+        apiUrl,
+        projectId,
+        projectTitle: "Mi Tesis / 2026",
+      });
+
+      expect(result.fileName).toBe("Mi Tesis - 2026.zip");
+      expect(result.fileCount).toBe(2);
+      expect(result.folderCount).toBe(1);
+      expect(captured).not.toBeNull();
+
+      const bytes = new Uint8Array(await captured!.arrayBuffer());
+      const entries = unzipSync(bytes);
+      expect(Object.keys(entries).sort()).toEqual(["figures/", "figures/logo.eps", "main.tex"]);
+      expect(new TextDecoder().decode(entries["main.tex"]!)).toBe("\\documentclass{article}");
+      expect(Array.from(entries["figures/logo.eps"]!)).toEqual(Array.from(epsBytes));
+    } finally {
+      createObjectURL.mockRestore();
+      revokeObjectURL.mockRestore();
+      click.mockRestore();
+    }
   });
 });

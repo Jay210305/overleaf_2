@@ -8,6 +8,7 @@ import {
 } from "@latex-collab/contracts";
 import { NotificationList } from "../notifications/list.js";
 import {
+  downloadProjectArchive,
   extractArchive,
   findNodeIdByPath,
   importArchiveIntoProject,
@@ -27,12 +28,56 @@ export interface DashboardProps {
   apiUrl?: string;
   initialFilter?: DashboardFilter;
   csrfToken?: string;
+  /** Embedded variant used by the home hub: no page header or sidebar. */
+  compact?: boolean;
+}
+
+const filters: Array<{ id: DashboardFilter; label: string }> = [
+  { id: "owned", label: "All / Owned" },
+  { id: "shared", label: "Shared" },
+  { id: "recent", label: "Recent" },
+  { id: "archived", label: "Archived" },
+  { id: "trashed", label: "Trashed" },
+];
+
+const compilerLabel: Record<Compiler, string> = {
+  pdflatex: "pdfLaTeX",
+  xelatex: "XeLaTeX",
+  lualatex: "LuaLaTeX",
+  latex: "LaTeX",
+};
+
+function formatDate(value: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function ProjectIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+      <path
+        d="M6 2h8l5 5v15H6z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+      />
+      <path d="M14 2v5h5" fill="none" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M9 13h6M9 17h4" fill="none" stroke="currentColor" strokeWidth="1.7" />
+    </svg>
+  );
 }
 
 export function ProjectsDashboard({
   apiUrl = defaultApiUrl,
   initialFilter = "owned",
   csrfToken,
+  compact = false,
 }: DashboardProps) {
   const [projects, setProjects] = useState<ProjectView[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,6 +88,7 @@ export function ProjectsDashboard({
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [cursorStack, setCursorStack] = useState<string[]>([]);
   const [currentCursor, setCurrentCursor] = useState<string | undefined>(undefined);
+  const [busyProject, setBusyProject] = useState<string | null>(null);
 
   // Modal states
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -60,6 +106,7 @@ export function ProjectsDashboard({
   const [importEntries, setImportEntries] = useState<ZipFileEntry[] | null>(null);
   const [importError, setImportError] = useState<string | null>(null);
   const [importProgress, setImportProgress] = useState<string | null>(null);
+  const [importPercent, setImportPercent] = useState(0);
   const [isImporting, setIsImporting] = useState(false);
 
   // Action status message
@@ -230,6 +277,7 @@ export function ProjectsDashboard({
     setIsImporting(true);
     setImportError(null);
     setImportProgress("Reading archive…");
+    setImportPercent(5);
 
     try {
       let entries = importEntries;
@@ -237,6 +285,7 @@ export function ProjectsDashboard({
         entries = extractArchive(new Uint8Array(await importFile.arrayBuffer())).entries;
         setImportEntries(entries);
       }
+      setImportPercent(15);
 
       setImportProgress("Creating project…");
       const csrf = await getCsrfToken();
@@ -259,8 +308,14 @@ export function ProjectsDashboard({
       }
       const created = (await createResponse.json()) as ProjectView;
 
-      await removePlaceholderMainFile({ apiUrl, projectId: created.id, csrfToken: csrf });
-      setImportProgress(`Importing ${entries.length} files…`);
+      // A default `main.tex` is created with the project. Only remove it when the
+      // archive supplies its own root `main.tex`; otherwise it stays as a safe
+      // fallback until the imported main document is selected.
+      const replacesPlaceholder = entries.some((entry) => entry.path === "main.tex");
+      if (replacesPlaceholder) {
+        await removePlaceholderMainFile({ apiUrl, projectId: created.id, csrfToken: csrf });
+      }
+      setImportProgress(`Extracting and uploading 0 of ${entries.length} files…`);
       const result = await importArchiveIntoProject({
         apiUrl,
         projectId: created.id,
@@ -268,38 +323,74 @@ export function ProjectsDashboard({
         entries,
         onProgress: (progress) => {
           if (progress.phase === "folders") {
+            setImportPercent(
+              15 + Math.round((progress.completed / Math.max(1, progress.total)) * 10),
+            );
             setImportProgress(`Creating folders (${progress.completed}/${progress.total})…`);
           } else if (progress.phase === "uploading") {
+            const ratio = progress.completed / Math.max(1, progress.total);
+            setImportPercent(25 + Math.round(ratio * 70));
             setImportProgress(
-              `Uploading ${Math.min(progress.completed + 1, progress.total)}/${
-                progress.total
-              }${progress.currentPath ? ` · ${progress.currentPath}` : ""}`,
+              `Extracting and uploading ${progress.completed} of ${progress.total} files…${
+                progress.currentPath ? ` (${progress.currentPath})` : ""
+              }`,
             );
           }
         },
       });
 
+      // Main-document selection is best effort: the files are already imported,
+      // so a failure here must not turn the whole import into an error.
       const mainPath = pickMainDocument(entries);
       if (mainPath) {
         setImportProgress("Selecting the main document…");
-        const treeResponse = await fetch(`${apiUrl}/projects/${created.id}/nodes`, {
-          credentials: "include",
-          headers: { accept: "application/json" },
-        });
-        if (treeResponse.ok) {
-          const parsedTree = treeViewSchema.safeParse(await treeResponse.json());
-          const mainFileId = parsedTree.success
-            ? findNodeIdByPath(parsedTree.data.items, mainPath)
-            : null;
-          if (mainFileId) {
-            await setMainDocument({
-              apiUrl,
-              projectId: created.id,
-              csrfToken: csrf,
-              fileId: mainFileId,
-            });
+        try {
+          const treeResponse = await fetch(`${apiUrl}/projects/${created.id}/nodes`, {
+            credentials: "include",
+            headers: { accept: "application/json" },
+          });
+          if (treeResponse.ok) {
+            const parsedTree = treeViewSchema.safeParse(await treeResponse.json());
+            const mainFileId = parsedTree.success
+              ? findNodeIdByPath(parsedTree.data.items, mainPath)
+              : null;
+            if (mainFileId) {
+              await setMainDocument({
+                apiUrl,
+                projectId: created.id,
+                csrfToken: csrf,
+                fileId: mainFileId,
+              });
+            }
           }
+        } catch {
+          // Ignore: the project keeps its placeholder main document.
         }
+      }
+
+      if (!replacesPlaceholder) {
+        try {
+          await removePlaceholderMainFile({ apiUrl, projectId: created.id, csrfToken: csrf });
+        } catch {
+          // A leftover empty placeholder is harmless once the main file is set.
+        }
+      }
+
+      setImportPercent(100);
+
+      if (result.failed.length > 0) {
+        const preview = result.failed
+          .slice(0, 3)
+          .map((failure) => `${failure.path} (${failure.message})`)
+          .join("; ");
+        const more = result.failed.length > 3 ? ` and ${result.failed.length - 3} more` : "";
+        setImportError(
+          `Imported ${result.uploaded} file${result.uploaded === 1 ? "" : "s"}, but ${
+            result.failed.length
+          } could not be uploaded: ${preview}${more}.`,
+        );
+        setImportProgress(null);
+        return;
       }
 
       setStatusMessage(
@@ -319,6 +410,7 @@ export function ProjectsDashboard({
     } finally {
       setIsImporting(false);
       setImportProgress(null);
+      setImportPercent(0);
     }
   }
 
@@ -341,6 +433,7 @@ export function ProjectsDashboard({
   }
 
   async function handleClone(projectId: string) {
+    setBusyProject(projectId);
     try {
       const csrf = await getCsrfToken();
       const res = await fetch(`${apiUrl}/projects/${projectId}/clone`, {
@@ -360,10 +453,39 @@ export function ProjectsDashboard({
       }
     } catch {
       setError("Network error while duplicating project.");
+    } finally {
+      setBusyProject(null);
+    }
+  }
+
+  async function handleArchive(projectId: string) {
+    setBusyProject(projectId);
+    try {
+      const csrf = await getCsrfToken();
+      const res = await fetch(`${apiUrl}/projects/${projectId}`, {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+          ...(csrf ? { "x-csrf-token": csrf } : {}),
+        },
+        credentials: "include",
+        body: JSON.stringify({ status: "archived" }),
+      });
+      if (res.ok) {
+        setStatusMessage("Project archived.");
+        void fetchProjects(currentCursor);
+      } else {
+        setError("Failed to archive project.");
+      }
+    } catch {
+      setError("Network error while archiving project.");
+    } finally {
+      setBusyProject(null);
     }
   }
 
   async function handleDelete(projectId: string) {
+    setBusyProject(projectId);
     try {
       const csrf = await getCsrfToken();
       const res = await fetch(`${apiUrl}/projects/${projectId}`, {
@@ -381,35 +503,41 @@ export function ProjectsDashboard({
       }
     } catch {
       setError("Network error while deleting project.");
+    } finally {
+      setBusyProject(null);
+    }
+  }
+
+  async function handleDownload(project: ProjectView) {
+    setBusyProject(project.id);
+    try {
+      const result = await downloadProjectArchive({
+        apiUrl,
+        projectId: project.id,
+        projectTitle: project.title,
+      });
+      setStatusMessage(`Downloaded ${result.fileCount} files as ${result.fileName}.`);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "The project ZIP could not be downloaded.");
+    } finally {
+      setBusyProject(null);
     }
   }
 
   return (
-    <main className="dashboard-container" role="region" aria-label="Projects dashboard">
-      <header className="dashboard-header">
-        <div>
-          <p className="eyebrow">Workspace</p>
-          <h1>Projects</h1>
-        </div>
-        <div className="dashboard-header-actions">
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => setShowImportModal(true)}
-            aria-haspopup="dialog"
-          >
-            Import ZIP Project
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => setShowCreateModal(true)}
-            aria-haspopup="dialog"
-          >
-            New Project
-          </button>
-        </div>
-      </header>
+    <div className="dashboard-container" role="region" aria-label="Projects dashboard">
+      {!compact && (
+        <header className="dashboard-header">
+          <div className="dashboard-heading">
+            <p className="eyebrow">Workspace</p>
+            <h1>Projects</h1>
+            <p className="section-lead">
+              Create, import, and organize your academic writing projects. Every project keeps its
+              compiler, revision history, and collaborator access in one place.
+            </p>
+          </div>
+        </header>
+      )}
 
       {statusMessage && (
         <div role="status" aria-live="polite" className="status-banner">
@@ -417,145 +545,214 @@ export function ProjectsDashboard({
         </div>
       )}
 
-      <NotificationList apiUrl={apiUrl} />
+      <div className={`dashboard-layout${compact ? " is-compact" : ""}`}>
+        {!compact && (
+          <aside className="dashboard-sidebar" aria-label="Project navigation">
+            <div className="sidebar-actions">
+              <button
+                type="button"
+                className="btn btn-primary btn-block"
+                onClick={() => setShowCreateModal(true)}
+                aria-haspopup="dialog"
+              >
+                <span aria-hidden="true">+</span> New Project
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary btn-block"
+                onClick={() => setShowImportModal(true)}
+                aria-haspopup="dialog"
+              >
+                Import ZIP Project
+              </button>
+            </div>
 
-      {/* Toolbar: Filters, Search, Sort */}
-      <section className="dashboard-toolbar" aria-label="Project list controls">
-        <div className="filter-tabs" role="tablist" aria-label="Project filter categories">
-          {(["owned", "shared", "recent", "archived", "trashed"] as const).map((cat) => (
-            <button
-              key={cat}
-              role="tab"
-              aria-selected={filter === cat}
-              className={`tab-btn ${filter === cat ? "active" : ""}`}
-              onClick={() => setFilter(cat)}
-            >
-              {cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </button>
-          ))}
-        </div>
+            <nav className="filter-tabs" role="tablist" aria-label="Project filter categories">
+              {filters.map((entry) => (
+                <button
+                  key={entry.id}
+                  role="tab"
+                  aria-selected={filter === entry.id}
+                  className={`tab-btn ${filter === entry.id ? "active" : ""}`}
+                  onClick={() => setFilter(entry.id)}
+                >
+                  {entry.label}
+                </button>
+              ))}
+            </nav>
 
-        <div className="search-and-sort">
-          <div className="search-field">
-            <label htmlFor="search-input">Search projects</label>
-            <input
-              id="search-input"
-              type="search"
-              placeholder="Search by title..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-
-          <div className="sort-field">
-            <label htmlFor="sort-select">Sort by</label>
-            <select
-              id="sort-select"
-              value={order}
-              onChange={(e) => setOrder(e.target.value as DashboardOrder)}
-            >
-              <option value="updatedAt">Last Modified</option>
-              <option value="owner">Owner</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      {/* Main Content Area */}
-      <section className="projects-content" aria-live="polite">
-        {loading && (
-          <div role="status" className="loading-state">
-            <p>Loading projects...</p>
-          </div>
+            <details className="sidebar-notifications" open>
+              <summary>Notifications</summary>
+              <div className="sidebar-notifications-body">
+                <NotificationList apiUrl={apiUrl} />
+              </div>
+            </details>
+          </aside>
         )}
 
-        {error && (
-          <div role="alert" className="error-state">
-            <p>{error}</p>
-          </div>
-        )}
+        <section className="projects-content" aria-live="polite" aria-label="Project list">
+          <div className="projects-toolbar">
+            <div className="search-field">
+              <label htmlFor="search-input" className="sr-only">
+                Search projects
+              </label>
+              <input
+                id="search-input"
+                type="search"
+                placeholder="Search by title..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
 
-        {!loading && !error && projects.length === 0 && (
-          <div role="status" className="empty-state">
-            <p>No projects found.</p>
+            <div className="sort-field">
+              <label htmlFor="sort-select">Sort by</label>
+              <select
+                id="sort-select"
+                value={order}
+                onChange={(e) => setOrder(e.target.value as DashboardOrder)}
+              >
+                <option value="updatedAt">Last Modified</option>
+                <option value="owner">Owner</option>
+              </select>
+            </div>
           </div>
-        )}
 
-        {!loading && !error && projects.length > 0 && (
-          <div className="table-responsive">
-            <table className="projects-table" aria-label="Projects list">
-              <thead>
-                <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">Compiler</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Last Modified</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.map((proj) => (
-                  <tr key={proj.id}>
-                    <td>
-                      <a href={`/project/${proj.id}`} className="project-title-link">
-                        {proj.title}
-                      </a>
-                      {proj.description && <p className="project-desc">{proj.description}</p>}
-                    </td>
-                    <td>{proj.compiler}</td>
-                    <td>{proj.status}</td>
-                    <td>{new Date(proj.updatedAt).toLocaleDateString()}</td>
-                    <td>
-                      <button
-                        type="button"
-                        aria-label={`Duplicate ${proj.title}`}
-                        className="btn btn-secondary btn-sm"
-                        onClick={() => void handleClone(proj.id)}
-                      >
-                        Duplicate
-                      </button>
-                      {filter !== "trashed" && (
-                        <button
-                          type="button"
-                          aria-label={`Delete ${proj.title}`}
-                          className="btn btn-danger btn-sm"
-                          onClick={() => void handleDelete(proj.id)}
-                        >
-                          Delete
-                        </button>
-                      )}
-                    </td>
+          {loading && (
+            <div role="status" className="loading-state">
+              <p>Loading projects...</p>
+            </div>
+          )}
+
+          {error && (
+            <div role="alert" className="error-state">
+              <p>{error}</p>
+            </div>
+          )}
+
+          {!loading && !error && projects.length === 0 && (
+            <div role="status" className="empty-state">
+              <p>No projects found.</p>
+            </div>
+          )}
+
+          {!loading && !error && projects.length > 0 && (
+            <div className="table-responsive">
+              <table className="projects-table" aria-label="Projects list">
+                <thead>
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Compiler</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Last Modified</th>
+                    <th scope="col">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                </thead>
+                <tbody>
+                  {projects.map((proj) => (
+                    <tr key={proj.id}>
+                      <td>
+                        <a href={`/project/${proj.id}`} className="project-title-link">
+                          <ProjectIcon />
+                          <span>{proj.title}</span>
+                        </a>
+                        {proj.description && <p className="project-desc">{proj.description}</p>}
+                      </td>
+                      <td>
+                        <span className={`badge badge-compiler ${proj.compiler}`}>
+                          {compilerLabel[proj.compiler] ?? proj.compiler}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={`badge badge-status ${proj.status}`}>
+                          <span className="status-dot" aria-hidden="true" />
+                          {proj.status}
+                        </span>
+                      </td>
+                      <td className="project-date">{formatDate(proj.updatedAt)}</td>
+                      <td>
+                        <div className="project-actions">
+                          <a
+                            className="btn btn-secondary btn-sm"
+                            href={`/project/${proj.id}`}
+                            aria-label={`Open ${proj.title}`}
+                          >
+                            Open
+                          </a>
+                          <button
+                            type="button"
+                            aria-label={`Download ZIP ${proj.title}`}
+                            className="btn btn-secondary btn-sm"
+                            disabled={busyProject === proj.id}
+                            onClick={() => void handleDownload(proj)}
+                          >
+                            Download ZIP
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Duplicate ${proj.title}`}
+                            className="btn btn-secondary btn-sm"
+                            disabled={busyProject === proj.id}
+                            onClick={() => void handleClone(proj.id)}
+                          >
+                            Duplicate
+                          </button>
+                          {proj.status === "active" && filter !== "archived" && (
+                            <button
+                              type="button"
+                              aria-label={`Archive ${proj.title}`}
+                              className="btn btn-secondary btn-sm"
+                              disabled={busyProject === proj.id}
+                              onClick={() => void handleArchive(proj.id)}
+                            >
+                              Archive
+                            </button>
+                          )}
+                          {filter !== "trashed" && (
+                            <button
+                              type="button"
+                              aria-label={`Delete ${proj.title}`}
+                              className="btn btn-danger btn-sm"
+                              disabled={busyProject === proj.id}
+                              onClick={() => void handleDelete(proj.id)}
+                            >
+                              Delete
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
-        {/* Pagination controls */}
-        {!loading && !error && projects.length > 0 && (
-          <nav className="pagination-nav" aria-label="Pagination">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              disabled={cursorStack.length === 0}
-              onClick={handlePrevPage}
-              aria-label="Previous page"
-            >
-              Previous
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              disabled={!nextCursor}
-              onClick={handleNextPage}
-              aria-label="Next page"
-            >
-              Next
-            </button>
-          </nav>
-        )}
-      </section>
+          {!loading && !error && projects.length > 0 && (
+            <nav className="pagination-nav" aria-label="Pagination">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                disabled={cursorStack.length === 0}
+                onClick={handlePrevPage}
+                aria-label="Previous page"
+              >
+                Previous
+              </button>
+              <span className="pagination-page">Page {cursorStack.length + 1}</span>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                disabled={!nextCursor}
+                onClick={handleNextPage}
+                aria-label="Next page"
+              >
+                Next
+              </button>
+            </nav>
+          )}
+        </section>
+      </div>
 
       {/* Import ZIP Project Modal */}
       {showImportModal && (
@@ -568,8 +765,9 @@ export function ProjectsDashboard({
           <div className="modal-dialog import-modal">
             <h2 id="import-modal-title">Import ZIP Project</h2>
             <p className="modal-subtitle">
-              Upload a <code>.zip</code> archive exported from Overleaf or this workspace. Its
-              folders and files are recreated and the first main document is selected automatically.
+              Upload a <code>.zip</code> archive exported from Overleaf or this workspace. Folders,
+              images, and bibliographies are recreated and a main document is selected
+              automatically.
             </p>
             <form onSubmit={(e) => void handleImportArchive(e)}>
               {importError && (
@@ -602,18 +800,31 @@ export function ProjectsDashboard({
                 </select>
               </div>
               <div className="form-group">
-                <label htmlFor="import-project-file">ZIP Archive</label>
-                <input
-                  id="import-project-file"
-                  type="file"
-                  accept=".zip,application/zip"
-                  onChange={chooseImportFile}
-                />
+                <label htmlFor="import-project-file" className="file-drop">
+                  <span className="file-drop-title">
+                    {importFile ? importFile.name : "Choose a .zip archive"}
+                  </span>
+                  <span className="file-drop-hint">
+                    Drag the file onto this field or click to browse. Up to 25 MiB.
+                  </span>
+                  <input
+                    id="import-project-file"
+                    type="file"
+                    accept=".zip,application/zip"
+                    onChange={chooseImportFile}
+                  />
+                </label>
               </div>
               {importProgress && (
-                <p role="status" className="import-progress">
-                  {importProgress}
-                </p>
+                <div role="status" className="import-progress" aria-live="polite">
+                  <div className="progress-track">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${Math.max(3, Math.min(100, importPercent))}%` }}
+                    />
+                  </div>
+                  <p>{importProgress}</p>
+                </div>
               )}
               <div className="modal-actions">
                 <button
@@ -700,7 +911,7 @@ export function ProjectsDashboard({
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }
 export default ProjectsDashboard;

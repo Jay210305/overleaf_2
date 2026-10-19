@@ -66,7 +66,10 @@ function fileMime(file: File): string {
     ".bib": ["application/x-bibtex", "text/plain"],
     ".sty": ["application/x-tex", "text/plain"],
     ".cls": ["application/x-tex", "text/plain"],
-    ".bst": ["text/plain"],
+    ".bst": ["application/x-tex", "text/plain"],
+    ".tikz": ["application/x-tex", "text/plain"],
+    ".txt": ["text/plain"],
+    ".eps": ["application/postscript", "application/eps", "image/eps", "application/x-eps"],
     ".png": ["image/png"],
     ".jpg": ["image/jpeg"],
     ".jpeg": ["image/jpeg"],
@@ -219,10 +222,14 @@ export function FileUploader({ projectId, apiUrl, csrfToken, onUploaded }: FileU
             item.id === row.id
               ? {
                   ...item,
-                  status: "complete",
+                  status: result.failed.length > 0 ? "error" : "complete",
                   message: `${result.uploaded} file${
                     result.uploaded === 1 ? "" : "s"
-                  } imported${skipped > 0 ? ` · ${skipped} skipped` : ""}.`,
+                  } imported${skipped > 0 ? ` · ${skipped} skipped` : ""}${
+                    result.failed.length > 0
+                      ? ` · ${result.failed.length} failed (${result.failed[0]?.path}: ${result.failed[0]?.message})`
+                      : ""
+                  }.`,
                 }
               : item,
           ),
@@ -415,7 +422,7 @@ export function FileUploader({ projectId, apiUrl, csrfToken, onUploaded }: FileU
         id="project-upload-input"
         type="file"
         multiple
-        accept=".tex,.bib,.sty,.cls,.bst,.png,.jpg,.jpeg,.pdf,.ttf,.otf,.zip,application/zip"
+        accept=".tex,.bib,.sty,.cls,.bst,.tikz,.txt,.eps,.png,.jpg,.jpeg,.pdf,.ttf,.otf,.zip,application/zip"
         onChange={choose}
       />
       <div
