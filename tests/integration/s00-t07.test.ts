@@ -13,6 +13,14 @@ const input = {
   MAILPIT_URL: "http://localhost:8025",
 };
 describe("S00 config trust boundary", () => {
+  it("retains the server-only Resend key and redacts invalid configuration", () => {
+    expect(parseServerConfig({ ...input, RESEND_API_KEY: "re_test_only" }).RESEND_API_KEY).toBe(
+      "re_test_only",
+    );
+    expect(() => parseServerConfig({ ...input, RESEND_API_KEY: " " })).toThrow(
+      "Invalid configuration fields: RESEND_API_KEY",
+    );
+  });
   it("accepts bounded local settings and closed trust flags", () => {
     expect(parseServerConfig(input)).toMatchObject({
       PORT: 3000,

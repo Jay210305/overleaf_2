@@ -25,6 +25,7 @@ export const serverConfigSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   SMTP_SECURE: z.coerce.boolean().optional(),
+  RESEND_API_KEY: z.string().trim().min(1).optional(),
   EMAIL_FROM: z.email().optional(),
   PUBLIC_SIGNUP_ENABLED: z.literal("false").default("false"),
   UNTRUSTED_COMPILE_ENABLED: z.literal("false").default("false"),

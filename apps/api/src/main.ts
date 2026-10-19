@@ -24,17 +24,14 @@ import { githubAuthConfigFromEnv } from "./modules/integrations/github-auth.js";
 import { createGitHubRestReader } from "./modules/integrations/github-rest.js";
 import { createGitHubRestPushWriter } from "@latex-collab/jobs/sync/github-push";
 import { processAvatarCleanup } from "./modules/account/avatar.js";
-import {
-  createSmtpVerificationSender,
-  createSmtpPasswordResetSender,
-  createSmtpProjectInvitationSender,
-} from "./modules/auth/mail.js";
+import { createEmailSenders } from "./modules/auth/mail.js";
 async function main() {
   const envForConfig = { ...process.env };
   if (envForConfig.PUBLIC_SIGNUP_ENABLED === "true") {
     envForConfig.PUBLIC_SIGNUP_ENABLED = "false";
   }
   const config = parseServerConfig(envForConfig);
+  const emailSenders = createEmailSenders(config);
   const allowedOrigins = parseAllowedOrigins(
     config.APP_ORIGIN,
     config.CORS_ORIGIN ?? (process.env.ALLOWED_ORIGINS as string | undefined),
@@ -92,18 +89,9 @@ async function main() {
     storage,
     ticketStore,
     githubAuth: { config: githubAuthConfigFromEnv(process.env), reader: createGitHubRestReader() },
-    sendVerification:
-      config.SMTP_URL && config.EMAIL_FROM
-        ? createSmtpVerificationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
-        : undefined,
-    sendPasswordReset:
-      config.SMTP_URL && config.EMAIL_FROM
-        ? createSmtpPasswordResetSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
-        : undefined,
-    sendProjectInvitation:
-      config.SMTP_URL && config.EMAIL_FROM
-        ? createSmtpProjectInvitationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN)
-        : undefined,
+    sendVerification: emailSenders?.sendVerification,
+    sendPasswordReset: emailSenders?.sendPasswordReset,
+    sendProjectInvitation: emailSenders?.sendProjectInvitation,
     secureCookies: config.NODE_ENV === "production" || config.APP_ORIGIN.startsWith("https://"),
   });
   const collab = new CollabServer({

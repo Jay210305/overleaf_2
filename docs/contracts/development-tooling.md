@@ -25,7 +25,7 @@ Pin Node LTS compatibility and pnpm in manifests/lockfile after research; expose
 | API / server | NODE_ENV, APP_ORIGIN, API_PUBLIC_URL, COLLAB_PUBLIC_URL, PORT | Environment enum, exact allowed URL origins, PORT integer |
 | API DB/cache | DATABASE_URL, REDIS_URL | Private server URLs; redact connection credentials |
 | Server security | SESSION_SIGNING_KEY, TICKET_SIGNING_KEY, CRYPTO_ENCRYPTION_KEY | Injected high-entropy secrets; at least 32 bytes; rotate with documented key ID |
-| Email | EMAIL_FROM, SMTP_URL | Mailpit locally; optional verified hosted transport |
+| Email | EMAIL_FROM, SMTP_URL, RESEND_API_KEY | Mailpit SMTP locally; Resend HTTPS takes precedence when its server-only key is configured. Both transports require EMAIL_FROM. See [hosted email setup](../operations/hosted-email.md). |
 | Object adapter | S3_ENDPOINT, S3_REGION, S3_BUCKET, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY | Private server-only mapping to actual provider values |
 | Origin/trust | CORS_ALLOWED_ORIGINS, PUBLIC_SIGNUP_ENABLED, UNTRUSTED_COMPILE_ENABLED, COMPILER_EXECUTION_MODE | Exact origins; booleans false initially; trusted_worker/isolated enum |
 | Quotas | MAX_UPLOAD_MB, MAX_PROJECT_MB, MAX_COMPILES_PER_USER | Starting proposals 25, 100, 1; actual bytes checked and finite positive values |

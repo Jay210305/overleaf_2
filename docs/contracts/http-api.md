@@ -24,6 +24,11 @@ The planned routes are `GET /api/v1/projects/{projectId}/integrations/{provider}
 
 ## G1 Trusted Registration Slice
 
+Hosted transport maintenance (2026-10-18): the operator and API now use Resend
+HTTPS when `RESEND_API_KEY` is configured, otherwise SMTP. Both require
+`EMAIL_FROM`; the email-bound, hashed, single-use invitation contract below is
+unchanged. See [hosted email configuration](../operations/hosted-email.md).
+
 Until G5 isolation and release approval, `PUBLIC_SIGNUP_ENABLED=false`. The live S02-T01 `POST /auth/register` accepts the planned email/password/displayName body only with an operator-issued, email-bound, one-use `X-Registration-Invite` secret. The operator command sends that secret by SMTP; no public route issues it. Registration and `POST /auth/verify-email` require the exact configured `Origin` and a nonempty custom `X-CSRF-Token` header. The latter is a browser mutation guard for this anonymous, cookie-free flow; authenticated session CSRF is S02-T02 work. Both routes return the planned `Accepted` body, or `application/problem+json` on denial. The registration invitation and email-verification token are stored only as SHA-256 hashes, expire after 24 hours and are consumed under PostgreSQL row locks. The live S02-T06 rate limiter applies to these routes.
 
 ## G2 Project Invitation Slice (S08-T01)
