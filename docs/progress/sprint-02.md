@@ -4,6 +4,20 @@
 
 ## Task Matrix
 
+2026-10-18 maintenance: added Resend HTTPS selection for the existing account
+email flows and trusted invitation operator, because the deployed Railway Hobby
+service cannot use SMTP. No task status or release gate changed. Independent
+review and live delivery remain pending; see [maintenance evidence](../test-reports/hosted-email-2026-10-18.md).
+
+Deployment continuation: user/co-maintainer authorized deployment; integrated
+newer `origin/main` (`3c9d6e4`) on `codex/fix-resend-email`, preserving contributor
+templates and session/UI work. Railway deployment
+`ce1649f2-fa18-4838-a9f3-52e124d0c8ba` succeeded; live/ready returned HTTP 200 and
+the requested invitation was accepted by Resend. Integrated verification:
+16 focused tests, lint, typecheck and workspace build passed; local Mailpit
+integration could not run because the local SMTP service was stopped. Inbox
+receipt/registration remain user steps. No existing task or release gate changed.
+
 | ID | Status | Actual hours | Evidence |
 |---|---|---|---|
 | [S02-T01](../../implementation/sprint-02-identity-permissions/S02-T01-implement-registration-and-verification.md) | DONE | Not measured | [Scoped report](../test-reports/s02-t01.md); independent co-maintainer accepted 2026-10-11 |
