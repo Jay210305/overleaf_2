@@ -2,7 +2,9 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 test.describe("S15-T10 Release Accessibility & Browser Compatibility (NFR-08, NFR-11)", () => {
-  test("satisfies WCAG 2.2 AA accessibility criteria with axe-core on public views", async ({ page }) => {
+  test("satisfies WCAG 2.2 AA accessibility criteria with axe-core on public views", async ({
+    page,
+  }) => {
     await page.goto("/");
 
     const a11yScan = await new AxeBuilder({ page })

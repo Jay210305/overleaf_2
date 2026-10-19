@@ -130,7 +130,8 @@ export function ProjectsDashboard({
   }, [csrfToken]);
 
   const getCsrfToken = useCallback(async (): Promise<string | null> => {
-    if (internalCsrf) return internalCsrf;
+    // Session reads rotate the CSRF hash, so always prefer the freshest token
+    // stored by the session probe instead of a value captured at mount.
     try {
       const stored = sessionStorage.getItem("csrf_token");
       if (stored) {
@@ -138,7 +139,7 @@ export function ProjectsDashboard({
         return stored;
       }
     } catch {}
-    return null;
+    return internalCsrf;
   }, [internalCsrf]);
 
   const fetchProjects = useCallback(
@@ -675,7 +676,7 @@ export function ProjectsDashboard({
                           <a
                             className="btn btn-secondary btn-sm"
                             href={`/project/${proj.id}`}
-                            aria-label={`Open ${proj.title}`}
+                            title={proj.title}
                           >
                             Open
                           </a>

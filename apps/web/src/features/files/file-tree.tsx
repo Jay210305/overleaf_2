@@ -120,7 +120,8 @@ export function FileTree({
   }, [csrfToken]);
 
   const getCsrfToken = useCallback(async (): Promise<string | null> => {
-    if (internalCsrf) return internalCsrf;
+    // Session reads rotate the CSRF hash, so always prefer the freshest token
+    // stored by the session probe instead of a value captured at mount.
     try {
       const stored = sessionStorage.getItem("csrf_token");
       if (stored) {
@@ -128,7 +129,7 @@ export function FileTree({
         return stored;
       }
     } catch {}
-    return null;
+    return internalCsrf;
   }, [internalCsrf]);
 
   const treeContainerRef = useRef<HTMLDivElement>(null);
@@ -141,6 +142,8 @@ export function FileTree({
         method: "GET",
         headers: { accept: "application/json" },
         credentials: "include",
+        // Tree versions change on every mutation; never serve a cached listing.
+        cache: "no-store",
       });
 
       if (!res.ok) {

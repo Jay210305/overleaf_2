@@ -341,7 +341,7 @@ export function ProjectWorkspace({
                           className="btn btn-sm btn-primary"
                           onClick={() => setLiveFileId(selectedNode.id)}
                         >
-                          Enter Live Editor
+                          Join live editor
                         </button>
                       )}
                     </div>

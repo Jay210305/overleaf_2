@@ -3024,3 +3024,12 @@ main#main {
 .badge-status.build-none .status-dot {
   background: #7a8f85;
 }
+
+.workspace-modal-card .modal-subtitle {
+  color: #a9c3b5;
+}
+
+.shell.dark .error-state {
+  color: #f2a29b;
+  border-color: #7d3a34;
+}

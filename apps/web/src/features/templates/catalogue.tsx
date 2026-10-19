@@ -116,9 +116,7 @@ export const TemplateCatalogue: React.FC<TemplateCatalogueProps> = ({ apiUrl, on
         </p>
       ) : null}
       {templates.length === 0 && !error ? (
-        <p role="status" className="empty-state">
-          No templates in this category yet.
-        </p>
+        <p className="empty-state">No templates in this category yet.</p>
       ) : null}
       <ul className="template-grid">
         {templates.map((template) => (

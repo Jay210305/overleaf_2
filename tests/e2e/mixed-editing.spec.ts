@@ -5,7 +5,7 @@ import { parseServerConfig } from "@latex-collab/config/server";
 import { DatabaseClient } from "@latex-collab/db";
 import { S3StorageAdapter } from "@latex-collab/storage";
 import * as Y from "yjs";
-import { AUTH_STATE_PATH, readSharedCsrf } from "./shared-auth.js";
+import { createAuthenticatedContext } from "./authenticated-context.js";
 
 loadEnvFile(".env");
 const config = parseServerConfig(process.env);
@@ -37,24 +37,13 @@ test("two browser editors converge through the persistent collaboration socket",
     secretAccessKey: config.S3_SECRET_ACCESS_KEY,
   });
   let imageKey: string | null = null;
-  // Shared suite session (see auth.setup.ts): both editor contexts reuse one
-  // login instead of consuming the Redis rate-limit window per context.
-  const { csrf: sharedCsrf } = readSharedCsrf();
-
-  const contexts = await Promise.all([
-    browser.newContext({ storageState: AUTH_STATE_PATH }),
-    browser.newContext({ storageState: AUTH_STATE_PATH }),
-  ]);
+  // Each editor gets its own session: reading a session rotates its token and
+  // CSRF hash, so two contexts cannot share one stored session.
+  const first = await createAuthenticatedContext(browser);
+  const second = await createAuthenticatedContext(browser);
+  const contexts = [first.context, second.context];
   try {
-    const csrf = await Promise.all(
-      contexts.map(async (context) => {
-        await context.addInitScript(
-          (value) => sessionStorage.setItem("csrf_token", value),
-          sharedCsrf,
-        );
-        return sharedCsrf;
-      }),
-    );
+    const csrf = [first.csrf, second.csrf];
 
     const created = await contexts[0]!.request.post(`${api}/projects`, {
       headers: { origin, "x-csrf-token": csrf[0]! },

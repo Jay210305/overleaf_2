@@ -6,7 +6,7 @@ import { test, expect } from "@playwright/test";
 import { parseServerConfig } from "@latex-collab/config/server";
 import { DatabaseClient } from "@latex-collab/db";
 import { createProject } from "../../apps/api/src/modules/projects/create.js";
-import { AUTH_STATE_PATH, readSharedCsrf } from "./shared-auth.js";
+import { createAuthenticatedContext } from "./authenticated-context.js";
 
 loadEnvFile(".env");
 const config = parseServerConfig(process.env);
@@ -18,11 +18,9 @@ const config = parseServerConfig(process.env);
 test("signed multi-file upload persists nodes and reports per-file errors", async ({ browser }) => {
   test.setTimeout(90_000);
   const db = new DatabaseClient(config.DATABASE_URL);
-  const { userId, csrf } = readSharedCsrf();
-  // Shared session cookies plus the app's sessionStorage CSRF token, so UI
-  // mutations pass the CSRF guard without a per-spec login.
-  const context = await browser.newContext({ storageState: AUTH_STATE_PATH });
-  await context.addInitScript((value) => sessionStorage.setItem("csrf_token", value), csrf);
+  // A dedicated session per context keeps UI mutations authenticated even
+  // though reading the session rotates its token and CSRF hash.
+  const { context, userId } = await createAuthenticatedContext(browser);
   const page = await context.newPage();
   try {
     await expect
@@ -88,6 +86,7 @@ test("signed multi-file upload persists nodes and reports per-file errors", asyn
       ),
     ).toEqual([]);
   } finally {
+    await context.close();
     await db.close();
   }
 });

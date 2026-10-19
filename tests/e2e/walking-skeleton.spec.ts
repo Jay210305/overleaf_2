@@ -19,7 +19,10 @@ test("browser checks real API, navigation, theme and keyboard", async ({ page })
     "aria-pressed",
     "true",
   );
-  await page.getByRole("link", { name: "Projects", exact: true }).click();
+  await page
+    .getByRole("navigation", { name: "Main" })
+    .getByRole("link", { name: "Projects", exact: true })
+    .click();
   await expect(page.getByRole("heading", { name: "Projects", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "New Project" })).toBeVisible();
   await page.reload();

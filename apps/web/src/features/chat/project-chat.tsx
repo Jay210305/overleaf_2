@@ -144,6 +144,10 @@ export function ProjectChat({
   }
 
   async function csrf() {
+    try {
+      const stored = sessionStorage.getItem("csrf_token");
+      if (stored) return stored;
+    } catch {}
     if (csrfToken) return csrfToken;
     const response = await fetch(`${apiUrl}/auth/session`, { credentials: "include" });
     const token = response.headers.get("x-csrf-token");
