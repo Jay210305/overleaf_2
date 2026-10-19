@@ -99,6 +99,26 @@ export function AdminDashboard() {
     },
   });
 
+  if (quotasQuery.isLoading || flagsQuery.isLoading || usersQuery.isLoading) {
+    return (
+      <div className="admin-dashboard p-6 space-y-4">
+        <h1 className="text-2xl font-bold">System Administration & Abuse Controls</h1>
+        <p role="status">Loading administrative controls…</p>
+      </div>
+    );
+  }
+
+  if (quotasQuery.isError || flagsQuery.isError || usersQuery.isError) {
+    return (
+      <div className="admin-dashboard p-6 space-y-4">
+        <h1 className="text-2xl font-bold">System Administration & Abuse Controls</h1>
+        <div role="alert" className="p-4 bg-red-100 text-red-800 rounded">
+          Administrative access restricted or failed to load. Please verify you are signed in with an authorized administrator account.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="admin-dashboard p-6 space-y-8">
       <h1 className="text-2xl font-bold">System Administration & Abuse Controls</h1>

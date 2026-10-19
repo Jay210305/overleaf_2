@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import * as Y from "yjs";
 import { parsePublicConfig } from "@latex-collab/config";
 import type { CompilationView, ProjectNodeView, ProjectView } from "@latex-collab/contracts";
 import { FileTree } from "../files/file-tree.js";
@@ -56,6 +57,8 @@ export function ProjectWorkspace({
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [latestJob, setLatestJob] = useState<CompilationView | null>(null);
   const [uploadVersion, setUploadVersion] = useState(0);
+  const [bibSource, setBibSource] = useState("");
+  const [bibFiles, setBibFiles] = useState<Array<{ id: string; name: string }>>([]);
 
   const fetchProject = useCallback(async () => {
     if (!projectId) return;
@@ -89,6 +92,43 @@ export function ProjectWorkspace({
   useEffect(() => {
     void fetchProject();
   }, [fetchProject]);
+
+  useEffect(() => {
+    if (!showReferencesModal || !projectId) return;
+    let active = true;
+    void (async () => {
+      try {
+        const res = await fetch(`${apiUrl}/projects/${projectId}/nodes`, {
+          credentials: "include",
+        });
+        if (!res.ok) return;
+        const data = (await res.json()) as { items?: ProjectNodeView[] };
+        const found = (data.items ?? []).filter(
+          (n) => n.kind === "FILE" && n.name.toLowerCase().endsWith(".bib"),
+        );
+        if (!active) return;
+        setBibFiles(found.map((n) => ({ id: n.id, name: n.name })));
+        const firstBib = found[0];
+        if (firstBib && !bibSource) {
+          const textRes = await fetch(`${apiUrl}/projects/${projectId}/files/${firstBib.id}/text`, {
+            credentials: "include",
+          });
+          if (textRes.ok && active) {
+            const state = (await textRes.json()) as { updateBase64: string };
+            const doc = new Y.Doc();
+            Y.applyUpdate(
+              doc,
+              Uint8Array.from(atob(state.updateBase64), (c) => c.charCodeAt(0)),
+            );
+            setBibSource(doc.getText("content").toString());
+          }
+        }
+      } catch {}
+    })();
+    return () => {
+      active = false;
+    };
+  }, [apiUrl, projectId, showReferencesModal, bibSource]);
 
   if (!projectId) {
     return (
@@ -205,11 +245,7 @@ export function ProjectWorkspace({
                 selectedNodeId={selectedNode?.id}
                 onSelectNode={(node) => {
                   setSelectedNode(node);
-                  if (node.kind === "FILE" && node.contentKind === "TEXT") {
-                    setLiveFileId(node.id);
-                  } else {
-                    setLiveFileId(null);
-                  }
+                  setLiveFileId(null);
                 }}
                 refreshVersion={uploadVersion}
               />
@@ -434,8 +470,39 @@ export function ProjectWorkspace({
             <div className="workspace-references-tabs">
               <section aria-label="BibTeX Search">
                 <h3>BibTeX References</h3>
+                {bibFiles.length > 0 && (
+                  <div style={{ marginBottom: "8px" }}>
+                    <p style={{ margin: 0, fontSize: "12px", color: "#6b7280" }}>
+                      Loaded from: <strong>{bibFiles.map((f) => f.name).join(", ")}</strong>
+                    </p>
+                  </div>
+                )}
+                <div style={{ marginBottom: "12px" }}>
+                  <label
+                    htmlFor="bibtex-source-input"
+                    style={{ display: "block", fontSize: "12px", fontWeight: "600", marginBottom: "4px" }}
+                  >
+                    BibTeX Source (edit or paste below to search entries & check duplicate keys):
+                  </label>
+                  <textarea
+                    id="bibtex-source-input"
+                    rows={4}
+                    value={bibSource}
+                    onChange={(e) => setBibSource(e.target.value)}
+                    placeholder={`@article{knuth1984,\n  title={Literate Programming},\n  author={Knuth, Donald E.},\n  year={1984}\n}`}
+                    style={{
+                      width: "100%",
+                      fontFamily: "monospace",
+                      fontSize: "12px",
+                      padding: "8px",
+                      borderRadius: "4px",
+                      border: "1px solid #d1d5db",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
                 <ReferenceSearch
-                  bibSource=""
+                  bibSource={bibSource}
                   onSelectKey={(key) => {
                     navigator.clipboard?.writeText?.(key);
                   }}

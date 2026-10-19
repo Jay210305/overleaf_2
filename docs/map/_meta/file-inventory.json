@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "42317da1dfae54d00c1675995b2adf56abee1493",
+  "git_baseline": "3c9d6e4680ab3a69ce690a6f4eda93f2f1feca8c",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -823,7 +823,7 @@
     {
       "path": "apps/web/src/app/router.tsx",
       "role": "factory",
-      "sha256": "7e5900991d0db43d00b41d1cc4af141b2580e7ec8caea3cffe073d4295768329"
+      "sha256": "7fc9f6ed46f6c6484e0ace4253b72ec9bf738a49059a3ba0cb23d6859459afc3"
     },
     {
       "path": "apps/web/src/features/account/avatar.tsx",
@@ -838,7 +838,7 @@
     {
       "path": "apps/web/src/features/admin/dashboard.tsx",
       "role": "factory",
-      "sha256": "d7caa1ee9da795ac0fb40f47e44362062de4aafe3465368ecb0de64928089293"
+      "sha256": "47d15158e604851cc21c3d0aeab1d19de344492066afe3bc1e08185767e66902"
     },
     {
       "path": "apps/web/src/features/auth/auth-forms.tsx",
@@ -1008,7 +1008,7 @@
     {
       "path": "apps/web/src/features/projects/workspace.tsx",
       "role": "factory",
-      "sha256": "c0cfffdc9c9be2078249690562b1a385957b413faa4417057e6ccf7a87c95fc1"
+      "sha256": "d6825e123effd7add5d5ac9e08818d68ab89e87d829e4c302ef117f52ceae05d"
     },
     {
       "path": "apps/web/src/features/references/search.tsx",

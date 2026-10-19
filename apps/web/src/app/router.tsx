@@ -123,7 +123,7 @@ function Shell() {
     );
   };
   const [dark, setDark] = useState(resolvedDark);
-  const [currentUser, setCurrentUser] = useState<{ displayName: string } | null>(() => {
+  const [currentUser, setCurrentUser] = useState<{ displayName?: string } | null>(() => {
     try {
       const stored = sessionStorage.getItem("current_user");
       return stored ? JSON.parse(stored) : null;
@@ -142,7 +142,35 @@ function Shell() {
       }
     };
     window.addEventListener("auth-state-change", updateAuth);
-    return () => window.removeEventListener("auth-state-change", updateAuth);
+
+    // If no user is cached in session storage, probe /auth/session to restore state
+    let active = true;
+    if (!currentUser) {
+      void (async () => {
+        try {
+          const res = await fetch(`${config.VITE_API_URL}/auth/session`, {
+            credentials: "include",
+          });
+          if (!res.ok) return;
+          const data = (await res.json()) as { displayName?: string };
+          const csrf = res.headers.get("x-csrf-token");
+          const sessionToken = res.headers.get("x-session-token");
+          if (data && active) {
+            try {
+              if (csrf) sessionStorage.setItem("csrf_token", csrf);
+              if (sessionToken) sessionStorage.setItem("session_token", sessionToken);
+              sessionStorage.setItem("current_user", JSON.stringify(data));
+              window.dispatchEvent(new Event("auth-state-change"));
+            } catch {}
+          }
+        } catch {}
+      })();
+    }
+
+    return () => {
+      active = false;
+      window.removeEventListener("auth-state-change", updateAuth);
+    };
   }, []);
 
   useEffect(() => {
@@ -173,11 +201,17 @@ function Shell() {
           <Link to="/admin">Admin</Link>
           {currentUser ? (
             <span className="user-auth-indicator">
-              <span className="user-display-name">{currentUser.displayName}</span>
+              <span className="user-display-name">{currentUser.displayName || "Account"}</span>
               <button
                 type="button"
                 className="btn-signout"
-                onClick={() => {
+                onClick={async () => {
+                  try {
+                    await fetch(`${config.VITE_API_URL}/auth/logout`, {
+                      method: "POST",
+                      credentials: "include",
+                    });
+                  } catch {}
                   try {
                     sessionStorage.removeItem("session_token");
                     sessionStorage.removeItem("csrf_token");
