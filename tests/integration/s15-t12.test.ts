@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { validatePublicCompilationPolicy, PolicyViolationError } from "../../apps/jobs/src/compilation/public-policy.js";
+import {
+  validatePublicCompilationPolicy,
+  PolicyViolationError,
+} from "../../apps/jobs/src/compilation/public-policy.js";
 
 describe("S15-T12: Approve and enable optional public signup (PL-07, PL-05)", () => {
   it("verifies public-release-approval documents recorded dual-maintainer consensus", async () => {

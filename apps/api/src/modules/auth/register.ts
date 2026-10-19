@@ -152,7 +152,10 @@ export async function registerTrustedAccount(
   try {
     await sendVerification(parsed.data.email, verificationToken);
   } catch (smtpError) {
-    console.error("Failed to deliver registration verification email:", (smtpError as Error)?.message);
+    console.error(
+      "Failed to deliver registration verification email:",
+      (smtpError as Error)?.message,
+    );
     // SMTP can fail after the database commit. Restore the unused invitation
     // so the trusted user can retry, and invalidate the undelivered link.
     await db.transaction(async (tx) => {
@@ -220,7 +223,8 @@ export async function registerPublicAccount(
       );
       const row = existing.rows[0];
       if (row?.disabled_at) throw new AuthError(403, "ACCOUNT_DISABLED");
-      if (row?.password_hash || row?.email_verified_at) throw new AuthError(409, "ACCOUNT_CONFLICT");
+      if (row?.password_hash || row?.email_verified_at)
+        throw new AuthError(409, "ACCOUNT_CONFLICT");
 
       let userId: string;
       let isNew = false;
@@ -266,7 +270,10 @@ export async function registerPublicAccount(
   try {
     await sendVerification(parsed.data.email, verificationToken);
   } catch (smtpError) {
-    console.error("Failed to deliver registration verification email:", (smtpError as Error)?.message);
+    console.error(
+      "Failed to deliver registration verification email:",
+      (smtpError as Error)?.message,
+    );
     await db.transaction(async (tx) => {
       const user = await tx.query<{ email_verified_at: Date | null }>(
         "SELECT email_verified_at FROM users WHERE id = $1 FOR UPDATE",
@@ -289,4 +296,3 @@ export async function registerPublicAccount(
     throw new AuthError(502, "PROVIDER_UNAVAILABLE");
   }
 }
-

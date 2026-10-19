@@ -1,5 +1,14 @@
 import { useEffect, useState, lazy, Suspense } from "react";
-import { BrowserRouter, Link, Route, Routes, useNavigate, useParams } from "react-router-dom";
+import {
+  BrowserRouter,
+  Link,
+  NavLink,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { parsePublicConfig } from "@latex-collab/config";
 import type { AuthMode } from "../features/auth/auth-forms.js";
 
@@ -40,10 +49,20 @@ const TemplatePreview = lazy(() =>
   })),
 );
 const AdminDashboard = lazy(() =>
-  import("../features/admin/dashboard.js").then((module) => ({
-    default: module.AdminDashboard,
+  import("../features/admin/dashboard.js").then((module) => ({ default: module.AdminDashboard })),
+);
+const CompilationHub = lazy(() =>
+  import("../features/compilation/hub.js").then((module) => ({
+    default: module.CompilationHub,
   })),
 );
+
+const navItems: Array<{ to: string; label: string }> = [
+  { to: "/projects", label: "Projects" },
+  { to: "/templates", label: "Templates" },
+  { to: "/compilation", label: "Compilation" },
+  { to: "/settings/profile", label: "Settings" },
+];
 
 function AuthRoute({ mode }: { mode: AuthMode }) {
   return (
@@ -56,12 +75,13 @@ function AuthRoute({ mode }: { mode: AuthMode }) {
 function TemplatesCatalogueRoute() {
   const navigate = useNavigate();
   return (
-    <div className="templates-route-container" role="region" aria-label="Templates Catalogue">
-      <header className="section-header">
+    <div className="page-column" role="region" aria-label="Templates Catalogue">
+      <header className="page-header">
         <p className="eyebrow">Document Starters</p>
         <h1>Templates Catalogue</h1>
         <p className="section-lead">
-          Browse tested templates for articles, theses, reports, and presentations. Select or instantiate any template directly into your workspace.
+          Browse tested templates for articles, theses, reports, and presentations. Select or
+          instantiate any template directly into your workspace.
         </p>
       </header>
       <Suspense fallback={<p role="status">Loading templates catalogue…</p>}>
@@ -78,8 +98,8 @@ function TemplatePreviewRoute() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   return (
-    <div className="template-preview-route-container" role="region" aria-label="Template Preview">
-      <header className="section-header">
+    <div className="page-column" role="region" aria-label="Template Preview">
+      <header className="page-header">
         <nav aria-label="Template breadcrumbs" className="breadcrumbs-nav">
           <Link to="/templates">Templates</Link>
           <span aria-hidden="true"> / </span>
@@ -99,22 +119,23 @@ function TemplatePreviewRoute() {
 
 function CompilationHubRoute() {
   return (
-    <div className="compilation-hub-container" role="region" aria-label="Compilation Hub">
-      <header className="section-header">
-        <p className="eyebrow">TeX Engines & Compilation</p>
-        <h1>Project Compilation</h1>
-        <p className="section-lead">
-          Select any active project below to open its compilation controls, inspect build diagnostics, and review generated PDFs with SyncTeX navigation.
-        </p>
-      </header>
+    <div role="region" aria-label="Compilation Hub">
       <Suspense fallback={<p role="status">Loading projects for compilation…</p>}>
-        <ProjectsDashboard apiUrl={config.VITE_API_URL} initialFilter="recent" />
+        <CompilationHub apiUrl={config.VITE_API_URL} />
       </Suspense>
     </div>
   );
 }
 
+function initialsFor(name: string | undefined): string {
+  if (!name) return "?";
+  const parts = name.trim().split(/\s+/).slice(0, 2);
+  return parts.map((part) => part.charAt(0).toUpperCase()).join("") || "?";
+}
+
 function Shell() {
+  const location = useLocation();
+  const isWorkspace = /^\/project\/[^/]+(?:\/compilation)?\/?$/.test(location.pathname);
   const resolvedDark = () => {
     const preference = localStorage.getItem("theme");
     return (
@@ -123,7 +144,7 @@ function Shell() {
     );
   };
   const [dark, setDark] = useState(resolvedDark);
-  const [currentUser, setCurrentUser] = useState<{ displayName: string } | null>(() => {
+  const [currentUser, setCurrentUser] = useState<{ displayName?: string } | null>(() => {
     try {
       const stored = sessionStorage.getItem("current_user");
       return stored ? JSON.parse(stored) : null;
@@ -142,7 +163,35 @@ function Shell() {
       }
     };
     window.addEventListener("auth-state-change", updateAuth);
-    return () => window.removeEventListener("auth-state-change", updateAuth);
+
+    // If no user is cached in session storage, probe /auth/session to restore state
+    let active = true;
+    if (!currentUser) {
+      void (async () => {
+        try {
+          const res = await fetch(`${config.VITE_API_URL}/auth/session`, {
+            credentials: "include",
+          });
+          if (!res.ok) return;
+          const data = (await res.json()) as { displayName?: string };
+          const csrf = res.headers.get("x-csrf-token");
+          const sessionToken = res.headers.get("x-session-token");
+          if (data && active) {
+            try {
+              if (csrf) sessionStorage.setItem("csrf_token", csrf);
+              if (sessionToken) sessionStorage.setItem("session_token", sessionToken);
+              sessionStorage.setItem("current_user", JSON.stringify(data));
+              window.dispatchEvent(new Event("auth-state-change"));
+            } catch {}
+          }
+        } catch {}
+      })();
+    }
+
+    return () => {
+      active = false;
+      window.removeEventListener("auth-state-change", updateAuth);
+    };
   }, []);
 
   useEffect(() => {
@@ -156,59 +205,129 @@ function Shell() {
     };
   }, []);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.theme = dark ? "dark" : "light";
+  }, [dark]);
+
   return (
-    <div className={dark ? "shell dark" : "shell"}>
+    <div className={`shell${dark ? " dark" : ""}${isWorkspace ? " workspace-shell" : ""}`}>
       <a className="skip" href="#main">
         Skip to content
       </a>
-      <header>
-        <Link to="/" className="shell-logo">
-          LaTeX Workspace
-        </Link>
-        <nav aria-label="Main">
-          <Link to="/projects">Projects</Link>
-          <Link to="/templates">Templates</Link>
-          <Link to="/compilation">Compilation</Link>
-          <Link to="/settings/profile">Settings</Link>
-          <Link to="/admin">Admin</Link>
-          {currentUser ? (
-            <span className="user-auth-indicator">
-              <span className="user-display-name">{currentUser.displayName}</span>
-              <button
-                type="button"
-                className="btn-signout"
-                onClick={() => {
-                  try {
-                    sessionStorage.removeItem("session_token");
-                    sessionStorage.removeItem("csrf_token");
-                    sessionStorage.removeItem("current_user");
-                    window.dispatchEvent(new Event("auth-state-change"));
-                  } catch {}
-                  window.location.href = "/login";
-                }}
+      {!isWorkspace && (
+        <header className="app-header">
+          <Link to="/" className="shell-logo">
+            <span className="logo-mark" aria-hidden="true">
+              Λ
+            </span>
+            <span className="logo-text">
+              LaTeX Workspace
+              <span className="logo-tagline">Collaborative writing</span>
+            </span>
+          </Link>
+          <nav aria-label="Main" className="main-nav">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) => `nav-pill${isActive ? " active" : ""}`}
               >
-                Sign out
-              </button>
-            </span>
-          ) : (
-            <span className="guest-auth-links">
-              <Link to="/login">Sign in</Link>
-              <Link to="/register" className="btn-register-link">
-                Create account
-              </Link>
-            </span>
-          )}
-        </nav>
-        <button
-          aria-pressed={dark}
-          onClick={() => {
-            setDark(!dark);
-            localStorage.setItem("theme", dark ? "light" : "dark");
-          }}
-        >
-          Dark theme
-        </button>
-      </header>
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+          <div className="header-tools">
+            {currentUser ? (
+              <details className="user-menu">
+                <summary aria-label="Account menu">
+                  <span className="user-avatar" aria-hidden="true">
+                    {initialsFor(currentUser.displayName)}
+                  </span>
+                  <span className="user-display-name">{currentUser.displayName || "Account"}</span>
+                  <span className="chevron" aria-hidden="true">
+                    ▾
+                  </span>
+                </summary>
+                <div className="user-menu-panel">
+                  <Link to="/settings/profile">Account settings</Link>
+                  <Link to="/admin">Admin</Link>
+                  <button
+                    type="button"
+                    className="btn-signout"
+                    onClick={async () => {
+                      try {
+                        await fetch(`${config.VITE_API_URL}/auth/logout`, {
+                          method: "POST",
+                          credentials: "include",
+                        });
+                      } catch {}
+                      try {
+                        sessionStorage.removeItem("session_token");
+                        sessionStorage.removeItem("csrf_token");
+                        sessionStorage.removeItem("current_user");
+                        window.dispatchEvent(new Event("auth-state-change"));
+                      } catch {}
+                      window.location.href = "/login";
+                    }}
+                  >
+                    Sign out
+                  </button>
+                </div>
+              </details>
+            ) : (
+              <span className="guest-auth-links">
+                <Link to="/login">Sign in</Link>
+                <Link to="/register" className="btn-register-link">
+                  Create account
+                </Link>
+              </span>
+            )}
+            <button
+              type="button"
+              className="theme-toggle"
+              aria-pressed={dark}
+              aria-label="Dark theme"
+              title={dark ? "Switch to light theme" : "Switch to dark theme"}
+              onClick={() => {
+                setDark(!dark);
+                localStorage.setItem("theme", dark ? "light" : "dark");
+              }}
+            >
+              {dark ? (
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="4.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  />
+                  <path
+                    d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path
+                    d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+              <span>{dark ? "Light theme" : "Dark theme"}</span>
+            </button>
+          </div>
+        </header>
+      )}
       <main id="main" tabIndex={-1}>
         <Routes>
           <Route
@@ -318,19 +437,23 @@ function Shell() {
           />
         </Routes>
       </main>
-      <footer className="shell-footer">
-        <div className="footer-content">
-          <p>© {new Date().getFullYear()} LaTeX Workspace · Collaborative Academic Writing Platform</p>
-          <nav aria-label="Footer" className="footer-links">
-            <Link to="/">Home</Link>
-            <Link to="/projects">Projects</Link>
-            <Link to="/templates">Templates</Link>
-            <Link to="/compilation">Compilation</Link>
-            <Link to="/settings/profile">Settings</Link>
-            <Link to="/admin">Admin</Link>
-          </nav>
-        </div>
-      </footer>
+      {!isWorkspace && (
+        <footer className="shell-footer">
+          <div className="footer-content">
+            <p>
+              © {new Date().getFullYear()} LaTeX Workspace · Collaborative Academic Writing Platform
+            </p>
+            <nav aria-label="Footer" className="footer-links">
+              <Link to="/">Home</Link>
+              <Link to="/projects">Projects</Link>
+              <Link to="/templates">Templates</Link>
+              <Link to="/compilation">Compilation</Link>
+              <Link to="/settings/profile">Settings</Link>
+              <Link to="/admin">Admin</Link>
+            </nav>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }

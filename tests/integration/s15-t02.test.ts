@@ -4,7 +4,10 @@ import type { ExecuteInput, RevisionManifest } from "@latex-collab/contracts";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
-function createTestManifest(projectId: string, items: RevisionManifest["items"] = []): RevisionManifest {
+function createTestManifest(
+  projectId: string,
+  items: RevisionManifest["items"] = [],
+): RevisionManifest {
   return {
     version: 1,
     projectId,

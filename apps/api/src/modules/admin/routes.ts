@@ -66,7 +66,10 @@ export function registerAdminRoutes(
       (options.adminUserIds && options.adminUserIds.has(session.userId));
 
     if (!isAdmin) {
-      reply.code(403).type("application/problem+json").send(problem(403, "FORBIDDEN", request.id));
+      reply
+        .code(403)
+        .type("application/problem+json")
+        .send(problem(403, "FORBIDDEN", request.id));
       return;
     }
   }
@@ -79,7 +82,9 @@ export function registerAdminRoutes(
       display_name: string;
       disabled_at: string | null;
       created_at: string;
-    }>("SELECT id, email_normalized, display_name, disabled_at, created_at FROM users ORDER BY created_at DESC LIMIT 50");
+    }>(
+      "SELECT id, email_normalized, display_name, disabled_at, created_at FROM users ORDER BY created_at DESC LIMIT 50",
+    );
     return { users: res.rows };
   });
 
@@ -129,13 +134,7 @@ export function registerAdminRoutes(
         return reply
           .code(400)
           .type("application/problem+json")
-          .send(
-            problem(
-              400,
-              "ISOLATION_REQUIRED",
-              request.id,
-            ),
-          );
+          .send(problem(400, "ISOLATION_REQUIRED", request.id));
       }
       activeFlags = { ...activeFlags, ...request.body };
       return { flags: getAdminFlags() };

@@ -280,6 +280,7 @@ export function Profile() {
             <label>
               Theme
               <select
+                aria-label="Theme"
                 value={theme}
                 onChange={(event) => setTheme(event.target.value as "light" | "dark" | "system")}
               >

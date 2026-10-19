@@ -65,13 +65,12 @@ function reject(reply: FastifyReply, request: FastifyRequest, error: AuthError) 
 }
 
 export function registerOAuthRoutes(app: FastifyInstance, options: OAuthRoutesOptions): void {
-  const primaryOrigin = (
-    typeof options.origin === "string"
+  const primaryOrigin =
+    (typeof options.origin === "string"
       ? options.origin.split(",")[0]?.trim()
       : Array.isArray(options.origin)
         ? options.origin[0]
-        : undefined
-  ) ?? "http://127.0.0.1:5173";
+        : undefined) ?? "http://127.0.0.1:5173";
   const secureCookies = options.secureCookies ?? primaryOrigin.startsWith("https://");
   // GET /api/v1/auth/oauth/:provider/start
   app.get("/api/v1/auth/oauth/:provider/start", async (request, reply) => {

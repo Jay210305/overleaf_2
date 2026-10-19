@@ -182,10 +182,10 @@ export function CompileControls({
     }
   }, [apiBaseUrl, fetchImpl, onCompileComplete, projectId, stopPolling]);
 
-  // Keyboard shortcut listener (EDT-04): Ctrl+Enter or Cmd+Enter triggers compilation
+  // Keyboard shortcut listener (EDT-04): Ctrl/Cmd+Enter or Ctrl/Cmd+S compiles.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      if ((e.ctrlKey || e.metaKey) && (e.key === "Enter" || e.key.toLowerCase() === "s")) {
         e.preventDefault();
         void handleCompile();
       }
@@ -201,27 +201,12 @@ export function CompileControls({
   const warningCount = activeJob?.diagnostics?.filter((d) => d.severity === "warning").length ?? 0;
 
   return (
-    <div
-      data-testid="compile-controls"
-      className={`compile-controls-bar flex items-center justify-between px-3 py-1.5 bg-neutral-800 border-b border-neutral-700 text-xs text-neutral-200 ${className}`}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "6px 12px",
-        backgroundColor: "#262626",
-        borderBottom: "1px solid #404040",
-        color: "#e5e5e5",
-        fontSize: "0.75rem",
-      }}
-    >
+    <div data-testid="compile-controls" className={`compile-controls-bar ${className}`}>
       {/* Left: Engine Selector & Cache toggle */}
-      <div
-        className="flex items-center gap-2"
-        style={{ display: "flex", alignItems: "center", gap: "8px" }}
-      >
+      <div className="compile-group compile-group-engine">
         <select
           data-testid="engine-select"
+          aria-label="Compiler engine"
           value={compiler}
           onChange={(e) => setCompiler(e.target.value as Compiler)}
           disabled={isCompiling}
@@ -240,16 +225,7 @@ export function CompileControls({
           <option value="latex">LaTeX (DVI)</option>
         </select>
 
-        <label
-          className="flex items-center gap-1 cursor-pointer select-none text-neutral-400 hover:text-neutral-300"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "4px",
-            cursor: "pointer",
-            color: "#a3a3a3",
-          }}
-        >
+        <label className="compile-clean-toggle">
           <input
             type="checkbox"
             data-testid="force-clean-toggle"
@@ -263,10 +239,7 @@ export function CompileControls({
       </div>
 
       {/* Center: Compile status & diagnostics summary */}
-      <div
-        className="flex items-center gap-2"
-        style={{ display: "flex", alignItems: "center", gap: "8px" }}
-      >
+      <div className="compile-group compile-group-status">
         {activeJob && (
           <span
             data-testid="compile-status-badge"
@@ -321,23 +294,13 @@ export function CompileControls({
       </div>
 
       {/* Right: Compile Action Button & Cancel Button */}
-      <div
-        className="flex items-center gap-2"
-        style={{ display: "flex", alignItems: "center", gap: "8px" }}
-      >
+      <div className="compile-group compile-group-actions">
         {isCompiling && (
           <button
             type="button"
             data-testid="cancel-compile-btn"
             onClick={handleCancel}
-            className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-neutral-200 text-xs font-medium"
-            style={{
-              padding: "4px 8px",
-              borderRadius: "4px",
-              backgroundColor: "#404040",
-              color: "#e5e5e5",
-              fontWeight: "500",
-            }}
+            className="compile-cancel-btn"
           >
             Cancel
           </button>
@@ -348,18 +311,7 @@ export function CompileControls({
           data-testid="compile-button"
           onClick={handleCompile}
           disabled={isCompiling}
-          className="flex items-center gap-1.5 px-3 py-1 rounded bg-green-600 hover:bg-green-500 disabled:bg-neutral-700 text-white font-semibold text-xs transition-colors"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            padding: "4px 12px",
-            borderRadius: "4px",
-            backgroundColor: isCompiling ? "#404040" : "#16a34a",
-            color: "#ffffff",
-            fontWeight: "600",
-            cursor: isCompiling ? "not-allowed" : "pointer",
-          }}
+          className="compile-submit-btn"
         >
           {isCompiling ? (
             <>
@@ -378,7 +330,7 @@ export function CompileControls({
               <span>Compiling...</span>
             </>
           ) : (
-            <span>Recompile (Ctrl+Enter)</span>
+            <span>Recompile (Ctrl+S)</span>
           )}
         </button>
       </div>

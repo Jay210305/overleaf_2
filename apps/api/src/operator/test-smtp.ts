@@ -17,7 +17,11 @@ async function main() {
 
   if (recipient) {
     console.log(`Sending test verification email to: ${recipient}`);
-    const send = createSmtpVerificationSender(config.SMTP_URL, config.EMAIL_FROM, config.APP_ORIGIN);
+    const send = createSmtpVerificationSender(
+      config.SMTP_URL,
+      config.EMAIL_FROM,
+      config.APP_ORIGIN,
+    );
     await send(recipient, "test-verification-code-12345");
     console.log("Test email sent successfully.");
   }

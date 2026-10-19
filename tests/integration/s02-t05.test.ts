@@ -166,7 +166,9 @@ describe("S02-T05 browser authentication forms", () => {
     const fetcher = vi.fn().mockResolvedValue(new Response('{"accepted":true}', { status: 202 }));
     vi.stubGlobal("fetch", fetcher);
     render(createElement(AuthForms, { mode: "register" }));
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "public-writer@example.test" } });
+    fireEvent.change(screen.getByLabelText("Email"), {
+      target: { value: "public-writer@example.test" },
+    });
     fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "Public Writer" } });
     fireEvent.change(screen.getByLabelText("Password"), {
       target: { value: "secure-password-123" },
@@ -205,7 +207,9 @@ describe("S02-T05 browser authentication forms", () => {
 
     cleanup();
     render(createElement(AuthForms, { mode: "forgot" }));
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "reset-me@example.test" } });
+    fireEvent.change(screen.getByLabelText("Email"), {
+      target: { value: "reset-me@example.test" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Send reset link" }));
     await screen.findByText(/check your email/i);
     const forgotCall = fetcher.mock.calls.find(([url]) =>
@@ -243,10 +247,11 @@ describe("S02-T05 browser authentication forms", () => {
     render(createElement(AuthForms, { mode: "reset" }));
     fireEvent.change(screen.getByLabelText("Reset code"), { target: { value: "r".repeat(43) } });
     fireEvent.change(screen.getByLabelText("New password"), { target: { value: "password-1234" } });
-    fireEvent.change(screen.getByLabelText("Confirm password"), { target: { value: "password-different" } });
+    fireEvent.change(screen.getByLabelText("Confirm password"), {
+      target: { value: "password-different" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Reset password" }));
     const resetAlert = await screen.findByRole("alert");
     expect(resetAlert.textContent).toBe("Passwords do not match.");
   });
 });
-

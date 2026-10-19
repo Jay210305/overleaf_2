@@ -31,11 +31,7 @@ function useFragmentSecret(name: string | null) {
       setSecret(value);
     }
     if (window.location.hash || window.location.search) {
-      window.history.replaceState(
-        window.history.state,
-        "",
-        window.location.pathname,
-      );
+      window.history.replaceState(window.history.state, "", window.location.pathname);
     }
   }, [name]);
   return [secret, setSecret] as const;

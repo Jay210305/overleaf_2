@@ -45,6 +45,7 @@ The collaborative LaTeX editing system scales horizontally across multiple state
 ```
 
 ### Invariants:
+
 1. **Stateless Replicas:** No local disk volumes are required. If a replica crashes or terminates, no document history, user session, or CRDT update is lost.
 2. **Affinity Independence:** Web clients can connect to Replica A, disconnect, and reconnect to Replica B seamlessly. State converges deterministically via Yjs CRDT vector exchange.
 3. **Commit-Before-Ack (NFR-01):** Save status transitions to `saved` only after updates are committed under PostgreSQL row lock (`SELECT ... FOR UPDATE`).

@@ -9,11 +9,7 @@ export function setupApiClient() {
 
   window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
     const urlStr =
-      typeof input === "string"
-        ? input
-        : input instanceof URL
-          ? input.toString()
-          : input.url;
+      typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
 
     if (urlStr.startsWith(apiUrl)) {
       const headers = new Headers(
@@ -28,7 +24,9 @@ export function setupApiClient() {
           headers.set("x-session-token", sessionToken);
         }
         const csrfToken = sessionStorage.getItem("csrf_token");
-        const method = (init?.method ?? (input instanceof Request ? input.method : "GET")).toUpperCase();
+        const method = (
+          init?.method ?? (input instanceof Request ? input.method : "GET")
+        ).toUpperCase();
         if (
           csrfToken &&
           !headers.has("x-csrf-token") &&

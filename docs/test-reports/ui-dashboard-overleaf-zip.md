@@ -1,0 +1,43 @@
+# Acceptance report — dashboard refresh and Overleaf ZIP compatibility
+
+Date: 2026-10-19
+Scope: `apps/web` shell/dashboard/templates/compilation, project ZIP import/export (`apps/web/src/features/files/zip.ts`), and the shared upload content policy (`packages/storage/src/content-policy.ts`).
+Branch: `main` (working tree, not committed).
+
+## What changed
+
+### ZIP import/export
+
+- The archive policy now accepts the files real Overleaf exports contain beyond TeX sources: `.eps` (BINARY, PostScript/DOS EPS signature verified), `.txt` and `.tikz` (TEXT). Client policy, single-file uploader, and server policy were kept in sync.
+- Legacy text encodings (Windows-1252/Latin-1) are transcoded to UTF-8 before upload instead of aborting the import; a UTF-8 BOM is stripped.
+- Root-folder flattening, `__MACOSX/`, `.DS_Store`, backslash paths, absolute paths and `..` escapes are handled as before; macOS NFD names are normalized to NFC instead of being dropped; `.zip` entries that the server rejects no longer discard the rest of the archive (`failed` list is reported per file).
+- Limits are enforced twice: on central-directory metadata and on the inflated payload (25 MiB/file, 100 MiB expanded).
+- The editor import modal reports “Extracting and uploading X of Y files…” with a real progress bar; the dashboard import modal creates the empty project first, uploads files in batches, keeps a safe placeholder main document, and selects the imported main `.tex` best-effort before removing the placeholder.
+- Export fix: `TextEncoder` output is copied into the local realm before `zipSync`. Foreign-realm `Uint8Array`s (jsdom, some sandboxed contexts) were previously treated as objects by fflate, producing a corrupt zip with `main.tex/0/`, `main.tex/1/`… entries. Covered by a new round-trip test.
+
+### Application UI
+
+- Global shell: sticky navbar with pill links and active state, avatar menu (settings/admin/sign out), theme toggle with sun/moon icon that actually flips the palette and persists in `localStorage`, shared 1200px content column.
+- Projects dashboard: 250px sidebar (New Project, Import ZIP Project, vertical filters, collapsible notifications) + full-width table with title icon, compiler/status badges, formatted date and Open / Download ZIP / Duplicate / Archive / Delete actions; styled dark search and sort controls; pagination aligned right. Embedded (home hub) variant renders without header/sidebar.
+- Compilation: dedicated hub listing active projects with engine cards, project status, the latest build status (one `limit=1` jobs request per project), diagnostics links and “Open & Compile”; no duplicated filters or notifications.
+- Templates: category pills plus styled category select, responsive card grid (`auto-fill, minmax(300px, 1fr)`), version badge and inline instantiate form (`Use template` preserved).
+- Settings/account: 860px card width, dark-aware inputs/selects, section cards without the global top rule.
+
+## Verification (commands and results)
+
+| Command                                                                                                                                                                         | Result                                                                                                                                                                                                                                                                                                                              |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm typecheck`                                                                                                                                                                | PASS                                                                                                                                                                                                                                                                                                                                |
+| `pnpm exec eslint apps/web/src packages/storage/src tests/integration/zip-project.test.ts tests/integration/content-policy.test.ts`                                             | PASS (no output)                                                                                                                                                                                                                                                                                                                    |
+| `pnpm --filter @latex-collab/web build`                                                                                                                                         | PASS (vite build, 901 ms)                                                                                                                                                                                                                                                                                                           |
+| `pnpm exec vitest run --coverage.enabled=false tests/integration/zip-project.test.ts tests/integration/content-policy.test.ts`                                                  | PASS — 21 tests (extraction, nested paths, macOS NFD names, partial failure, export round-trip, policy/EPS signatures)                                                                                                                                                                                                              |
+| `pnpm exec vitest run --coverage.enabled=false` on `s00-t04`, `s03-t03`, `s05-t06`, `acc-01/s02-t05`, `nfr-08/s03-t03`, `pro-01/s03-t03`, `col-05/s08-t03`, plus the ZIP suites | PASS — 39 tests                                                                                                                                                                                                                                                                                                                     |
+| `pnpm exec vitest run` on `col-03/s08-t03`, `nfr-08/s05-t02`, `int-05/s12-t05-mount`                                                                                            | PASS — 4 tests                                                                                                                                                                                                                                                                                                                      |
+| Browser smoke (Vite dev server + Playwright, API responses mocked)                                                                                                              | `/`, `/projects`, `/templates`, `/compilation`, `/settings/profile` render at 1440px with no document-level horizontal overflow; dashboard table 926px inside a 250px sidebar; templates grid 4 columns (285px cards); mobile 390px collapses to one column, table scrolls inside its container; theme toggle persists after reload |
+| axe-core (`@axe-core/playwright`, WCAG 2.0/2.1/2.2 A+AA), light and dark                                                                                                        | 0 violations, 0 serious/critical on all five routes, including the compilation hub with a completed build badge                                                                                                                                                                                                                     |
+
+## Not run / limitations
+
+- `tests/e2e` and DB-backed integration suites (`s05-t01`, uploads) were not executed: PostgreSQL at `127.0.0.1:55432` is not running in this environment (`ECONNREFUSED`). They must be re-run in CI before release.
+- No real Overleaf archive was available locally; compatibility is covered by fixtures that reproduce its structure (nested folders, `__MACOSX`, EPS binary, Windows-1252 TeX, root wrapper folder) plus unit tests of the server policy.
+- The browser smoke used mocked API payloads; it verifies layout, navigation, theme and accessibility, not live persistence.

@@ -4,7 +4,10 @@ import type { ExecuteInput, RevisionManifest } from "@latex-collab/contracts";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
-function createTestManifest(projectId: string, items: RevisionManifest["items"] = []): RevisionManifest {
+function createTestManifest(
+  projectId: string,
+  items: RevisionManifest["items"] = [],
+): RevisionManifest {
   return {
     version: 1,
     projectId,
@@ -103,6 +106,8 @@ describe("CMP-01 S15-T13: Pinned TeX Live / latexmk genuine PDF output and engin
     expect(failRes.status).toBe("failed");
     expect(failRes.exitCode).toBe(1);
     expect(failRes.diagnostics.length).toBeGreaterThan(0);
-    expect(failRes.diagnostics.some((d) => d.message.includes("Undefined control sequence"))).toBe(true);
+    expect(failRes.diagnostics.some((d) => d.message.includes("Undefined control sequence"))).toBe(
+      true,
+    );
   });
 });

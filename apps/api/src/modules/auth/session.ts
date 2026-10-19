@@ -168,7 +168,8 @@ export function sessionCookie(
   token: string,
   secure: boolean,
   expiresAt: Date,
-  sameSite: "Lax" | "None" | "Strict" = (process.env.COOKIE_SAMESITE as "Lax" | "None" | "Strict" | undefined) || "Lax",
+  sameSite: "Lax" | "None" | "Strict" = (process.env.COOKIE_SAMESITE as
+    "Lax" | "None" | "Strict" | undefined) || "Lax",
 ): string {
   const maxAge = Math.max(0, Math.ceil((expiresAt.getTime() - Date.now()) / 1000));
   const effectiveSameSite = secure && sameSite === "None" ? "None" : sameSite;
@@ -178,7 +179,8 @@ export function sessionCookie(
 
 export function expiredSessionCookie(
   secure: boolean,
-  sameSite: "Lax" | "None" | "Strict" = (process.env.COOKIE_SAMESITE as "Lax" | "None" | "Strict" | undefined) || "Lax",
+  sameSite: "Lax" | "None" | "Strict" = (process.env.COOKIE_SAMESITE as
+    "Lax" | "None" | "Strict" | undefined) || "Lax",
 ): string {
   const effectiveSameSite = secure && sameSite === "None" ? "None" : sameSite;
   const partitioned = effectiveSameSite === "None" && secure ? "; Partitioned" : "";

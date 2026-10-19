@@ -237,7 +237,9 @@ describe("CORS & Origin Validation", () => {
       // Must NOT contain comma-separated origins in redirect_uri
       expect(url).not.toContain("%2C");
       expect(url).not.toContain(",");
-      expect(decodeURIComponent(url)).toContain("https://latex-editor.pages.dev/auth/oauth/google/callback");
+      expect(decodeURIComponent(url)).toContain(
+        "https://latex-editor.pages.dev/auth/oauth/google/callback",
+      );
     });
   });
 

@@ -101,7 +101,7 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
 
   return (
     <div
-      className="flex flex-col h-full border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden bg-white dark:bg-gray-900"
+      className="latex-editor-shell flex flex-col h-full border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden bg-white dark:bg-gray-900"
       role="region"
       aria-label="LaTeX Code Editor"
       data-testid="latex-code-editor"

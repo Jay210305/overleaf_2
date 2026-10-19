@@ -99,6 +99,27 @@ export function AdminDashboard() {
     },
   });
 
+  if (quotasQuery.isLoading || flagsQuery.isLoading || usersQuery.isLoading) {
+    return (
+      <div className="admin-dashboard p-6 space-y-4">
+        <h1 className="text-2xl font-bold">System Administration & Abuse Controls</h1>
+        <p role="status">Loading administrative controls…</p>
+      </div>
+    );
+  }
+
+  if (quotasQuery.isError || flagsQuery.isError || usersQuery.isError) {
+    return (
+      <div className="admin-dashboard p-6 space-y-4">
+        <h1 className="text-2xl font-bold">System Administration & Abuse Controls</h1>
+        <div role="alert" className="p-4 bg-red-100 text-red-800 rounded">
+          Administrative access restricted or failed to load. Please verify you are signed in with
+          an authorized administrator account.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="admin-dashboard p-6 space-y-8">
       <h1 className="text-2xl font-bold">System Administration & Abuse Controls</h1>
@@ -110,7 +131,9 @@ export function AdminDashboard() {
 
       {/* Quotas Section */}
       <section aria-labelledby="quotas-heading" className="space-y-4">
-        <h2 id="quotas-heading" className="text-xl font-semibold">Concurrency & Storage Quotas (NFR-07)</h2>
+        <h2 id="quotas-heading" className="text-xl font-semibold">
+          Concurrency & Storage Quotas (NFR-07)
+        </h2>
         {quotasQuery.data?.quotas && (
           <dl className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded">
             <dt className="font-medium">Max Concurrent Compiles / Project:</dt>
@@ -125,16 +148,22 @@ export function AdminDashboard() {
 
       {/* Feature Flags Section */}
       <section aria-labelledby="flags-heading" className="space-y-4">
-        <h2 id="flags-heading" className="text-xl font-semibold">Security & Feature Flags</h2>
+        <h2 id="flags-heading" className="text-xl font-semibold">
+          Security & Feature Flags
+        </h2>
         {flagsQuery.data?.flags && (
           <ul className="space-y-2">
             <li>
               Public Signup Enabled:{" "}
-              <span className="font-mono">{flagsQuery.data.flags.publicSignupEnabled ? "TRUE" : "FALSE"}</span>
+              <span className="font-mono">
+                {flagsQuery.data.flags.publicSignupEnabled ? "TRUE" : "FALSE"}
+              </span>
             </li>
             <li>
               Untrusted Compile Enabled:{" "}
-              <span className="font-mono">{flagsQuery.data.flags.untrustedCompileEnabled ? "TRUE" : "FALSE"}</span>
+              <span className="font-mono">
+                {flagsQuery.data.flags.untrustedCompileEnabled ? "TRUE" : "FALSE"}
+              </span>
             </li>
           </ul>
         )}
@@ -142,7 +171,9 @@ export function AdminDashboard() {
 
       {/* User Moderation Section */}
       <section aria-labelledby="users-heading" className="space-y-4">
-        <h2 id="users-heading" className="text-xl font-semibold">User Moderation & Abuse Mitigation</h2>
+        <h2 id="users-heading" className="text-xl font-semibold">
+          User Moderation & Abuse Mitigation
+        </h2>
         {usersQuery.data?.users && (
           <table className="w-full text-left border">
             <thead>

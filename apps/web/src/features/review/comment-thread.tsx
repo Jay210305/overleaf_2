@@ -68,6 +68,10 @@ export function CommentThread({ projectId, fileId, apiUrl, csrfToken }: CommentT
   }, [load]);
 
   async function csrf() {
+    try {
+      const stored = sessionStorage.getItem("csrf_token");
+      if (stored) return stored;
+    } catch {}
     if (csrfToken) return csrfToken;
     const response = await fetch(`${apiUrl}/auth/session`, { credentials: "include" });
     if (!response.ok) throw new Error("Session expired. Sign in and try again.");

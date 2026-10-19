@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { uploadViewSchema } from "@latex-collab/contracts";
+import { extractArchive, importArchiveIntoProject } from "./zip.js";
 
 const maxFileBytes = 25 * 1024 * 1024;
 
@@ -13,6 +14,13 @@ type UploadStatus =
   | "error"
   | "cancelled";
 type SignedUpload = { uploadId: string; url: string; expiresAt: string };
+type ZipStatus = "reading" | "importing" | "complete" | "error";
+type ZipRow = {
+  id: string;
+  file: File;
+  status: ZipStatus;
+  message: string;
+};
 type UploadRow = {
   id: string;
   file: File;
@@ -58,7 +66,10 @@ function fileMime(file: File): string {
     ".bib": ["application/x-bibtex", "text/plain"],
     ".sty": ["application/x-tex", "text/plain"],
     ".cls": ["application/x-tex", "text/plain"],
-    ".bst": ["text/plain"],
+    ".bst": ["application/x-tex", "text/plain"],
+    ".tikz": ["application/x-tex", "text/plain"],
+    ".txt": ["text/plain"],
+    ".eps": ["application/postscript", "application/eps", "image/eps", "application/x-eps"],
     ".png": ["image/png"],
     ".jpg": ["image/jpeg"],
     ".jpeg": ["image/jpeg"],
@@ -145,6 +156,7 @@ function putSigned(
 
 export function FileUploader({ projectId, apiUrl, csrfToken, onUploaded }: FileUploaderProps) {
   const [rows, setRows] = useState<UploadRow[]>([]);
+  const [zipRows, setZipRows] = useState<ZipRow[]>([]);
   const [running, setRunning] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const activeIdRef = useRef<string | null>(null);
@@ -156,16 +168,119 @@ export function FileUploader({ projectId, apiUrl, csrfToken, onUploaded }: FileU
     setRows((current) => current.map((row) => (row.id === id ? { ...row, ...changes } : row)));
   }, []);
 
-  const addFiles = useCallback((files: FileList | File[]) => {
-    const added = Array.from(files).map((file) => ({
-      id: crypto.randomUUID(),
-      file,
-      status: "queued" as const,
-      progress: 0,
-      completionKey: crypto.randomUUID(),
-    }));
-    setRows((current) => [...current, ...added]);
-  }, []);
+  const importZip = useCallback(
+    async (row: ZipRow) => {
+      try {
+        const csrf = csrfToken || sessionStorage.getItem("csrf_token");
+        const bytes = new Uint8Array(await row.file.arrayBuffer());
+        setZipRows((current) =>
+          current.map((item) =>
+            item.id === row.id ? { ...item, status: "reading", message: "Reading archive…" } : item,
+          ),
+        );
+        const archive = extractArchive(bytes);
+        setZipRows((current) =>
+          current.map((item) =>
+            item.id === row.id
+              ? {
+                  ...item,
+                  status: "importing",
+                  message: `Importing ${archive.entries.length} file${
+                    archive.entries.length === 1 ? "" : "s"
+                  }…`,
+                }
+              : item,
+          ),
+        );
+        const result = await importArchiveIntoProject({
+          apiUrl,
+          projectId,
+          csrfToken: csrf,
+          entries: archive.entries,
+          onProgress: (progress) => {
+            if (progress.phase === "uploading" && progress.currentPath) {
+              setZipRows((current) =>
+                current.map((item) =>
+                  item.id === row.id
+                    ? {
+                        ...item,
+                        status: "importing",
+                        message: `Uploading ${Math.min(
+                          progress.completed + 1,
+                          progress.total,
+                        )}/${progress.total}: ${progress.currentPath}`,
+                      }
+                    : item,
+                ),
+              );
+            }
+          },
+        });
+        const skipped = archive.skipped.length + result.skippedExisting;
+        setZipRows((current) =>
+          current.map((item) =>
+            item.id === row.id
+              ? {
+                  ...item,
+                  status: result.failed.length > 0 ? "error" : "complete",
+                  message: `${result.uploaded} file${
+                    result.uploaded === 1 ? "" : "s"
+                  } imported${skipped > 0 ? ` · ${skipped} skipped` : ""}${
+                    result.failed.length > 0
+                      ? ` · ${result.failed.length} failed (${result.failed[0]?.path}: ${result.failed[0]?.message})`
+                      : ""
+                  }.`,
+                }
+              : item,
+          ),
+        );
+        onUploaded?.();
+      } catch (cause) {
+        setZipRows((current) =>
+          current.map((item) =>
+            item.id === row.id
+              ? {
+                  ...item,
+                  status: "error",
+                  message:
+                    cause instanceof Error
+                      ? cause.message
+                      : "The ZIP archive could not be imported.",
+                }
+              : item,
+          ),
+        );
+      }
+    },
+    [apiUrl, csrfToken, onUploaded, projectId],
+  );
+
+  const addFiles = useCallback(
+    (files: FileList | File[]) => {
+      const selected = Array.from(files);
+      const archives = selected.filter((file) => file.name.toLowerCase().endsWith(".zip"));
+      const sources = selected.filter((file) => !file.name.toLowerCase().endsWith(".zip"));
+      if (archives.length > 0) {
+        const addedZipRows = archives.map((file) => ({
+          id: crypto.randomUUID(),
+          file,
+          status: "reading" as const,
+          message: "Reading archive…",
+        }));
+        setZipRows((current) => [...current, ...addedZipRows]);
+        for (const row of addedZipRows) void importZip(row);
+      }
+      const added = sources.map((file) => ({
+        id: crypto.randomUUID(),
+        file,
+        status: "queued" as const,
+        progress: 0,
+        completionKey: crypto.randomUUID(),
+      }));
+      setRows((current) => [...current, ...added]);
+    },
+    [importZip],
+  );
 
   const apiRequest = useCallback(
     async (path: string, body: object, key?: string): Promise<Response> => {
@@ -307,7 +422,7 @@ export function FileUploader({ projectId, apiUrl, csrfToken, onUploaded }: FileU
         id="project-upload-input"
         type="file"
         multiple
-        accept=".tex,.bib,.sty,.cls,.bst,.png,.jpg,.jpeg,.pdf,.ttf,.otf"
+        accept=".tex,.bib,.sty,.cls,.bst,.tikz,.txt,.eps,.png,.jpg,.jpeg,.pdf,.ttf,.otf,.zip,application/zip"
         onChange={choose}
       />
       <div
@@ -327,8 +442,36 @@ export function FileUploader({ projectId, apiUrl, csrfToken, onUploaded }: FileU
       >
         Drop files here or choose files
       </div>
-      {rows.length > 0 && (
+      {(zipRows.length > 0 || rows.length > 0) && (
         <ul className="file-uploader-list" aria-live="polite">
+          {zipRows.map((row) => (
+            <li key={row.id} className={`upload-row zip ${row.status}`}>
+              <span className="upload-row-name">{row.file.name}</span>
+              <span
+                className="upload-row-status"
+                role={row.status === "error" ? "alert" : undefined}
+              >
+                {row.message}
+              </span>
+              {row.status === "error" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setZipRows((current) =>
+                      current.map((item) =>
+                        item.id === row.id
+                          ? { ...item, status: "reading", message: "Reading archive…" }
+                          : item,
+                      ),
+                    );
+                    void importZip(row);
+                  }}
+                >
+                  Retry {row.file.name}
+                </button>
+              )}
+            </li>
+          ))}
           {rows.map((row) => (
             <li key={row.id}>
               <span>{row.file.name}</span>

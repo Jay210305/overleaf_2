@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 import { parseServerConfig } from "@latex-collab/config/server";
 import { DatabaseClient } from "@latex-collab/db";
 import { createProject } from "../../apps/api/src/modules/projects/create.js";
-import { AUTH_STATE_PATH, readSharedCsrf } from "./shared-auth.js";
+import { createAuthenticatedContext } from "./authenticated-context.js";
 
 loadEnvFile(".env");
 const config = parseServerConfig(process.env);
@@ -11,12 +11,11 @@ const config = parseServerConfig(process.env);
 test("project workspace mounts the real GitHub sync panel", async ({ browser }) => {
   const db = new DatabaseClient(config.DATABASE_URL);
   try {
-    const { userId } = readSharedCsrf();
+    const { context, userId } = await createAuthenticatedContext(browser);
     const project = await createProject(db, userId, {
       title: "GitHub sync workspace",
       compiler: "pdflatex",
     });
-    const context = await browser.newContext({ storageState: AUTH_STATE_PATH });
     try {
       const page = await context.newPage();
       await page.goto(`${config.APP_ORIGIN}/project/${project.id}`);

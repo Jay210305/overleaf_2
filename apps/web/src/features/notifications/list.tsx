@@ -68,13 +68,13 @@ export function NotificationList({
   }
 
   async function csrf() {
-    if (csrfToken) return csrfToken;
     try {
       const stored = sessionStorage.getItem("csrf_token");
       if (stored) return stored;
     } catch {
       // Session storage may be unavailable in a restricted browser context.
     }
+    if (csrfToken) return csrfToken;
     const response = await fetch(`${apiUrl}/auth/session`, { credentials: "include" });
     const token = response.headers.get("x-csrf-token");
     if (!response.ok || !token) throw new Error("Session expired. Sign in and try again.");

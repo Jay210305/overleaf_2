@@ -8,7 +8,10 @@ import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { existsSync } from "node:fs";
 
-function createTestManifest(projectId: string, items: RevisionManifest["items"] = []): RevisionManifest {
+function createTestManifest(
+  projectId: string,
+  items: RevisionManifest["items"] = [],
+): RevisionManifest {
   return {
     version: 1,
     projectId,

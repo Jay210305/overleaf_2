@@ -5,8 +5,13 @@ describe("NFR-07 S15-T05: Concurrent compile job quotas under load regression", 
     const MAX_CONCURRENT_PER_PROJECT = 2;
     const activeJobs = new Set<string>();
 
-    function acquireJobSlot(projectId: string, jobId: string): { allowed: boolean; activeCount: number } {
-      const currentForProject = Array.from(activeJobs).filter((j) => j.startsWith(`${projectId}:`)).length;
+    function acquireJobSlot(
+      projectId: string,
+      jobId: string,
+    ): { allowed: boolean; activeCount: number } {
+      const currentForProject = Array.from(activeJobs).filter((j) =>
+        j.startsWith(`${projectId}:`),
+      ).length;
       if (currentForProject >= MAX_CONCURRENT_PER_PROJECT) {
         return { allowed: false, activeCount: currentForProject };
       }

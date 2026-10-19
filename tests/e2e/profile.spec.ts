@@ -58,14 +58,14 @@ test("profile preferences persist and a selected browser session can be revoked"
     await expect(page.getByRole("status")).toContainText("Profile saved.");
     await page.getByLabel("Locale").fill("es-PE");
     await page.getByLabel("Timezone").fill("America/Lima");
-    await page.getByLabel("Theme").selectOption("dark");
+    await page.getByRole("combobox", { name: "Theme" }).selectOption("dark");
     await page.getByRole("button", { name: "Save preferences" }).click();
     await expect(page.getByRole("status")).toContainText("Preferences saved.");
     await page.reload();
     await expect(page.getByLabel("Display name")).toHaveValue("Updated Profile Writer");
     await expect(page.getByLabel("Locale")).toHaveValue("es-PE");
     await expect(page.getByLabel("Timezone")).toHaveValue("America/Lima");
-    await expect(page.getByLabel("Theme")).toHaveValue("dark");
+    await expect(page.getByRole("combobox", { name: "Theme" })).toHaveValue("dark");
     await expect(page.locator(".shell")).toHaveClass(/dark/);
     await page.getByLabel("Avatar PNG").setInputFiles({
       name: "avatar.png",

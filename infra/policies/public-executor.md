@@ -17,6 +17,7 @@ All untrusted user source code compilation MUST execute under the constraints sp
 ## 2. Mandatory Isolation Controls
 
 ### 2.1 Network Isolation
+
 - **Rule:** The execution container or sandbox MUST NOT possess an external network interface.
 - **Specification:**
   - Docker / Compose: `network_mode: none`.
@@ -25,6 +26,7 @@ All untrusted user source code compilation MUST execute under the constraints sp
 - **Verification:** Network socket creation (`socket(AF_INET, ...)`) returns `ENETUNREACH` or is blocked by seccomp filters.
 
 ### 2.2 Mount & Filesystem Isolation
+
 - **Rule:** The host filesystem MUST NEVER be mounted read-write. TeX Live assets MUST be mounted read-only. Working directories MUST be ephemeral.
 - **Specification:**
   - Root Filesystem (`/`): `read_only: true`.
@@ -34,6 +36,7 @@ All untrusted user source code compilation MUST execute under the constraints sp
 - **Verification:** Attempts to write to `/`, `/usr`, `/etc`, or outside `/tmp` fail with `EROFS` (Read-only file system).
 
 ### 2.3 Process & Privilege Sandboxing
+
 - **Rule:** Execution MUST NOT run as root (UID 0) and MUST NOT allow privilege escalation.
 - **Specification:**
   - Runner User: Non-root dedicated user UID `10001`, GID `10001`.
@@ -43,6 +46,7 @@ All untrusted user source code compilation MUST execute under the constraints sp
 - **Verification:** `id -u` inside executor returns `10001`; `setuid` binaries fail.
 
 ### 2.4 Resource Limits (cgroup v2 & Engine Limits)
+
 - **Rule:** Every compilation job MUST have strict upper bounds on CPU, memory, PIDs, and wall-clock execution time.
 - **Specification:**
   - CPU Limit: `cpus: 1.0` (100% of single CPU core max).
@@ -53,6 +57,7 @@ All untrusted user source code compilation MUST execute under the constraints sp
 - **Verification:** Infinite loop macros terminate at 30 seconds; memory bombs trigger OOM kill cleanly.
 
 ### 2.5 Secret Stripping & Environment Isolation
+
 - **Rule:** No operational secrets or ambient credentials may enter compilation sub-processes.
 - **Specification:**
   - Permitted Environment Variables: `PATH`, `HOME`, `TMPDIR`, `TEXMFCNF`, `LC_ALL`, `LANG`.
@@ -65,10 +70,10 @@ All untrusted user source code compilation MUST execute under the constraints sp
 
 Before approving any public compile release, the test suite MUST execute the following adversarial vectors and confirm safe containment:
 
-| Vector ID | Description | Expected Behavior |
-|---|---|---|
-| **ADV-01** | `\immediate\write18{id}` shell escape | Compilation succeeds or logs error, but shell command is NOT executed (`-no-shell-escape` active). |
+| Vector ID  | Description                               | Expected Behavior                                                                                                       |
+| ---------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **ADV-01** | `\immediate\write18{id}` shell escape     | Compilation succeeds or logs error, but shell command is NOT executed (`-no-shell-escape` active).                      |
 | **ADV-02** | `\input{/etc/passwd}` directory traversal | File is not included; compilation fails with file not found or permission error; zero system text leaked in log or PDF. |
-| **ADV-03** | `\loop \repeat` infinite loop | Process killed at 30-second timeout; returns `TIMEOUT` status safely. |
-| **ADV-04** | Large token accumulation memory bomb | Process killed by OOM or memory limit; returns `OUT_OF_MEMORY` status safely. |
-| **ADV-05** | Network curl attempt | Fails immediately with network unreachable. |
+| **ADV-03** | `\loop \repeat` infinite loop             | Process killed at 30-second timeout; returns `TIMEOUT` status safely.                                                   |
+| **ADV-04** | Large token accumulation memory bomb      | Process killed by OOM or memory limit; returns `OUT_OF_MEMORY` status safely.                                           |
+| **ADV-05** | Network curl attempt                      | Fails immediately with network unreachable.                                                                             |

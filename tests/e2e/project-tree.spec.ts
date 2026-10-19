@@ -6,7 +6,7 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { parseServerConfig } from "@latex-collab/config/server";
 import { DatabaseClient } from "@latex-collab/db";
-import { AUTH_STATE_PATH, readSharedCsrf } from "./shared-auth.js";
+import { createAuthenticatedContext } from "./authenticated-context.js";
 
 loadEnvFile(".env");
 const config = parseServerConfig(process.env);
@@ -21,11 +21,9 @@ test("project and file tree journey: create, mutate tree, reload persistence, an
   test.setTimeout(60000);
   const db = new DatabaseClient(config.DATABASE_URL);
 
-  // Shared session cookies plus the app's sessionStorage CSRF token, so UI
-  // mutations pass the CSRF guard without a per-spec login.
-  const { csrf } = readSharedCsrf();
-  const context = await browser.newContext({ storageState: AUTH_STATE_PATH });
-  await context.addInitScript((value) => sessionStorage.setItem("csrf_token", value), csrf);
+  // A dedicated session per context keeps UI mutations authenticated even
+  // though reading the session rotates its token and CSRF hash.
+  const { context } = await createAuthenticatedContext(browser);
   const page = await context.newPage();
 
   // Ensure database migrations and health

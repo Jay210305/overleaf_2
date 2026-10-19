@@ -9,7 +9,11 @@ async function main() {
   const db = new DatabaseClient(config.DATABASE_URL);
   const normalized = normalizeEmail(email);
   try {
-    const result = await db.query<{ id: string; email_normalized: string; email_verified_at: Date | null }>(
+    const result = await db.query<{
+      id: string;
+      email_normalized: string;
+      email_verified_at: Date | null;
+    }>(
       "UPDATE users SET email_verified_at = NOW() WHERE email_normalized = $1 RETURNING id, email_normalized, email_verified_at",
       [normalized],
     );
@@ -18,7 +22,9 @@ async function main() {
       process.exitCode = 1;
       return;
     }
-    console.log(`\nUser ${normalized} has been verified successfully! (email_verified_at: ${result.rows[0].email_verified_at})\n`);
+    console.log(
+      `\nUser ${normalized} has been verified successfully! (email_verified_at: ${result.rows[0].email_verified_at})\n`,
+    );
   } finally {
     await db.close();
   }

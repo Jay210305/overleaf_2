@@ -4,7 +4,7 @@ import { test, expect } from "@playwright/test";
 import { parseServerConfig } from "@latex-collab/config/server";
 import { DatabaseClient } from "@latex-collab/db";
 import * as Y from "yjs";
-import { AUTH_STATE_PATH, readSharedCsrf } from "./shared-auth.js";
+import { createAuthenticatedContext } from "./authenticated-context.js";
 
 loadEnvFile(".env");
 const config = parseServerConfig(process.env);
@@ -15,11 +15,10 @@ test("Unicode editor persistence journey: UTF-8, Spanish, math, emojis, RTL acro
   test.setTimeout(60000);
   const db = new DatabaseClient(config.DATABASE_URL);
 
-  // Shared suite session (see auth.setup.ts): one login per run instead of
-  // per-spec logins against the Redis rate-limit window.
-  const context = await browser.newContext({ storageState: AUTH_STATE_PATH });
+  // Per-context session: session reads rotate the token, so one stored
+  // storageState cannot be reused by another context.
+  const { context, csrf: csrfToken } = await createAuthenticatedContext(browser);
   const request = context.request;
-  const { csrf: csrfToken } = readSharedCsrf();
 
   // Check backend readiness
   await expect

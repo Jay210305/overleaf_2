@@ -41,6 +41,10 @@ const extensionPolicy: Record<string, ExtensionPolicy> = {
   ".sty": { kind: "TEXT", mime: "application/x-tex" },
   ".cls": { kind: "TEXT", mime: "application/x-tex" },
   ".bst": { kind: "TEXT", mime: "application/x-tex" },
+  // Overleaf projects routinely ship these alongside TeX sources.
+  ".tikz": { kind: "TEXT", mime: "application/x-tex" },
+  ".txt": { kind: "TEXT", mime: "text/plain" },
+  ".eps": { kind: "BINARY", mime: "application/postscript" },
   ".png": { kind: "BINARY", mime: "image/png" },
   ".jpg": { kind: "BINARY", mime: "image/jpeg" },
   ".jpeg": { kind: "BINARY", mime: "image/jpeg" },
@@ -55,6 +59,9 @@ const acceptedMimes: Record<string, string[]> = {
   ".sty": ["application/x-tex", "text/plain"],
   ".cls": ["application/x-tex", "text/plain"],
   ".bst": ["application/x-tex", "text/plain"],
+  ".tikz": ["application/x-tex", "text/plain"],
+  ".txt": ["text/plain"],
+  ".eps": ["application/postscript", "application/eps", "image/eps", "application/x-eps"],
   ".png": ["image/png"],
   ".jpg": ["image/jpeg"],
   ".jpeg": ["image/jpeg"],
@@ -155,6 +162,15 @@ export function verifyBinaryContent(name: string, bytes: Uint8Array): void {
       buffer[1] === 0xd8 &&
       buffer[2] === 0xff &&
       buffer.subarray(-2).equals(Buffer.from([0xff, 0xd9]));
+  } else if (extension === ".eps") {
+    // Accept plain PostScript headers and DOS EPS binaries (C5 D0 D3 C6).
+    const dosEps =
+      buffer.length >= 4 &&
+      buffer[0] === 0xc5 &&
+      buffer[1] === 0xd0 &&
+      buffer[2] === 0xd3 &&
+      buffer[3] === 0xc6;
+    valid = (buffer.length >= 4 && buffer.subarray(0, 4).toString("ascii") === "%!PS") || dosEps;
   } else if (extension === ".pdf") {
     valid =
       buffer.length >= 12 &&
