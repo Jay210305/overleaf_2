@@ -178,6 +178,8 @@ export function createServer(options: ServerOptions) {
       methods: ["GET", "POST", "PATCH", "DELETE"],
       allowedHeaders: [
         "content-type",
+        "authorization",
+        "x-session-token",
         "x-csrf-token",
         "x-registration-invite",
         "if-match",
@@ -185,7 +187,14 @@ export function createServer(options: ServerOptions) {
         "x-request-id",
         "x-trace-id",
       ],
-      exposedHeaders: ["x-csrf-token", "x-request-id", "x-trace-id", "retry-after", "etag"],
+      exposedHeaders: [
+        "x-csrf-token",
+        "x-session-token",
+        "x-request-id",
+        "x-trace-id",
+        "retry-after",
+        "etag",
+      ],
     });
   app.addHook("onRequest", async (request, reply) => {
     const scope = `${request.method} ${request.routeOptions.url ?? ""}`;

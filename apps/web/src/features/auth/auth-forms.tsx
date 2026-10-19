@@ -105,12 +105,26 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
           if (!response.ok) return { status: response.status };
           const parsed = userViewSchema.safeParse(await response.json());
           const csrf = response.headers.get("x-csrf-token");
-          if (!parsed.success || !csrf) throw new Error("Invalid session response");
+          const sessionToken = response.headers.get("x-session-token");
+          if (!parsed.success || !csrf) return { status: response.status };
+          try {
+            sessionStorage.setItem("csrf_token", csrf);
+            if (sessionToken) sessionStorage.setItem("session_token", sessionToken);
+            sessionStorage.setItem("current_user", JSON.stringify(parsed.data));
+            window.dispatchEvent(new Event("auth-state-change"));
+          } catch {}
           return { status: response.status, user: parsed.data, csrf };
         })();
         const result = await sessionLookup.current;
         if (!active) return;
-        if (result.status === 401) return;
+        if (result.status === 401) {
+          try {
+            sessionStorage.removeItem("session_token");
+            sessionStorage.removeItem("current_user");
+            window.dispatchEvent(new Event("auth-state-change"));
+          } catch {}
+          return;
+        }
         if (result.status !== 200 || !result.user || !result.csrf) {
           setMessage({ kind: "error", text: errorText(result.status, "login") });
           return;
@@ -236,11 +250,15 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
       if (mode === "login") {
         const parsed = userViewSchema.safeParse(await response.json());
         const csrf = response.headers.get("x-csrf-token");
+        const sessionToken = response.headers.get("x-session-token");
         if (!parsed.success || !csrf) throw new Error("Invalid session response");
         setUser(parsed.data);
         setSessionCsrf(csrf);
         try {
           sessionStorage.setItem("csrf_token", csrf);
+          if (sessionToken) sessionStorage.setItem("session_token", sessionToken);
+          sessionStorage.setItem("current_user", JSON.stringify(parsed.data));
+          window.dispatchEvent(new Event("auth-state-change"));
         } catch {}
         setPassword("");
         setMessage({ kind: "success", text: `Signed in as ${parsed.data.displayName}.` });
@@ -284,6 +302,12 @@ export function AuthForms({ mode }: { mode: AuthMode }) {
       }
       setUser(null);
       setSessionCsrf(null);
+      try {
+        sessionStorage.removeItem("session_token");
+        sessionStorage.removeItem("csrf_token");
+        sessionStorage.removeItem("current_user");
+        window.dispatchEvent(new Event("auth-state-change"));
+      } catch {}
       setMessage({ kind: "success", text: "Signed out." });
     } catch {
       setMessage({

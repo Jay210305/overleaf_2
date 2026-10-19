@@ -35,7 +35,15 @@ export async function requireSession(
   mutation = false,
 ): Promise<SessionIdentity> {
   requireExactOrigin(request, origin);
-  const token = readSessionCookie(request.headers.cookie, secureCookies);
+  const authHeader = request.headers.authorization;
+  const fallbackToken =
+    (typeof request.headers["x-session-token"] === "string"
+      ? request.headers["x-session-token"]
+      : undefined) ||
+    (typeof authHeader === "string" && authHeader.startsWith("Bearer ")
+      ? authHeader.slice(7).trim()
+      : undefined);
+  const token = readSessionCookie(request.headers.cookie, secureCookies, fallbackToken);
   if (!/^[A-Za-z0-9_-]{43}$/.test(token)) throw new AuthError(401, "AUTHENTICATION_REQUIRED");
   const found = await db.query<{
     session_id: string;

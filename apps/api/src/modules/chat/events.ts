@@ -72,7 +72,15 @@ export function registerChatEvents(
       return;
     }
     void (async () => {
-      const token = readSessionCookie(request.headers.cookie, secureCookies);
+      const authHeader = request.headers.authorization;
+      const fallbackToken =
+        (typeof request.headers["x-session-token"] === "string"
+          ? request.headers["x-session-token"]
+          : undefined) ||
+        (typeof authHeader === "string" && authHeader.startsWith("Bearer ")
+          ? authHeader.slice(7).trim()
+          : undefined);
+      const token = readSessionCookie(request.headers.cookie, secureCookies, fallbackToken);
       const found = await db.query<{ id: string }>(
         "SELECT id FROM sessions WHERE token_hash = $1",
         [tokenHash(token)],

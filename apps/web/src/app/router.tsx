@@ -41,6 +41,28 @@ function Shell() {
     );
   };
   const [dark, setDark] = useState(resolvedDark);
+  const [currentUser, setCurrentUser] = useState<{ displayName: string } | null>(() => {
+    try {
+      const stored = sessionStorage.getItem("current_user");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    const updateAuth = () => {
+      try {
+        const stored = sessionStorage.getItem("current_user");
+        setCurrentUser(stored ? JSON.parse(stored) : null);
+      } catch {
+        setCurrentUser(null);
+      }
+    };
+    window.addEventListener("auth-state-change", updateAuth);
+    return () => window.removeEventListener("auth-state-change", updateAuth);
+  }, []);
+
   useEffect(() => {
     const update = () => setDark(resolvedDark());
     window.addEventListener("workspace-theme-change", update);
@@ -61,7 +83,36 @@ function Shell() {
         <nav aria-label="Main">
           <Link to="/projects">Projects</Link>
           <Link to="/settings/profile">Settings</Link>
-          <Link to="/login">Sign in</Link>
+          {currentUser ? (
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+              <span>{currentUser.displayName}</span>
+              <button
+                type="button"
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "inherit",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  padding: 0,
+                  font: "inherit",
+                }}
+                onClick={() => {
+                  try {
+                    sessionStorage.removeItem("session_token");
+                    sessionStorage.removeItem("csrf_token");
+                    sessionStorage.removeItem("current_user");
+                    window.dispatchEvent(new Event("auth-state-change"));
+                  } catch {}
+                  window.location.href = "/login";
+                }}
+              >
+                Sign out
+              </button>
+            </span>
+          ) : (
+            <Link to="/login">Sign in</Link>
+          )}
         </nav>
         <button
           aria-pressed={dark}
@@ -92,15 +143,9 @@ function Shell() {
           <Route
             path="/projects"
             element={
-              <>
-                <h1>Projects</h1>
-                <p>
-                  Not implemented yet. Project creation and editing are scheduled for later stages.
-                </p>
-                <p>
-                  <Link to="/dashboard">Go to Projects Dashboard</Link>
-                </p>
-              </>
+              <Suspense fallback={<p role="status">Loading dashboard…</p>}>
+                <ProjectsDashboard />
+              </Suspense>
             }
           />
           <Route

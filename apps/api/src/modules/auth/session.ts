@@ -164,23 +164,42 @@ export function sessionCookieName(secure: boolean): string {
   return secure ? "__Host-latex_session" : "latex_session";
 }
 
-export function sessionCookie(token: string, secure: boolean, expiresAt: Date): string {
+export function sessionCookie(
+  token: string,
+  secure: boolean,
+  expiresAt: Date,
+  sameSite: "Lax" | "None" | "Strict" = (process.env.COOKIE_SAMESITE as "Lax" | "None" | "Strict" | undefined) || "Lax",
+): string {
   const maxAge = Math.max(0, Math.ceil((expiresAt.getTime() - Date.now()) / 1000));
-  return `${sessionCookieName(secure)}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure ? "; Secure" : ""}`;
+  const effectiveSameSite = secure && sameSite === "None" ? "None" : sameSite;
+  const partitioned = effectiveSameSite === "None" && secure ? "; Partitioned" : "";
+  return `${sessionCookieName(secure)}=${token}; Path=/; HttpOnly; SameSite=${effectiveSameSite}; Max-Age=${maxAge}${secure ? "; Secure" : ""}${partitioned}`;
 }
 
-export function expiredSessionCookie(secure: boolean): string {
-  return `${sessionCookieName(secure)}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure ? "; Secure" : ""}`;
+export function expiredSessionCookie(
+  secure: boolean,
+  sameSite: "Lax" | "None" | "Strict" = (process.env.COOKIE_SAMESITE as "Lax" | "None" | "Strict" | undefined) || "Lax",
+): string {
+  const effectiveSameSite = secure && sameSite === "None" ? "None" : sameSite;
+  const partitioned = effectiveSameSite === "None" && secure ? "; Partitioned" : "";
+  return `${sessionCookieName(secure)}=; Path=/; HttpOnly; SameSite=${effectiveSameSite}; Max-Age=0${secure ? "; Secure" : ""}${partitioned}`;
 }
 
-export function readSessionCookie(header: string | undefined, secure: boolean): string {
+export function readSessionCookie(
+  header: string | undefined,
+  secure: boolean,
+  fallbackToken?: string | undefined,
+): string {
   const name = sessionCookieName(secure);
   const matches = (header ?? "")
     .split(";")
     .map((part) => part.trim())
     .filter((part) => part.startsWith(`${name}=`));
-  if (matches.length !== 1) throw new AuthError(401, "AUTHENTICATION_REQUIRED");
-  return matches[0]!.slice(name.length + 1);
+  if (matches.length === 1) return matches[0]!.slice(name.length + 1);
+  if (fallbackToken && /^[A-Za-z0-9_-]{43}$/.test(fallbackToken)) {
+    return fallbackToken;
+  }
+  throw new AuthError(401, "AUTHENTICATION_REQUIRED");
 }
 
 export async function createSessionForUserId(

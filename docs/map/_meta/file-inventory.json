@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "be585138c554cbffd8dc65aa9eff8dd212daa6a3",
+  "git_baseline": "1284b026ca8884a0b963e62c796dff6bdedc42c9",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -188,12 +188,12 @@
     {
       "path": "apps/api/src/modules/auth/routes.ts",
       "role": "factory",
-      "sha256": "9df2b4ad997981d8b119cffc38c2a8ce02547bae9eb05d2a786f34091e889899"
+      "sha256": "d6cde13e275dbea6a49ad03c3499f149763687307f506ac2e77af5e8dbf0b721"
     },
     {
       "path": "apps/api/src/modules/auth/session.ts",
       "role": "factory",
-      "sha256": "2825a3cae3a506b66534ebe5188dec296ae8a78ea2c2d9beca6566dcbd316aee"
+      "sha256": "308f1c4dc8bce43fa7ad436d95f8fb735b619c211aabb132d4762ad238c32b49"
     },
     {
       "path": "apps/api/src/modules/auth/totp.ts",
@@ -208,7 +208,7 @@
     {
       "path": "apps/api/src/modules/chat/events.ts",
       "role": "factory",
-      "sha256": "633931dc58d0c760070d9c0bd8c9b1a7b56bc5f88c15223a2eb5212e911109d9"
+      "sha256": "cec6af59457e8bd3f9eb20e296c221b2b6db0b700a04b2d802bb099401b0fc60"
     },
     {
       "path": "apps/api/src/modules/chat/routes.ts",
@@ -498,7 +498,7 @@
     {
       "path": "apps/api/src/plugins/require-session.ts",
       "role": "factory",
-      "sha256": "ff1510c6fea52c02b7a5758a529ddf777973ff1844426f678467f359660b9db6"
+      "sha256": "4f220bd6e1ba6e22d871548db044f502f3315a7a4d7afa3fc40d6c09dd1ac6af"
     },
     {
       "path": "apps/api/src/plugins/telemetry.ts",
@@ -513,7 +513,7 @@
     {
       "path": "apps/api/src/server.ts",
       "role": "factory",
-      "sha256": "4aaf35a1c4e30d885b82498d9771db63c45b4dce9a8d297b0d2a9363f2a40c37"
+      "sha256": "09f9b3bbc2cdfa388d652f224fb529243859fe53375375e310a03833cce4c339"
     },
     {
       "path": "apps/api/tsconfig.json",
@@ -811,6 +811,11 @@
       "sha256": "6036983e5fc00f0169c9e939b1816ed771eee00e27f2fcc517b819041460b9ef"
     },
     {
+      "path": "apps/web/src/app/api-client.ts",
+      "role": "factory",
+      "sha256": "368d88c02565b7ca2cba6922df68e9f82eee7f6534e8bdc7f996a176350098b2"
+    },
+    {
       "path": "apps/web/src/app/providers.tsx",
       "role": "factory",
       "sha256": "b7ff26bc895172650d89c26536c19508c7771f2856a4202ba5e79725d765e4c6"
@@ -818,7 +823,7 @@
     {
       "path": "apps/web/src/app/router.tsx",
       "role": "factory",
-      "sha256": "9e18bc536a1431e31b82a712bc456a015d5b502c233942a76ff6224e7643a5ce"
+      "sha256": "504023ef20cdc0554bf238fafaa25d0730e4a6b652d0760d8b053ab8967dc1d3"
     },
     {
       "path": "apps/web/src/features/account/avatar.tsx",
@@ -838,7 +843,7 @@
     {
       "path": "apps/web/src/features/auth/auth-forms.tsx",
       "role": "factory",
-      "sha256": "4efdadb71a6412cc8bda373e322a792d67aac9e00b8acf94ce88d2d0029cc2b0"
+      "sha256": "d8e4d826a4e1f1ded426e2ca1755ed1995523c84f0a1008772fddb0616d985b2"
     },
     {
       "path": "apps/web/src/features/chat/project-chat.tsx",
@@ -1073,7 +1078,7 @@
     {
       "path": "apps/web/src/main.tsx",
       "role": "factory",
-      "sha256": "e9a77ff9f6db3179bdb585dd661f9f67ac65c69750b1cec89bf9038079d18294"
+      "sha256": "c5b4229526eda83f8ddecdb70049da1ae2890833dd7248cb961e5e2a25609e99"
     },
     {
       "path": "apps/web/src/styles.css",
@@ -3728,7 +3733,7 @@
     {
       "path": "packages/config/src/server.ts",
       "role": "factory",
-      "sha256": "744324edb3ba180fde534cb0641e0cf376428466254196557784738b20b33464"
+      "sha256": "d97a7193db2e7472da97a10c543aa9f0486e4b335d3858b9a8983cd49c51cd4d"
     },
     {
       "path": "packages/config/tsconfig.json",

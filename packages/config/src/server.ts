@@ -30,6 +30,7 @@ export const serverConfigSchema = z.object({
   UNTRUSTED_COMPILE_ENABLED: z.literal("false").default("false"),
   COMPILER_EXECUTION_MODE: z.literal("trusted_worker").default("trusted_worker"),
   LOG_LEVEL: z.enum(["error", "warn", "info", "debug", "silent"]).default("info"),
+  COOKIE_SAMESITE: z.enum(["Lax", "None", "Strict"]).optional(),
 });
 export type ServerConfig = z.infer<typeof serverConfigSchema>;
 export function parseServerConfig(env: Record<string, unknown>): ServerConfig {

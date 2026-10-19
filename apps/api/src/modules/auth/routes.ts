@@ -122,6 +122,7 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
       return reply
         .header("set-cookie", sessionCookie(issued.token, secureCookies, issued.expiresAt))
         .header("x-csrf-token", issued.csrf)
+        .header("x-session-token", issued.token)
         .code(200)
         .send(issued.user);
     } catch (error) {
@@ -134,11 +135,20 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
     try {
       requireExactOrigin(request, options.origin);
       if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
-      const token = readSessionCookie(request.headers.cookie, secureCookies);
+      const authHeader = request.headers.authorization;
+      const fallbackToken =
+        (typeof request.headers["x-session-token"] === "string"
+          ? request.headers["x-session-token"]
+          : undefined) ||
+        (typeof authHeader === "string" && authHeader.startsWith("Bearer ")
+          ? authHeader.slice(7).trim()
+          : undefined);
+      const token = readSessionCookie(request.headers.cookie, secureCookies, fallbackToken);
       const issued = await rotateSession(options.db, token);
       return reply
         .header("set-cookie", sessionCookie(issued.token, secureCookies, issued.expiresAt))
         .header("x-csrf-token", issued.csrf)
+        .header("x-session-token", issued.token)
         .code(200)
         .send(issued.user);
     } catch (error) {
@@ -151,7 +161,15 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
     try {
       requireExactOrigin(request, options.origin);
       if (!options.db) throw new AuthError(503, "SERVICE_UNAVAILABLE");
-      const token = readSessionCookie(request.headers.cookie, secureCookies);
+      const authHeader = request.headers.authorization;
+      const fallbackToken =
+        (typeof request.headers["x-session-token"] === "string"
+          ? request.headers["x-session-token"]
+          : undefined) ||
+        (typeof authHeader === "string" && authHeader.startsWith("Bearer ")
+          ? authHeader.slice(7).trim()
+          : undefined);
+      const token = readSessionCookie(request.headers.cookie, secureCookies, fallbackToken);
       await logout(options.db, token, request.headers["x-csrf-token"], request.id);
       return reply.header("set-cookie", expiredSessionCookie(secureCookies)).code(204).send();
     } catch (error) {
