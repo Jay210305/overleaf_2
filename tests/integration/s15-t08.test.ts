@@ -30,9 +30,8 @@ describe("S15-T08: Audit delivered API, WSS, files, and integrations (COL-03, PL
   });
 
   it("verifies compiler trust boundary and prevents unverified untrusted execution (PL-07)", async () => {
-    const { validatePublicCompilationPolicy } = await import(
-      "../../apps/jobs/src/compilation/public-policy.js"
-    );
+    const { validatePublicCompilationPolicy } =
+      await import("../../apps/jobs/src/compilation/public-policy.js");
 
     // Untrusted compile with shell escape must be forbidden
     expect(() =>

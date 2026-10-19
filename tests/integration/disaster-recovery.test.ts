@@ -23,7 +23,9 @@ describe("S15-T06 Disaster Recovery: Complete automated backup and restore (NFR-
   let pdfKey: string;
   let tempBackupDir: string;
 
-  const validPdfBytes = new TextEncoder().encode("%PDF-1.5\nDisaster recovery test authentic PDF\n%%EOF");
+  const validPdfBytes = new TextEncoder().encode(
+    "%PDF-1.5\nDisaster recovery test authentic PDF\n%%EOF",
+  );
   const validLogBytes = new TextEncoder().encode("Transcript: DR test compilation completed.\n");
 
   beforeAll(async () => {
@@ -75,7 +77,12 @@ describe("S15-T06 Disaster Recovery: Complete automated backup and restore (NFR-
       jobId,
       sourceHash: "d".repeat(64),
       artifacts: [
-        { name: "output.pdf", mime: "application/pdf", bytes: validPdfBytes, sha256: "hash-dr-pdf" },
+        {
+          name: "output.pdf",
+          mime: "application/pdf",
+          bytes: validPdfBytes,
+          sha256: "hash-dr-pdf",
+        },
         { name: "compile.log", mime: "text/plain", bytes: validLogBytes, sha256: "hash-dr-log" },
       ],
       retentionDays: 14,
@@ -151,12 +158,16 @@ describe("S15-T06 Disaster Recovery: Complete automated backup and restore (NFR-
     expect(new TextDecoder().decode(restoredPdf)).toContain("Disaster recovery test authentic PDF");
 
     // 5. Corrupted blob integrity test (tampered backup payload)
-    const blobToCorrupt = backupResult.manifest.blobs.find((b) => b.key === pdfKey) ?? backupResult.manifest.blobs[0]!;
+    const blobToCorrupt =
+      backupResult.manifest.blobs.find((b) => b.key === pdfKey) ?? backupResult.manifest.blobs[0]!;
     await storage.delete(blobToCorrupt.key);
     const corruptedBlobPath = join(tempBackupDir, "blobs", `${blobToCorrupt.sha256}.bin`);
     const originalBytes = await readFile(corruptedBlobPath);
     try {
-      await writeFile(corruptedBlobPath, Buffer.concat([originalBytes, Buffer.from("corrupted-extra-data")]));
+      await writeFile(
+        corruptedBlobPath,
+        Buffer.concat([originalBytes, Buffer.from("corrupted-extra-data")]),
+      );
       await expect(
         executeAutomatedRestore({
           db: fixture.db,

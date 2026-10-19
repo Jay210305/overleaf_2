@@ -23,9 +23,10 @@ describe("S15-T09: Abuse quotas, feature flags, and admin permissions (INT-11, N
     // Admin user (using designated admin email)
     await fixture.db.query("DELETE FROM users WHERE email_normalized = 'admin@overleaf.local'");
     adminUser = await fixture.seed();
-    await fixture.db.query("UPDATE users SET email_normalized = 'admin@overleaf.local' WHERE id = $1", [
-      adminUser.id,
-    ]);
+    await fixture.db.query(
+      "UPDATE users SET email_normalized = 'admin@overleaf.local' WHERE id = $1",
+      [adminUser.id],
+    );
     const admLogin = await fixture.login("admin@overleaf.local");
     expect(admLogin.statusCode).toBe(200);
     adminHeaders = {
@@ -38,11 +39,7 @@ describe("S15-T09: Abuse quotas, feature flags, and admin permissions (INT-11, N
   afterAll(async () => fixture.close());
 
   it("denies access to admin endpoints for non-admin users (403 Forbidden)", async () => {
-    const endpoints = [
-      "/api/v1/admin/users",
-      "/api/v1/admin/quotas",
-      "/api/v1/admin/flags",
-    ];
+    const endpoints = ["/api/v1/admin/users", "/api/v1/admin/quotas", "/api/v1/admin/flags"];
 
     for (const url of endpoints) {
       const res = await fixture.app.inject({

@@ -7,7 +7,10 @@ import type { ExecuteInput, RevisionManifest } from "@latex-collab/contracts";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
-function createTestManifest(projectId: string, items: RevisionManifest["items"] = []): RevisionManifest {
+function createTestManifest(
+  projectId: string,
+  items: RevisionManifest["items"] = [],
+): RevisionManifest {
   return {
     version: 1,
     projectId,
@@ -29,18 +32,20 @@ const defaultLimits = {
 
 describe("S15-T13: Provision verified isolated executor adapter integration", () => {
   it("executes valid TeX job producing output.pdf and sanitized compile.log", async () => {
-    let capturedOptions: {
-      timeoutMs?: number;
-      env?: Record<string, string>;
-      maxBuffer?: number;
-      isolation?: {
-        networkDisabled?: boolean;
-        readOnlyRoot?: boolean;
-        dropCapabilities?: boolean;
-        noNewPrivileges?: boolean;
-        userUid?: number;
-      };
-    } | undefined;
+    let capturedOptions:
+      | {
+          timeoutMs?: number;
+          env?: Record<string, string>;
+          maxBuffer?: number;
+          isolation?: {
+            networkDisabled?: boolean;
+            readOnlyRoot?: boolean;
+            dropCapabilities?: boolean;
+            noNewPrivileges?: boolean;
+            userUid?: number;
+          };
+        }
+      | undefined;
 
     const executor = new IsolatedCompilerExecutor({
       runner: async (_cmd, args, opts) => {
@@ -48,7 +53,10 @@ describe("S15-T13: Provision verified isolated executor adapter integration", ()
         // Simulate successful latexmk execution by generating a dummy PDF in out dir
         const outDir = args.find((a) => a.startsWith("-outdir="))!.split("=")[1]!;
         await writeFile(join(outDir, "main.pdf"), "%PDF-1.5 test content");
-        await writeFile(join(outDir, "main.log"), "Output written on main.pdf (1 page).\nTranscript written on main.log.");
+        await writeFile(
+          join(outDir, "main.log"),
+          "Output written on main.pdf (1 page).\nTranscript written on main.log.",
+        );
 
         return { exitCode: 0, stdout: "latexmk completed", stderr: "" };
       },

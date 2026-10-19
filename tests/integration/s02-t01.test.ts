@@ -213,4 +213,3 @@ describe("S02-T01 trusted registration and verification", () => {
     }
   });
 });
-

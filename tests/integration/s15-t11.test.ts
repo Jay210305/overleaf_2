@@ -18,7 +18,7 @@ describe("S15-T11: Audit every feature ID and claim (PL-03, PL-05)", () => {
     const auditContent = await readFile(auditPath, "utf8");
 
     expect(auditContent).toContain("Zero Mocked Shortcuts");
-    expect(auditContent).toContain("No UI-Only \"DONE\" Claims");
+    expect(auditContent).toContain('No UI-Only "DONE" Claims');
     expect(auditContent).toContain("Honest Deferred/Blocked Boundaries");
   });
 });

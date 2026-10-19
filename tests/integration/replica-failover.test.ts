@@ -53,7 +53,9 @@ describe("S15-T04: Replica failover and graceful reconnection (NFR-01)", () => {
     const client1 = await fixture.createClient(ticket1);
 
     const doc1 = new Y.Doc();
-    doc1.getText("content").insert(0, "\\section{Failover Resilience}\nDurable content committed before failover.\n");
+    doc1
+      .getText("content")
+      .insert(0, "\\section{Failover Resilience}\nDurable content committed before failover.\n");
     const update1 = Y.encodeStateAsUpdate(doc1);
 
     const ack1 = await client1.sendUpdate(update1);

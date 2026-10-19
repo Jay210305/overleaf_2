@@ -4,7 +4,8 @@ import * as Y from "yjs";
 describe("NFR-02 S15-T04: Five simultaneous editors cross-replica convergence regression", () => {
   it("converges five concurrent editors distributed across replicas without data loss or ordering conflict", () => {
     const numEditors = 5;
-    const initialText = "\\documentclass{article}\n\\begin{document}\n\\section{Collaborative Multi-Replica}\n\\end{document}\n";
+    const initialText =
+      "\\documentclass{article}\n\\begin{document}\n\\section{Collaborative Multi-Replica}\n\\end{document}\n";
 
     // Create 5 client documents initialized with the same base state
     const baseDoc = new Y.Doc();

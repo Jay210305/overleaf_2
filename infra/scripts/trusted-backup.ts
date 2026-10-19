@@ -204,7 +204,9 @@ export async function verifyBackupIntegrity(options: {
   const referencedKeys = new Set<string>();
   const queryParams = projectId ? [projectId] : [];
 
-  const revFilter = projectId ? `WHERE project_id = $1 AND manifest_key IS NOT NULL` : `WHERE manifest_key IS NOT NULL`;
+  const revFilter = projectId
+    ? `WHERE project_id = $1 AND manifest_key IS NOT NULL`
+    : `WHERE manifest_key IS NOT NULL`;
   const revisionsRes = await db.query<{ manifest_key: string | null }>(
     `SELECT manifest_key FROM project_revisions ${revFilter}`,
     queryParams,

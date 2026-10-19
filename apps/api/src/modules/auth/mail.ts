@@ -54,7 +54,9 @@ export function createSmtpVerificationSender(
         html: `<!DOCTYPE html><html><body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1f2937; line-height: 1.5; padding: 20px;"><div style="max-width: 560px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; background: #ffffff;"><h2 style="margin-top: 0; color: #111827;">Verify your LaTeX Workspace email</h2><p>Please confirm your email address to complete your account setup. This link is valid for 24 hours.</p><div style="margin: 24px 0;"><a href="${link.toString()}" style="background-color: #2563eb; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">Verify Email</a></div><p style="margin-bottom: 8px; color: #4b5563;">Or copy and paste this verification code into the application:</p><div style="background: #f3f4f6; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 14px; word-break: break-all; color: #1f2937;">${token}</div><hr style="margin-top: 32px; border: none; border-top: 1px solid #e5e7eb;" /><p style="font-size: 12px; color: #9ca3af; margin-bottom: 0;">If you did not request this, you can safely ignore this email.</p></div></body></html>`,
       });
     } catch (err) {
-      console.warn(`[AUTH] Verification email delivery failed for ${email} (${(err as Error)?.message}). Code: ${token}`);
+      console.warn(
+        `[AUTH] Verification email delivery failed for ${email} (${(err as Error)?.message}). Code: ${token}`,
+      );
     }
   };
 }
@@ -77,7 +79,9 @@ export function createSmtpInvitationSender(
         html: `<!DOCTYPE html><html><body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1f2937; line-height: 1.5; padding: 20px;"><div style="max-width: 560px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; background: #ffffff;"><h2 style="margin-top: 0; color: #111827;">Your trusted LaTeX Workspace invitation</h2><p>You have been invited to create a trusted account on LaTeX Workspace. This invitation is valid for 24 hours.</p><div style="margin: 24px 0;"><a href="${link.toString()}" style="background-color: #2563eb; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">Accept Invitation</a></div><p style="margin-bottom: 8px; color: #4b5563;">Or copy and paste this invitation code into the registration form:</p><div style="background: #f3f4f6; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 14px; word-break: break-all; color: #1f2937;">${token}</div><hr style="margin-top: 32px; border: none; border-top: 1px solid #e5e7eb;" /><p style="font-size: 12px; color: #9ca3af; margin-bottom: 0;">If you did not expect this invitation, you can safely ignore this email.</p></div></body></html>`,
       });
     } catch (err) {
-      console.warn(`[AUTH] Invitation email delivery failed for ${email} (${(err as Error)?.message}). Token: ${token}`);
+      console.warn(
+        `[AUTH] Invitation email delivery failed for ${email} (${(err as Error)?.message}). Token: ${token}`,
+      );
     }
   };
 }
@@ -100,7 +104,9 @@ export function createSmtpPasswordResetSender(
         html: `<!DOCTYPE html><html><body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1f2937; line-height: 1.5; padding: 20px;"><div style="max-width: 560px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; background: #ffffff;"><h2 style="margin-top: 0; color: #111827;">Reset your LaTeX Workspace password</h2><p>We received a request to reset your password. This link is valid for 1 hour.</p><div style="margin: 24px 0;"><a href="${link.toString()}" style="background-color: #2563eb; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">Reset Password</a></div><p style="margin-bottom: 8px; color: #4b5563;">Or copy and paste this reset code into the application:</p><div style="background: #f3f4f6; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 14px; word-break: break-all; color: #1f2937;">${token}</div><hr style="margin-top: 32px; border: none; border-top: 1px solid #e5e7eb;" /><p style="font-size: 12px; color: #9ca3af; margin-bottom: 0;">If you did not request a password reset, you can safely ignore this email.</p></div></body></html>`,
       });
     } catch (err) {
-      console.warn(`[AUTH] Password reset email delivery failed for ${email} (${(err as Error)?.message}). Code: ${token}`);
+      console.warn(
+        `[AUTH] Password reset email delivery failed for ${email} (${(err as Error)?.message}). Code: ${token}`,
+      );
     }
   };
 }

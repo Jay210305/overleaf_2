@@ -6,7 +6,14 @@ describe("NFR-10 S15-T07: Zero credentials and manuscript content in logs regres
   it("enforces redaction rules covering passwords, tokens, cookies, and manuscript content", () => {
     const opts = safeLoggerOptions("info");
 
-    const requiredRedactions = ["password", "token", "source", "content", "cookie", "authorization"];
+    const requiredRedactions = [
+      "password",
+      "token",
+      "source",
+      "content",
+      "cookie",
+      "authorization",
+    ];
     for (const key of requiredRedactions) {
       expect(opts.redact).toContain(key);
     }

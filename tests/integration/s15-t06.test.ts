@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { executeAutomatedRestore, verifyBackupIntegrity } from "../../infra/scripts/backup-restore.js";
+import {
+  executeAutomatedRestore,
+  verifyBackupIntegrity,
+} from "../../infra/scripts/backup-restore.js";
 import type { DatabaseClient } from "@latex-collab/db";
 import type { StorageAdapter } from "@latex-collab/storage";
 
@@ -9,7 +12,9 @@ describe("S15-T06: Automate complete backup and restore integration", () => {
     const mockDb = {
       query: async (queryText: string) => {
         if (queryText.includes("FROM project_revisions")) {
-          return { rows: [{ manifest_key: "manifests/p1/rev1.json" }] } as unknown as Awaited<ReturnType<DatabaseClient["query"]>>;
+          return { rows: [{ manifest_key: "manifests/p1/rev1.json" }] } as unknown as Awaited<
+            ReturnType<DatabaseClient["query"]>
+          >;
         }
         return { rows: [] } as unknown as Awaited<ReturnType<DatabaseClient["query"]>>;
       },

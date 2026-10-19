@@ -182,7 +182,10 @@ export class IsolatedCompilerExecutor implements CompilerExecutor {
         // Blob content or default template
         const fileContent = "dummy content";
         const contentBytes = Buffer.from(fileContent, "utf8");
-        const itemSize = item.object?.sizeBytes ?? (item as unknown as { size?: number }).size ?? contentBytes.length;
+        const itemSize =
+          item.object?.sizeBytes ??
+          (item as unknown as { size?: number }).size ??
+          contentBytes.length;
         totalMaterializedBytes += itemSize;
 
         if (totalMaterializedBytes > this.maxScratchSizeBytes) {

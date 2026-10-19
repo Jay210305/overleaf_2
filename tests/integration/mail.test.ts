@@ -34,14 +34,16 @@ describe("SMTP Mail Sender formatting and delivery", () => {
 
     await sender(recipient, token);
 
-    const inbox = await (await fetch(`${config.MAILPIT_URL}/api/v1/messages`)).json() as {
+    const inbox = (await (await fetch(`${config.MAILPIT_URL}/api/v1/messages`)).json()) as {
       messages: Array<{ ID: string; Subject: string; To: Array<{ Address: string }> }>;
     };
     const message = inbox.messages.find((m) => m.To.some((to) => to.Address === recipient));
     expect(message).toBeDefined();
     expect(message?.Subject).toBe("Verify your LaTeX Workspace email");
 
-    const detail = await (await fetch(`${config.MAILPIT_URL}/api/v1/message/${message!.ID}`)).json() as {
+    const detail = (await (
+      await fetch(`${config.MAILPIT_URL}/api/v1/message/${message!.ID}`)
+    ).json()) as {
       Text: string;
       HTML: string;
     };
@@ -63,14 +65,16 @@ describe("SMTP Mail Sender formatting and delivery", () => {
 
     await sender(recipient, token);
 
-    const inbox = await (await fetch(`${config.MAILPIT_URL}/api/v1/messages`)).json() as {
+    const inbox = (await (await fetch(`${config.MAILPIT_URL}/api/v1/messages`)).json()) as {
       messages: Array<{ ID: string; Subject: string; To: Array<{ Address: string }> }>;
     };
     const message = inbox.messages.find((m) => m.To.some((to) => to.Address === recipient));
     expect(message).toBeDefined();
     expect(message?.Subject).toBe("Reset your LaTeX Workspace password");
 
-    const detail = await (await fetch(`${config.MAILPIT_URL}/api/v1/message/${message!.ID}`)).json() as {
+    const detail = (await (
+      await fetch(`${config.MAILPIT_URL}/api/v1/message/${message!.ID}`)
+    ).json()) as {
       Text: string;
       HTML: string;
     };
@@ -91,14 +95,16 @@ describe("SMTP Mail Sender formatting and delivery", () => {
 
     await sender(recipient, token);
 
-    const inbox = await (await fetch(`${config.MAILPIT_URL}/api/v1/messages`)).json() as {
+    const inbox = (await (await fetch(`${config.MAILPIT_URL}/api/v1/messages`)).json()) as {
       messages: Array<{ ID: string; Subject: string; To: Array<{ Address: string }> }>;
     };
     const message = inbox.messages.find((m) => m.To.some((to) => to.Address === recipient));
     expect(message).toBeDefined();
     expect(message?.Subject).toBe("Your trusted LaTeX Workspace invitation");
 
-    const detail = await (await fetch(`${config.MAILPIT_URL}/api/v1/message/${message!.ID}`)).json() as {
+    const detail = (await (
+      await fetch(`${config.MAILPIT_URL}/api/v1/message/${message!.ID}`)
+    ).json()) as {
       Text: string;
       HTML: string;
     };
@@ -119,14 +125,16 @@ describe("SMTP Mail Sender formatting and delivery", () => {
 
     await sender(recipient, token);
 
-    const inbox = await (await fetch(`${config.MAILPIT_URL}/api/v1/messages`)).json() as {
+    const inbox = (await (await fetch(`${config.MAILPIT_URL}/api/v1/messages`)).json()) as {
       messages: Array<{ ID: string; Subject: string; To: Array<{ Address: string }> }>;
     };
     const message = inbox.messages.find((m) => m.To.some((to) => to.Address === recipient));
     expect(message).toBeDefined();
     expect(message?.Subject).toBe("Join a LaTeX Workspace project");
 
-    const detail = await (await fetch(`${config.MAILPIT_URL}/api/v1/message/${message!.ID}`)).json() as {
+    const detail = (await (
+      await fetch(`${config.MAILPIT_URL}/api/v1/message/${message!.ID}`)
+    ).json()) as {
       Text: string;
       HTML: string;
     };

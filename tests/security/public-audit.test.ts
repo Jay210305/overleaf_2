@@ -1,6 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createSessionFixture, origin } from "../helpers/s02-session.js";
-import { isAllowedImportUrl, validateZipEntryPath } from "../../apps/api/src/modules/imports/guards.js";
+import {
+  isAllowedImportUrl,
+  validateZipEntryPath,
+} from "../../apps/api/src/modules/imports/guards.js";
 
 describe("S15-T08 Public Security Audit: IDOR, CSRF, SSRF, Ticket, ZIP protections", () => {
   let fixture: Awaited<ReturnType<typeof createSessionFixture>>;

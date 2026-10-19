@@ -5,7 +5,10 @@ import {
 } from "../../apps/jobs/src/compilation/isolated-executor.js";
 import type { ExecuteInput, RevisionManifest } from "@latex-collab/contracts";
 
-function createTestManifest(projectId: string, items: RevisionManifest["items"] = []): RevisionManifest {
+function createTestManifest(
+  projectId: string,
+  items: RevisionManifest["items"] = [],
+): RevisionManifest {
   return {
     version: 1,
     projectId,

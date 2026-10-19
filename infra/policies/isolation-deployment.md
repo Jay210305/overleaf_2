@@ -11,6 +11,7 @@
 This document establishes the production deployment configuration for isolated TeX executor adapters (`IsolatedCompilerExecutor` in `apps/jobs/src/compilation/isolated-executor.ts`), operationalizing the architecture defined in [ADR-011](../../docs/adr/011-public-executor.md).
 
 Core Guarantees:
+
 1. **Network Denial:** Zero egress/ingress network connectivity inside compilation sub-processes.
 2. **Ephemeral Mounts:** Dedicated temporary directories wiped immediately upon process exit.
 3. **Least Privilege:** Non-root execution with dropped capabilities (`cap_drop=ALL`) and `no-new-privileges`.

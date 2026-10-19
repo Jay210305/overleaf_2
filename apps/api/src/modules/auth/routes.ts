@@ -4,7 +4,11 @@ import type { DatabaseClient } from "@latex-collab/db";
 import { problem } from "../../plugins/errors.js";
 import { AuthError } from "./errors.js";
 import { isOriginAllowed } from "@latex-collab/config/server";
-import { registerPublicAccount, registerTrustedAccount, type SendVerification } from "./register.js";
+import {
+  registerPublicAccount,
+  registerTrustedAccount,
+  type SendVerification,
+} from "./register.js";
 import { verifyEmail } from "./verify-email.js";
 import { requireAnonymousCsrf, requireExactOrigin } from "../../plugins/csrf.js";
 import { requestPasswordReset, resetPassword, type SendPasswordReset } from "./password-reset.js";
@@ -83,12 +87,7 @@ export function registerAuthRoutes(app: FastifyInstance, options: AuthRouteOptio
 
     if (process.env.PUBLIC_SIGNUP_ENABLED === "true") {
       try {
-        await registerPublicAccount(
-          options.db,
-          request.body,
-          options.sendVerification,
-          request.id,
-        );
+        await registerPublicAccount(options.db, request.body, options.sendVerification, request.id);
         return reply.code(202).send({ accepted: true });
       } catch (error) {
         if (error instanceof AuthError) return reject(reply, request, error);

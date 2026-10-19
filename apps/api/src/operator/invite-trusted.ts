@@ -37,8 +37,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error(
-    "Invitation failed:", (err as Error)?.message || err,
-  );
+  console.error("Invitation failed:", (err as Error)?.message || err);
   process.exitCode = 1;
 });

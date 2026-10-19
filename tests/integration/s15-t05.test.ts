@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { computePercentiles, runSimulatedBenchmark } from "../load/workspace.js";
-import { validatePublicCompilationPolicy, PolicyViolationError } from "../../apps/jobs/src/compilation/public-policy.js";
+import {
+  validatePublicCompilationPolicy,
+  PolicyViolationError,
+} from "../../apps/jobs/src/compilation/public-policy.js";
 
 describe("S15-T05: REST, WS, and compile load benchmarking", () => {
   it("calculates latency percentiles accurately across sample distributions", () => {

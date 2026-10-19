@@ -73,7 +73,8 @@ export function evaluateAlertTriggers(metrics: MetricSnapshot): AlertEvaluation 
   };
 }
 
-const SENSITIVE_KEY_REGEX = /^(password|token|secret|authorization|cookie|csrf|content|source|manuscript|body|payload)$/i;
+const SENSITIVE_KEY_REGEX =
+  /^(password|token|secret|authorization|cookie|csrf|content|source|manuscript|body|payload)$/i;
 
 export function sanitizeTelemetryPayload(data: unknown): unknown {
   if (data === null || data === undefined) return data;

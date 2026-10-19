@@ -148,6 +148,9 @@ async function main() {
   void runAvatarCleanup();
 }
 main().catch((error) => {
-  console.error("API startup failed: check required configuration and service availability.", error);
+  console.error(
+    "API startup failed: check required configuration and service availability.",
+    error,
+  );
   process.exitCode = 1;
 });

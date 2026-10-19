@@ -87,7 +87,9 @@ describe("S15-T04: Multi-replica API and collab deployment integration", () => {
     docB.once("update", (u) => {
       updateBBytes = u;
     });
-    docB.getText("content").insert(docB.getText("content").length, "Appended by Replica 2 editor.\n");
+    docB
+      .getText("content")
+      .insert(docB.getText("content").length, "Appended by Replica 2 editor.\n");
 
     const clientAReceivedUpdateB = clientA.waitForMessage((m) => m.type === "sync.update");
     const ackB = await clientB.sendUpdate(updateBBytes!);
