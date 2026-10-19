@@ -43,23 +43,4 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.CLOUDFLARE_API_KEY }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          echo "=== DIST FILES ===" > deploy.log
-          ls -la apps/web/dist >> deploy.log
-          cat apps/web/dist/index.html >> deploy.log
-          echo "=== CLOUDFLARE PAGES PROJECTS ===" >> deploy.log
-          npx --yes wrangler@^4 pages project list >> deploy.log 2>&1 || true
-          echo "=== ATTEMPT DEPLOY latex-editor-do7 ===" >> deploy.log
-          npx --yes wrangler@^4 pages deploy apps/web/dist --project-name=latex-editor-do7 --branch=main --commit-dirty=true >> deploy.log 2>&1 || true
-          echo "=== ATTEMPT DEPLOY latex-editor ===" >> deploy.log
-          npx --yes wrangler@^4 pages deploy apps/web/dist --project-name=latex-editor --branch=main --commit-dirty=true >> deploy.log 2>&1 || true
-          cat deploy.log
-
-      - name: Upload deploy log to branch
-        if: always()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -B deploy-status
-          git add deploy.log -f
-          git commit -m "chore: update deploy log [skip ci]" || true
-          git push origin deploy-status --force || true
+          npx --yes wrangler@^4 pages deploy apps/web/dist --project-name=latex-editor --branch=main --commit-dirty=true
