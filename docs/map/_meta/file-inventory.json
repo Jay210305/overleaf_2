@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "b02e141deab1556733b405e3527292987e1bc0d2",
+  "git_baseline": "9f5a858c5cabdbf20bb5750ffe344b854763426a",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -4183,12 +4183,12 @@
     {
       "path": "tests/e2e/.auth/csrf.json",
       "role": "factory",
-      "sha256": "5f134c2d6a49abb24043b323bee57409e174ae0f39b57383126cab37a2991720"
+      "sha256": "f63a89e705e09637929592c5f410bcbd83d84f0731daee09960f2fd05e970f59"
     },
     {
       "path": "tests/e2e/.auth/state.json",
       "role": "factory",
-      "sha256": "1d614bf9962aa04de0e12649f4409526a71ec62909a2151cb3a8b526c5d073f5"
+      "sha256": "3919b852ffb9c46a2cd3e213aaf2e05a78fbe3fcd23e3503e0d32298bcc211a5"
     },
     {
       "path": "tests/e2e/academic-editor.spec.ts",
