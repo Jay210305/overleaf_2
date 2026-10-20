@@ -161,7 +161,7 @@ describe("S05-T01 verified uploads", () => {
     const tooLarge = await presign({
       ...valid,
       fileName: "large.bib",
-      sizeBytes: 25 * 1024 * 1024 + 1,
+      sizeBytes: 100 * 1024 * 1024 + 1,
     });
     expect(tooLarge.statusCode).toBe(413);
   });
@@ -173,7 +173,7 @@ describe("S05-T01 verified uploads", () => {
     });
     await fixture.db.query(
       "UPDATE project_nodes SET size_bytes = $1 WHERE project_id = $2 AND deleted_at IS NULL",
-      [100 * 1024 * 1024, full.id],
+      [500 * 1024 * 1024, full.id],
     );
     const response = await presign(
       {

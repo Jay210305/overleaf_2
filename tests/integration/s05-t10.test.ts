@@ -317,7 +317,7 @@ describe("S05-T10 durable project and blob preparation", () => {
     ["unsafe path", buildZip([{ name: "../escape.tex", data: "escape" }]), "UNSAFE_PATH"],
     [
       "decompression limit",
-      buildZip([{ name: "main.tex", data: "A".repeat(26 * 1024 * 1024), method: 8 }]),
+      buildZip([{ name: "main.tex", data: "A".repeat(101 * 1024 * 1024), method: 8 }]),
       "LIMIT_EXCEEDED",
     ],
   ] as const)(

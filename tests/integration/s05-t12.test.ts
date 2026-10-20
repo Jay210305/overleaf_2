@@ -118,7 +118,7 @@ describe("S05-T12 authenticated ZIP import intake", () => {
     const bytes = validZip();
     const payload = { sizeBytes: bytes.length, sha256: digest(bytes) };
     expect((await presign({})).statusCode).toBe(400);
-    expect((await presign({ sizeBytes: 26 * 1024 * 1024, sha256: digest(bytes) })).statusCode).toBe(
+    expect((await presign({ sizeBytes: 201 * 1024 * 1024, sha256: digest(bytes) })).statusCode).toBe(
       413,
     );
     expect((await presign(payload, { cookie: "session=invalid" })).statusCode).toBe(401);
@@ -200,8 +200,8 @@ describe("S05-T12 authenticated ZIP import intake", () => {
   });
 
   it("rejects oversized staged objects beyond the ZIP budget", async () => {
-    const declared = 25 * 1024 * 1024;
-    const real = Buffer.alloc(26 * 1024 * 1024, 0);
+    const declared = 200 * 1024 * 1024;
+    const real = Buffer.alloc(201 * 1024 * 1024, 0);
     const signed = await presign({
       sizeBytes: declared,
       sha256: digest(real.subarray(0, declared)),

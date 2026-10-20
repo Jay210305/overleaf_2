@@ -122,7 +122,7 @@ function checkInput(input: ReserveImportJobInput): string {
   if (
     !Number.isSafeInteger(input.archiveSize) ||
     input.archiveSize < 1 ||
-    input.archiveSize > 25 * 1024 * 1024
+    input.archiveSize > 200 * 1024 * 1024
   ) {
     throw new PersistenceError("CONSTRAINT_VIOLATION", "Invalid archive size", false);
   }

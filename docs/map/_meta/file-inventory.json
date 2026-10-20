@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "8027f7305572066be28a2479fffd53f7d7be124a",
+  "git_baseline": "630d592a9ca5f055b2a8f9f50e6e3ba7bba9e61b",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -41,11 +41,6 @@
       "sha256": "5ef1470c55dd31af794a59323a4933ec2b4c72172791461474c43786391d3235"
     },
     {
-      "path": ".env.github-test",
-      "role": "factory",
-      "sha256": "549bd71648abc181416b70d13cf98922f69a88db240b235e84b3a35b62dd6a2a"
-    },
-    {
       "path": ".env.production",
       "role": "factory",
       "sha256": "5fa4ec5492fa728ea43301a889782d1418eea7e35fe18432faa70a7148dd5efe"
@@ -53,7 +48,7 @@
     {
       "path": ".freebuff/project-id",
       "role": "factory",
-      "sha256": "2c1dfd767ff7845d45dde9fe171c6f8236e4bf369e7d310b4aeeb10f5525a815"
+      "sha256": "f3e606637050463ad5bcb902febfd04dfacce620352fe4e714d965f21921d6f9"
     },
     {
       "path": ".gitattributes",
@@ -91,24 +86,39 @@
       "sha256": "5cbf4d2f441cffcfa77b3bd5c40ea01d999012b232cdc9e33bd20113b3aec051"
     },
     {
-      "path": ".superpowers/sdd/.gitignore",
-      "role": "factory",
-      "sha256": "cdbcae15105d6b781e620813c79c7e868740d4e9cc53ce6f5fcbbc12387adf4b"
-    },
-    {
-      "path": ".superpowers/sdd/2026-10-13-s05-import-project-apply/progress.md",
-      "role": "factory",
-      "sha256": "c1aa6e16f4254f57a823bfce8387df9bced4157b6a5e29a28c290c94dc00d39e"
-    },
-    {
-      "path": ".superpowers/sdd/2026-10-13-s05-import-project-apply/review-35a9d57..36ac70e.diff",
-      "role": "factory",
-      "sha256": "19eeb8cbcd5d8fa4c298c8c83e7153c47e6d29b4d6336609206842044b5c1f20"
-    },
-    {
       "path": "AGENTS.md",
       "role": "catalog",
       "sha256": "af8f0193ff6d73ff16f5509431c8ce657652bab53fffcfc45401555a16316bec"
+    },
+    {
+      "path": "CONTEXT.md",
+      "role": "contract",
+      "sha256": "eb1ea8772f6fd6753d57b82340db5d842f15518274681b04a4d7551232afc1fa"
+    },
+    {
+      "path": "Dockerfile",
+      "role": "factory",
+      "sha256": "70fcf0d6c02ef9cdccaa516666e9cd88a8cdda90c029b661da134b7cd65822ba"
+    },
+    {
+      "path": "Dockerfile.worker",
+      "role": "factory",
+      "sha256": "22b7218f76a2cd8ec56bbaddd94e2d453a769c69f539d2eb899ef35c89c8c758"
+    },
+    {
+      "path": "PLANNING_METHODOLOGY.md",
+      "role": "factory",
+      "sha256": "6bdf434c96ca66a99bd797f3b98ce92342c1dd202fbe58c3c5d891b27f4e1cc0"
+    },
+    {
+      "path": "PLAN_IMPLEMENTACION_EDITOR_LATEX_COLABORATIVO.md",
+      "role": "factory",
+      "sha256": "338d8bf32297c3de6fc2e3d9be62e5ae2b3f56abd1d547ca2c71fe83a50ada05"
+    },
+    {
+      "path": "README.md",
+      "role": "catalog",
+      "sha256": "ac3b52632f006bad9d06b9a763ef2a50b759575b593cd94e764fccffa23e5f46"
     },
     {
       "path": "apps/api/package.json",
@@ -263,12 +273,12 @@
     {
       "path": "apps/api/src/modules/files/binary-download.ts",
       "role": "factory",
-      "sha256": "adaf87a8446adc1bd8f92bdf992f4b80852db7beaaeabe6138abfca1961edd05"
+      "sha256": "2cb3f24e89a94d5eb1e9c59ad2472d4337e8793a45c7d6ec4cdfa4c239eb93d5"
     },
     {
       "path": "apps/api/src/modules/files/figure-preview.ts",
       "role": "factory",
-      "sha256": "e34c4f6cff34d7286ea9d2b7917c568b303a5d21c1f35aeb4c6a152d712c736a"
+      "sha256": "c3286dd6896f90f506106492222629bf4e5b4e5e6af5ab1e9e012fdb4d4015e1"
     },
     {
       "path": "apps/api/src/modules/files/tree.ts",
@@ -928,12 +938,12 @@
     {
       "path": "apps/web/src/features/files/file-uploader.tsx",
       "role": "factory",
-      "sha256": "13f3a6b198e0a0140931cae98bfc2cae1177cc7ae53a96b08cf532d6e68c3579"
+      "sha256": "9a1b1404e314c4e7ae5a92c507b7409df03504e2f64197cef27303ccfe4bf7f3"
     },
     {
       "path": "apps/web/src/features/files/zip.ts",
       "role": "factory",
-      "sha256": "fa222be0bb6362fee98656d0d5964b8355b110eabecfcccf7d7fa951f16055cd"
+      "sha256": "719bbe4896fb7a7fed082f952921d33e1a6f3cf18b32d5766f115c0c201e5cdb"
     },
     {
       "path": "apps/web/src/features/health/health-panel.tsx",
@@ -1121,19 +1131,9 @@
       "sha256": "bc44b068ef1d260d63b60f84c2fb1d9cf7ddd7c4ade1b991ae980c60e47cfcb5"
     },
     {
-      "path": "CONTEXT.md",
+      "path": "docs/CONTEXT.md",
       "role": "contract",
-      "sha256": "eb1ea8772f6fd6753d57b82340db5d842f15518274681b04a4d7551232afc1fa"
-    },
-    {
-      "path": "Dockerfile",
-      "role": "factory",
-      "sha256": "70fcf0d6c02ef9cdccaa516666e9cd88a8cdda90c029b661da134b7cd65822ba"
-    },
-    {
-      "path": "Dockerfile.worker",
-      "role": "factory",
-      "sha256": "22b7218f76a2cd8ec56bbaddd94e2d453a769c69f539d2eb899ef35c89c8c758"
+      "sha256": "ead020e68280b5b71440829149741e7ce882a14cd5731b247206f6254f524746"
     },
     {
       "path": "docs/adr/001-stack.md",
@@ -1196,14 +1196,14 @@
       "sha256": "1f4dd29b65bb95a9b025e6a1624ad05731e45e45d9b886c7838e52f40e25b1b0"
     },
     {
-      "path": "docs/adr/compatibility-spike.md",
-      "role": "factory",
-      "sha256": "3f9d2cd738b042d1d80af78ce29e8b6b63f02994527069a2686b55ef106292fe"
-    },
-    {
       "path": "docs/adr/CONTEXT.md",
       "role": "contract",
       "sha256": "22f86e886d228ed35cf195dc1811a2b81e3ef5245376cc5c471504eaf42dc7b7"
+    },
+    {
+      "path": "docs/adr/compatibility-spike.md",
+      "role": "factory",
+      "sha256": "3f9d2cd738b042d1d80af78ce29e8b6b63f02994527069a2686b55ef106292fe"
     },
     {
       "path": "docs/adr/trusted-runtime-spike.md",
@@ -1221,9 +1221,14 @@
       "sha256": "9fbabcf5259b81e4cde606105a35c80794be2301a8f8b0f55d23c14d17cade8d"
     },
     {
-      "path": "docs/CONTEXT.md",
+      "path": "docs/contracts/CONTEXT.md",
       "role": "contract",
-      "sha256": "ead020e68280b5b71440829149741e7ce882a14cd5731b247206f6254f524746"
+      "sha256": "a0d11ec9ae4661a3a575d6fa4ede6225999fd342e3d88502ae082c7610f2faf0"
+    },
+    {
+      "path": "docs/contracts/README.md",
+      "role": "catalog",
+      "sha256": "9180982e49e9daa1324d1d9ab0521467f1c5506d4c0a8c3d375a4b5ecfcac2ed"
     },
     {
       "path": "docs/contracts/collaboration.md",
@@ -1234,11 +1239,6 @@
       "path": "docs/contracts/compilation.md",
       "role": "contract",
       "sha256": "3e6ef476abb86f91b28fa10bc201ed4877f91ec154b4e8a7f7aae9377b596b67"
-    },
-    {
-      "path": "docs/contracts/CONTEXT.md",
-      "role": "contract",
-      "sha256": "a0d11ec9ae4661a3a575d6fa4ede6225999fd342e3d88502ae082c7610f2faf0"
     },
     {
       "path": "docs/contracts/data-model.md",
@@ -1276,11 +1276,6 @@
       "sha256": "ab49b075f468d5bc1ba2c58281daf4bf3f80cfc9b62333c6de963dd22d5268d4"
     },
     {
-      "path": "docs/contracts/README.md",
-      "role": "catalog",
-      "sha256": "9180982e49e9daa1324d1d9ab0521467f1c5506d4c0a8c3d375a4b5ecfcac2ed"
-    },
-    {
       "path": "docs/contracts/storage-and-revisions.md",
       "role": "contract",
       "sha256": "db4db14b5a2cfe6efbb232deb59f0d443fd62ba60001c18a79bf2bb4290ef2b5"
@@ -1289,6 +1284,16 @@
       "path": "docs/feature-parity.md",
       "role": "product",
       "sha256": "33dc9e343ea8fe7601212d15b175e79d51ba0f6406a4e9f6bccda2299d96392a"
+    },
+    {
+      "path": "docs/map/CLAUDE.md",
+      "role": "catalog",
+      "sha256": "90ac55f148dd4a15e6a13765bcf4d0dc3ccdcd5f1a41408664da681e2b3e669a"
+    },
+    {
+      "path": "docs/map/CONTEXT.md",
+      "role": "contract",
+      "sha256": "7038ad77942213e518beaf2913db14313aa436f949d9e7495b3f15211b6c4f00"
     },
     {
       "path": "docs/map/_meta/CONTEXT.md",
@@ -1321,19 +1326,14 @@
       "sha256": "f90c49eb2d7b45641590e703b04a8b351e8479a62d75349989b2483e65de3ea2"
     },
     {
-      "path": "docs/map/CLAUDE.md",
-      "role": "catalog",
-      "sha256": "90ac55f148dd4a15e6a13765bcf4d0dc3ccdcd5f1a41408664da681e2b3e669a"
-    },
-    {
-      "path": "docs/map/CONTEXT.md",
-      "role": "contract",
-      "sha256": "7038ad77942213e518beaf2913db14313aa436f949d9e7495b3f15211b6c4f00"
-    },
-    {
       "path": "docs/map/effects/CONTEXT.md",
       "role": "contract",
       "sha256": "18b650bc56032e765c6c35942ec76faa2e7f9dff3f1e3766d2a102e575520a8f"
+    },
+    {
+      "path": "docs/map/objects/CONTEXT.md",
+      "role": "contract",
+      "sha256": "e7af4e9e7ad20b305ba23f3e55ee0c6d6635941e99aecb51360bf23c90112a44"
     },
     {
       "path": "docs/map/objects/agent-guidance.md",
@@ -1354,11 +1354,6 @@
       "path": "docs/map/objects/compilation-and-artifacts.md",
       "role": "factory",
       "sha256": "d79ef6cd9c1e72cb4875bd62e4b70d88821ea7daf5dbb4b509fd54a276c8c5fc"
-    },
-    {
-      "path": "docs/map/objects/CONTEXT.md",
-      "role": "contract",
-      "sha256": "e7af4e9e7ad20b305ba23f3e55ee0c6d6635941e99aecb51360bf23c90112a44"
     },
     {
       "path": "docs/map/objects/data-model-and-persistence.md",
@@ -1516,6 +1511,11 @@
       "sha256": "9d9d2023a06af9df4d2e693eca4181a7f2ce701ad2ab16a4a46cf2dabf20ea72"
     },
     {
+      "path": "docs/planning/README.md",
+      "role": "catalog",
+      "sha256": "b1b6d703c7e15b0a06f0d0f61f39224eb6664a00eba04f7ee0f632d50b288bfe"
+    },
+    {
       "path": "docs/planning/execution-guide.md",
       "role": "factory",
       "sha256": "31676c5a645ff6fbe5f3b1632490a11c9ca76d531d844146af709877f1df9a45"
@@ -1524,11 +1524,6 @@
       "path": "docs/planning/migration-report.md",
       "role": "factory",
       "sha256": "7efe12490013d7cdbf280f2c29869b3925bd5176fe450a6873daf2eb7df59bb6"
-    },
-    {
-      "path": "docs/planning/README.md",
-      "role": "catalog",
-      "sha256": "b1b6d703c7e15b0a06f0d0f61f39224eb6664a00eba04f7ee0f632d50b288bfe"
     },
     {
       "path": "docs/planning/release-and-postmortem.md",
@@ -3983,7 +3978,7 @@
     {
       "path": "packages/db/src/repositories/import-jobs.ts",
       "role": "factory",
-      "sha256": "4314e7f6304cac6168a30e4c1e2efe2b9cfc55400674e3ebf2bc1cdb545d81b9"
+      "sha256": "3eabca6e474a50b9c0f331602868aabf6a3eab9a0330fcf40b1dadb1f3b115ef"
     },
     {
       "path": "packages/db/src/repositories/projects.ts",
@@ -4128,7 +4123,7 @@
     {
       "path": "packages/storage/src/content-policy.ts",
       "role": "factory",
-      "sha256": "d2d3d34cd3f552334e57e5d115feb3d551572bdc54ede499eab7229197c56845"
+      "sha256": "427cbc1dd2553a50ab61fdc98149ac5a771ad0b23b32f990975c778dce4ea3d2"
     },
     {
       "path": "packages/storage/src/index.ts",
@@ -4171,21 +4166,6 @@
       "sha256": "e730427f31195ca4b071ff456465a6a36be4cc74b50ed9f361a27a2b7dab7ecc"
     },
     {
-      "path": "Plan_de_Tesis__Dynamic_Queue_Drain_Rate_.zip",
-      "role": "factory",
-      "sha256": "a638b783f77aee23bbf266591cb3a21424c1314885e74ca475b6428c9c51a855"
-    },
-    {
-      "path": "PLAN_IMPLEMENTACION_EDITOR_LATEX_COLABORATIVO.md",
-      "role": "factory",
-      "sha256": "338d8bf32297c3de6fc2e3d9be62e5ae2b3f56abd1d547ca2c71fe83a50ada05"
-    },
-    {
-      "path": "PLANNING_METHODOLOGY.md",
-      "role": "factory",
-      "sha256": "6bdf434c96ca66a99bd797f3b98ce92342c1dd202fbe58c3c5d891b27f4e1cc0"
-    },
-    {
       "path": "playwright.config.ts",
       "role": "factory",
       "sha256": "f8c76a8982a42541b8c9947286f4a22397d789d0a126fbb29abd7d1d13205542"
@@ -4206,9 +4186,9 @@
       "sha256": "720a20dc62124f720a53bb70df7c864a6f6b22d758e41e1696188942d582ad43"
     },
     {
-      "path": "README.md",
-      "role": "catalog",
-      "sha256": "ac3b52632f006bad9d06b9a763ef2a50b759575b593cd94e764fccffa23e5f46"
+      "path": "scripts/CONTEXT.md",
+      "role": "contract",
+      "sha256": "baf320fe747a52a87b27996732c884addadb878c9348d2afd572d9508287f4f8"
     },
     {
       "path": "scripts/build_icm_map.py",
@@ -4229,11 +4209,6 @@
       "path": "scripts/check-workspace.ts",
       "role": "factory",
       "sha256": "133ed27f9095b9ef397249d2953fcc47aa1239616391c9918743f7262a0932a5"
-    },
-    {
-      "path": "scripts/CONTEXT.md",
-      "role": "contract",
-      "sha256": "baf320fe747a52a87b27996732c884addadb878c9348d2afd572d9508287f4f8"
     },
     {
       "path": "scripts/dev.ts",
@@ -4258,12 +4233,12 @@
     {
       "path": "tests/e2e/.auth/csrf.json",
       "role": "factory",
-      "sha256": "3851eaf0bbeec72b81e2ffc2b6f703b6cc9628c94d1fec3995747d1ae98ca463"
+      "sha256": "f63a89e705e09637929592c5f410bcbd83d84f0731daee09960f2fd05e970f59"
     },
     {
       "path": "tests/e2e/.auth/state.json",
       "role": "factory",
-      "sha256": "6509182393ae8ed6271344f8ea8f8a6630dbc697f84bd03a49a4a97bc81be35a"
+      "sha256": "3919b852ffb9c46a2cd3e213aaf2e05a78fbe3fcd23e3503e0d32298bcc211a5"
     },
     {
       "path": "tests/e2e/academic-editor.spec.ts",
@@ -4708,12 +4683,12 @@
     {
       "path": "tests/integration/s05-t01.test.ts",
       "role": "factory",
-      "sha256": "a2544f72e6b5f28bc9ab5b5e561e49bb28703fc510332354f4106e7dbd927e84"
+      "sha256": "8b14863ba845605a12a1014abc92250d0926491b5508a7f98e0fd3538a9fc05b"
     },
     {
       "path": "tests/integration/s05-t02.test.ts",
       "role": "factory",
-      "sha256": "73d49cd486a679458cc75a0531241269a41ca494e19ad1401d6a45c0f2d5e063"
+      "sha256": "19739cfbf77437f9a2a5a65e48dce046865f4561c34f31026874f50b1d2005c1"
     },
     {
       "path": "tests/integration/s05-t03.test.ts",
@@ -4753,7 +4728,7 @@
     {
       "path": "tests/integration/s05-t10.test.ts",
       "role": "factory",
-      "sha256": "2fa9c3bdad0028ecccf9e6c72cacebaebe1c244e698dd9cdad9954ed670b18c9"
+      "sha256": "8c3c0f781e795d09f2b83c5957f01a2ed64f80297b65b4a015b114a95921aa04"
     },
     {
       "path": "tests/integration/s05-t11-assets.test.ts",
@@ -4768,7 +4743,7 @@
     {
       "path": "tests/integration/s05-t12.test.ts",
       "role": "factory",
-      "sha256": "e4a4adeafd950ad7f21af2158b7d641479e8c243513fdd327130f82eb177f36a"
+      "sha256": "754bc86b7d4bb5841aad0f41a6a0119f737354fe54e141ad40e50e7f0cdabea5"
     },
     {
       "path": "tests/integration/s06-t01.test.ts",
@@ -5158,7 +5133,7 @@
     {
       "path": "tests/integration/s12-t03.test.ts",
       "role": "factory",
-      "sha256": "0aa66f2b04b25c3dfad5997dd5a27b1b78f11d3a1be32e2ed62ed44f9558c111"
+      "sha256": "3530ac819cae6bfdf89ddb52f0b0888babd24cc6f7de1f5a1a3cae530ac7ce8a"
     },
     {
       "path": "tests/integration/s12-t04.test.ts",
@@ -5368,7 +5343,7 @@
     {
       "path": "tests/integration/zip-project.test.ts",
       "role": "factory",
-      "sha256": "2f09098df39f09c420c1569956fe3eebe404830916a82210edb900d0815054f1"
+      "sha256": "3d9190aa0d754be852eea1bdbd27a15c2582b61cb97f127bc715b9076495f012"
     },
     {
       "path": "tests/load/workspace.ts",
@@ -6173,7 +6148,7 @@
     {
       "path": "tests/regression/int-05/s12-t03.test.ts",
       "role": "factory",
-      "sha256": "eb482e548e2249d7c4a23efbac5b9f5202941d92b9196484f45adea6d5682986"
+      "sha256": "b8353ba76c40281de732380fd20083512ba495defb8e73506d7ffcbdab353a3b"
     },
     {
       "path": "tests/regression/int-05/s12-t04.test.ts",
@@ -6408,7 +6383,7 @@
     {
       "path": "tests/regression/nfr-07/s05-t09.test.ts",
       "role": "factory",
-      "sha256": "3b27409e9b0ec96419e48723dde8ebb593399fdd0e7f8f391ec18181af713db4"
+      "sha256": "b5d34758f99e766c147a612ddec8eeba86d4cdee4c1fff21643c8af286f6d420"
     },
     {
       "path": "tests/regression/nfr-07/s06-t01.test.ts",
@@ -6893,7 +6868,7 @@
     {
       "path": "tests/regression/pro-10/s05-t03.test.ts",
       "role": "factory",
-      "sha256": "47bc6c0d7f4aad5395bff21721bd9349c6377206ef31b6bb3d5f290e0f75876f"
+      "sha256": "09ea3b931ba2f307a657f53c61436724f44760d1250d75ef0e40a7eea76f10e4"
     },
     {
       "path": "tests/regression/pro-10/s05-t10.test.ts",

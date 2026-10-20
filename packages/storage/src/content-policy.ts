@@ -8,11 +8,11 @@ import { StorageSecurityError } from "./s3.js";
  * This module must never be imported by browser code.
  */
 
-export const maxFileBytes = 25 * 1024 * 1024;
-export const maxProjectBytes = 100 * 1024 * 1024;
+export const maxFileBytes = 100 * 1024 * 1024;
+export const maxProjectBytes = 500 * 1024 * 1024;
 export const maxProjectNodes = 2000;
-export const maxArchiveBytes = 25 * 1024 * 1024;
-export const maxExpandedBytes = 100 * 1024 * 1024;
+export const maxArchiveBytes = 200 * 1024 * 1024;
+export const maxExpandedBytes = 500 * 1024 * 1024;
 export const maxArchiveNodes = 2000;
 export const maxEntryExpansionRatio = 100;
 

@@ -29,6 +29,10 @@ class UploadRequest {
     UploadRequest.instances.push(this);
   }
   open() {}
+  setRequestHeader(name: string, value: string) {
+    this.headers[name] = value;
+  }
+  readonly headers: Record<string, string> = {};
   send() {
     if (UploadRequest.autoComplete) this.complete();
   }

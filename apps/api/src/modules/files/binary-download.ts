@@ -1,12 +1,12 @@
 import { createHash } from "node:crypto";
 import type { FastifyInstance, FastifyReply } from "fastify";
 import { isUUID, type DatabaseClient } from "@latex-collab/db";
-import type { StorageAdapter } from "@latex-collab/storage";
+import { maxFileBytes, type StorageAdapter } from "@latex-collab/storage";
 import { buildSourceZip, SourceExportError } from "@latex-collab/storage/source-export";
 import { AuthError } from "../auth/errors.js";
 import { problem } from "../../plugins/errors.js";
 
-const maxDownloadBytes = 25 * 1024 * 1024;
+const maxDownloadBytes = maxFileBytes;
 const inlineTypes = new Set(["image/png", "image/jpeg", "application/pdf"]);
 
 type Node = {

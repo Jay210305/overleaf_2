@@ -122,7 +122,7 @@ describe("S05-T03 PRO-10 hostile archives", () => {
   });
 
   it("aborts entries that exceed the per-file byte budget", async () => {
-    const zeroes = Buffer.alloc(26 * 1024 * 1024, 0);
+    const zeroes = Buffer.alloc(101 * 1024 * 1024, 0);
     const job = await runCase([{ name: "big.tex", data: zeroes, method: 8 }]);
     expect(job.errorCode).toBe("LIMIT_EXCEEDED");
   });

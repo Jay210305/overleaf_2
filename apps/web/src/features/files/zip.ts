@@ -16,9 +16,9 @@ import {
  * Nothing here is trusted by the API.
  */
 
-const maxArchiveBytes = 25 * 1024 * 1024;
-const maxFileBytes = 25 * 1024 * 1024;
-const maxExpandedBytes = 100 * 1024 * 1024;
+const maxArchiveBytes = 200 * 1024 * 1024;
+const maxFileBytes = 100 * 1024 * 1024;
+const maxExpandedBytes = 500 * 1024 * 1024;
 const maxEntries = 2000;
 
 const ignoredPathSegments = new Set([".git", "__MACOSX", ".DS_Store", "Thumbs.db"]);
@@ -134,7 +134,7 @@ function normalizeEntryPath(raw: string): string | null {
 export function extractArchive(archive: Uint8Array): ExtractedArchive {
   if (archive.length === 0) throw new Error("The selected archive is empty.");
   if (archive.length > maxArchiveBytes) {
-    throw new Error("The selected archive exceeds the 25 MiB ZIP limit.");
+    throw new Error("The selected archive exceeds the 200 MiB ZIP limit.");
   }
 
   const skipped: string[] = [];
@@ -151,13 +151,13 @@ export function extractArchive(archive: Uint8Array): ExtractedArchive {
           return false;
         }
         if (file.originalSize > maxFileBytes) {
-          throw new Error(`"${path}" exceeds the 25 MiB per-file limit.`);
+          throw new Error(`"${path}" exceeds the 100 MiB per-file limit.`);
         }
         count += 1;
         expanded += file.originalSize;
         if (count > maxEntries) throw new Error("The archive contains more than 2000 files.");
         if (expanded > maxExpandedBytes) {
-          throw new Error("The archive expands beyond the 100 MiB project limit.");
+          throw new Error("The archive expands beyond the 500 MiB project limit.");
         }
         return true;
       },
@@ -179,11 +179,11 @@ export function extractArchive(archive: Uint8Array): ExtractedArchive {
     // Central-directory sizes can be omitted by streaming zip writers, so the
     // byte limits are enforced again on the inflated payload.
     if (bytes.length > maxFileBytes) {
-      throw new Error(`"${path}" exceeds the 25 MiB per-file limit.`);
+      throw new Error(`"${path}" exceeds the 100 MiB per-file limit.`);
     }
     realExpanded += bytes.length;
     if (realExpanded > maxExpandedBytes) {
-      throw new Error("The archive expands beyond the 100 MiB project limit.");
+      throw new Error("The archive expands beyond the 500 MiB project limit.");
     }
     if (policy.kind === "TEXT") {
       const normalized = normalizeTextEntry(bytes);
@@ -329,11 +329,18 @@ async function uploadFile(
   }
   const signed = uploadViewSchema.parse(await presign.json());
 
-  const put = await fetch(signed.url, {
-    method: "PUT",
-    headers: { "content-type": mime },
-    body: new Blob([bytes as BlobPart], { type: mime }),
-  });
+  let put: Response;
+  try {
+    put = await fetch(signed.url, {
+      method: "PUT",
+      headers: { "content-type": mime },
+      body: new Blob([bytes as BlobPart], { type: mime }),
+    });
+  } catch {
+    throw new Error(
+      `Direct upload of "${fileName}" to storage failed (network or CORS error). Verify bucket CORS configuration.`,
+    );
+  }
   if (!put.ok) {
     throw new Error(`Uploading "${fileName}" failed (HTTP ${put.status}).`);
   }
@@ -350,7 +357,16 @@ async function uploadFile(
     body: JSON.stringify({ uploadId: signed.uploadId, sha256: hash }),
   });
   if (!complete.ok) {
-    throw new Error(`Finalizing "${fileName}" failed (HTTP ${complete.status}).`);
+    let message = `Finalizing "${fileName}" failed (HTTP ${complete.status}).`;
+    try {
+      const err = (await complete.json()) as { message?: string; detail?: string; code?: string };
+      if (err?.message || err?.detail || err?.code) {
+        message = `Finalizing "${fileName}" failed: ${err.message || err.detail || err.code} (HTTP ${complete.status}).`;
+      }
+    } catch {
+      // ignore
+    }
+    throw new Error(message);
   }
 }
 
@@ -638,7 +654,7 @@ export async function downloadProjectArchive(input: {
     }
     totalBytes += bytes.length;
     if (totalBytes > maxExpandedBytes) {
-      throw new Error("The project exceeds the 100 MiB ZIP export limit.");
+      throw new Error("The project exceeds the 500 MiB ZIP export limit.");
     }
     archive[path] = bytes;
   }

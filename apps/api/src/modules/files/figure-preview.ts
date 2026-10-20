@@ -1,11 +1,11 @@
 import type { FastifyInstance } from "fastify";
 import { isUUID, type DatabaseClient } from "@latex-collab/db";
-import type { StorageAdapter } from "@latex-collab/storage";
+import { maxFileBytes, type StorageAdapter } from "@latex-collab/storage";
 import { AuthError } from "../auth/errors.js";
 import { problem } from "../../plugins/errors.js";
 
 const imageTypes = new Set(["image/png", "image/jpeg", "image/webp"]);
-const maxPreviewBytes = 25 * 1024 * 1024;
+const maxPreviewBytes = maxFileBytes;
 
 type Node = {
   id: string;

@@ -73,7 +73,7 @@ describe("S12-T03 INT-05 pull validation and classification", () => {
   });
 
   it("rejects oversized or over-quota remote trees with QUOTA_EXCEEDED", () => {
-    expectReject([remoteFile("big.bin", sha("a"), 25 * 1024 * 1024 + 1)], 413, "QUOTA_EXCEEDED");
+    expectReject([remoteFile("big.bin", sha("a"), 100 * 1024 * 1024 + 1)], 413, "QUOTA_EXCEEDED");
     expectReject(
       Array.from({ length: 2001 }, (_, index) => remoteFile(`f${index}.tex`, sha("a"))),
       413,
@@ -81,7 +81,7 @@ describe("S12-T03 INT-05 pull validation and classification", () => {
     );
     expectReject(
       Array.from({ length: 5 }, (_, index) =>
-        remoteFile(`big${index}.bin`, sha("a"), 24 * 1024 * 1024),
+        remoteFile(`big${index}.bin`, sha("a"), 120 * 1024 * 1024),
       ),
       413,
       "QUOTA_EXCEEDED",
@@ -111,7 +111,7 @@ describe("S12-T03 INT-05 pull validation and classification", () => {
     }
     const accepted = validateRemoteTree([
       remoteFile(".env", sha("a")),
-      remoteFile("main.aux", sha("a"), 25 * 1024 * 1024 + 1),
+      remoteFile("main.aux", sha("a"), 100 * 1024 * 1024 + 1),
       remoteFile("main.tex", sha("b")),
     ]);
     expect(accepted.map((entry) => entry.path)).toEqual(["main.tex"]);

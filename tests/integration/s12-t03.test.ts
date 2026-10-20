@@ -187,7 +187,7 @@ describe("S12-T03 pull using checkpoint and base SHA", () => {
           if (readerMode === "traversal")
             return { ...tree, entries: [remoteFile("../evil.tex", sha("e"))] };
           if (readerMode === "huge")
-            return { ...tree, entries: [remoteFile("huge.bin", sha("f"), 25 * 1024 * 1024 + 1)] };
+            return { ...tree, entries: [remoteFile("huge.bin", sha("f"), 100 * 1024 * 1024 + 1)] };
           return tree;
         },
       },

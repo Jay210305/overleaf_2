@@ -85,6 +85,13 @@ describe("project ZIP extraction", () => {
     ).toBe("paper.tex");
     expect(pickMainDocument([{ path: "refs.bib", bytes: new Uint8Array() }])).toBeNull();
   });
+
+  it("rejects archives exceeding the 200 MiB ZIP limit", () => {
+    const fakeOversized = { length: 200 * 1024 * 1024 + 1 } as Uint8Array;
+    expect(() => extractArchive(fakeOversized)).toThrow(
+      "The selected archive exceeds the 200 MiB ZIP limit.",
+    );
+  });
 });
 
 describe("project ZIP import", () => {
@@ -336,6 +343,43 @@ describe("Overleaf archive compatibility", () => {
     expect(result.uploaded).toBe(1);
     expect(result.failed).toHaveLength(1);
     expect(result.failed[0]?.path).toBe("broken.eps");
+  });
+
+  it("reports network or CORS error cleanly when direct storage upload fails", async () => {
+    sessionStorage.setItem("csrf_token", "csrf-test-token");
+    const fetcher = vi.fn(async (url: string, init?: RequestInit) => {
+      const method = init?.method ?? "GET";
+      if (url.endsWith(`/projects/${projectId}/nodes`) && method === "GET") {
+        return Response.json({ projectId, treeVersion: 1, items: [] });
+      }
+      if (url.endsWith("/uploads/presign")) {
+        return Response.json({
+          uploadId: crypto.randomUUID(),
+          url: "https://r2-storage.test/object",
+          expiresAt: new Date(Date.now() + 60_000).toISOString(),
+        });
+      }
+      if (url === "https://r2-storage.test/object") {
+        throw new TypeError("Failed to fetch (CORS network error)");
+      }
+      throw new Error(`Unexpected request ${method} ${url}`);
+    });
+    vi.stubGlobal("fetch", fetcher);
+
+    const result = await importArchiveIntoProject({
+      apiUrl,
+      projectId,
+      entries: [
+        { path: "main.tex", bytes: new Uint8Array(strToU8("\\documentclass{article}")) },
+      ],
+    });
+
+    expect(result.uploaded).toBe(0);
+    expect(result.failed).toHaveLength(1);
+    expect(result.failed[0]?.path).toBe("main.tex");
+    expect(result.failed[0]?.message).toContain(
+      'Direct upload of "main.tex" to storage failed (network or CORS error)',
+    );
   });
 });
 

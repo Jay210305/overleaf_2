@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState, type ChangeEvent, type DragEv
 import { uploadViewSchema } from "@latex-collab/contracts";
 import { extractArchive, importArchiveIntoProject } from "./zip.js";
 
-const maxFileBytes = 25 * 1024 * 1024;
+const maxFileBytes = 100 * 1024 * 1024;
 
 type UploadStatus =
   | "queued"
@@ -97,14 +97,18 @@ function validateFile(file: File): string {
     throw new UploadFailure(400, "Unsafe file name. Rename the file and try again.");
   }
   if (file.size < 1 || file.size > maxFileBytes) {
-    throw new UploadFailure(413, "File exceeds the 25 MiB upload limit or is empty.");
+    throw new UploadFailure(413, "File exceeds the 100 MiB upload limit or is empty.");
   }
   return fileMime(file);
 }
 
 function statusMessage(error: unknown): string {
   if (error instanceof UploadFailure) {
-    if (error.status === 0) return "Connection failed. Retry this file.";
+    if (error.status === 0)
+      return (
+        error.message ||
+        "Storage upload failed: network or CORS error. Verify bucket CORS configuration."
+      );
     if (error.status === 400) return "Unsafe file name or invalid request.";
     if (error.status === 401) return "Session expired. Sign in and retry.";
     if (error.status === 403 || error.status === 404)
@@ -113,9 +117,9 @@ function statusMessage(error: unknown): string {
     if (error.status === 413) return "Project or file quota exceeded.";
     if (error.status === 422) return error.message;
     if (error.status === 503) return "Upload service unavailable. Retry later.";
-    return `Upload failed (${error.status}). Retry this file.`;
+    return error.message || `Upload failed (${error.status}). Retry this file.`;
   }
-  return "Connection failed. Retry this file.";
+  return error instanceof Error ? error.message : "Connection failed. Retry this file.";
 }
 
 async function sha256(file: File): Promise<string> {
@@ -126,6 +130,7 @@ async function sha256(file: File): Promise<string> {
 function putSigned(
   url: string,
   file: File,
+  mime: string,
   onProgress: (progress: number) => void,
   onRequest: (request: XMLHttpRequest | null) => void,
 ): Promise<void> {
@@ -133,6 +138,9 @@ function putSigned(
     const request = new XMLHttpRequest();
     onRequest(request);
     request.open("PUT", url);
+    if (typeof request.setRequestHeader === "function") {
+      request.setRequestHeader("Content-Type", mime);
+    }
     request.upload.onprogress = (event) => {
       if (event.lengthComputable && event.total > 0)
         onProgress(Math.min(100, Math.round((event.loaded / event.total) * 100)));
@@ -140,11 +148,16 @@ function putSigned(
     request.onload = () => {
       onRequest(null);
       if (request.status >= 200 && request.status < 300) resolve();
-      else reject(new UploadFailure(request.status, "Private object upload failed."));
+      else reject(new UploadFailure(request.status, `Storage upload failed (HTTP ${request.status}).`));
     };
     request.onerror = () => {
       onRequest(null);
-      reject(new UploadFailure(0, "Private object upload failed."));
+      reject(
+        new UploadFailure(
+          0,
+          "Storage upload failed: network or CORS error. Verify bucket CORS configuration.",
+        ),
+      );
     };
     request.onabort = () => {
       onRequest(null);
@@ -350,6 +363,7 @@ export function FileUploader({ projectId, apiUrl, csrfToken, onUploaded }: FileU
         await putSigned(
           signed.url,
           row.file,
+          mime,
           (progress) => update(row.id, { progress }),
           (request) => {
             requestRef.current = request;

@@ -39,7 +39,7 @@ describe("S05-T09 concurrent project upload quota", () => {
     ).id;
     await fixture.db.query(
       "UPDATE project_nodes SET size_bytes = $1 WHERE project_id = $2 AND deleted_at IS NULL",
-      [100 * 1024 * 1024 - 1, projectId],
+      [500 * 1024 * 1024 - 1, projectId],
     );
     const login = await fixture.login(owner.email);
     cookie = String(login.headers["set-cookie"]).split(";")[0]!;
@@ -108,7 +108,7 @@ describe("S05-T09 concurrent project upload quota", () => {
        FROM project_nodes WHERE project_id = $1 AND deleted_at IS NULL`,
       [projectId],
     );
-    expect(Number(usage.rows[0]?.bytes)).toBe(100 * 1024 * 1024);
+    expect(Number(usage.rows[0]?.bytes)).toBe(500 * 1024 * 1024);
     expect(Number(usage.rows[0]?.count)).toBe(1);
   });
 
