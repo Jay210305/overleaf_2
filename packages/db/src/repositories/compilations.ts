@@ -380,7 +380,7 @@ export class CompilationsRepository {
         `SELECT id FROM compile_jobs
          WHERE (
            status = 'queued'
-           OR (status = 'running' AND lease_expires_at < $1 AND attempts < 3)
+           OR (status = 'running' AND (lease_expires_at IS NULL OR lease_expires_at < $1) AND attempts < 3)
          )
          ORDER BY created_at ASC
          LIMIT 1
@@ -470,7 +470,7 @@ export class CompilationsRepository {
            lease_expires_at = NULL,
            updated_at = $1
        WHERE status = 'running'
-         AND lease_expires_at < $1
+         AND (lease_expires_at IS NULL OR lease_expires_at < $1)
          AND attempts >= 3`,
       [now],
     );

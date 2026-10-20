@@ -1,0 +1,51 @@
+# Worker image: Node.js job runner with pinned TeX Live for trusted compilation.
+# Railway `latex-collab-worker` service builds from this file. API stays on ./Dockerfile.
+# Public signup and untrusted compilation remain disabled; this image only serves
+# authenticated team workloads via TrustedWorkerExecutor (no secrets in TeX env).
+
+FROM node:24-bookworm-slim AS builder
+
+WORKDIR /app
+
+RUN npm install -g pnpm@11.25.0
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages ./packages
+COPY apps ./apps
+COPY tsconfig*.json ./
+
+RUN pnpm install --frozen-lockfile
+
+RUN pnpm --filter "./packages/*" build && \
+    pnpm --filter @latex-collab/jobs build
+
+FROM node:24-bookworm-slim AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+# Pinned-by-distro TeX Live profile: latexmk + pdfLaTeX/XeLaTeX/LuaLaTeX/DVI + BibTeX/Biber.
+# Keeps the hardened flags used by TrustedWorkerExecutor (-no-shell-escape, nonstopmode).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      latexmk \
+      texlive-latex-base \
+      texlive-latex-recommended \
+      texlive-latex-extra \
+      texlive-fonts-recommended \
+      texlive-bibtex-extra \
+      texlive-xetex \
+      texlive-luatex \
+      biber \
+    && rm -rf /var/lib/apt/lists/*
+
+# Unprivileged TeX runtime user (matches trusted-compilation runbook UID 10001).
+RUN useradd --uid 10001 --create-home texrunner && \
+    mkdir -p /app /tmp/compile && \
+    chown -R texrunner:texrunner /app /tmp/compile
+
+COPY --from=builder /app /app
+
+USER texrunner
+
+CMD ["node", "apps/jobs/dist/main.js"]

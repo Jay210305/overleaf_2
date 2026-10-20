@@ -78,9 +78,10 @@ The Gate 1 collaborative LaTeX system runs as a decoupled multi-service staging 
 ### 2.2 Compile Worker Service (`apps/jobs`)
 
 - **Railway Service Name:** `latex-collab-worker`
-- **Build Command:** `pnpm --filter @latex-collab/jobs build`
-- **Start Command:** `pnpm --filter @latex-collab/jobs start`
-- **Runtime:** Dedicated worker image with pinned TeX Live 2024 packages (`latexmk`, `pdflatex`, `lualatex`, `xelatex`).
+- **Dockerfile:** `Dockerfile.worker` (repo root; TeX Live runtime — do NOT use the API `Dockerfile`, it has no TeX toolchain).
+- **Build Command:** Railway Docker build with `Dockerfile.worker`.
+- **Start Command:** `node apps/jobs/dist/main.js` (long-running: compile drain every `COMPILE_POLL_MS` + hourly storage GC).
+- **Runtime:** Dedicated worker image with Debian TeX Live packages (`latexmk`, `pdflatex`, `lualatex`, `xelatex`, `biber`), running as unprivileged `texrunner` (UID 10001).
 - **Resource Allocation:**
   - CPU: 2 vCPU
   - Memory: 1024 MiB
@@ -100,7 +101,17 @@ The Gate 1 collaborative LaTeX system runs as a decoupled multi-service staging 
   S3_SECRET_ACCESS_KEY=${{shared.S3_SECRET_ACCESS_KEY}}
   PUBLIC_SIGNUP_ENABLED=false
   UNTRUSTED_COMPILE_ENABLED=false
+  COMPILE_ENABLED=true
+  COMPILE_POLL_MS=5000
+  COMPILE_LIMIT=5
+  COMPILE_LEASE_MS=300000
   ```
+- **Deploy & Verify (after merging the worker-drain fix):**
+  1. Create/update the `latex-collab-worker` Railway service pointing at `Dockerfile.worker`.
+  2. Confirm worker logs show `Compilation pass { claimed: N, ... }` after submitting a compile.
+  3. Poll `GET /api/v1/projects/:projectId/compilations/:jobId` to `succeeded`/`failed` (terminal), then `GET .../artifacts/output.pdf` starts with `%PDF-`.
+  4. Confirm no `queued`/`running` job stays longer than ~10 min (`SELECT ... WHERE status IN ('queued','running','cancel_requested')`).
+  5. Keep `PUBLIC_SIGNUP_ENABLED=false` and `UNTRUSTED_COMPILE_ENABLED=false`; anonymous/untrusted compilation stays disabled until G5 isolation approval.
 
 ### 2.3 Managed PostgreSQL (`latex-collab-postgres`)
 

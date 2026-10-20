@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { isAbsolute, join, relative, resolve } from "node:path";
 import { promisify } from "node:util";
 import type {
   Compiler,
@@ -11,6 +11,7 @@ import type {
   ExecuteOutput,
   ExecuteOutputArtifact,
 } from "@latex-collab/contracts";
+import type { ManifestItemLoader } from "./source-loader.js";
 import { parseLatexLog, redactHostPaths, redactSecrets } from "@latex-collab/latex";
 
 const execFileAsync = promisify(execFile);
@@ -30,6 +31,12 @@ export type CommandRunner = (
 export type TrustedWorkerExecutorOptions = {
   runner?: CommandRunner;
   baseTempDir?: string;
+  /**
+   * Loads genuine frozen item bytes. When absent, the executor keeps its
+   * historical dummy materialization used by unit fixtures. Production wiring
+   * must provide the revision source loader so PDFs reflect user sources.
+   */
+  sourceLoader?: ManifestItemLoader | undefined;
 };
 
 const ALLOWED_ENGINES = new Set<Compiler>(["pdflatex", "xelatex", "lualatex", "latex"]);
@@ -57,9 +64,11 @@ function sanitizeEnv(): Record<string, string> {
 export class TrustedWorkerExecutor implements CompilerExecutor {
   private readonly runner: CommandRunner;
   private readonly baseTempDir?: string | undefined;
+  private readonly sourceLoader?: ManifestItemLoader | undefined;
 
   constructor(options: TrustedWorkerExecutorOptions = {}) {
     this.baseTempDir = options.baseTempDir;
+    this.sourceLoader = options.sourceLoader;
     this.runner =
       options.runner ??
       (async (cmd, args, opts) => {
@@ -108,17 +117,34 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
       await mkdir(inputDir, { recursive: true });
       await mkdir(outDir, { recursive: true });
 
-      // Materialize manifest items into input directory
-      const normalizedInputRoot = inputDir.endsWith("/") ? inputDir : `${inputDir}/`;
+      // Materialize genuine frozen manifest items into input directory.
+      // relative() comparison is separator-aware so the traversal guard holds on Windows and POSIX.
       for (const item of input.manifest.items) {
         // Prevent path traversal
         const targetPath = resolve(inputDir, item.path);
-        if (!targetPath.startsWith(normalizedInputRoot)) {
+        const rel = relative(inputDir, targetPath);
+        if (rel === "" || rel.startsWith("..") || isAbsolute(rel)) {
           throw new Error(`Path traversal rejected: ${item.path}`);
         }
         await mkdir(resolve(targetPath, ".."), { recursive: true });
-        // In real workflow, blob content is downloaded from storage or provided in memory
-        await writeFile(targetPath, "dummy content", "utf8");
+        let loaded: Uint8Array | null = null;
+        if (this.sourceLoader) {
+          try {
+            loaded = await this.sourceLoader(input.manifest, item);
+          } catch (err) {
+            throw new Error(
+              `Source unavailable for ${item.path}: ${(err as Error)?.message ?? String(err)}`,
+            );
+          }
+        }
+        if (loaded && loaded.length > 0) {
+          await writeFile(targetPath, loaded);
+        } else if (this.sourceLoader) {
+          throw new Error(`Source unavailable for ${item.path}: empty frozen content`);
+        } else {
+          // Fixture-only fallback when no source loader is configured.
+          await writeFile(targetPath, "dummy content", "utf8");
+        }
       }
 
       // Check for main.tex
@@ -126,6 +152,9 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
       try {
         await readFile(mainPath);
       } catch {
+        if (this.sourceLoader) {
+          throw new Error("Main source main.tex not found in revision");
+        }
         // If main.tex not present, write basic document to avoid empty compilation
         await writeFile(
           mainPath,

@@ -62,7 +62,7 @@ export async function reconcileExpiredLeases(
     [now],
   );
 
-  // 2. Mark running jobs with expired leases and attempts >= maxAttempts as timed_out
+  // 2. Mark running jobs with expired (or missing) leases and attempts >= maxAttempts as timed_out
   const maxAttempts = options.maxAttempts ?? 3;
   const timeOutRes = await db.query(
     `UPDATE compile_jobs
@@ -72,7 +72,7 @@ export async function reconcileExpiredLeases(
          lease_expires_at = NULL,
          updated_at = $1
      WHERE status = 'running'
-       AND lease_expires_at < $1
+       AND (lease_expires_at IS NULL OR lease_expires_at < $1)
        AND attempts >= $2`,
     [now, maxAttempts],
   );

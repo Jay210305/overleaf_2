@@ -13,6 +13,7 @@ The G1 compilation subsystem is exclusively configured for trusted team and auth
 ### 1.1 Enforcement of Closed Mode Flags
 
 Per project invariant defined in `AGENTS.md` and `PLAN_IMPLEMENTACION_EDITOR_LATEX_COLABORATIVO.md`:
+
 - `PUBLIC_SIGNUP_ENABLED=false`: Anonymous, self-service public registration is strictly disabled. Only invited team accounts provisioned by administrators are permitted.
 - `UNTRUSTED_COMPILE_ENABLED=false`: Untrusted compilation mode is permanently disabled. `IsolatedCompilerExecutor` fails closed with status `SERVICE_UNAVAILABLE` / error code `NOT_IMPLEMENTED`.
 - **Zero Credential Injection**: No API keys, PostgreSQL connection strings, Redis passwords, or S3 object-store secret credentials are EVER injected into compiler environments, container arguments, or TeX processes.
@@ -33,6 +34,7 @@ Per project invariant defined in `AGENTS.md` and `PLAN_IMPLEMENTACION_EDITOR_LAT
 ### 2.1 Execution Configuration
 
 The compiler executor environment operates with strictly pinned parameters:
+
 - **Base Image:** `debian:bookworm-slim@sha256:d8c0b484501438902882894389ec1b369c0d9a691bc1510dd9fe3ea9a1ebcfa4`
 - **TeX Profile:** TeX Live 2024 scheme-basic + latexmk + essential science/math packages (`amsmath`, `hyperref`, `bibtex`, etc.).
 - **Flags:** `latexmk -pdf -interaction=nonstopmode -file-line-error -synctex=1 -no-shell-escape`
@@ -43,12 +45,12 @@ The compiler executor environment operates with strictly pinned parameters:
 
 ### 2.2 Hard Resource Limits
 
-| Resource | Limit | Enforcement Mechanism | Failure Status |
-|---|---|---|---|
-| Wallclock Timeout | 60 seconds | Process SIGTERM / SIGKILL via AbortController | `timed_out` |
-| RAM / Memory | 512 MiB | Docker cgroups / system ulimit (`maxBuffer`) | `failed` |
-| CPU Allocation | 1.0 core | cgroups CPU quota | CPU throttling |
-| Output Cap | 25 MiB | Buffer overflow check & S3 upload guard | `failed` |
+| Resource           | Limit        | Enforcement Mechanism                           | Failure Status            |
+| ------------------ | ------------ | ----------------------------------------------- | ------------------------- |
+| Wallclock Timeout  | 60 seconds   | Process SIGTERM / SIGKILL via AbortController   | `timed_out`               |
+| RAM / Memory       | 512 MiB      | Docker cgroups / system ulimit (`maxBuffer`)    | `failed`                  |
+| CPU Allocation     | 1.0 core     | cgroups CPU quota                               | CPU throttling            |
+| Output Cap         | 25 MiB       | Buffer overflow check & S3 upload guard         | `failed`                  |
 | Active Concurrency | 1 active job | Unique PG index `compile_jobs_active_quota_idx` | HTTP 429 `QUOTA_EXCEEDED` |
 
 ---
@@ -76,7 +78,9 @@ The compiler executor environment operates with strictly pinned parameters:
 ## 4. Runbook: Verification & Operational Audits
 
 ### 4.1 Periodic Allowlist & Flag Check
+
 Inspect application configuration in `.env` or deployment secrets:
+
 ```bash
 # Verify public flags are disabled
 grep -E "PUBLIC_SIGNUP_ENABLED|UNTRUSTED_COMPILE_ENABLED" .env
@@ -86,13 +90,25 @@ grep -E "PUBLIC_SIGNUP_ENABLED|UNTRUSTED_COMPILE_ENABLED" .env
 ```
 
 ### 4.2 Credential Leakage Audit
+
 Execute secret check script across build artifacts and logs:
+
 ```bash
 node scripts/check-secrets.mjs
 ```
 
 ### 4.3 Stale Worker Cleanup
-If compile workers encounter an ungraceful host crash, stale jobs are automatically recovered on the next pass or via operator run:
+
+Compile draining runs inside the jobs service: long-running `node apps/jobs/dist/main.js`
+(or `pnpm --filter @latex-collab/jobs start`) polls `CompilationWorker.runPass()` every
+`COMPILE_POLL_MS` (default 5s), reclaiming expired leases and moving queued jobs to
+terminal states. A one-shot drain plus storage GC is:
+
 ```bash
-pnpm --filter @latex-collab/jobs exec tsx src/compilation/worker.ts --recover-stale
+node --env-file=../../.env --import tsx src/main.ts --once
 ```
+
+run from `apps/jobs`. `running` jobs with expired (or missing) leases and `attempts < 3`
+are reclaimed; `attempts >= 3` go `timed_out`; expired `cancel_requested` go `cancelled`
+(`packages/db/src/repositories/compilations.ts`, `apps/jobs/src/compilation/lifecycle.ts`).
+No `queued`/`running` job may stay longer than ~10 min while the worker is up.
