@@ -806,7 +806,7 @@ export function ProjectsDashboard({
                     {importFile ? importFile.name : "Choose a .zip archive"}
                   </span>
                   <span className="file-drop-hint">
-                    Drag the file onto this field or click to browse. Up to 25 MiB.
+                    Drag the file onto this field or click to browse. Up to 200 MiB.
                   </span>
                   <input
                     id="import-project-file"

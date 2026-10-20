@@ -104,6 +104,13 @@ function validateFile(file: File): string {
 
 function statusMessage(error: unknown): string {
   if (error instanceof UploadFailure) {
+    if (
+      typeof error.message === "string" &&
+      (error.message.includes("Verify bucket CORS configuration") ||
+        error.message.startsWith("Storage upload failed"))
+    ) {
+      return error.message;
+    }
     if (error.status === 0)
       return (
         error.message ||

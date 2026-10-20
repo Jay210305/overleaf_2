@@ -355,4 +355,33 @@ describe("S05-T01 verified uploads", () => {
     );
     expect(nodes.rows).toEqual([]);
   });
+
+  it("presigns and commits an asset exceeding the old 25 MiB limit up to 100 MiB", async () => {
+    const size = 30 * 1024 * 1024;
+    const bigPdf = Buffer.alloc(size, 0x20);
+    bigPdf.write("%PDF-1.4\n", 0);
+    bigPdf.write("\n%%EOF\n", size - 10);
+    const metadata = {
+      fileName: `asset-${randomUUID()}.pdf`,
+      mime: "application/pdf",
+      sizeBytes: size,
+      sha256: digest(bigPdf),
+    };
+    const signed = await presign(metadata);
+    expect(signed.statusCode).toBe(200);
+    const { uploadId, url } = signed.json() as { uploadId: string; url: string };
+    const put = await fetch(url, { method: "PUT", body: bigPdf });
+    expect(put.status).toBe(200);
+
+    const completion = await complete(uploadId, metadata.sha256, projectId);
+    expect(completion.statusCode).toBe(201);
+    expect(completion.json()).toMatchObject({
+      projectId,
+      name: metadata.fileName,
+      kind: "FILE",
+      contentKind: "BINARY",
+      mime: "application/pdf",
+      sizeBytes: size,
+    });
+  });
 });

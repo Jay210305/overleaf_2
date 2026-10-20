@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Repository working files; source hashes identify the snapshot, not a product release.",
-  "git_baseline": "630d592a9ca5f055b2a8f9f50e6e3ba7bba9e61b",
+  "git_baseline": "9d0927e2d45a9df84ec7ee55c43dfdd465873fe1",
   "generated_outputs_excluded": [
     "docs/map/AGENTS.md",
     "docs/map/_meta/file-inventory.json",
@@ -938,7 +938,7 @@
     {
       "path": "apps/web/src/features/files/file-uploader.tsx",
       "role": "factory",
-      "sha256": "9a1b1404e314c4e7ae5a92c507b7409df03504e2f64197cef27303ccfe4bf7f3"
+      "sha256": "3547844bc729d50ec350801ff4421de7d55bec0134db5a209a72a5aa4578d597"
     },
     {
       "path": "apps/web/src/features/files/zip.ts",
@@ -1013,7 +1013,7 @@
     {
       "path": "apps/web/src/features/projects/dashboard.tsx",
       "role": "factory",
-      "sha256": "396b4066923cde1ef0b7c88fb0c5f2e122b6dac04dd6dd9a874cd67851d1e7bd"
+      "sha256": "f1daaebac6cfcfd1eb4aa4377d6b12c847ae2a965f68558271e5e9032f3c4fba"
     },
     {
       "path": "apps/web/src/features/projects/lifecycle.tsx",
@@ -1218,7 +1218,7 @@
     {
       "path": "docs/api/openapi.json",
       "role": "factory",
-      "sha256": "9fbabcf5259b81e4cde606105a35c80794be2301a8f8b0f55d23c14d17cade8d"
+      "sha256": "7a27c115a7c75b52c9e15ce34b37a73bdf7087d95349d301acbdf79a1c6694c5"
     },
     {
       "path": "docs/contracts/CONTEXT.md",
@@ -1273,7 +1273,7 @@
     {
       "path": "docs/contracts/openapi.json",
       "role": "contract",
-      "sha256": "ab49b075f468d5bc1ba2c58281daf4bf3f80cfc9b62333c6de963dd22d5268d4"
+      "sha256": "30a8015b6ed5e621f4d1c094c7947e0d04f4698c843fe1ff66fb4e424d8edebf"
     },
     {
       "path": "docs/contracts/storage-and-revisions.md",
@@ -3873,17 +3873,17 @@
     {
       "path": "packages/db/migrations/0005-upload-intents.sql",
       "role": "factory",
-      "sha256": "81042bae4b254db3e17d5628f430523b0a831e141bdee63a6db912244bdade03"
+      "sha256": "ef0629480cfff8d4d3db25852766efdfb31f540418d80da24e439c1709c0d59c"
     },
     {
       "path": "packages/db/migrations/0006-import-jobs.sql",
       "role": "factory",
-      "sha256": "f44eecf78e0160382f1f5c2faaeac834db25958d28969480fddcd4bde013ed9f"
+      "sha256": "638552c8d2277ec24c64fbe9655fbfddab0470fce31227cb6a054a98f53b2925"
     },
     {
       "path": "packages/db/migrations/0007-import-upload-intents.sql",
       "role": "factory",
-      "sha256": "fa10cc2685dcafdff7e308c5696ad74f1c2a07d6a92c8fcbebc37266fc616e3d"
+      "sha256": "c76f72e0f9a5bd84902aba9a84bc48edcf452d84b60f88d94081607e531dbd68"
     },
     {
       "path": "packages/db/migrations/0008-compile-jobs.sql",
@@ -3946,6 +3946,11 @@
       "sha256": "65590d318a7332d3355a5af65b141100d428498e22bbaf0dc1f82aaace4d751b"
     },
     {
+      "path": "packages/db/migrations/0017-increase-upload-limits.sql",
+      "role": "factory",
+      "sha256": "f6b7fe05d002333e970ce2fb477af3e8ac1c5c54506d0aec5a81eca888b5f5ea"
+    },
+    {
       "path": "packages/db/package.json",
       "role": "factory",
       "sha256": "db1052c4f90e2b1ff40b6a24c482be0eabbd4e9edda2082fe703bee09289d713"
@@ -4003,7 +4008,7 @@
     {
       "path": "packages/db/src/schema/core.ts",
       "role": "factory",
-      "sha256": "31bd4f7fc6af291680a9f526f19f88ad24b8b2e718278379cf3049ad7b5f24f4"
+      "sha256": "89d3206ce9bfbbc0be7d6e336c2d121988d95d4568226b7b64401d89b640013d"
     },
     {
       "path": "packages/db/src/schema/integrations.ts",
@@ -4683,7 +4688,7 @@
     {
       "path": "tests/integration/s05-t01.test.ts",
       "role": "factory",
-      "sha256": "8b14863ba845605a12a1014abc92250d0926491b5508a7f98e0fd3538a9fc05b"
+      "sha256": "d8a5430bb85bc4a35c8061ea170ab7ab67f6eb86a1a85993aa3b3af4bafcf136"
     },
     {
       "path": "tests/integration/s05-t02.test.ts",

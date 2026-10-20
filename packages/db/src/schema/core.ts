@@ -288,7 +288,7 @@ export const pendingUploads = pgTable(
     check("pending_uploads_content_kind_check", sql`${table.contentKind} IN ('TEXT', 'BINARY')`),
     check(
       "pending_uploads_expected_size_check",
-      sql`${table.expectedSize} > 0 AND ${table.expectedSize} <= 26214400`,
+      sql`${table.expectedSize} > 0 AND ${table.expectedSize} <= 104857600`,
     ),
     check(
       "pending_uploads_completion_pair",
@@ -331,7 +331,7 @@ export const importJobs = pgTable(
       .where(sql`${table.status} = 'failed' AND ${table.archiveSwept} = FALSE`),
     check(
       "import_jobs_archive_size_check",
-      sql`${table.archiveSize} > 0 AND ${table.archiveSize} <= 26214400`,
+      sql`${table.archiveSize} > 0 AND ${table.archiveSize} <= 209715200`,
     ),
   ],
 );
@@ -359,7 +359,7 @@ export const importUploadIntents = pgTable(
       .where(sql`${table.completedJobId} IS NULL`),
     check(
       "import_upload_intents_expected_size_check",
-      sql`${table.expectedSize} > 0 AND ${table.expectedSize} <= 26214400`,
+      sql`${table.expectedSize} > 0 AND ${table.expectedSize} <= 209715200`,
     ),
   ],
 );

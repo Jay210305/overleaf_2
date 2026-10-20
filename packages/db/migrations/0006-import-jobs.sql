@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS import_jobs (
   actor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   idempotency_key_hash TEXT NOT NULL CHECK (idempotency_key_hash ~ '^[a-f0-9]{64}$'),
   archive_sha256 TEXT NOT NULL CHECK (archive_sha256 ~ '^[a-f0-9]{64}$'),
-  archive_size BIGINT NOT NULL CHECK (archive_size > 0 AND archive_size <= 26214400),
+  archive_size BIGINT NOT NULL CHECK (archive_size > 0 AND archive_size <= 209715200),
   title TEXT NOT NULL CHECK (char_length(title) BETWEEN 1 AND 200),
   archive_key TEXT NOT NULL UNIQUE,
   status TEXT NOT NULL DEFAULT 'staging'
@@ -48,3 +48,9 @@ DROP INDEX IF EXISTS import_jobs_failed_idx;
 CREATE INDEX IF NOT EXISTS import_jobs_sweep_idx
   ON import_jobs (created_at)
   WHERE status = 'failed' AND archive_swept = FALSE;
+
+ALTER TABLE import_jobs
+  DROP CONSTRAINT IF EXISTS import_jobs_archive_size_check;
+ALTER TABLE import_jobs
+  ADD CONSTRAINT import_jobs_archive_size_check
+  CHECK (archive_size > 0 AND archive_size <= 209715200);

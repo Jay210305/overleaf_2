@@ -6,7 +6,7 @@
 CREATE TABLE IF NOT EXISTS import_upload_intents (
   id UUID PRIMARY KEY,
   actor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  expected_size BIGINT NOT NULL CHECK (expected_size > 0 AND expected_size <= 26214400),
+  expected_size BIGINT NOT NULL CHECK (expected_size > 0 AND expected_size <= 209715200),
   expected_sha256 TEXT NOT NULL CHECK (expected_sha256 ~ '^[a-f0-9]{64}$'),
   staging_key TEXT NOT NULL UNIQUE,
   expires_at TIMESTAMPTZ NOT NULL,
@@ -19,6 +19,12 @@ CREATE TABLE IF NOT EXISTS import_upload_intents (
   ),
   CONSTRAINT import_upload_key_scope CHECK (staging_key LIKE 'imports/%/uploads/%')
 );
+
+ALTER TABLE import_upload_intents
+  DROP CONSTRAINT IF EXISTS import_upload_intents_expected_size_check;
+ALTER TABLE import_upload_intents
+  ADD CONSTRAINT import_upload_intents_expected_size_check
+  CHECK (expected_size > 0 AND expected_size <= 209715200);
 
 CREATE INDEX IF NOT EXISTS import_upload_intents_actor_expiry_idx
   ON import_upload_intents (actor_id, expires_at)
