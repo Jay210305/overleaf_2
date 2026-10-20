@@ -28,7 +28,7 @@ describe("S06-T08 Real PDF viewer component integration", () => {
 
     expect(screen.getByTestId("pdf-viewer")).toBeTruthy();
     expect(screen.getByTestId("empty-pdf-message")).toBeTruthy();
-    expect(screen.getByText("No PDF compiled yet")).toBeTruthy();
+    expect(screen.getByText("Your document, ready to preview")).toBeTruthy();
 
     // Controls are disabled when no PDF is loaded
     expect(screen.getByTestId("zoom-in").hasAttribute("disabled")).toBe(true);

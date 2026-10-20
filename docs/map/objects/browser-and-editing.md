@@ -6,7 +6,7 @@ status: verified
 entity: apps/web/src/app/router.tsx
 sources: ["docs/planning/02-architecture.md", "docs/planning/03-technical-spec.md", "docs/contracts/editing-and-review.md", "docs/contracts/collaboration.md", "apps/web/src/app/router.tsx", "apps/web/src/app/providers.tsx", "apps/web/src/features/health/health-panel.tsx", "apps/web/src/features/auth/auth-forms.tsx", "apps/web/src/features/account/profile.tsx", "apps/web/src/features/account/avatar.tsx", "apps/web/src/features/editor/latex-code-editor.tsx", "apps/web/src/features/files/file-uploader.tsx", "apps/web/src/features/projects/workspace.tsx", "tests/e2e/mixed-editing.spec.ts", "tests/e2e/walking-skeleton.spec.ts", "tests/e2e/auth-forms.spec.ts", "tests/e2e/profile.spec.ts", "tests/e2e/project-upload.spec.ts", "docs/test-reports/gate-g3-audit.md", "docs/test-reports/s11-t05.md", "docs/test-reports/s11-t09.md", "docs/test-reports/s02-t05.md", "docs/test-reports/s02-t07.md", "docs/test-reports/s02-t11.md", "docs/test-reports/s05-t02.md", "apps/web/src/features/sharing/share-dialog.tsx", "tests/e2e/sharing.spec.ts", "tests/regression/col-03/s08-t03.test.tsx", "tests/regression/col-04/s08-t03.test.tsx", "tests/regression/col-05/s08-t03.test.tsx", "docs/test-reports/s08-t03.md", "apps/web/src/features/review/comment-anchors.tsx", "tests/e2e/comments.spec.ts", "docs/test-reports/s08-t09.md", "apps/web/src/features/collab/live-document.tsx", "apps/web/src/features/visual/basic-nodes.tsx", "apps/web/src/features/visual/academic-nodes.tsx", "apps/web/src/features/visual/mode-switch.tsx"]
 runtime: implemented
-verified_on: 2026-10-16
+verified_on: 2026-10-19
 snapshot: _meta/file-inventory.json
 ---
 
@@ -35,6 +35,8 @@ S08-T05 mounts a project chat panel with cursor history and text-only rendering.
 S11 visual components live under `features/visual/`. `ReadOnlyTextDocument` decodes the authorized Yjs snapshot and renders existing node views through the mode switch. `LiveTextDocument` obtains a scoped write or read ticket, binds CodeMirror and supported Visual patches to canonical Y.Text, and waits for a covering durable acknowledgement before showing saved. `VisualFigure` fetches real image bytes from the project-scoped READ route and shows an authorized preview only after success; failed reads stay unverified. KaTeX typesets compatible inline/display math with an unsupported-macro literal fallback; the compiled PDF remains authoritative. The [S11-T09 test](../../test-reports/s11-t09.md) drives two authenticated Edge pages through persisted convergence and conflict, and [S11-T05](../../test-reports/s11-t05.md) adds a real image preview journey. G3 was released 2026-10-16; see the [G3 audit](../../test-reports/gate-g3-audit.md).
 
 S12-T05 adds `features/integrations/github-sync.tsx`: a base/local/remote sync diff with explicit keep-local/keep-remote/manual conflict resolution and a state guard that never labels a pending, failed or manually deferred action as synced. A refreshed plan clears earlier conflict choices and retry identity, and manual merge cannot trigger Apply. The workspace mounts the panel through its GitHub Sync control; the client calls the authorized checkpoint and sync routes with session CSRF. A routed workspace regression covers the mount; see [S12-T05 evidence](../../test-reports/s12-t05.md).
+
+The [2026-10-19 workspace refresh](../../test-reports/editor-workspace-refresh.md) keeps compilation in the header, groups secondary tools in a disclosure, and collapses comments. Compact Files/Editor/PDF views retain mounted editing state. `styles.css` and the existing Code/Visual mode component own the explicit workspace appearance; fixture browser checks establish presentation only. Independent review remains pending.
 
 ## Connected to
 
@@ -72,6 +74,6 @@ Browser navigation, theme, keyboard and health/outage/recovery were exercised in
 - [S08-T05 evidence](../../test-reports/s08-t05.md)
 - [Project workspace](../../../apps/web/src/features/projects/workspace.tsx)
 - [Visual figure component](../../../apps/web/src/features/visual/academic-nodes.tsx)
-- [GitHub sync panel (S12-T05, not mounted)](../../../apps/web/src/features/integrations/github-sync.tsx)
+- [GitHub sync panel (S12-T05)](../../../apps/web/src/features/integrations/github-sync.tsx)
 - [S12-T05 evidence](../../test-reports/s12-t05.md)
 - [Released G3 audit](../../test-reports/gate-g3-audit.md)

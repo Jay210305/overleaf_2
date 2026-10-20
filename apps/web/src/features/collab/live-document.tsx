@@ -279,9 +279,10 @@ export function LiveTextDocument({
 
   return (
     <section aria-label="Live document" data-testid="live-document">
-      <div>
+      <div className="live-document-status">
+        <span>{ready ? (canEdit ? "Editing" : "Read-only") : "Connecting to editor"}</span>
         <span role="status" data-testid="live-save-status">
-          {ready ? status : "connecting"}
+          {ready || status === "offline" || status === "error" ? status : "connecting"}
         </span>
         <button type="button" onClick={onExit}>
           Close live editor

@@ -42,7 +42,8 @@ it("mounts the authorized sync panel from the loaded project workspace", async (
       createElement(ProjectWorkspace, { projectId, apiUrl: "http://api.test/api/v1" }),
     ),
   );
-  fireEvent.click(await screen.findByRole("button", { name: "GitHub Sync" }));
+  (await screen.findByText("Tools")).closest("details")!.open = true;
+  fireEvent.click(screen.getByRole("button", { name: "GitHub Sync" }));
   expect(await screen.findByRole("region", { name: "GitHub synchronization" })).toBeTruthy();
   expect(
     fetcher.mock.calls.some(

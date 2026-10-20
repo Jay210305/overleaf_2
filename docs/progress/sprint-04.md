@@ -48,6 +48,10 @@
 - Type Checking: `pnpm typecheck` -> PASS.
 - Build: `pnpm build` -> PASS.
 
+## Editor workspace maintenance — 2026-10-19
+
+User-approved usability and appearance refresh spans the existing S04 editor, S06 preview/compile controls and S08 comments. Explicit mode styling, a simpler toolbar, retained editor state across compact views and collapsible comments are implemented. [Scoped evidence and review limits](../test-reports/editor-workspace-refresh.md) record actual checks. Independent co-maintainer review is pending; existing task statuses are unchanged. No new sprint is started and actual effort is not measured.
+
 ## Next Sprint
 
 Sprint 05 — Assets, import, and export (`sprint-05-assets-import-export`).

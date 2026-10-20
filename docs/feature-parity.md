@@ -2,6 +2,8 @@
 
 All requirements from the master plan and planning catalog are verified and completed with real implementation and test reports.
 
+2026-10-19 maintenance: [editor workspace refresh](test-reports/editor-workspace-refresh.md) adds scoped UI evidence for EDT-01, EDT-04, CMP-03, COL-06 and NFR-08. Existing feature/task states are unchanged; independent review of this refresh is pending. Fixture UI checks do not replace service-backed feature evidence.
+
 | ID | Gate | Priority | Status | Evidence |
 |---|---|---|---|---|
 | ACC-01 | G1 | Must | DONE | [S02-T01 registration and verification](test-reports/s02-t01.md); [S02-T02 login/logout](test-reports/s02-t02.md); [S02-T03 recovery](test-reports/s02-t03.md); [S02-T05 browser flow](test-reports/s02-t05.md); [S02-T06 server rate limits](test-reports/s02-t06.md); [S15-T10 accessibility](test-reports/s15-t10.md); [Gate G5 audit](test-reports/gate-g5-audit.md) |

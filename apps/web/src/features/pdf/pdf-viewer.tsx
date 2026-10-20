@@ -110,93 +110,35 @@ export function PdfViewer({
     return null;
   }, [revisionLabel, revisionNo, sourceRevisionId]);
 
+  const waiting = lastCompileStatus === "queued" || lastCompileStatus === "running";
+  const failed = lastCompileStatus === "failed" || lastCompileStatus === "timed_out";
+
   return (
-    <div
-      data-testid="pdf-viewer"
-      className={`pdf-viewer-container ${className}`}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        width: "100%",
-        backgroundColor: "#1e1e1e",
-        color: "#f3f4f6",
-      }}
-    >
-      {/* 1. Stale warning banner if subsequent compile failed but previous PDF is kept */}
+    <div data-testid="pdf-viewer" className={`pdf-viewer-container ${className}`}>
       {isStale && (
-        <div
-          data-testid="stale-banner"
-          className="stale-pdf-banner flex items-center justify-between px-4 py-2 bg-amber-900/80 text-amber-200 border-b border-amber-700 text-sm"
-          style={{
-            backgroundColor: "#78350f",
-            color: "#fef3c7",
-            padding: "6px 12px",
-            fontSize: "0.875rem",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <div className="flex items-center gap-2">
-            <span
-              data-testid="stale-badge"
-              className="px-2 py-0.5 rounded bg-amber-700 text-white font-semibold text-xs"
-              style={{
-                backgroundColor: "#b45309",
-                padding: "2px 6px",
-                borderRadius: "4px",
-                fontWeight: "bold",
-              }}
-            >
-              OUTDATED
-            </span>
-            <span>
-              Showing previous successful build. Latest compilation{" "}
-              {lastCompileStatus ? lastCompileStatus.toUpperCase() : "FAILED"}.
-            </span>
-          </div>
-          {errorMessage && <span className="text-xs text-amber-300 italic">{errorMessage}</span>}
+        <div data-testid="stale-banner" className="stale-pdf-banner" role="status">
+          <span data-testid="stale-badge">OUTDATED</span>
+          <span>
+            Showing previous successful build. Latest compilation{" "}
+            {lastCompileStatus ? lastCompileStatus.toUpperCase() : "FAILED"}.
+          </span>
+          {errorMessage && <span>{errorMessage}</span>}
         </div>
       )}
-
-      {/* 2. Viewer Toolbar */}
-      <div
-        data-testid="pdf-toolbar"
-        className="pdf-toolbar flex items-center justify-between px-3 py-1.5 bg-neutral-800 border-b border-neutral-700 text-xs"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "8px",
-          padding: "6px 12px",
-          backgroundColor: "#262626",
-          borderBottom: "1px solid #404040",
-          fontSize: "0.75rem",
-        }}
-      >
-        {/* Left: Page Navigation */}
-        <div
-          className="flex items-center gap-1.5"
-          style={{ display: "flex", alignItems: "center", gap: "6px" }}
-        >
+      <div data-testid="pdf-toolbar" className="pdf-toolbar" role="group" aria-label="PDF controls">
+        <div className="pdf-toolbar-group">
           <button
             type="button"
             data-testid="page-prev"
+            aria-label="Previous page"
             onClick={handlePrevPage}
             disabled={currentPage <= 1 || !pdfUrl}
-            className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 disabled:opacity-40"
-            style={{
-              padding: "4px 8px",
-              borderRadius: "4px",
-              backgroundColor: "#404040",
-              color: "#fff",
-            }}
           >
-            &lt;
+            ‹
           </button>
-          <span>Page</span>
+          <label htmlFor="pdf-page-number">Page</label>
           <input
+            id="pdf-page-number"
             type="number"
             data-testid="page-input"
             aria-label="Page number"
@@ -205,99 +147,54 @@ export function PdfViewer({
             value={currentPage}
             onChange={handlePageChange}
             disabled={!pdfUrl}
-            className="w-12 px-1 py-0.5 text-center bg-neutral-900 border border-neutral-600 rounded text-neutral-100"
-            style={{
-              width: "45px",
-              textAlign: "center",
-              backgroundColor: "#171717",
-              color: "#fff",
-              border: "1px solid #525252",
-            }}
           />
-          <span>of</span>
-          <span data-testid="page-total">{totalPages}</span>
+          <span>
+            of <span data-testid="page-total">{totalPages}</span>
+          </span>
           <button
             type="button"
             data-testid="page-next"
+            aria-label="Next page"
             onClick={handleNextPage}
             disabled={currentPage >= totalPages || !pdfUrl}
-            className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 disabled:opacity-40"
-            style={{
-              padding: "4px 8px",
-              borderRadius: "4px",
-              backgroundColor: "#404040",
-              color: "#fff",
-            }}
           >
-            &gt;
+            ›
           </button>
         </div>
-
-        {/* Center: Zoom Controls & Fit Modes */}
-        <div
-          className="flex items-center gap-1.5"
-          style={{ display: "flex", alignItems: "center", gap: "6px" }}
-        >
+        <div className="pdf-toolbar-group">
           <button
             type="button"
             data-testid="zoom-out"
+            aria-label="Zoom out"
             onClick={handleZoomOut}
             disabled={!pdfUrl}
-            className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 disabled:opacity-40"
-            style={{
-              padding: "4px 8px",
-              borderRadius: "4px",
-              backgroundColor: "#404040",
-              color: "#fff",
-            }}
           >
-            -
+            −
           </button>
           <button
             type="button"
             data-testid="zoom-reset"
+            aria-label="Reset zoom"
             onClick={handleZoomReset}
             disabled={!pdfUrl}
-            className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 font-mono disabled:opacity-40"
-            style={{
-              padding: "4px 8px",
-              borderRadius: "4px",
-              backgroundColor: "#404040",
-              color: "#fff",
-            }}
           >
             {fitMode === "none" ? `${zoom}%` : fitMode === "fit-width" ? "Fit Width" : "Fit Page"}
           </button>
           <button
             type="button"
             data-testid="zoom-in"
+            aria-label="Zoom in"
             onClick={handleZoomIn}
             disabled={!pdfUrl}
-            className="px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600 disabled:opacity-40"
-            style={{
-              padding: "4px 8px",
-              borderRadius: "4px",
-              backgroundColor: "#404040",
-              color: "#fff",
-            }}
           >
             +
           </button>
-
-          <span className="text-neutral-500">|</span>
-
           <button
             type="button"
             data-testid="fit-width"
             onClick={handleFitWidth}
             disabled={!pdfUrl}
-            className={`px-2 py-1 rounded ${fitMode === "fit-width" ? "bg-blue-600" : "bg-neutral-700 hover:bg-neutral-600"} disabled:opacity-40`}
-            style={{
-              padding: "4px 8px",
-              borderRadius: "4px",
-              backgroundColor: fitMode === "fit-width" ? "#2563eb" : "#404040",
-              color: "#fff",
-            }}
+            aria-pressed={fitMode === "fit-width"}
           >
             Fit Width
           </button>
@@ -306,98 +203,62 @@ export function PdfViewer({
             data-testid="fit-page"
             onClick={handleFitPage}
             disabled={!pdfUrl}
-            className={`px-2 py-1 rounded ${fitMode === "fit-page" ? "bg-blue-600" : "bg-neutral-700 hover:bg-neutral-600"} disabled:opacity-40`}
-            style={{
-              padding: "4px 8px",
-              borderRadius: "4px",
-              backgroundColor: fitMode === "fit-page" ? "#2563eb" : "#404040",
-              color: "#fff",
-            }}
+            aria-pressed={fitMode === "fit-page"}
           >
             Fit Page
           </button>
         </div>
-
-        {/* Right: Revision provenance & Download */}
-        <div
-          className="flex items-center gap-2"
-          style={{ display: "flex", alignItems: "center", gap: "8px" }}
-        >
+        <div className="pdf-toolbar-group">
           {formattedRevision && (
-            <span
-              data-testid="revision-label"
-              className="text-neutral-400 font-mono text-xs px-1.5 py-0.5 rounded bg-neutral-900 border border-neutral-700"
-              style={{
-                padding: "2px 6px",
-                borderRadius: "4px",
-                backgroundColor: "#171717",
-                color: "#9ca3af",
-                border: "1px solid #404040",
-              }}
-            >
+            <span data-testid="revision-label" className="pdf-revision">
               {formattedRevision}
             </span>
           )}
-
           <button
             type="button"
             data-testid="pdf-download-btn"
             onClick={handleDownloadClick}
             disabled={!pdfUrl}
-            className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 font-semibold text-white disabled:opacity-40"
-            style={{
-              padding: "4px 10px",
-              borderRadius: "4px",
-              backgroundColor: "#2563eb",
-              color: "#fff",
-              fontWeight: "600",
-            }}
           >
             Download PDF
           </button>
         </div>
       </div>
-
-      {/* 3. Main Viewer Canvas / Document Display */}
-      <div
-        className="pdf-viewport flex-1 overflow-auto flex items-center justify-center p-4 relative"
-        style={{
-          flex: 1,
-          overflow: "auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "16px",
-          position: "relative",
-        }}
-      >
+      <div className="pdf-viewport">
         {pdfUrl ? (
-          <div
-            data-testid="pdf-document"
-            className="pdf-canvas-wrapper shadow-2xl transition-transform duration-100 ease-out"
-            style={{ ...scaleStyle, display: "flex", justifyContent: "center" }}
-          >
+          <div data-testid="pdf-document" className="pdf-canvas-wrapper" style={scaleStyle}>
             <object
               data={pdfUrl}
               type="application/pdf"
               width="800"
               height="1100"
-              className="rounded border border-neutral-700 bg-white"
-              style={{ border: "1px solid #525252", borderRadius: "4px", backgroundColor: "#fff" }}
+              aria-label="Compiled PDF"
             >
               <embed src={pdfUrl} type="application/pdf" width="800" height="1100" />
             </object>
           </div>
         ) : (
-          <div
-            data-testid="empty-pdf-message"
-            className="text-center p-8 text-neutral-400"
-            style={{ textAlign: "center", padding: "32px", color: "#9ca3af" }}
-          >
-            <p className="text-base font-medium mb-1">No PDF compiled yet</p>
-            <p className="text-xs text-neutral-500">
-              Click &quot;Recompile&quot; in the editor toolbar to compile your LaTeX project.
+          <div data-testid="empty-pdf-message" className="pdf-empty" role="status">
+            <div className="pdf-empty-icon" aria-hidden="true">
+              PDF
+            </div>
+            <h3>
+              {waiting
+                ? "Compiling your document…"
+                : failed
+                  ? "Compilation needs attention"
+                  : "Your document, ready to preview"}
+            </h3>
+            <p>
+              {waiting
+                ? "The preview will appear here when compilation finishes."
+                : failed
+                  ? "Check the compilation message above, update your source, then try again."
+                  : 'Click "Recompile" to turn your LaTeX source into a PDF.'}
             </p>
+            {!waiting && !failed && (
+              <span className="pdf-empty-shortcut">You can also press Ctrl + Enter</span>
+            )}
           </div>
         )}
       </div>

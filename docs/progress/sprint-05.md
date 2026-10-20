@@ -45,6 +45,20 @@ S05-T02 focused tests pass (3 files, 8 tests), and a real Edge journey passed wi
 
 ## Risks and Debt
 
+Local follow-up on 2026-10-19 imported the user's root thesis ZIP through the real
+Edge dashboard against local MinIO: all 13 supported files persisted with matching
+read-back hashes and the workspace reopened after reload. Two unsupported `.pngng`
+entries were skipped. No local application/configuration change was needed;
+production GAP-41 remains separate. See [local verification](../test-reports/local-zip-import.md).
+
+Production ZIP troubleshooting on 2026-10-19 confirmed missing CORS on the deployed
+Cloudflare R2 bucket: a PUT/content-type preflight from the deployed Pages origin
+returned HTTP 403, `CORS not configured for this bucket`. A narrow dashboard policy
+is prepared in `infra/cloudflare/r2-cors.json`. Application is pending because the
+available API object credentials return AccessDenied for bucket CORS management;
+see [diagnosis and actual checks](../test-reports/production-zip-upload-cors.md)
+and GAP-41. Existing task acceptance statuses are unchanged.
+
 S05-T09 cleanup is conservative around revisions because the current schema can erase historical item references. S05-T02's hosted-storage CORS and cross-browser coverage remain unverified. Two LOW review nits recorded 2026-10-13 without touching accepted code: the browser `.bst` MIME allowlist is narrower than the server policy (server stays authoritative), and a row hung in `completing` has no cancel affordance (network failure still yields error plus retry). Migration deployment, historical references and inherited gate failures are tracked in [Open Gaps](open-gaps.md). S05-T01, S05-T09 and S05-T02 were accepted 2026-10-13; do not mark later tasks done without their own review.
 
 The [2026-10-13 origin/main integration review](../test-reports/integration-review-2026-10-13.md) confirmed no new merge was needed and reran the local gates. It found a post-Redis-restart auth recovery defect (GAP-29), a Firefox host/browser gate blocker (GAP-30) and the existing formatting gap (GAP-16). S05-T10 status and co-maintainer review requirement are unchanged.

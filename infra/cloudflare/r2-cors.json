@@ -1,0 +1,8 @@
+[
+  {
+    "AllowedOrigins": ["https://latex-editor-do7.pages.dev", "https://latex-editor.pages.dev"],
+    "AllowedMethods": ["PUT"],
+    "AllowedHeaders": ["Content-Type"],
+    "MaxAgeSeconds": 3600
+  }
+]

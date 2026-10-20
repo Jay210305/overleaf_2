@@ -107,7 +107,7 @@ test("two browser editors converge through the persistent collaboration socket",
       pages.map(async (page) => {
         await page.goto(`/project/${projectId}`);
         await page.getByRole("treeitem", { name: "main.tex (file)" }).click();
-        await page.getByRole("button", { name: "Join live editor" }).click();
+        await page.getByRole("button", { name: "Start editing" }).click();
         await expect(page.getByTestId("live-save-status")).toHaveText("saved");
       }),
     );

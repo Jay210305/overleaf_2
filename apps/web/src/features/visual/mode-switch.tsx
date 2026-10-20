@@ -144,7 +144,7 @@ export const EditorModeSwitch: React.FC<EditorModeSwitchProps> = ({
 }) => {
   return (
     <div
-      className="inline-flex items-center p-1 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium"
+      className="editor-mode-switch"
       data-testid="editor-mode-switch"
       role="radiogroup"
       aria-label="Editor display mode"
@@ -155,14 +155,16 @@ export const EditorModeSwitch: React.FC<EditorModeSwitchProps> = ({
         aria-checked={mode === "code"}
         disabled={disabled}
         onClick={() => onSelectMode("code")}
-        className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
-          mode === "code"
-            ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm font-semibold"
-            : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
-        } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
         data-testid="mode-code-btn"
       >
-        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          width={16}
+          height={16}
+          aria-hidden="true"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -179,14 +181,16 @@ export const EditorModeSwitch: React.FC<EditorModeSwitchProps> = ({
         aria-checked={mode === "visual"}
         disabled={disabled}
         onClick={() => onSelectMode("visual")}
-        className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
-          mode === "visual"
-            ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm font-semibold"
-            : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
-        } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
         data-testid="mode-visual-btn"
       >
-        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          width={16}
+          height={16}
+          aria-hidden="true"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -202,11 +206,7 @@ export const EditorModeSwitch: React.FC<EditorModeSwitchProps> = ({
         </svg>
         <span>Visual</span>
         {hasErrors && (
-          <span
-            className="w-2 h-2 rounded-full bg-amber-500"
-            title="Document contains syntax fallbacks or errors"
-            data-testid="mode-error-dot"
-          />
+          <span title="Document contains syntax fallbacks or errors" data-testid="mode-error-dot" />
         )}
       </button>
     </div>
@@ -292,7 +292,9 @@ function ReadOnlyLoadedDocument({
 
   return (
     <div role="region" aria-label="Read-only document">
-      <p role="status">Read-only preview. Editing is unavailable here.</p>
+      <p role="status" className="document-preview-notice">
+        Read-only preview · Choose “Start editing” to work on this file.
+      </p>
       <EditorModeSwitch mode={mode} onSelectMode={setMode} hasErrors={ast?.hasErrors ?? false} />
       {mode === "code" ? (
         <pre data-testid="source-code" style={{ whiteSpace: "pre-wrap" }}>

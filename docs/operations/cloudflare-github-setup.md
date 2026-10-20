@@ -182,6 +182,28 @@ Cloudflare proporciona por defecto:
 
 ## 5. Resumen de Comprobación Rápida (Troubleshooting)
 
+### ZIP uploads and private R2 CORS
+
+The deployed API uses private Cloudflare R2 bucket `latex-collab-prod` for file
+storage. Browser ZIP imports PUT each extracted file directly to a presigned R2
+URL. Railway's `CORS_ORIGIN` only controls API requests; configure the bucket's
+CORS separately.
+
+In Cloudflare Dashboard, open **R2 Object Storage → latex-collab-prod → Settings →
+CORS Policy → Add CORS policy → JSON**, paste
+[`infra/cloudflare/r2-cors.json`](../../infra/cloudflare/r2-cors.json), and save.
+The policy allows PUT with Content-Type from the two deployed Pages origins.
+Keep the bucket private and retain signed URLs. The JSON file is for the dashboard,
+not the different Wrangler configuration format. A frontend/API redeploy is not
+required for this bucket setting.
+
+Verify a PUT/content-type OPTIONS preflight from each allowed origin succeeds,
+then retry ZIP import. An unrelated origin must not receive an allow-origin header.
+HTTP 403 with `CORS not configured for this bucket` identifies this bucket setting,
+rather than an API origin setting. See the
+[production diagnosis](../test-reports/production-zip-upload-cors.md) and
+[Cloudflare CORS documentation](https://developers.cloudflare.com/r2/buckets/cors/).
+
 | Problema | Causa Posible | Solución |
 |---|---|---|
 | **Fallo en GitHub Action:** `Authentication error (Code: 10000)` | `CLOUDFLARE_API_TOKEN` es incorrecto o no tiene permisos de Pages. | Vuelve a generar el token en Cloudflare con permisos `Account.Cloudflare Pages: Edit`. |

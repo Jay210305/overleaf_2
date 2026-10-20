@@ -75,6 +75,7 @@ test("anchored comment and reply remain usable in the workspace", async ({ page 
     await expect(page.getByText(/Signed in as Comment Owner/)).toBeVisible();
     await page.goto(`${config.APP_ORIGIN}/project/${projectId}`);
     await page.getByRole("treeitem", { name: "main.tex (file)" }).click();
+    await page.locator(".workspace-comments > summary").click();
     const panel = page.getByRole("region", { name: "Comment anchors" });
     const source = panel.getByRole("textbox", { name: "Source text for comment selection" });
     await expect(source).toHaveValue("Before target after");
@@ -173,6 +174,7 @@ test("deleted comment range shows a detached reason instead of moving", async ({
     await expect(page.getByText(/Signed in as Detached Owner/)).toBeVisible();
     await page.goto(`${config.APP_ORIGIN}/project/${projectId}`);
     await page.getByRole("treeitem", { name: "main.tex (file)" }).click();
+    await page.locator(".workspace-comments > summary").click();
     const panel = page.getByRole("region", { name: "Comment anchors" });
     const source = panel.getByRole("textbox", { name: "Source text for comment selection" });
     await expect(source).toHaveValue("Before target after");

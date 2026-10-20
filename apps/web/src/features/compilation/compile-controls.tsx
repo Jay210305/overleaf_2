@@ -202,138 +202,96 @@ export function CompileControls({
 
   return (
     <div data-testid="compile-controls" className={`compile-controls-bar ${className}`}>
-      {/* Left: Engine Selector & Cache toggle */}
-      <div className="compile-group compile-group-engine">
-        <select
-          data-testid="engine-select"
-          aria-label="Compiler engine"
-          value={compiler}
-          onChange={(e) => setCompiler(e.target.value as Compiler)}
-          disabled={isCompiling}
-          className="bg-neutral-900 border border-neutral-700 rounded px-2 py-1 text-xs text-neutral-200"
-          style={{
-            backgroundColor: "#171717",
-            border: "1px solid #404040",
-            borderRadius: "4px",
-            padding: "4px 8px",
-            color: "#e5e5e5",
-          }}
+      <details className="compile-options">
+        <summary>
+          {compiler === "pdflatex"
+            ? "pdfLaTeX"
+            : compiler === "xelatex"
+              ? "XeLaTeX"
+              : compiler === "lualatex"
+                ? "LuaLaTeX"
+                : "LaTeX"}{" "}
+          options
+        </summary>
+        <div className="compile-options-panel">
+          <label>
+            Compiler engine
+            <select
+              data-testid="engine-select"
+              aria-label="Compiler engine"
+              value={compiler}
+              onChange={(event) => setCompiler(event.target.value as Compiler)}
+              disabled={isCompiling}
+            >
+              <option value="pdflatex">pdfLaTeX</option>
+              <option value="xelatex">XeLaTeX</option>
+              <option value="lualatex">LuaLaTeX</option>
+              <option value="latex">LaTeX (DVI)</option>
+            </select>
+          </label>
+          <label className="compile-clean-toggle">
+            <input
+              type="checkbox"
+              data-testid="force-clean-toggle"
+              checked={forceClean}
+              onChange={(event) => setForceClean(event.target.checked)}
+              disabled={isCompiling}
+            />
+            Clean Cache
+          </label>
+        </div>
+      </details>
+      {activeJob && (
+        <span
+          data-testid="compile-status-badge"
+          className="compile-status"
+          data-status={activeJob.status}
+          role="status"
         >
-          <option value="pdflatex">pdfLaTeX</option>
-          <option value="xelatex">XeLaTeX</option>
-          <option value="lualatex">LuaLaTeX</option>
-          <option value="latex">LaTeX (DVI)</option>
-        </select>
-
-        <label className="compile-clean-toggle">
-          <input
-            type="checkbox"
-            data-testid="force-clean-toggle"
-            checked={forceClean}
-            onChange={(e) => setForceClean(e.target.checked)}
-            disabled={isCompiling}
-            className="rounded bg-neutral-900 border-neutral-700"
-          />
-          <span>Clean Cache</span>
-        </label>
-      </div>
-
-      {/* Center: Compile status & diagnostics summary */}
-      <div className="compile-group compile-group-status">
-        {activeJob && (
-          <span
-            data-testid="compile-status-badge"
-            className="px-2 py-0.5 rounded font-mono text-xs uppercase"
-            style={{
-              padding: "2px 6px",
-              borderRadius: "4px",
-              fontFamily: "monospace",
-              backgroundColor:
-                activeJob.status === "succeeded"
-                  ? "#15803d"
-                  : activeJob.status === "failed"
-                    ? "#b91c1c"
-                    : activeJob.status === "timed_out"
-                      ? "#b45309"
-                      : activeJob.status === "cancelled"
-                        ? "#525252"
-                        : "#2563eb",
-              color: "#ffffff",
-            }}
-          >
-            {activeJob.status}
-          </span>
-        )}
-
-        {(errorCount > 0 || warningCount > 0) && (
-          <span
-            data-testid="diagnostics-count"
-            className="flex items-center gap-1 text-xs font-semibold"
-            style={{ display: "flex", alignItems: "center", gap: "4px", fontWeight: "600" }}
-          >
-            {errorCount > 0 && <span style={{ color: "#f87171" }}>{errorCount} err</span>}
-            {warningCount > 0 && <span style={{ color: "#fbbf24" }}>{warningCount} warn</span>}
-          </span>
-        )}
-
-        {errorMessage && (
-          <span
-            data-testid="compile-error-msg"
-            className="text-xs text-red-400 italic max-w-xs truncate"
-            style={{
-              color: "#f87171",
-              fontStyle: "italic",
-              maxWidth: "250px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {errorMessage}
-          </span>
-        )}
-      </div>
-
-      {/* Right: Compile Action Button & Cancel Button */}
-      <div className="compile-group compile-group-actions">
-        {isCompiling && (
-          <button
-            type="button"
-            data-testid="cancel-compile-btn"
-            onClick={handleCancel}
-            className="compile-cancel-btn"
-          >
-            Cancel
-          </button>
-        )}
-
+          {activeJob.status}
+        </span>
+      )}
+      {(errorCount > 0 || warningCount > 0) && (
+        <span data-testid="diagnostics-count" className="compile-diagnostics">
+          {errorCount} err · {warningCount} warn
+        </span>
+      )}
+      {errorMessage && (
+        <span data-testid="compile-error-msg" className="compile-error" role="alert">
+          {errorMessage}
+        </span>
+      )}
+      {isCompiling && (
         <button
           type="button"
-          data-testid="compile-button"
-          onClick={handleCompile}
-          disabled={isCompiling}
-          className="compile-submit-btn"
+          data-testid="cancel-compile-btn"
+          onClick={handleCancel}
+          className="compile-cancel-btn"
         >
-          {isCompiling ? (
-            <>
-              <span
-                data-testid="compile-loading"
-                className="animate-spin inline-block w-3 h-3 border border-white border-t-transparent rounded-full"
-                style={{
-                  display: "inline-block",
-                  width: "12px",
-                  height: "12px",
-                  border: "2px solid #fff",
-                  borderTopColor: "transparent",
-                  borderRadius: "50%",
-                }}
-              />
-              <span>Compiling...</span>
-            </>
-          ) : (
-            <span>Recompile (Ctrl+S)</span>
-          )}
+          Cancel
         </button>
-      </div>
+      )}
+      <button
+        type="button"
+        data-testid="compile-button"
+        onClick={handleCompile}
+        disabled={isCompiling}
+        className="compile-submit-btn"
+        title="Recompile (Ctrl+Enter or Ctrl+S)"
+      >
+        {isCompiling ? (
+          <>
+            <span data-testid="compile-loading" className="compile-spinner" aria-hidden="true" />
+            <span>Compiling...</span>
+          </>
+        ) : (
+          <>
+            <span aria-hidden="true">▷</span>
+            <span>Recompile</span>
+            <kbd>Ctrl ↵</kbd>
+          </>
+        )}
+      </button>
     </div>
   );
 }

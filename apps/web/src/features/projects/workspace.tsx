@@ -50,6 +50,7 @@ export function ProjectWorkspace({
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showGitHubSync, setShowGitHubSync] = useState(false);
   const [showPdf, setShowPdf] = useState(defaultShowCompile);
+  const [compactPanel, setCompactPanel] = useState<"files" | "editor" | "pdf">("editor");
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [showReferencesModal, setShowReferencesModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
@@ -63,7 +64,9 @@ export function ProjectWorkspace({
   const [compareBaseNo, setCompareBaseNo] = useState<number | null>(null);
   const [compareTargetNo, setCompareTargetNo] = useState<number | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [latestJob, setLatestJob] = useState<CompilationView | null>(null);
+  const [latestCompileStatus, setLatestCompileStatus] = useState<CompilationView["status"] | null>(
+    null,
+  );
   const [uploadVersion, setUploadVersion] = useState(0);
   const [bibSource, setBibSource] = useState("");
   const [bibFiles, setBibFiles] = useState<Array<{ id: string; name: string }>>([]);
@@ -182,7 +185,12 @@ export function ProjectWorkspace({
   }
 
   return (
-    <div className="project-workspace" role="region" aria-label="Project workspace">
+    <div
+      className="project-workspace"
+      data-panel={compactPanel}
+      role="region"
+      aria-label="Project workspace"
+    >
       <header className="workspace-header">
         <nav aria-label="Workspace breadcrumbs">
           <Link to="/dashboard">Projects</Link>
@@ -198,82 +206,141 @@ export function ProjectWorkspace({
           >
             {showPdf ? "Hide PDF" : "Show PDF"}
           </button>
-          <button
-            type="button"
-            className="ws-action"
-            onClick={() => setShowSearchModal(true)}
-            aria-haspopup="dialog"
+          <details
+            className="workspace-tools"
+            onClick={(event) => {
+              if ((event.target as HTMLElement).closest("button")) event.currentTarget.open = false;
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") {
+                event.currentTarget.open = false;
+                event.currentTarget.querySelector("summary")?.focus();
+              }
+            }}
           >
-            Search
-          </button>
+            <summary className="ws-action">Tools</summary>
+            <div className="workspace-tools-list">
+              <button
+                type="button"
+                className="ws-action"
+                onClick={() => setShowSearchModal(true)}
+                aria-haspopup="dialog"
+              >
+                Search
+              </button>
+              <button
+                type="button"
+                className="ws-action"
+                onClick={() => setShowReferencesModal(true)}
+                aria-haspopup="dialog"
+              >
+                References
+              </button>
+              <button
+                type="button"
+                className="ws-action"
+                onClick={() => setShowHistoryModal(true)}
+                aria-haspopup="dialog"
+              >
+                History
+              </button>
+              <button
+                type="button"
+                className="ws-action"
+                onClick={() => setShowGitHubSync((value) => !value)}
+                aria-expanded={showGitHubSync}
+                aria-controls="github-sync-workspace"
+              >
+                GitHub Sync
+              </button>
+              <button
+                type="button"
+                className="ws-action"
+                onClick={() => setShowSettingsModal(true)}
+                aria-haspopup="dialog"
+                aria-label="Open project settings"
+              >
+                Project Settings
+              </button>
+              <button
+                type="button"
+                className={`ws-action ws-chat-toggle${showChat ? " active" : ""}`}
+                onClick={() => setShowChat((value) => !value)}
+                aria-haspopup="dialog"
+                aria-expanded={showChat}
+                aria-controls="project-chat-drawer"
+              >
+                Chat
+                {chatMessageCount > 0 && (
+                  <span className="ws-chat-count" aria-label={`${chatMessageCount} messages`}>
+                    {chatMessageCount}
+                  </span>
+                )}
+              </button>
+              <button
+                type="button"
+                className="ws-action ws-download-zip"
+                onClick={() => void handleDownloadZip()}
+                disabled={downloadingZip}
+              >
+                {downloadingZip ? "Preparing ZIP…" : "Download ZIP"}
+              </button>
+            </div>
+          </details>
           <button
             type="button"
-            className="ws-action"
-            onClick={() => setShowReferencesModal(true)}
-            aria-haspopup="dialog"
-          >
-            References
-          </button>
-          <button
-            type="button"
-            className="ws-action"
-            onClick={() => setShowHistoryModal(true)}
-            aria-haspopup="dialog"
-          >
-            History
-          </button>
-          <button
-            type="button"
-            className="ws-action"
-            onClick={() => setShowGitHubSync((value) => !value)}
-            aria-expanded={showGitHubSync}
-            aria-controls="github-sync-workspace"
-          >
-            GitHub Sync
-          </button>
-          <button
-            type="button"
-            className="ws-action"
+            className="ws-action ws-share"
             onClick={() => setShowShareDialog(true)}
             aria-haspopup="dialog"
             aria-label="Share project"
           >
             Share
           </button>
-          <button
-            type="button"
-            className="ws-action"
-            onClick={() => setShowSettingsModal(true)}
-            aria-haspopup="dialog"
-            aria-label="Open project settings"
-          >
-            Project Settings
-          </button>
-          <button
-            type="button"
-            className={`ws-action ws-chat-toggle${showChat ? " active" : ""}`}
-            onClick={() => setShowChat((value) => !value)}
-            aria-haspopup="dialog"
-            aria-expanded={showChat}
-            aria-controls="project-chat-drawer"
-          >
-            Chat
-            {chatMessageCount > 0 && (
-              <span className="ws-chat-count" aria-label={`${chatMessageCount} messages`}>
-                {chatMessageCount}
-              </span>
-            )}
-          </button>
-          <button
-            type="button"
-            className="ws-action ws-download-zip"
-            onClick={() => void handleDownloadZip()}
-            disabled={downloadingZip}
-          >
-            {downloadingZip ? "Preparing ZIP…" : "Download ZIP"}
-          </button>
+          {!loading && !error && (
+            <CompileControls
+              projectId={projectId}
+              defaultCompiler={project?.compiler ?? "pdflatex"}
+              apiBaseUrl={apiUrl}
+              onCompileStart={() => setLatestCompileStatus("queued")}
+              onCompileError={() => setLatestCompileStatus("failed")}
+              onCompileComplete={(job) => {
+                setLatestCompileStatus(job.status);
+                if (job.status === "succeeded") {
+                  setPdfUrl(
+                    `${apiUrl}/projects/${projectId}/compilations/${job.id}/artifacts/output.pdf`,
+                  );
+                }
+              }}
+            />
+          )}
         </div>
       </header>
+      <div className="workspace-compact-nav" role="group" aria-label="Workspace view">
+        <button
+          type="button"
+          aria-pressed={compactPanel === "files"}
+          onClick={() => setCompactPanel("files")}
+        >
+          Files
+        </button>
+        <button
+          type="button"
+          aria-pressed={compactPanel === "editor"}
+          onClick={() => setCompactPanel("editor")}
+        >
+          Editor
+        </button>
+        <button
+          type="button"
+          aria-pressed={compactPanel === "pdf"}
+          onClick={() => {
+            setShowPdf(true);
+            setCompactPanel("pdf");
+          }}
+        >
+          PDF
+        </button>
+      </div>
 
       {loading && (
         <div role="status" aria-live="polite">
@@ -313,6 +380,7 @@ export function ProjectWorkspace({
                 onSelectNode={(node) => {
                   setSelectedNode(node);
                   setLiveFileId(null);
+                  setCompactPanel("editor");
                 }}
                 refreshVersion={uploadVersion}
                 onRequestUpload={() => setShowUploadModal(true)}
@@ -333,7 +401,7 @@ export function ProjectWorkspace({
                           className="btn btn-sm btn-secondary"
                           onClick={() => setLiveFileId(null)}
                         >
-                          View Read-Only
+                          Stop editing
                         </button>
                       ) : (
                         <button
@@ -341,7 +409,7 @@ export function ProjectWorkspace({
                           className="btn btn-sm btn-primary"
                           onClick={() => setLiveFileId(selectedNode.id)}
                         >
-                          Join live editor
+                          Start editing
                         </button>
                       )}
                     </div>
@@ -364,12 +432,15 @@ export function ProjectWorkspace({
                       apiUrl={apiUrl}
                     />
                   )}
-                  <CommentAnchors
-                    projectId={projectId}
-                    fileId={selectedNode.id}
-                    apiUrl={apiUrl}
-                    csrfToken={csrfToken}
-                  />
+                  <details className="workspace-comments">
+                    <summary>Comments</summary>
+                    <CommentAnchors
+                      projectId={projectId}
+                      fileId={selectedNode.id}
+                      apiUrl={apiUrl}
+                      csrfToken={csrfToken}
+                    />
+                  </details>
                 </div>
               ) : selectedNode?.kind === "FILE" && selectedNode.contentKind === "BINARY" ? (
                 <div className="selected-node-panel">
@@ -417,28 +488,22 @@ export function ProjectWorkspace({
             {showPdf && (
               <aside className="workspace-pdf-pane" aria-label="PDF Preview and Compilation">
                 <div className="pdf-pane-header">
-                  <CompileControls
-                    projectId={projectId}
-                    defaultCompiler={project?.compiler ?? "pdflatex"}
-                    apiBaseUrl={apiUrl}
-                    onCompileComplete={(job) => {
-                      setLatestJob(job);
-                      if (job.status === "succeeded") {
-                        setPdfUrl(
-                          `${apiUrl}/projects/${projectId}/compilations/${job.id}/artifacts/output.pdf`,
-                        );
-                      }
-                    }}
-                  />
+                  <h2>PDF preview</h2>
+                  <span>
+                    {pdfUrl ? "Last successful compilation" : "Your compiled document appears here"}
+                  </span>
                 </div>
                 <div className="pdf-pane-body">
                   <PdfViewer
                     projectId={projectId}
                     pdfUrl={pdfUrl}
+                    isStale={Boolean(
+                      pdfUrl &&
+                      latestCompileStatus &&
+                      ["failed", "timed_out", "cancelled"].includes(latestCompileStatus),
+                    )}
                     lastCompileStatus={
-                      latestJob?.status === "cancel_requested"
-                        ? "cancelled"
-                        : (latestJob?.status ?? null)
+                      latestCompileStatus === "cancel_requested" ? "cancelled" : latestCompileStatus
                     }
                     onDownload={() => {
                       if (pdfUrl) window.open(pdfUrl, "_blank");
