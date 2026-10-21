@@ -118,9 +118,9 @@ describe("S05-T12 authenticated ZIP import intake", () => {
     const bytes = validZip();
     const payload = { sizeBytes: bytes.length, sha256: digest(bytes) };
     expect((await presign({})).statusCode).toBe(400);
-    expect((await presign({ sizeBytes: 201 * 1024 * 1024, sha256: digest(bytes) })).statusCode).toBe(
-      413,
-    );
+    expect(
+      (await presign({ sizeBytes: 201 * 1024 * 1024, sha256: digest(bytes) })).statusCode,
+    ).toBe(413);
     expect((await presign(payload, { cookie: "session=invalid" })).statusCode).toBe(401);
     expect((await presign(payload, { origin: "https://evil.test" })).statusCode).toBe(403);
     expect((await presign(payload, { "x-csrf-token": "wrong" })).statusCode).toBe(403);

@@ -60,6 +60,15 @@ async function sessionCsrf(apiUrl: string, supplied?: string): Promise<string> {
   return token;
 }
 
+/** Local `datetime-local` value seven days ahead, used as the default expiry. */
+export function defaultLinkExpiry(now: Date = new Date()): string {
+  const next = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${next.getFullYear()}-${pad(next.getMonth() + 1)}-${pad(next.getDate())}T${pad(
+    next.getHours(),
+  )}:${pad(next.getMinutes())}`;
+}
+
 function roleOptions() {
   return (
     <>
@@ -94,9 +103,11 @@ export function ShareDialog({
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<ShareRole>("EDITOR");
   const [linkRole, setLinkRole] = useState<ShareRole>("VIEWER");
-  const [linkExpiry, setLinkExpiry] = useState("");
+  const [linkExpiry, setLinkExpiry] = useState(defaultLinkExpiry);
   const [linkMaxUses, setLinkMaxUses] = useState("");
   const [createdUrl, setCreatedUrl] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [expiryMode, setExpiryMode] = useState<"date" | "permanent">("date");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -233,6 +244,17 @@ export function ShareDialog({
       setNotice("Invitation sent.");
       await load();
     });
+  }
+
+  async function copyShareUrl() {
+    if (!createdUrl) return;
+    try {
+      await navigator.clipboard.writeText(createdUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setError("Copy failed. Select the link and copy it manually.");
+    }
   }
 
   function submitLink(event: FormEvent) {
@@ -429,8 +451,37 @@ export function ShareDialog({
                       {roleOptions()}
                     </select>
                   </label>
+                  <fieldset className="share-expiry-fieldset">
+                    <legend>Link validity</legend>
+                    <label className="share-expiry-option">
+                      <input
+                        type="radio"
+                        name="share-expiry-mode"
+                        value="date"
+                        checked={expiryMode === "date"}
+                        onChange={() => setExpiryMode("date")}
+                      />
+                      Valid until
+                    </label>
+                    <label className="share-expiry-option is-disabled">
+                      <input
+                        type="radio"
+                        name="share-expiry-mode"
+                        value="permanent"
+                        checked={expiryMode === "permanent"}
+                        disabled
+                        onChange={() => setExpiryMode("permanent")}
+                        title="Always-valid links need server support that is not enabled yet"
+                      />
+                      Always valid (no expiry) — unavailable
+                    </label>
+                    <p className="share-expiry-hint">
+                      Every share link currently expires automatically. Permanent links stay
+                      disabled until the server accepts links without an expiry date.
+                    </p>
+                  </fieldset>
                   <label>
-                    Link expiry{" "}
+                    Link expiry
                     <input
                       type="datetime-local"
                       required
@@ -453,7 +504,7 @@ export function ShareDialog({
                   </button>
                 </form>
                 {createdUrl && (
-                  <p>
+                  <div className="share-created-link">
                     <label>
                       One-time share URL{" "}
                       <input
@@ -462,7 +513,19 @@ export function ShareDialog({
                         onFocus={(event) => event.target.select()}
                       />
                     </label>
-                  </p>
+                    <button
+                      type="button"
+                      className="share-copy-btn"
+                      onClick={() => void copyShareUrl()}
+                    >
+                      {copied ? "Copied ✓" : "Copy link"}
+                    </button>
+                    {copied && (
+                      <span role="status" className="share-copy-feedback">
+                        Link copied to the clipboard.
+                      </span>
+                    )}
+                  </div>
                 )}
                 <ul>
                   {links.map((link) => (

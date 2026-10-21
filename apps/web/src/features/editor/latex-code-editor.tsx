@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import {
+  applyRemoteSelections,
   createLatexEditorExtensions,
   getModeForFilename,
   type EditorTheme,
+  type RemoteSelection,
   createEditorKeymap,
   EditorView,
   EditorState,
+  remoteSelectionExtension,
+  revealLine,
 } from "@latex-collab/editor";
 import type { Role } from "@latex-collab/contracts";
 import type * as Y from "yjs";
@@ -26,6 +30,12 @@ export interface LatexCodeEditorProps {
   saveStatus?: "saved" | "saving" | "offline" | "error";
   errorMessage?: string | null;
   errorCode?: "FORBIDDEN" | "NOT_FOUND" | "CONFLICT" | "SERVICE_UNAVAILABLE" | null;
+  /** Cursors of every other collaborator connected to this document. */
+  remoteSelections?: RemoteSelection[];
+  /** Emits the local caret so presence can be published to collaborators. */
+  onCursorChange?: (cursor: { anchor: number; head: number; line: number; col: number }) => void;
+  /** Jump request from the outline or the diagnostics list. */
+  revealLine?: { line: number; nonce: number } | null;
 }
 
 export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
@@ -43,11 +53,19 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
   saveStatus = "saved",
   errorMessage,
   errorCode,
+  remoteSelections,
+  onCursorChange,
+  revealLine: revealRequest,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
+  const cursorListenerRef = useRef(onCursorChange);
   const [currentLine, setCurrentLine] = useState<number>(1);
   const [currentCol, setCurrentCol] = useState<number>(1);
+
+  cursorListenerRef.current = onCursorChange;
+  const remoteSelectionsRef = useRef(remoteSelections);
+  remoteSelectionsRef.current = remoteSelections;
 
   const isViewerOrReadOnly = readOnly || userRole === "VIEWER" || userRole === "REVIEWER";
   const mode = useMemo(() => getModeForFilename(fileName), [fileName]);
@@ -63,6 +81,7 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
         readOnly: isViewerOrReadOnly,
       }),
       ...(binding?.extensions ?? []),
+      remoteSelectionExtension(),
       createEditorKeymap({
         onSave,
         onCompile,
@@ -76,6 +95,12 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
           const line = update.state.doc.lineAt(mainSel.head);
           setCurrentLine(line.number);
           setCurrentCol(mainSel.head - line.from + 1);
+          cursorListenerRef.current?.({
+            anchor: mainSel.anchor,
+            head: mainSel.head,
+            line: line.number,
+            col: mainSel.head - line.from + 1,
+          });
         }
       }),
     ];
@@ -91,6 +116,9 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
     });
 
     viewRef.current = view;
+    if (remoteSelectionsRef.current && remoteSelectionsRef.current.length > 0) {
+      applyRemoteSelections(view, remoteSelectionsRef.current);
+    }
 
     return () => {
       view.destroy();
@@ -98,6 +126,20 @@ export const LatexCodeEditor: React.FC<LatexCodeEditorProps> = ({
       viewRef.current = null;
     };
   }, [fileId, isViewerOrReadOnly, mode, theme, yText]);
+
+  useEffect(() => {
+    const view = viewRef.current;
+    if (!view) return;
+    applyRemoteSelections(view, remoteSelections ?? []);
+  }, [remoteSelections]);
+
+  const revealNonce = revealRequest?.nonce;
+  const revealTarget = revealRequest?.line;
+  useEffect(() => {
+    const view = viewRef.current;
+    if (!view || revealTarget === undefined || revealNonce === undefined) return;
+    revealLine(view, revealTarget);
+  }, [revealNonce, revealTarget]);
 
   return (
     <div

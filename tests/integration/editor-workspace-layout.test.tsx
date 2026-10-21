@@ -57,11 +57,68 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+const dom = () => ({
+  editor: document.querySelector(".workspace-editor") as HTMLElement,
+  pdf: document.querySelector(".workspace-pdf-pane") as HTMLElement,
+  splitter: document.querySelector(".workspace-splitter") as HTMLElement | null,
+  sidebar: document.querySelector(".workspace-sidebar") as HTMLElement,
+});
+
 it("keeps compilation available when the PDF pane is hidden", async () => {
   await screen.findByRole("treeitem", { name: "main.tex (file)" });
-  fireEvent.click(screen.getByRole("button", { name: "Hide PDF" }));
-  expect(screen.queryByRole("complementary", { name: "PDF Preview and Compilation" })).toBeNull();
+  fireEvent.click(screen.getByTestId("view-mode-editor"));
+  expect(dom().pdf.hasAttribute("hidden")).toBe(true);
   expect(screen.getByTestId("compile-button").hasAttribute("disabled")).toBe(false);
+});
+
+it("switches between the three layout modes", async () => {
+  await screen.findByRole("treeitem", { name: "main.tex (file)" });
+  const { editor, pdf } = dom();
+  expect(editor.hasAttribute("hidden")).toBe(false);
+  expect(pdf.hasAttribute("hidden")).toBe(false);
+  expect(dom().splitter?.getAttribute("aria-orientation")).toBe("vertical");
+
+  fireEvent.click(screen.getByTestId("view-mode-pdf"));
+  expect(dom().editor.hasAttribute("hidden")).toBe(true);
+  expect(dom().pdf.hasAttribute("hidden")).toBe(false);
+  expect(dom().splitter).toBeNull();
+
+  fireEvent.click(screen.getByTestId("view-mode-editor"));
+  expect(dom().editor.hasAttribute("hidden")).toBe(false);
+  expect(dom().pdf.hasAttribute("hidden")).toBe(true);
+
+  fireEvent.click(screen.getByTestId("view-mode-split"));
+  expect(dom().editor.hasAttribute("hidden")).toBe(false);
+  expect(dom().pdf.hasAttribute("hidden")).toBe(false);
+  expect(dom().splitter).not.toBeNull();
+});
+
+it("resizes the split view from the keyboard", async () => {
+  await screen.findByRole("treeitem", { name: "main.tex (file)" });
+  const splitter = dom().splitter as HTMLElement;
+  expect(splitter.getAttribute("aria-valuenow")).toBe("52");
+  fireEvent.keyDown(splitter, { key: "ArrowLeft" });
+  expect(dom().splitter?.getAttribute("aria-valuenow")).toBe("49");
+});
+
+it("collapses and restores the file sidebar from the header toggle", async () => {
+  await screen.findByRole("treeitem", { name: "main.tex (file)" });
+  expect(dom().sidebar.hasAttribute("hidden")).toBe(false);
+  fireEvent.click(screen.getByRole("button", { name: "Hide sidebar" }));
+  expect(dom().sidebar.hasAttribute("hidden")).toBe(true);
+  fireEvent.click(screen.getByRole("button", { name: "Show sidebar" }));
+  expect(dom().sidebar.hasAttribute("hidden")).toBe(false);
+  fireEvent.click(screen.getByRole("tab", { name: "Outline" }));
+  expect(screen.getByText("No document open")).toBeTruthy();
+});
+
+it("shows the live outline of the open document and jumps to a section", async () => {
+  fireEvent.click(await screen.findByRole("treeitem", { name: "main.tex (file)" }));
+  await screen.findByTestId("source-code");
+  fireEvent.click(screen.getByRole("tab", { name: "Outline" }));
+  const heading = await screen.findByText("Introduction");
+  fireEvent.click(heading);
+  expect(screen.getByTestId("source-code")).toBeTruthy();
 });
 
 it("opens secondary tools and closes the tool list after selecting an action", async () => {
@@ -75,7 +132,7 @@ it("opens secondary tools and closes the tool list after selecting an action", a
   expect(tools.open).toBe(false);
 });
 
-it("preserves the selected document and comment draft while switching compact views", async () => {
+it("preserves the selected document and comment draft while switching layout modes", async () => {
   fireEvent.click(await screen.findByRole("treeitem", { name: "main.tex (file)" }));
   const source = await screen.findByTestId("source-code");
   expect(screen.getByRole("button", { name: "Start editing" })).toBeTruthy();
@@ -85,8 +142,8 @@ it("preserves the selected document and comment draft while switching compact vi
   const draft = screen.getByLabelText("Comment body") as HTMLTextAreaElement;
   fireEvent.change(draft, { target: { value: "Please expand this section." } });
   comments.open = false;
-  fireEvent.click(screen.getByRole("button", { name: "PDF" }));
-  fireEvent.click(screen.getByRole("button", { name: "Editor" }));
+  fireEvent.click(screen.getByTestId("view-mode-pdf"));
+  fireEvent.click(screen.getByTestId("view-mode-split"));
   expect(screen.getByTestId("source-code")).toBe(source);
   comments.open = true;
   expect(draft.value).toBe("Please expand this section.");

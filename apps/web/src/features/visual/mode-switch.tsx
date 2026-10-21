@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import * as Y from "yjs";
 import { computeTextHash, parseVisualAst, type VisualAstDocument } from "@latex-collab/editor";
 import { textStateSchema } from "@latex-collab/contracts";
@@ -217,10 +217,20 @@ export interface ReadOnlyTextDocumentProps {
   projectId: string;
   fileId: string;
   apiUrl: string;
+  /** Publishes the loaded source so the outline can be parsed live. */
+  onSourceChange?: ((source: string) => void) | undefined;
+  /** Jump request coming from the outline or the diagnostics console. */
+  revealLine?: { line: number; nonce: number } | null | undefined;
 }
 
 /** Authorized canonical source projection. No local edit is presented as saved. */
-export function ReadOnlyTextDocument({ projectId, fileId, apiUrl }: ReadOnlyTextDocumentProps) {
+export function ReadOnlyTextDocument({
+  projectId,
+  fileId,
+  apiUrl,
+  onSourceChange,
+  revealLine,
+}: ReadOnlyTextDocumentProps) {
   const [doc, setDoc] = useState<Y.Doc | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -273,6 +283,8 @@ export function ReadOnlyTextDocument({ projectId, fileId, apiUrl }: ReadOnlyText
       projectId={projectId}
       fileId={fileId}
       apiUrl={apiUrl}
+      onSourceChange={onSourceChange}
+      revealLine={revealLine ?? null}
     />
   );
 }
@@ -282,13 +294,41 @@ function ReadOnlyLoadedDocument({
   projectId,
   fileId,
   apiUrl,
+  onSourceChange,
+  revealLine,
 }: {
   yText: Y.Text;
   projectId: string;
   fileId: string;
   apiUrl: string;
+  onSourceChange?: ((source: string) => void) | undefined;
+  revealLine: { line: number; nonce: number } | null;
 }) {
   const { mode, ast, setMode } = useEditorModeSwitch({ yText });
+  const source = yText.toString();
+  const preRef = useRef<HTMLPreElement>(null);
+
+  useEffect(() => {
+    onSourceChange?.(source);
+  }, [onSourceChange, source]);
+
+  const revealNonce = revealLine?.nonce;
+  const revealTarget = revealLine?.line;
+  useEffect(() => {
+    const element = preRef.current;
+    if (!element || revealTarget === undefined || revealNonce === undefined) return;
+    window.setTimeout(() => {
+      const lineHeight = Number.parseFloat(getComputedStyle(element).lineHeight) || 20;
+      let scroller: HTMLElement | null = element.parentElement;
+      while (scroller && scroller !== document.body) {
+        const overflow = getComputedStyle(scroller).overflowY;
+        if (overflow === "auto" || overflow === "scroll") break;
+        scroller = scroller.parentElement;
+      }
+      const target = scroller ?? element;
+      target.scrollTop = Math.max(0, (revealTarget - 1) * lineHeight - target.clientHeight / 3);
+    }, 0);
+  }, [revealNonce, revealTarget]);
 
   return (
     <div role="region" aria-label="Read-only document">
@@ -297,8 +337,8 @@ function ReadOnlyLoadedDocument({
       </p>
       <EditorModeSwitch mode={mode} onSelectMode={setMode} hasErrors={ast?.hasErrors ?? false} />
       {mode === "code" ? (
-        <pre data-testid="source-code" style={{ whiteSpace: "pre-wrap" }}>
-          {yText.toString()}
+        <pre ref={preRef} data-testid="source-code" className="read-only-source" tabIndex={0}>
+          {source}
         </pre>
       ) : (
         <div data-testid="visual-document">

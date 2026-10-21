@@ -7,6 +7,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
+import * as Y from "yjs";
 import { parsePublicConfig } from "@latex-collab/config";
 import { treeViewSchema, type ProjectNodeView, type TreeView } from "@latex-collab/contracts";
 
@@ -25,9 +26,15 @@ export interface FileTreeProps {
   onRequestUpload?: (() => void) | undefined;
   onRequestDownloadZip?: (() => void) | undefined;
   downloadingZip?: boolean | undefined;
+  /** Node id of the .tex root used by the compiler. */
+  mainFileId?: string | null | undefined;
+  onSetMainFile?: ((node: ProjectNodeView) => void) | undefined;
 }
 
 type IconName =
+  | "more"
+  | "star"
+  | "copy"
   | "chevron-right"
   | "chevron-down"
   | "file"
@@ -42,6 +49,9 @@ type IconName =
   | "trash";
 
 const iconPaths: Record<IconName, string> = {
+  more: "M12 6h.01M12 12h.01M12 18h.01",
+  star: "M12 3l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-3-5.3 3 1.1-6L3.4 9.3l6-.8z",
+  copy: "M9 9h10v12H9zM5 3h10v4M5 3v12h4",
   "chevron-right": "M9 18l6-6-6-6",
   "chevron-down": "M6 9l6 6 6-6",
   file: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6",
@@ -85,6 +95,8 @@ export function FileTree({
   onRequestUpload,
   onRequestDownloadZip,
   downloadingZip = false,
+  mainFileId = null,
+  onSetMainFile,
 }: FileTreeProps) {
   const [nodes, setNodes] = useState<ProjectNodeView[]>([]);
   const [treeVersion, setTreeVersion] = useState<number>(0);
@@ -101,6 +113,11 @@ export function FileTree({
   const [dialogError, setDialogError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [openMenuNodeId, setOpenMenuNodeId] = useState<string | null>(null);
+  const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
+  const [dropTargetId, setDropTargetId] = useState<string | null>(null);
+  const [rowBusyNodeId, setRowBusyNodeId] = useState<string | null>(null);
+  const menuTriggerRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
 
   const [internalCsrf, setInternalCsrf] = useState<string | null>(() => {
     if (csrfToken) return csrfToken;
@@ -360,16 +377,10 @@ export function FileTree({
     }
   };
 
-  const handleMoveSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!targetNode) return;
-
-    setIsSubmitting(true);
-    setDialogError(null);
-
-    try {
+  const moveNode = useCallback(
+    async (node: ProjectNodeView, targetParentId: string | null): Promise<string | null> => {
       const csrf = await getCsrfToken();
-      const res = await fetch(`${apiUrl}/projects/${projectId}/nodes/${targetNode.id}/move`, {
+      const res = await fetch(`${apiUrl}/projects/${projectId}/nodes/${node.id}/move`, {
         method: "PATCH",
         headers: {
           "content-type": "application/json",
@@ -378,23 +389,31 @@ export function FileTree({
           "if-match": `"${treeVersion}"`,
         },
         credentials: "include",
-        body: JSON.stringify({ targetParentId: dialogTargetParentId }),
+        body: JSON.stringify({ targetParentId }),
       });
+      if (res.ok) return null;
+      if (res.status === 400) return "Invalid destination: cannot move into self or descendant.";
+      if (res.status === 409) return "Name collision at destination.";
+      if (res.status === 412) return "Tree modified concurrently. Please refresh.";
+      return "Failed to move node.";
+    },
+    [apiUrl, getCsrfToken, projectId, treeVersion],
+  );
 
-      if (!res.ok) {
-        if (res.status === 400) {
-          setDialogError("Invalid destination: cannot move into self or descendant.");
-        } else if (res.status === 409) {
-          setDialogError("Name collision at destination.");
-        } else if (res.status === 412) {
-          setDialogError("Tree modified concurrently. Please refresh.");
-        } else {
-          setDialogError("Failed to move node.");
-        }
+  const handleMoveSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!targetNode) return;
+
+    setIsSubmitting(true);
+    setDialogError(null);
+
+    try {
+      const failure = await moveNode(targetNode, dialogTargetParentId);
+      if (failure) {
+        setDialogError(failure);
         await fetchTree();
         return;
       }
-
       setStatusMessage(`Moved ${targetNode.name}`);
       closeDialog();
       await fetchTree();
@@ -447,6 +466,193 @@ export function FileTree({
       setIsSubmitting(false);
     }
   };
+
+  /** Is `candidateFolderId` inside the subtree of `node`? */
+  const isDescendant = (node: ProjectNodeView, candidateFolderId: string): boolean => {
+    let current = nodes.find((item) => item.id === candidateFolderId);
+    while (current) {
+      if (current.id === node.id) return true;
+      const parentId: string | null = current.parentId;
+      current = parentId ? nodes.find((item) => item.id === parentId) : undefined;
+    }
+    return false;
+  };
+
+  const canDropInto = (dragged: ProjectNodeView, folderId: string): boolean => {
+    if (dragged.id === folderId) return false;
+    if (dragged.kind === "FOLDER" && isDescendant(dragged, folderId)) return false;
+    return true;
+  };
+
+  const handleRowDrop = (target: ProjectNodeView | null) => {
+    const dragged = nodes.find((node) => node.id === draggingNodeId);
+    setDraggingNodeId(null);
+    setDropTargetId(null);
+    if (!dragged) return;
+    const targetParentId = target ? target.id : null;
+    if (dragged.parentId === targetParentId) return;
+    if (target && !canDropInto(dragged, target.id)) {
+      setStatusMessage("A folder cannot be moved inside itself.");
+      return;
+    }
+    setRowBusyNodeId(dragged.id);
+    void (async () => {
+      try {
+        const failure = await moveNode(dragged, targetParentId);
+        setStatusMessage(failure ?? `Moved ${dragged.name}`);
+        await fetchTree();
+        if (target) setExpandedFolders((previous) => new Set([...previous, target.id]));
+      } catch {
+        setStatusMessage("Network error while moving the item.");
+        await fetchTree();
+      } finally {
+        setRowBusyNodeId(null);
+      }
+    })();
+  };
+
+  const uniqueCopyName = (node: ProjectNodeView): string => {
+    const siblings = nodes.filter((item) => item.parentId === node.parentId);
+    const dot = node.name.lastIndexOf(".");
+    const stem = dot > 0 ? node.name.slice(0, dot) : node.name;
+    const extension = dot > 0 ? node.name.slice(dot) : "";
+    let candidate = `${stem}-copy${extension}`;
+    let counter = 2;
+    while (siblings.some((item) => item.name === candidate)) {
+      candidate = `${stem}-copy-${counter}${extension}`;
+      counter += 1;
+    }
+    return candidate;
+  };
+
+  const downloadNode = async (node: ProjectNodeView) => {
+    if (node.kind !== "FILE") return;
+    try {
+      if (node.contentKind === "BINARY") {
+        window.open(`${apiUrl}/projects/${projectId}/files/${node.id}/download`, "_blank");
+        return;
+      }
+      const response = await fetch(`${apiUrl}/projects/${projectId}/files/${node.id}/text`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+      });
+      if (!response.ok) throw new Error(String(response.status));
+      const state = (await response.json()) as { updateBase64: string };
+      const sourceDocument = new Y.Doc();
+      Y.applyUpdate(
+        sourceDocument,
+        Uint8Array.from(atob(state.updateBase64), (char) => char.charCodeAt(0)),
+      );
+      const blob = new Blob([sourceDocument.getText("content").toString()], {
+        type: node.mime || "text/plain",
+      });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = node.name;
+      anchor.click();
+      URL.revokeObjectURL(url);
+      setStatusMessage(`Downloaded ${node.name}`);
+    } catch {
+      setStatusMessage(`Could not download ${node.name}.`);
+    }
+  };
+
+  const duplicateNode = async (node: ProjectNodeView) => {
+    setRowBusyNodeId(node.id);
+    try {
+      const copyName = uniqueCopyName(node);
+      const csrf = await getCsrfToken();
+      const created = await fetch(`${apiUrl}/projects/${projectId}/nodes`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+          ...(csrf ? { "x-csrf-token": csrf } : {}),
+          "if-match": `"${treeVersion}"`,
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: copyName,
+          parentId: node.parentId,
+          kind: "FILE",
+          mime: node.mime,
+          contentKind: "TEXT",
+        }),
+      });
+      if (!created.ok) {
+        setStatusMessage(`Could not duplicate ${node.name}.`);
+        await fetchTree();
+        return;
+      }
+      const copy = (await created.json()) as ProjectNodeView;
+      const sourceResponse = await fetch(`${apiUrl}/projects/${projectId}/files/${node.id}/text`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+      });
+      if (!sourceResponse.ok) throw new Error("source unreadable");
+      const sourceState = (await sourceResponse.json()) as { updateBase64: string };
+      const sourceDoc = new Y.Doc();
+      Y.applyUpdate(
+        sourceDoc,
+        Uint8Array.from(atob(sourceState.updateBase64), (char) => char.charCodeAt(0)),
+      );
+      const copyDoc = new Y.Doc();
+      copyDoc.getText("content").insert(0, sourceDoc.getText("content").toString());
+      const update = Y.encodeStateAsUpdate(copyDoc);
+      const emptyVector = Y.encodeStateVector(new Y.Doc());
+      const base64 = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes));
+      const written = await fetch(`${apiUrl}/projects/${projectId}/files/${copy.id}/text`, {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+          ...(csrf ? { "x-csrf-token": csrf } : {}),
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          updateBase64: base64(update),
+          baseStateVectorBase64: base64(emptyVector),
+        }),
+      });
+      setStatusMessage(
+        written.ok ? `Duplicated ${node.name}` : `Created ${copyName} without content.`,
+      );
+      await fetchTree();
+    } catch {
+      setStatusMessage(`Could not duplicate ${node.name}.`);
+      await fetchTree();
+    } finally {
+      setRowBusyNodeId(null);
+    }
+  };
+
+  const closeMenu = (restoreFocus: boolean) => {
+    const nodeId = openMenuNodeId;
+    setOpenMenuNodeId(null);
+    if (restoreFocus && nodeId) menuTriggerRefs.current.get(nodeId)?.focus();
+  };
+
+  useEffect(() => {
+    if (!openMenuNodeId) return;
+    const menuNodeId = openMenuNodeId;
+    const onPointerDown = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest(".file-tree-row-menu")) return;
+      setOpenMenuNodeId(null);
+    };
+    const onKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setOpenMenuNodeId(null);
+      menuTriggerRefs.current.get(menuNodeId)?.focus();
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [openMenuNodeId]);
 
   // Keyboard navigation within the tree
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -534,12 +740,53 @@ export function FileTree({
             aria-level={level}
             aria-label={`${node.name} (${isFolder ? "folder" : "file"})`}
             tabIndex={isFocused ? 0 : -1}
+            draggable
+            onDragStart={(event) => {
+              event.dataTransfer.effectAllowed = "move";
+              event.dataTransfer.setData("text/plain", node.id);
+              setDraggingNodeId(node.id);
+              setOpenMenuNodeId(null);
+            }}
+            onDragEnd={() => {
+              setDraggingNodeId(null);
+              setDropTargetId(null);
+            }}
+            onDragOver={(event) => {
+              if (!draggingNodeId) return;
+              const dragged = nodes.find((item) => item.id === draggingNodeId);
+              if (!dragged) return;
+              if (isFolder) {
+                if (!canDropInto(dragged, node.id)) return;
+                event.preventDefault();
+                event.dataTransfer.dropEffect = "move";
+                if (dropTargetId !== node.id) setDropTargetId(node.id);
+              }
+            }}
+            onDragLeave={(event) => {
+              if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+              if (dropTargetId === node.id) setDropTargetId(null);
+            }}
+            onDrop={(event) => {
+              if (!isFolder) return;
+              event.preventDefault();
+              event.stopPropagation();
+              handleRowDrop(node);
+            }}
             onClick={() => {
               setFocusedNodeId(node.id);
               if (isFolder) toggleFolder(node.id);
               if (onSelectNode) onSelectNode(node);
             }}
-            className={`file-tree-row${isSelected ? " selected" : ""}${isFolder ? " is-folder" : ""}`}
+            className={[
+              "file-tree-row",
+              isSelected ? "selected" : "",
+              isFolder ? "is-folder" : "",
+              draggingNodeId === node.id ? "dragging" : "",
+              dropTargetId === node.id ? "drop-target" : "",
+              rowBusyNodeId === node.id ? "busy" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
             style={{ paddingLeft: `${level * 14 + 6}px` }}
           >
             <span className="file-tree-label">
@@ -558,64 +805,160 @@ export function FileTree({
               <span className="file-tree-name" title={node.name}>
                 {node.name}
               </span>
+              {node.id === mainFileId && (
+                <span className="file-tree-main-badge" title="Compiled main document">
+                  Main
+                </span>
+              )}
             </span>
 
-            {/* Actions Context Menu Buttons */}
-            <span
-              role="group"
-              aria-label={`Actions for ${node.name}`}
-              className="file-tree-actions"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {isFolder && (
-                <button
-                  type="button"
-                  aria-label={`Add file to ${node.name}`}
-                  title="Add file"
-                  onClick={() => openCreateDialog("create-file", node.id)}
-                  className="tree-row-action"
+            <span className="file-tree-actions">
+              <button
+                type="button"
+                ref={(element) => {
+                  if (element) menuTriggerRefs.current.set(node.id, element);
+                  else menuTriggerRefs.current.delete(node.id);
+                }}
+                aria-label={`Actions for ${node.name}`}
+                aria-haspopup="menu"
+                aria-expanded={openMenuNodeId === node.id}
+                title="More actions"
+                className="tree-row-action tree-menu-trigger"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOpenMenuNodeId((current) => (current === node.id ? null : node.id));
+                }}
+              >
+                <TreeIcon name="more" className="tree-menu-dots" />
+              </button>
+
+              {openMenuNodeId === node.id && (
+                <div
+                  role="menu"
+                  aria-label={`Actions menu for ${node.name}`}
+                  className="file-tree-row-menu"
+                  onClick={(event) => event.stopPropagation()}
                 >
-                  <TreeIcon name="file-plus" />
-                </button>
+                  {isFolder && (
+                    <>
+                      <button
+                        type="button"
+                        role="menuitem"
+                        className="tree-menu-item"
+                        aria-label={`Add file to ${node.name}`}
+                        onClick={() => {
+                          closeMenu(false);
+                          openCreateDialog("create-file", node.id);
+                        }}
+                      >
+                        New file
+                      </button>
+                      <button
+                        type="button"
+                        role="menuitem"
+                        className="tree-menu-item"
+                        aria-label={`Add folder to ${node.name}`}
+                        onClick={() => {
+                          closeMenu(false);
+                          openCreateDialog("create-folder", node.id);
+                        }}
+                      >
+                        New folder
+                      </button>
+                      <hr className="tree-menu-separator" />
+                    </>
+                  )}
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="tree-menu-item"
+                    aria-label={`Rename ${node.name}`}
+                    onClick={() => {
+                      closeMenu(false);
+                      openRenameDialog(node);
+                    }}
+                  >
+                    Rename
+                  </button>
+                  {node.kind === "FILE" && (
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="tree-menu-item"
+                      aria-label={`Download ${node.name}`}
+                      onClick={() => {
+                        closeMenu(false);
+                        void downloadNode(node);
+                      }}
+                    >
+                      Download
+                    </button>
+                  )}
+                  {node.kind === "FILE" && (
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="tree-menu-item"
+                      aria-label={`Duplicate ${node.name}`}
+                      disabled={node.contentKind !== "TEXT"}
+                      title={
+                        node.contentKind === "TEXT"
+                          ? "Create a copy in the same folder"
+                          : "Only text files can be duplicated"
+                      }
+                      onClick={() => {
+                        closeMenu(false);
+                        void duplicateNode(node);
+                      }}
+                    >
+                      Duplicate
+                    </button>
+                  )}
+                  {node.kind === "FILE" &&
+                    node.name.toLowerCase().endsWith(".tex") &&
+                    onSetMainFile && (
+                      <button
+                        type="button"
+                        role="menuitem"
+                        className="tree-menu-item"
+                        aria-label={`Set ${node.name} as main document`}
+                        disabled={node.id === mainFileId}
+                        onClick={() => {
+                          closeMenu(false);
+                          onSetMainFile(node);
+                        }}
+                      >
+                        <TreeIcon name="star" className="tree-menu-icon" />
+                        {node.id === mainFileId ? "Main document" : "Set as main document"}
+                      </button>
+                    )}
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="tree-menu-item"
+                    aria-label={`Move ${node.name}`}
+                    onClick={() => {
+                      closeMenu(false);
+                      openMoveDialog(node);
+                    }}
+                  >
+                    Move to…
+                  </button>
+                  <hr className="tree-menu-separator" />
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="tree-menu-item danger"
+                    aria-label={`Delete ${node.name}`}
+                    onClick={() => {
+                      closeMenu(false);
+                      openDeleteDialog(node);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
               )}
-              {isFolder && (
-                <button
-                  type="button"
-                  aria-label={`Add folder to ${node.name}`}
-                  title="Add folder"
-                  onClick={() => openCreateDialog("create-folder", node.id)}
-                  className="tree-row-action"
-                >
-                  <TreeIcon name="folder-plus" />
-                </button>
-              )}
-              <button
-                type="button"
-                aria-label={`Rename ${node.name}`}
-                title="Rename"
-                onClick={() => openRenameDialog(node)}
-                className="tree-row-action"
-              >
-                <TreeIcon name="pencil" />
-              </button>
-              <button
-                type="button"
-                aria-label={`Move ${node.name}`}
-                title="Move"
-                onClick={() => openMoveDialog(node)}
-                className="tree-row-action"
-              >
-                <TreeIcon name="move" />
-              </button>
-              <button
-                type="button"
-                aria-label={`Delete ${node.name}`}
-                title="Delete"
-                onClick={() => openDeleteDialog(node)}
-                className="tree-row-action danger"
-              >
-                <TreeIcon name="trash" />
-              </button>
             </span>
           </div>
 
@@ -707,7 +1050,23 @@ export function FileTree({
         aria-label="Project files tree"
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        className="file-tree-scroll"
+        onDragOver={(event) => {
+          if (!draggingNodeId) return;
+          const dragged = nodes.find((item) => item.id === draggingNodeId);
+          if (!dragged || dragged.parentId === null) return;
+          event.preventDefault();
+          if (dropTargetId !== "__root__") setDropTargetId("__root__");
+        }}
+        onDragLeave={(event) => {
+          if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+          if (dropTargetId === "__root__") setDropTargetId(null);
+        }}
+        onDrop={(event) => {
+          if (!draggingNodeId) return;
+          event.preventDefault();
+          handleRowDrop(null);
+        }}
+        className={`file-tree-scroll${dropTargetId === "__root__" ? " drop-target-root" : ""}`}
       >
         {loading && <div className="file-tree-empty">Loading files...</div>}
         {error && (
@@ -716,9 +1075,17 @@ export function FileTree({
           </div>
         )}
         {!loading && !error && nodes.length === 0 && (
-          <div className="file-tree-empty">No files in project.</div>
+          <div className="file-tree-empty">
+            <p>No files in project.</p>
+            <p className="file-tree-empty-hint">Create a file or drop sources here to start.</p>
+          </div>
         )}
         {!loading && !error && renderTreeNodes(null, 1)}
+        {draggingNodeId && (
+          <p className="file-tree-drop-hint" aria-hidden="true">
+            Drop on a folder, or here to move to the project root.
+          </p>
+        )}
       </div>
 
       {/* Modals & Dialogs */}

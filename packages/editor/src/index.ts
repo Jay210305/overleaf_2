@@ -8,6 +8,13 @@ export * from "./spellcheck.js";
 export * from "./visual-patch.js";
 export * from "./visual-academic-patch.js";
 export {
+  setRemoteSelections,
+  remoteSelectionExtension,
+  applyRemoteSelections,
+  revealLine,
+  type RemoteSelection,
+} from "./remote-selection.js";
+export {
   computeTextHash,
   parseVisualAst,
   serializeVisualAst,

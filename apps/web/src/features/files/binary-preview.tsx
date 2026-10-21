@@ -115,14 +115,20 @@ export const BinaryPreview: React.FC<BinaryPreviewProps> = ({ projectId, apiUrl,
 
   if (node.mime === inlinePdfType) {
     return (
-      <embed
-        src={objectUrl}
-        type="application/pdf"
-        data-testid="binary-pdf"
-        className="w-full min-h-96"
-      />
+      <div className="binary-pdf-frame">
+        <embed
+          src={objectUrl}
+          type="application/pdf"
+          data-testid="binary-pdf"
+          title={`${node.name} preview`}
+        />
+      </div>
     );
   }
 
-  return <img src={objectUrl} alt={node.name} data-testid="binary-image" className="max-w-full" />;
+  return (
+    <div className="binary-image-frame">
+      <img src={objectUrl} alt={node.name} data-testid="binary-image" />
+    </div>
+  );
 };

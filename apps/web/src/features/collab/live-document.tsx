@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as Y from "yjs";
 import { durableAckSchema, ticketViewSchema } from "@latex-collab/contracts";
+import type { RemoteSelection } from "@latex-collab/editor";
 import {
   applyFigureCaptionPatch,
   applyFigureLabelPatch,
@@ -17,6 +18,7 @@ import { AcademicVisualNodesView } from "../visual/academic-nodes.js";
 import { BasicVisualNodesView } from "../visual/basic-nodes.js";
 import { VisualLiteralFallback } from "../visual/fallback-node.js";
 import { EditorModeSwitch } from "../visual/mode-switch.js";
+import { collaboratorColor, type CollaboratorUser } from "./presence.js";
 
 type SaveStatus = "saved" | "saving" | "offline" | "error";
 
@@ -47,6 +49,11 @@ export interface LiveTextDocumentProps {
   apiUrl: string;
   csrfToken?: string | undefined;
   onExit?: (() => void) | undefined;
+  /** Identity published to collaborators for cursors and presence avatars. */
+  currentUser?: { id: string; name: string } | undefined;
+  onCollaboratorsChange?: ((collaborators: CollaboratorUser[]) => void) | undefined;
+  onSourceChange?: ((source: string) => void) | undefined;
+  revealLine?: { line: number; nonce: number } | null | undefined;
 }
 
 export function LiveTextDocument({
@@ -56,6 +63,10 @@ export function LiveTextDocument({
   apiUrl,
   csrfToken,
   onExit,
+  currentUser,
+  onCollaboratorsChange,
+  onSourceChange,
+  revealLine,
 }: LiveTextDocumentProps) {
   const doc = useMemo(() => new Y.Doc(), [projectId, fileId]);
   const yText = doc.getText("content");
@@ -65,6 +76,19 @@ export function LiveTextDocument({
   const [status, setStatus] = useState<SaveStatus>("offline");
   const [message, setMessage] = useState<string | null>(null);
   const [sourceVersion, setSourceVersion] = useState(0);
+  const [collaborators, setCollaborators] = useState<CollaboratorUser[]>([]);
+  const [remoteSelections, setRemoteSelections] = useState<RemoteSelection[]>([]);
+  const awarenessSenderRef = useRef<
+    ((cursor: { anchor: number; head: number; line: number; col: number }) => void) | null
+  >(null);
+  const collaboratorsListenerRef = useRef(onCollaboratorsChange);
+  const sourceListenerRef = useRef(onSourceChange);
+  collaboratorsListenerRef.current = onCollaboratorsChange;
+  sourceListenerRef.current = onSourceChange;
+
+  useEffect(() => {
+    collaboratorsListenerRef.current?.(collaborators);
+  }, [collaborators]);
 
   useEffect(() => {
     let stopped = false;
@@ -73,6 +97,46 @@ export function LiveTextDocument({
     let retryCount = 0;
     let connected = false;
     const pending: Array<{ update: Uint8Array; vector: Uint8Array }> = [];
+    const peers = new Map<string, CollaboratorUser>();
+    const peerSelections = new Map<string, RemoteSelection>();
+    let lastCursor: { anchor: number; head: number; line: number; col: number } | null = null;
+    let lastSentAt = 0;
+    let throttleTimer: ReturnType<typeof setTimeout> | null = null;
+    const localName = currentUser?.name ?? "You";
+    const localId = currentUser?.id ?? localName;
+    const publish = () => {
+      setCollaborators([...peers.values()]);
+      setRemoteSelections([...peerSelections.values()]);
+    };
+    const flushAwareness = () => {
+      if (!lastCursor) return;
+      if (!connected || socket?.readyState !== WebSocket.OPEN) return;
+      lastSentAt = Date.now();
+      socket.send(
+        JSON.stringify({
+          type: "awareness",
+          awareness: {
+            user: { id: localId, name: localName },
+            cursor: { anchor: lastCursor.anchor, head: lastCursor.head },
+          },
+        }),
+      );
+    };
+    // Caret movement fires on every keystroke; cap awareness traffic.
+    const sendAwareness = (cursor: { anchor: number; head: number; line: number; col: number }) => {
+      lastCursor = cursor;
+      if (!connected) return;
+      const elapsed = Date.now() - lastSentAt;
+      if (elapsed >= 120) {
+        flushAwareness();
+      } else if (!throttleTimer) {
+        throttleTimer = setTimeout(() => {
+          throttleTimer = null;
+          if (!stopped) flushAwareness();
+        }, 120 - elapsed);
+      }
+    };
+    awarenessSenderRef.current = sendAwareness;
     const textObserver = () => setSourceVersion((version) => version + 1);
     yText.observe(textObserver);
 
@@ -132,8 +196,34 @@ export function LiveTextDocument({
               setMessage(null);
               for (const item of pending) send(item.update);
               setStatus(pending.length ? "saving" : "saved");
+              if (lastCursor) sendAwareness(lastCursor);
             } else if (data.type === "sync.update" && typeof data.updateBase64 === "string") {
               Y.applyUpdate(doc, fromBase64(data.updateBase64), "remote");
+            } else if (data.type === "awareness") {
+              if (typeof data.userId !== "string") return;
+              const awareness = data.awareness as { user?: unknown; cursor?: unknown } | null;
+              const remoteUser = awareness?.user as { name?: unknown } | undefined;
+              const remoteCursor = awareness?.cursor as
+                { anchor?: unknown; head?: unknown } | undefined;
+              if (data.userId === localId) return;
+              const name =
+                typeof remoteUser?.name === "string" && remoteUser.name.trim().length > 0
+                  ? remoteUser.name.trim().slice(0, 80)
+                  : "Collaborator";
+              const color = collaboratorColor(data.userId);
+              peers.set(data.userId, { id: data.userId, name, color });
+              const anchor = remoteCursor?.anchor;
+              const head = remoteCursor?.head;
+              if (typeof anchor === "number" && typeof head === "number") {
+                peerSelections.set(data.userId, {
+                  clientId: data.userId,
+                  name,
+                  color,
+                  anchor,
+                  head,
+                });
+              }
+              publish();
             } else if (data.type === "text.durable_ack") {
               const parsed = durableAckSchema.safeParse(data);
               if (!parsed.success || parsed.data.fileId !== fileId) return;
@@ -155,6 +245,9 @@ export function LiveTextDocument({
         socket.onclose = (event) => {
           connected = false;
           if (stopped) return;
+          peers.clear();
+          peerSelections.clear();
+          publish();
           setReady(false);
           setCanEdit(false);
           setStatus("offline");
@@ -175,14 +268,21 @@ export function LiveTextDocument({
     void connect();
     return () => {
       stopped = true;
+      awarenessSenderRef.current = null;
+      peers.clear();
+      peerSelections.clear();
+      if (throttleTimer) clearTimeout(throttleTimer);
       if (retryTimer) clearTimeout(retryTimer);
       socket?.close();
       doc.off("update", updateObserver);
       yText.unobserve(textObserver);
     };
-  }, [apiUrl, csrfToken, doc, fileId, projectId, yText]);
+  }, [apiUrl, csrfToken, doc, fileId, projectId, yText, currentUser?.id, currentUser?.name]);
 
   const source = yText.toString();
+  useEffect(() => {
+    sourceListenerRef.current?.(source);
+  }, [source, sourceVersion]);
   const ast = useMemo(() => parseVisualAst(source), [source, sourceVersion]);
   const [conflict, setConflict] = useState<string | null>(null);
   const recordPatch = (result: VisualPatchResult) =>
@@ -302,6 +402,9 @@ export function LiveTextDocument({
               readOnly={!canEdit}
               saveStatus={status}
               theme="dark"
+              remoteSelections={remoteSelections}
+              revealLine={revealLine ?? null}
+              onCursorChange={(cursor) => awarenessSenderRef.current?.(cursor)}
             />
           ) : (
             <div data-testid="live-visual-document">

@@ -369,9 +369,7 @@ describe("Overleaf archive compatibility", () => {
     const result = await importArchiveIntoProject({
       apiUrl,
       projectId,
-      entries: [
-        { path: "main.tex", bytes: new Uint8Array(strToU8("\\documentclass{article}")) },
-      ],
+      entries: [{ path: "main.tex", bytes: new Uint8Array(strToU8("\\documentclass{article}")) }],
     });
 
     expect(result.uploaded).toBe(0);

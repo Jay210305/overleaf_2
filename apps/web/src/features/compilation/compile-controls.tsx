@@ -11,6 +11,13 @@ export interface CompileControlsProps {
   apiBaseUrl?: string;
   fetchImpl?: typeof fetch;
   className?: string;
+  /** Every compilable root candidate offered by the main-document selector. */
+  texFiles?: Array<{ id: string; name: string }>;
+  mainFileId?: string | null;
+  onSelectMainFile?: (fileId: string) => void;
+  /** Opens the errors/warnings/log console under the editor. */
+  onOpenConsole?: () => void;
+  consoleOpen?: boolean;
 }
 
 export function generateIdempotencyKey(): string {
@@ -34,6 +41,11 @@ export function CompileControls({
   apiBaseUrl = "/api/v1",
   fetchImpl = typeof fetch !== "undefined" ? fetch : undefined,
   className = "",
+  texFiles = [],
+  mainFileId = null,
+  onSelectMainFile,
+  onOpenConsole,
+  consoleOpen = false,
 }: CompileControlsProps): React.JSX.Element {
   const [compiler, setCompiler] = useState<Compiler>(defaultCompiler);
   const [forceClean, setForceClean] = useState<boolean>(false);
@@ -239,6 +251,24 @@ export function CompileControls({
             />
             Clean Cache
           </label>
+          {onSelectMainFile && texFiles.length > 0 && (
+            <label className="compile-main-file">
+              Main document
+              <select
+                data-testid="main-file-select"
+                aria-label="Main document to compile"
+                value={mainFileId ?? texFiles[0]?.id ?? ""}
+                onChange={(event) => onSelectMainFile(event.target.value)}
+                disabled={isCompiling}
+              >
+                {texFiles.map((file) => (
+                  <option key={file.id} value={file.id}>
+                    {file.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
         </div>
       </details>
       {activeJob && (
@@ -252,9 +282,18 @@ export function CompileControls({
         </span>
       )}
       {(errorCount > 0 || warningCount > 0) && (
-        <span data-testid="diagnostics-count" className="compile-diagnostics">
-          {errorCount} err · {warningCount} warn
-        </span>
+        <button
+          type="button"
+          data-testid="diagnostics-count"
+          className="compile-diagnostics"
+          onClick={onOpenConsole}
+          aria-expanded={consoleOpen}
+          aria-controls="compile-console-panel"
+          title="Open the compilation console"
+        >
+          {errorCount > 0 && <span>❌ {errorCount} err</span>}
+          {warningCount > 0 && <span>⚠️ {warningCount} warn</span>}
+        </button>
       )}
       {errorMessage && (
         <span data-testid="compile-error-msg" className="compile-error" role="alert">

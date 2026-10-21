@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import * as Y from "yjs";
 import { parsePublicConfig } from "@latex-collab/config";
@@ -11,25 +11,41 @@ import { CommentAnchors } from "../review/comment-anchors.js";
 import { ProjectChat } from "../chat/project-chat.js";
 import { ReadOnlyTextDocument } from "../visual/mode-switch.js";
 import { LiveTextDocument } from "../collab/live-document.js";
+import { PresenceAvatars, collaboratorColor, type CollaboratorUser } from "../collab/presence.js";
 import { ProjectSettings } from "./settings.js";
 import { GitHubSyncPanel } from "../integrations/github-sync.js";
 import { CompileControls } from "../compilation/compile-controls.js";
+import { CompileLogPanel, type DiagnosticTarget } from "../compilation/compile-log-panel.js";
 import { PdfViewer } from "../pdf/pdf-viewer.js";
 import { HistoryTimeline } from "../history/timeline.js";
 import { VersionCompare } from "../history/version-compare.js";
 import { ReferenceSearch } from "../references/search.js";
 import { ZoteroLibraryPanel } from "../references/zotero.js";
 import { ProjectSearch } from "../search/project-search.js";
+import { DocumentOutline } from "../editor/document-outline.js";
 import { downloadProjectArchive } from "../files/zip.js";
 
 const config = parsePublicConfig(import.meta.env);
 const defaultApiUrl = config.VITE_API_URL;
+
+type ViewMode = "editor" | "split" | "pdf";
+type SidebarTab = "files" | "outline";
+
+interface SessionUser {
+  id: string;
+  displayName: string;
+}
 
 export interface ProjectWorkspaceProps {
   projectId?: string | undefined;
   apiUrl?: string | undefined;
   csrfToken?: string | undefined;
   defaultShowCompile?: boolean | undefined;
+}
+
+function baseName(path: string): string {
+  const parts = path.split(/[\\/]/);
+  return parts[parts.length - 1] ?? path;
 }
 
 export function ProjectWorkspace({
@@ -49,8 +65,6 @@ export function ProjectWorkspace({
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showGitHubSync, setShowGitHubSync] = useState(false);
-  const [showPdf, setShowPdf] = useState(defaultShowCompile);
-  const [compactPanel, setCompactPanel] = useState<"files" | "editor" | "pdf">("editor");
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [showReferencesModal, setShowReferencesModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
@@ -67,9 +81,40 @@ export function ProjectWorkspace({
   const [latestCompileStatus, setLatestCompileStatus] = useState<CompilationView["status"] | null>(
     null,
   );
+  const [compileJob, setCompileJob] = useState<CompilationView | null>(null);
+  const [showConsole, setShowConsole] = useState(false);
   const [uploadVersion, setUploadVersion] = useState(0);
   const [bibSource, setBibSource] = useState("");
   const [bibFiles, setBibFiles] = useState<Array<{ id: string; name: string }>>([]);
+
+  const [viewMode, setViewMode] = useState<ViewMode>(defaultShowCompile ? "split" : "editor");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarTab, setSidebarTab] = useState<SidebarTab>("files");
+  const [editorWidth, setEditorWidth] = useState(52);
+  const [nodes, setNodes] = useState<ProjectNodeView[]>([]);
+  const [mainFileId, setMainFileId] = useState<string | null>(null);
+  const [sessionUser, setSessionUser] = useState<SessionUser | null>(null);
+  const [collaborators, setCollaborators] = useState<CollaboratorUser[]>([]);
+  const [activeSource, setActiveSource] = useState("");
+  const [revealLine, setRevealLine] = useState<{ line: number; nonce: number } | null>(null);
+  const [savingMainFile, setSavingMainFile] = useState(false);
+  const layoutRef = useRef<HTMLDivElement>(null);
+  const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const texFiles = useMemo(
+    () =>
+      nodes
+        .filter((node) => node.kind === "FILE" && node.name.toLowerCase().endsWith(".tex"))
+        .map((node) => ({ id: node.id, name: node.name })),
+    [nodes],
+  );
+
+  const announce = useCallback((message: string) => {
+    setWorkspaceStatus(message);
+    setWorkspaceError(null);
+    if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+    statusTimerRef.current = setTimeout(() => setWorkspaceStatus(null), 4000);
+  }, []);
 
   const fetchProject = useCallback(async () => {
     if (!projectId) return;
@@ -93,6 +138,7 @@ export function ProjectWorkspace({
       }
       const data = (await res.json()) as ProjectView;
       setProject(data);
+      setMainFileId((current) => current ?? data.mainFileId ?? null);
     } catch {
       setError("Network error loading project.");
     } finally {
@@ -100,9 +146,76 @@ export function ProjectWorkspace({
     }
   }, [apiUrl, projectId]);
 
+  const fetchNodes = useCallback(async () => {
+    if (!projectId) return;
+    try {
+      const res = await fetch(`${apiUrl}/projects/${projectId}/nodes`, {
+        credentials: "include",
+        headers: { accept: "application/json" },
+        cache: "no-store",
+      });
+      if (!res.ok) return;
+      const data = (await res.json()) as { items?: ProjectNodeView[] };
+      setNodes(data.items ?? []);
+    } catch {
+      // The file tree owns its own error surface; this copy only feeds selectors.
+    }
+  }, [apiUrl, projectId]);
+
   useEffect(() => {
     void fetchProject();
   }, [fetchProject]);
+
+  useEffect(() => {
+    void fetchNodes();
+  }, [fetchNodes, uploadVersion]);
+
+  // Resolve the signed-in identity once so presence avatars have a real name.
+  useEffect(() => {
+    if (!apiUrl) return;
+    let active = true;
+    void (async () => {
+      try {
+        const response = await fetch(`${apiUrl}/auth/session`, {
+          credentials: "include",
+          headers: { accept: "application/json" },
+        });
+        if (!response.ok) return;
+        const token = response.headers.get("x-csrf-token");
+        if (token) {
+          try {
+            sessionStorage.setItem("csrf_token", token);
+          } catch {
+            // Storage may be blocked; requests fall back to the session endpoint.
+          }
+        }
+        const data = (await response.json()) as { id?: unknown; displayName?: unknown };
+        if (!active || typeof data.id !== "string") return;
+        setSessionUser({
+          id: data.id,
+          displayName:
+            typeof data.displayName === "string" && data.displayName.trim().length > 0
+              ? data.displayName
+              : "You",
+        });
+      } catch {
+        // Presence falls back to collaborator-provided names.
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [apiUrl]);
+
+  // Collapse the sidebar on narrow screens so the workspace stays usable.
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth < 760) setSidebarOpen(false);
+    };
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     if (!showChat) return;
@@ -112,6 +225,13 @@ export function ProjectWorkspace({
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [showChat]);
+
+  useEffect(
+    () => () => {
+      if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+    },
+    [],
+  );
 
   const handleDownloadZip = useCallback(async () => {
     if (!project || downloadingZip) return;
@@ -124,7 +244,7 @@ export function ProjectWorkspace({
         projectId,
         projectTitle: project.title,
       });
-      setWorkspaceStatus(
+      announce(
         `Downloaded ${result.fileName} · ${result.fileCount} file${
           result.fileCount === 1 ? "" : "s"
         }${result.folderCount > 0 ? ` and ${result.folderCount} folders` : ""}.`,
@@ -136,7 +256,7 @@ export function ProjectWorkspace({
     } finally {
       setDownloadingZip(false);
     }
-  }, [apiUrl, downloadingZip, project, projectId]);
+  }, [announce, apiUrl, downloadingZip, project, projectId]);
 
   useEffect(() => {
     if (!showReferencesModal || !projectId) return;
@@ -175,6 +295,122 @@ export function ProjectWorkspace({
     };
   }, [apiUrl, projectId, showReferencesModal, bibSource]);
 
+  const setMainDocument = useCallback(
+    async (fileId: string) => {
+      if (!fileId || savingMainFile) return;
+      setSavingMainFile(true);
+      try {
+        let csrf = csrfToken ?? null;
+        try {
+          csrf = csrf ?? sessionStorage.getItem("csrf_token");
+        } catch {}
+        if (!csrf) {
+          const session = await fetch(`${apiUrl}/auth/session`, { credentials: "include" });
+          csrf = session.headers.get("x-csrf-token");
+          if (csrf) {
+            try {
+              sessionStorage.setItem("csrf_token", csrf);
+            } catch {}
+          }
+        }
+        const response = await fetch(`${apiUrl}/projects/${projectId}/settings`, {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+            ...(csrf ? { "x-csrf-token": csrf } : {}),
+          },
+          body: JSON.stringify({ mainFileId: fileId }),
+        });
+        if (!response.ok) {
+          setWorkspaceError(
+            response.status === 403
+              ? "Only editors can change the main document."
+              : "The main document could not be updated.",
+          );
+          return;
+        }
+        setMainFileId(fileId);
+        const name = nodes.find((node) => node.id === fileId)?.name ?? "selected file";
+        announce(`Main document set to ${name}.`);
+      } catch {
+        setWorkspaceError("Network error while updating the main document.");
+      } finally {
+        setSavingMainFile(false);
+      }
+    },
+    [announce, apiUrl, csrfToken, nodes, projectId, savingMainFile],
+  );
+
+  const jumpToLine = useCallback((line: number) => {
+    setRevealLine({ line, nonce: Date.now() });
+  }, []);
+
+  const handleDiagnosticJump = useCallback(
+    (target: DiagnosticTarget) => {
+      if (target.line === undefined) return;
+      const fileName = baseName(target.filePath ?? "");
+      if (fileName) {
+        const match = nodes.find(
+          (node) => node.kind === "FILE" && node.name.toLowerCase() === fileName.toLowerCase(),
+        );
+        if (match && match.id !== selectedNode?.id) {
+          setSelectedNode(match);
+          void fetchNodes();
+        }
+      }
+      jumpToLine(target.line);
+      if (viewMode === "pdf") setViewMode("split");
+    },
+    [fetchNodes, jumpToLine, nodes, selectedNode?.id, viewMode],
+  );
+
+  const handleSplitterPointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    const container = layoutRef.current;
+    if (!container) return;
+    // preventDefault blocks the native focus, so move focus to the splitter explicitly.
+    event.currentTarget.focus();
+    event.preventDefault();
+    const rect = container.getBoundingClientRect();
+    const sidebar = container.querySelector<HTMLElement>(".workspace-sidebar");
+    const sidebarWidth = sidebar?.getBoundingClientRect().width ?? 0;
+    const usable = rect.width - sidebarWidth - 8;
+    const onMove = (moveEvent: PointerEvent) => {
+      const offset = moveEvent.clientX - rect.left - sidebarWidth;
+      const ratio = (offset / usable) * 100;
+      setEditorWidth(Math.min(80, Math.max(20, ratio)));
+    };
+    const onUp = () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      document.body.classList.remove("ws-resizing");
+    };
+    document.body.classList.add("ws-resizing");
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  }, []);
+
+  const handleSplitterKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      setEditorWidth((width) => Math.max(20, width - 3));
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      setEditorWidth((width) => Math.min(80, width + 3));
+    }
+  }, []);
+
+  const collaboratorsWithSelf = useMemo<CollaboratorUser[]>(() => {
+    if (!sessionUser) return collaborators;
+    const self: CollaboratorUser = {
+      id: sessionUser.id,
+      name: sessionUser.displayName,
+      color: collaboratorColor(sessionUser.id),
+    };
+    if (collaborators.some((person) => person.id === self.id)) return collaborators;
+    return [self, ...collaborators];
+  }, [collaborators, sessionUser]);
   if (!projectId) {
     return (
       <div role="region" aria-label="Project workspace error">
@@ -186,26 +422,74 @@ export function ProjectWorkspace({
 
   return (
     <div
-      className="project-workspace"
-      data-panel={compactPanel}
+      className={`project-workspace mode-${viewMode}${sidebarOpen ? " sidebar-open" : ""}`}
       role="region"
       aria-label="Project workspace"
     >
       <header className="workspace-header">
+        <button
+          type="button"
+          className="ws-action ws-sidebar-toggle"
+          onClick={() => setSidebarOpen((value) => !value)}
+          aria-pressed={sidebarOpen}
+          aria-controls="workspace-sidebar"
+          aria-label={sidebarOpen ? "Hide sidebar" : "Show sidebar"}
+          title={sidebarOpen ? "Hide sidebar" : "Show sidebar"}
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path
+              d="M4 6h16M4 12h16M4 18h16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
         <nav aria-label="Workspace breadcrumbs">
           <Link to="/dashboard">Projects</Link>
           <span aria-hidden="true"> / </span>
           <span>{project ? project.title : "Loading…"}</span>
         </nav>
-        <div className="workspace-actions">
+        <div
+          className="ws-view-modes"
+          role="group"
+          aria-label="Layout"
+          data-testid="view-mode-switch"
+        >
           <button
             type="button"
-            className="ws-action"
-            onClick={() => setShowPdf((value) => !value)}
-            aria-pressed={showPdf}
+            aria-pressed={viewMode === "editor"}
+            onClick={() => setViewMode("editor")}
+            title="Editor only"
+            data-testid="view-mode-editor"
           >
-            {showPdf ? "Hide PDF" : "Show PDF"}
+            <span aria-hidden="true">▤</span>
+            <span className="ws-view-label">Editor</span>
           </button>
+          <button
+            type="button"
+            aria-pressed={viewMode === "split"}
+            onClick={() => setViewMode("split")}
+            title="Split view"
+            data-testid="view-mode-split"
+          >
+            <span aria-hidden="true">◫</span>
+            <span className="ws-view-label">Split</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={viewMode === "pdf"}
+            onClick={() => setViewMode("pdf")}
+            title="PDF only"
+            data-testid="view-mode-pdf"
+          >
+            <span aria-hidden="true">▣</span>
+            <span className="ws-view-label">PDF</span>
+          </button>
+        </div>
+        <div className="workspace-actions">
+          <PresenceAvatars collaborators={collaboratorsWithSelf} currentUserId={sessionUser?.id} />
           <details
             className="workspace-tools"
             onClick={(event) => {
@@ -301,10 +585,20 @@ export function ProjectWorkspace({
               projectId={projectId}
               defaultCompiler={project?.compiler ?? "pdflatex"}
               apiBaseUrl={apiUrl}
+              texFiles={texFiles}
+              mainFileId={mainFileId}
+              onSelectMainFile={(fileId) => void setMainDocument(fileId)}
+              onOpenConsole={() => setShowConsole((value) => !value)}
+              consoleOpen={showConsole}
               onCompileStart={() => setLatestCompileStatus("queued")}
               onCompileError={() => setLatestCompileStatus("failed")}
               onCompileComplete={(job) => {
                 setLatestCompileStatus(job.status);
+                setCompileJob(job);
+                const problems = job.diagnostics.filter(
+                  (item) => item.severity === "error" || item.severity === "warning",
+                ).length;
+                if (problems > 0) setShowConsole(true);
                 if (job.status === "succeeded") {
                   setPdfUrl(
                     `${apiUrl}/projects/${projectId}/compilations/${job.id}/artifacts/output.pdf`,
@@ -315,35 +609,9 @@ export function ProjectWorkspace({
           )}
         </div>
       </header>
-      <div className="workspace-compact-nav" role="group" aria-label="Workspace view">
-        <button
-          type="button"
-          aria-pressed={compactPanel === "files"}
-          onClick={() => setCompactPanel("files")}
-        >
-          Files
-        </button>
-        <button
-          type="button"
-          aria-pressed={compactPanel === "editor"}
-          onClick={() => setCompactPanel("editor")}
-        >
-          Editor
-        </button>
-        <button
-          type="button"
-          aria-pressed={compactPanel === "pdf"}
-          onClick={() => {
-            setShowPdf(true);
-            setCompactPanel("pdf");
-          }}
-        >
-          PDF
-        </button>
-      </div>
 
       {loading && (
-        <div role="status" aria-live="polite">
+        <div role="status" aria-live="polite" className="workspace-loading">
           <p>Loading project workspace…</p>
         </div>
       )}
@@ -370,123 +638,234 @@ export function ProjectWorkspace({
             )}
           </div>
 
-          <div className={`workspace-layout${showPdf ? "" : " no-pdf"}`}>
-            <aside className="workspace-sidebar" aria-label="Project files">
-              <FileTree
-                projectId={projectId}
-                apiUrl={apiUrl}
-                csrfToken={csrfToken}
-                selectedNodeId={selectedNode?.id}
-                onSelectNode={(node) => {
-                  setSelectedNode(node);
-                  setLiveFileId(null);
-                  setCompactPanel("editor");
-                }}
-                refreshVersion={uploadVersion}
-                onRequestUpload={() => setShowUploadModal(true)}
-                onRequestDownloadZip={() => void handleDownloadZip()}
-                downloadingZip={downloadingZip}
-              />
+          <div
+            ref={layoutRef}
+            className={`workspace-layout${sidebarOpen ? " with-sidebar" : ""}`}
+            style={{ ["--ws-editor-width" as string]: `${editorWidth}%` }}
+          >
+            <aside
+              id="workspace-sidebar"
+              className="workspace-sidebar"
+              aria-label="Project files"
+              hidden={!sidebarOpen}
+            >
+              <div className="workspace-sidebar-tabs" role="tablist" aria-label="Sidebar panels">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={sidebarTab === "files"}
+                  className={sidebarTab === "files" ? "active" : ""}
+                  onClick={() => setSidebarTab("files")}
+                >
+                  Files
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={sidebarTab === "outline"}
+                  className={sidebarTab === "outline" ? "active" : ""}
+                  onClick={() => setSidebarTab("outline")}
+                >
+                  Outline
+                </button>
+              </div>
+
+              <div className="workspace-sidebar-panel" hidden={sidebarTab !== "files"}>
+                <FileTree
+                  projectId={projectId}
+                  apiUrl={apiUrl}
+                  csrfToken={csrfToken}
+                  selectedNodeId={selectedNode?.id}
+                  mainFileId={mainFileId}
+                  onSetMainFile={(node) => void setMainDocument(node.id)}
+                  onSelectNode={(node) => {
+                    setSelectedNode(node);
+                    setLiveFileId(null);
+                    setActiveSource("");
+                  }}
+                  refreshVersion={uploadVersion}
+                  onRequestUpload={() => setShowUploadModal(true)}
+                  onRequestDownloadZip={() => void handleDownloadZip()}
+                  downloadingZip={downloadingZip}
+                />
+              </div>
+
+              <div
+                className="workspace-sidebar-panel outline-panel-wrap"
+                hidden={sidebarTab !== "outline"}
+              >
+                {selectedNode?.kind === "FILE" && selectedNode.contentKind === "TEXT" ? (
+                  <DocumentOutline
+                    source={activeSource}
+                    fileName={selectedNode.name}
+                    onJumpToLine={jumpToLine}
+                  />
+                ) : (
+                  <div className="outline-empty" role="status">
+                    <p className="outline-empty-title">No document open</p>
+                    <p>Select a .tex file to see its sections, subsections and chapters here.</p>
+                  </div>
+                )}
+              </div>
             </aside>
 
-            <section className="workspace-editor" aria-label="Document view">
-              {selectedNode?.kind === "FILE" && selectedNode.contentKind === "TEXT" ? (
-                <div className="selected-node-panel">
-                  <div className="node-panel-header">
-                    <h2>{selectedNode.name}</h2>
-                    <div className="node-panel-actions">
-                      {liveFileId === selectedNode.id ? (
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-secondary"
-                          onClick={() => setLiveFileId(null)}
-                        >
-                          Stop editing
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-primary"
-                          onClick={() => setLiveFileId(selectedNode.id)}
-                        >
-                          Start editing
-                        </button>
-                      )}
+            <div className="workspace-panes">
+              <section
+                className="workspace-editor"
+                aria-label="Document view"
+                hidden={viewMode === "pdf"}
+              >
+                {selectedNode?.kind === "FILE" && selectedNode.contentKind === "TEXT" ? (
+                  <div className="selected-node-panel">
+                    <div className="node-panel-header">
+                      <h2 title={selectedNode.name}>{selectedNode.name}</h2>
+                      <div className="node-panel-actions">
+                        {selectedNode.id === mainFileId && (
+                          <span
+                            className="node-main-chip"
+                            title="Main document compiled by default"
+                          >
+                            Main
+                          </span>
+                        )}
+                        {selectedNode.name.toLowerCase().endsWith(".tex") &&
+                          selectedNode.id !== mainFileId && (
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-secondary"
+                              onClick={() => void setMainDocument(selectedNode.id)}
+                              disabled={savingMainFile}
+                            >
+                              Set as main
+                            </button>
+                          )}
+                        {liveFileId === selectedNode.id ? (
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-secondary"
+                            onClick={() => setLiveFileId(null)}
+                          >
+                            Stop editing
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-primary"
+                            onClick={() => setLiveFileId(selectedNode.id)}
+                          >
+                            Start editing
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    {liveFileId === selectedNode.id ? (
+                      <LiveTextDocument
+                        key={selectedNode.id}
+                        projectId={projectId}
+                        fileId={selectedNode.id}
+                        fileName={selectedNode.name}
+                        apiUrl={apiUrl}
+                        csrfToken={csrfToken}
+                        currentUser={
+                          sessionUser
+                            ? { id: sessionUser.id, name: sessionUser.displayName }
+                            : undefined
+                        }
+                        onCollaboratorsChange={setCollaborators}
+                        onSourceChange={setActiveSource}
+                        revealLine={revealLine}
+                        onExit={() => setLiveFileId(null)}
+                      />
+                    ) : (
+                      <ReadOnlyTextDocument
+                        key={selectedNode.id}
+                        projectId={projectId}
+                        fileId={selectedNode.id}
+                        apiUrl={apiUrl}
+                        revealLine={revealLine}
+                        onSourceChange={setActiveSource}
+                      />
+                    )}
+                    <details className="workspace-comments">
+                      <summary>Comments</summary>
+                      <CommentAnchors
+                        projectId={projectId}
+                        fileId={selectedNode.id}
+                        apiUrl={apiUrl}
+                        csrfToken={csrfToken}
+                      />
+                    </details>
+                  </div>
+                ) : selectedNode?.kind === "FILE" && selectedNode.contentKind === "BINARY" ? (
+                  <div className="selected-node-panel is-binary">
+                    <div className="node-panel-header">
+                      <h2 title={selectedNode.name}>{selectedNode.name}</h2>
+                    </div>
+                    <div className="binary-pane-body">
+                      <BinaryPreview
+                        projectId={projectId}
+                        apiUrl={apiUrl}
+                        node={{
+                          id: selectedNode.id,
+                          name: selectedNode.name,
+                          mime: selectedNode.mime,
+                          contentKind: selectedNode.contentKind,
+                          sizeBytes: selectedNode.sizeBytes,
+                        }}
+                      />
                     </div>
                   </div>
-                  {liveFileId === selectedNode.id ? (
-                    <LiveTextDocument
-                      key={selectedNode.id}
-                      projectId={projectId}
-                      fileId={selectedNode.id}
-                      fileName={selectedNode.name}
-                      apiUrl={apiUrl}
-                      csrfToken={csrfToken}
-                      onExit={() => setLiveFileId(null)}
-                    />
-                  ) : (
-                    <ReadOnlyTextDocument
-                      key={selectedNode.id}
-                      projectId={projectId}
-                      fileId={selectedNode.id}
-                      apiUrl={apiUrl}
-                    />
-                  )}
-                  <details className="workspace-comments">
-                    <summary>Comments</summary>
-                    <CommentAnchors
-                      projectId={projectId}
-                      fileId={selectedNode.id}
-                      apiUrl={apiUrl}
-                      csrfToken={csrfToken}
-                    />
-                  </details>
-                </div>
-              ) : selectedNode?.kind === "FILE" && selectedNode.contentKind === "BINARY" ? (
-                <div className="selected-node-panel">
-                  <h2>{selectedNode.name}</h2>
-                  <BinaryPreview
-                    projectId={projectId}
-                    apiUrl={apiUrl}
-                    node={{
-                      id: selectedNode.id,
-                      name: selectedNode.name,
-                      mime: selectedNode.mime,
-                      contentKind: selectedNode.contentKind,
-                      sizeBytes: selectedNode.sizeBytes,
-                    }}
-                  />
-                </div>
-              ) : selectedNode ? (
-                <div className="selected-node-panel">
-                  <h2>{selectedNode.name}</h2>
-                  <dl>
-                    <dt>Kind</dt>
-                    <dd>{selectedNode.kind}</dd>
-                    <dt>MIME</dt>
-                    <dd>{selectedNode.mime}</dd>
-                    <dt>Content Kind</dt>
-                    <dd>{selectedNode.contentKind}</dd>
-                    <dt>Size</dt>
-                    <dd>{selectedNode.sizeBytes} bytes</dd>
-                  </dl>
-                </div>
-              ) : (
-                <div className="empty-selection">
-                  <div className="empty-selection-mark" aria-hidden="true">
-                    &lt;/&gt;
+                ) : selectedNode ? (
+                  <div className="selected-node-panel">
+                    <h2>{selectedNode.name}</h2>
+                    <dl>
+                      <dt>Kind</dt>
+                      <dd>{selectedNode.kind}</dd>
+                      <dt>MIME</dt>
+                      <dd>{selectedNode.mime}</dd>
+                      <dt>Content Kind</dt>
+                      <dd>{selectedNode.contentKind}</dd>
+                      <dt>Size</dt>
+                      <dd>{selectedNode.sizeBytes} bytes</dd>
+                    </dl>
                   </div>
-                  <p>Select a file in the tree to begin editing or viewing.</p>
-                  <p className="empty-selection-hint">
-                    Open a file from Project Files, or upload sources and ZIP archives to get
-                    started.
-                  </p>
+                ) : (
+                  <div className="empty-selection">
+                    <div className="empty-selection-mark" aria-hidden="true">
+                      &lt;/&gt;
+                    </div>
+                    <p>Select a file in the tree to begin editing or viewing.</p>
+                    <p className="empty-selection-hint">
+                      Open a file from Project Files, or upload sources and ZIP archives to get
+                      started.
+                    </p>
+                  </div>
+                )}
+              </section>
+
+              {viewMode === "split" && (
+                <div
+                  className="workspace-splitter"
+                  role="separator"
+                  aria-orientation="vertical"
+                  aria-label="Resize editor and PDF panes"
+                  aria-valuemin={20}
+                  aria-valuemax={80}
+                  aria-valuenow={Math.round(editorWidth)}
+                  tabIndex={0}
+                  onPointerDown={handleSplitterPointerDown}
+                  onKeyDown={handleSplitterKeyDown}
+                  title="Drag to resize"
+                >
+                  <span aria-hidden="true" />
                 </div>
               )}
-            </section>
 
-            {showPdf && (
-              <aside className="workspace-pdf-pane" aria-label="PDF Preview and Compilation">
+              <aside
+                className="workspace-pdf-pane"
+                aria-label="PDF Preview and Compilation"
+                hidden={viewMode === "editor"}
+              >
                 <div className="pdf-pane-header">
                   <h2>PDF preview</h2>
                   <span>
@@ -511,8 +890,20 @@ export function ProjectWorkspace({
                   />
                 </div>
               </aside>
-            )}
+            </div>
           </div>
+
+          {showConsole && (
+            <div id="compile-console-panel" className="workspace-console-shell">
+              <CompileLogPanel
+                projectId={projectId}
+                job={compileJob}
+                apiUrl={apiUrl}
+                onJumpToDiagnostic={handleDiagnosticJump}
+                onClose={() => setShowConsole(false)}
+              />
+            </div>
+          )}
 
           {showGitHubSync && (
             <>
@@ -578,8 +969,7 @@ export function ProjectWorkspace({
                   csrfToken={csrfToken}
                   onUploaded={() => {
                     setUploadVersion((value) => value + 1);
-                    setWorkspaceStatus("Project files updated.");
-                    setWorkspaceError(null);
+                    announce("Project files updated.");
                   }}
                 />
               </div>

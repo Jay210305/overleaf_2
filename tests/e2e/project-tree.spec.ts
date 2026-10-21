@@ -110,14 +110,16 @@ test("project and file tree journey: create, mutate tree, reload persistence, an
   await page.getByRole("button", { name: "Create", exact: true }).click();
   await expect(page.getByRole("treeitem", { name: "chapters (folder)" })).toBeVisible();
 
-  // 7. CREATE FILE 'ch1.tex' INSIDE 'chapters'
-  await page.getByRole("button", { name: "Add file to chapters" }).click();
+  // 7. CREATE FILE 'ch1.tex' INSIDE 'chapters' THROUGH THE ROW ACTION MENU
+  await page.getByRole("button", { name: "Actions for chapters" }).click();
+  await page.getByRole("menuitem", { name: "Add file to chapters" }).click();
   await page.getByLabel("Name:").fill("ch1.tex");
   await page.getByRole("button", { name: "Create", exact: true }).click();
   await expect(page.getByRole("treeitem", { name: "ch1.tex (file)" })).toBeVisible();
 
   // 8. RENAME 'ch1.tex' TO 'intro.tex'
-  await page.getByRole("button", { name: "Rename ch1.tex" }).click();
+  await page.getByRole("button", { name: "Actions for ch1.tex" }).click();
+  await page.getByRole("menuitem", { name: "Rename ch1.tex" }).click();
   await page.getByLabel("New name:").fill("intro.tex");
   await page.getByRole("button", { name: "Rename", exact: true }).click();
   await expect(page.getByRole("treeitem", { name: "intro.tex (file)" })).toBeVisible();
@@ -142,7 +144,8 @@ test("project and file tree journey: create, mutate tree, reload persistence, an
   await unauthContext.close();
 
   // 11. DELETE FOLDER 'chapters' AND VERIFY CASCADE & PERSISTENCE
-  await page.getByRole("button", { name: "Delete chapters" }).click();
+  await page.getByRole("button", { name: "Actions for chapters" }).click();
+  await page.getByRole("menuitem", { name: "Delete chapters" }).click();
   await page.getByRole("button", { name: "Delete", exact: true }).click();
 
   // Both chapters and intro.tex are gone

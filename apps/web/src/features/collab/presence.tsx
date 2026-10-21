@@ -1,4 +1,4 @@
-import React from "react";
+import { useMemo } from "react";
 
 export interface CollaboratorUser {
   id: string;
@@ -14,57 +14,116 @@ export interface CollaboratorUser {
 
 export interface CollaboratorPresenceProps {
   collaborators: CollaboratorUser[];
-  currentUserId?: string;
+  currentUserId?: string | undefined;
 }
 
-export const CollaboratorPresenceList: React.FC<CollaboratorPresenceProps> = ({
+const avatarPalette = [
+  "#2f9e73",
+  "#3f7fd1",
+  "#c26a35",
+  "#9a5bc9",
+  "#0f8f96",
+  "#c04a72",
+  "#7d8b2f",
+  "#5a6b8c",
+];
+
+/**
+ * Deterministic avatar colour per user so every client renders the same hue
+ * for the same collaborator without a server round-trip.
+ */
+export function collaboratorColor(userId: string): string {
+  let hash = 0;
+  for (let index = 0; index < userId.length; index += 1) {
+    hash = (hash * 31 + userId.charCodeAt(index)) >>> 0;
+  }
+  return avatarPalette[hash % avatarPalette.length]!;
+}
+
+/** Two-letter monogram used inside presence avatars. */
+export function collaboratorInitials(name: string): string {
+  const cleaned = name.trim();
+  if (cleaned.length === 0) return "?";
+  const words = cleaned.split(/\s+/).filter(Boolean);
+  if (words.length === 1) return words[0]!.slice(0, 2).toUpperCase();
+  return `${words[0]![0] ?? ""}${words[1]![0] ?? ""}`.toUpperCase();
+}
+
+/**
+ * Circular presence avatars shown in the workspace header (Overleaf-style).
+ * Renders nothing else when nobody is connected, keeping the header clean.
+ */
+export function PresenceAvatars({
   collaborators,
   currentUserId,
-}) => {
+  maxVisible = 5,
+}: CollaboratorPresenceProps & { maxVisible?: number }) {
+  const visible = useMemo(() => collaborators.slice(0, maxVisible), [collaborators, maxVisible]);
+  const overflow = collaborators.length - visible.length;
+  if (collaborators.length === 0) return null;
+  return (
+    <div className="ws-presence" role="group" aria-label="Collaborators connected">
+      <ul className="ws-presence-list">
+        {visible.map((user) => {
+          const isSelf = user.id === currentUserId;
+          const label = `${user.name}${isSelf ? " (you)" : ""}${
+            user.activeFileName ? ` · ${user.activeFileName}` : ""
+          }${user.cursor ? ` · Ln ${user.cursor.line}, Col ${user.cursor.col}` : ""}`;
+          return (
+            <li key={user.id}>
+              <span
+                className={`ws-presence-avatar${isSelf ? " is-self" : ""}`}
+                style={{ backgroundColor: user.color }}
+                title={label}
+                aria-label={label}
+                data-testid={`presence-avatar-${user.id}`}
+              >
+                {collaboratorInitials(user.name)}
+              </span>
+            </li>
+          );
+        })}
+        {overflow > 0 && (
+          <li>
+            <span
+              className="ws-presence-avatar is-overflow"
+              title={`${overflow} more collaborators`}
+            >
+              +{overflow}
+            </span>
+          </li>
+        )}
+      </ul>
+    </div>
+  );
+}
+
+/** Legacy inline list kept for callers that still render it in a toolbar. */
+export const CollaboratorPresenceList = ({
+  collaborators,
+  currentUserId,
+}: CollaboratorPresenceProps) => {
+  if (collaborators.length === 0) {
+    return (
+      <div
+        role="region"
+        aria-label="Collaborators"
+        data-testid="collaborators-presence-list"
+        className="collaborator-bar"
+      >
+        <span className="collaborator-empty">No other collaborators active</span>
+      </div>
+    );
+  }
   return (
     <div
       role="region"
       aria-label="Collaborators"
       data-testid="collaborators-presence-list"
-      className="flex items-center space-x-2 py-1 px-2 border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 text-xs"
+      className="collaborator-bar"
     >
-      <span className="text-gray-500 font-medium">Collaborating:</span>
-      <div className="flex items-center -space-x-1.5 overflow-hidden">
-        {collaborators.map((user) => {
-          const isSelf = user.id === currentUserId;
-          return (
-            <div
-              key={user.id}
-              data-testid={`collaborator-badge-${user.id}`}
-              className="relative group cursor-pointer inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold text-white shadow ring-2 ring-white dark:ring-gray-900 select-none"
-              style={{ backgroundColor: user.color }}
-              title={`${user.name}${isSelf ? " (you)" : ""}${
-                user.activeFileName ? ` - editing ${user.activeFileName}` : ""
-              }`}
-            >
-              <span>{user.name.slice(0, 2).toUpperCase()}</span>
-
-              {/* Hover Tooltip */}
-              <div className="absolute top-full mt-1.5 hidden group-hover:flex flex-col z-50 bg-gray-900 text-white rounded px-2 py-1 text-[11px] whitespace-nowrap shadow-lg">
-                <span className="font-semibold">
-                  {user.name} {isSelf && "(you)"}
-                </span>
-                {user.activeFileName && (
-                  <span className="text-gray-300">File: {user.activeFileName}</span>
-                )}
-                {user.cursor && (
-                  <span className="text-gray-400">
-                    Ln {user.cursor.line}, Col {user.cursor.col}
-                  </span>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      {collaborators.length === 0 && (
-        <span className="text-gray-400 italic">No other collaborators active</span>
-      )}
+      <span className="collaborator-label">Collaborating:</span>
+      <PresenceAvatars collaborators={collaborators} currentUserId={currentUserId} />
     </div>
   );
 };

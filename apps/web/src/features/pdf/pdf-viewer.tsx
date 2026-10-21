@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
 
 export type FitMode = "none" | "fit-width" | "fit-page";
 
@@ -17,9 +17,16 @@ export interface PdfViewerProps {
   className?: string;
 }
 
+const A4_RATIO = 297 / 210;
+const basePageWidth = 816;
+
 /**
- * Real PDF viewer component supporting zoom, fit modes, page navigation,
- * authorized downloading, revision provenance tracking, and stale state fallback (S06-T08, CMP-03, NFR-06).
+ * Real PDF viewer supporting zoom, fit modes, page navigation, authorized
+ * downloading, revision provenance tracking, and stale state fallback
+ * (S06-T08, CMP-03, NFR-06).
+ *
+ * The viewport is a flex column that scrolls on both axes, and the document is
+ * sized from the measured pane so a page is never clipped by its container.
  */
 export function PdfViewer({
   pdfUrl,
@@ -38,6 +45,25 @@ export function PdfViewer({
   const [fitMode, setFitMode] = useState<FitMode>("none");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const totalPages = Math.max(1, propTotalPages);
+
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [pane, setPane] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const element = viewportRef.current;
+    if (!element || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver((entries) => {
+      const box = entries[0]?.contentRect;
+      if (!box) return;
+      setPane((previous) =>
+        Math.abs(previous.width - box.width) < 1 && Math.abs(previous.height - box.height) < 1
+          ? previous
+          : { width: box.width, height: box.height },
+      );
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   const handleZoomIn = useCallback(() => {
     setFitMode("none");
@@ -73,7 +99,7 @@ export function PdfViewer({
   const handlePageChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const val = parseInt(e.target.value, 10);
-      if (!isNaN(val)) {
+      if (!Number.isNaN(val)) {
         setCurrentPage(Math.min(Math.max(val, 1), totalPages));
       }
     },
@@ -93,15 +119,22 @@ export function PdfViewer({
     }
   }, [onDownload, pdfUrl]);
 
-  const scaleStyle = useMemo((): React.CSSProperties => {
-    if (fitMode === "fit-width") {
-      return { width: "100%", height: "auto" };
-    }
+  /** Page box in CSS pixels: measured pane drives every fit mode. */
+  const pageBox = useMemo(() => {
+    const availableWidth = pane.width > 0 ? pane.width - 32 : basePageWidth;
+    const availableHeight = pane.height > 0 ? pane.height - 32 : basePageWidth * A4_RATIO;
+    const fitWidth = Math.max(240, Math.min(availableWidth, basePageWidth * 2));
+    const fitHeight = Math.max(240, Math.min(availableHeight, basePageWidth * 2));
+    if (fitMode === "fit-width") return { width: fitWidth, height: fitWidth * A4_RATIO };
     if (fitMode === "fit-page") {
-      return { maxWidth: "100%", maxHeight: "100%", objectFit: "contain" };
+      const width = Math.max(240, Math.min(fitWidth, fitHeight / A4_RATIO));
+      return { width, height: width * A4_RATIO };
     }
-    return { transform: `scale(${zoom / 100})`, transformOrigin: "top center" };
-  }, [fitMode, zoom]);
+    // 100% means "one page wide inside the pane": never overflow horizontally.
+    const natural = Math.min(basePageWidth, fitWidth);
+    const width = Math.min(Math.max(240, (natural * zoom) / 100), basePageWidth * 5);
+    return { width, height: width * A4_RATIO };
+  }, [fitMode, pane.height, pane.width, zoom]);
 
   const formattedRevision = useMemo(() => {
     if (revisionLabel) return revisionLabel;
@@ -112,6 +145,12 @@ export function PdfViewer({
 
   const waiting = lastCompileStatus === "queued" || lastCompileStatus === "running";
   const failed = lastCompileStatus === "failed" || lastCompileStatus === "timed_out";
+
+  const documentUrl = useMemo(() => {
+    if (!pdfUrl) return null;
+    const separator = pdfUrl.includes("#") ? "&" : "#";
+    return `${pdfUrl}${separator}page=${currentPage}&toolbar=1&navpanes=0&view=FitH`;
+  }, [pdfUrl, currentPage]);
 
   return (
     <div data-testid="pdf-viewer" className={`pdf-viewer-container ${className}`}>
@@ -224,17 +263,27 @@ export function PdfViewer({
           </button>
         </div>
       </div>
-      <div className="pdf-viewport">
-        {pdfUrl ? (
-          <div data-testid="pdf-document" className="pdf-canvas-wrapper" style={scaleStyle}>
+      <div ref={viewportRef} className="pdf-viewport" data-fit={fitMode}>
+        {documentUrl ? (
+          <div
+            data-testid="pdf-document"
+            className="pdf-canvas-wrapper"
+            style={{ width: pageBox.width, height: pageBox.height }}
+          >
             <object
-              data={pdfUrl}
+              data={documentUrl}
               type="application/pdf"
-              width="800"
-              height="1100"
-              aria-label="Compiled PDF"
+              aria-label={`Compiled PDF, page ${currentPage} of ${totalPages}`}
+              width={pageBox.width}
+              height={pageBox.height}
             >
-              <embed src={pdfUrl} type="application/pdf" width="800" height="1100" />
+              <p>
+                This browser cannot display PDFs inline.{" "}
+                <a href={pdfUrl ?? undefined} target="_blank" rel="noopener noreferrer">
+                  Open the PDF in a new tab
+                </a>
+                .
+              </p>
             </object>
           </div>
         ) : (

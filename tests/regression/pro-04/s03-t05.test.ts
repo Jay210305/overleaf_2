@@ -83,8 +83,9 @@ describe("PRO-04 Regression: File tree UI traversal rejection and error recovery
     render(createElement(FileTree, { projectId, apiUrl: "http://api.test/api/v1" }));
     await screen.findByText("folderA");
 
-    // Open move dialog
-    fireEvent.click(screen.getByRole("button", { name: "Move folderA" }));
+    // Open move dialog from the row's actions menu
+    fireEvent.click(screen.getByRole("button", { name: "Actions for folderA" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Move folderA" }));
     expect(screen.getByRole("dialog")).toBeTruthy();
 
     // Submit move

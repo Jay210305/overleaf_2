@@ -155,7 +155,10 @@ function putSigned(
     request.onload = () => {
       onRequest(null);
       if (request.status >= 200 && request.status < 300) resolve();
-      else reject(new UploadFailure(request.status, `Storage upload failed (HTTP ${request.status}).`));
+      else
+        reject(
+          new UploadFailure(request.status, `Storage upload failed (HTTP ${request.status}).`),
+        );
     };
     request.onerror = () => {
       onRequest(null);

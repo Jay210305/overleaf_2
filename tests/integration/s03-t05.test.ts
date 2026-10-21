@@ -208,8 +208,9 @@ describe("S03-T05 File tree interactions integration", () => {
     render(createElement(FileTree, { projectId, apiUrl: "http://api.test/api/v1" }));
     await screen.findByText("main.tex");
 
-    // Click rename button on main.tex
-    fireEvent.click(screen.getByRole("button", { name: "Rename main.tex" }));
+    // Open the row action menu and choose rename for main.tex
+    fireEvent.click(screen.getByRole("button", { name: "Actions for main.tex" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Rename main.tex" }));
     expect(screen.getByRole("dialog")).toBeTruthy();
 
     const input = screen.getByLabelText("New name:");
