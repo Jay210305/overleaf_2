@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { isAbsolute, join, relative, resolve } from "node:path";
+import { basename, dirname, extname, isAbsolute, join, relative, resolve } from "node:path";
 import { promisify } from "node:util";
 import type {
   Compiler,
@@ -10,6 +10,7 @@ import type {
   ExecuteInput,
   ExecuteOutput,
   ExecuteOutputArtifact,
+  RevisionManifest,
 } from "@latex-collab/contracts";
 import type { ManifestItemLoader } from "./source-loader.js";
 import { parseLatexLog, redactHostPaths, redactSecrets } from "@latex-collab/latex";
@@ -40,6 +41,57 @@ export type TrustedWorkerExecutorOptions = {
 };
 
 const ALLOWED_ENGINES = new Set<Compiler>(["pdflatex", "xelatex", "lualatex", "latex"]);
+
+type ManifestItem = RevisionManifest["items"][number];
+
+/**
+ * Selects the root document of a revision, the way a LaTeX project has one
+ * document that pulls the rest in with \input and \include (CMP-01).
+ *
+ * Preference order: the project's configured main file, then `main.tex`, then
+ * the shallowest `.tex` path so a single-chapter project still compiles.
+ */
+export function selectRootDocument(manifest: RevisionManifest): ManifestItem | undefined {
+  const items = manifest.items;
+  const configured = items.find((item) => item.nodeId === manifest.mainFileId);
+  if (configured) return configured;
+  const mainTex = items.find((item) => item.path === "main.tex");
+  if (mainTex) return mainTex;
+  return items
+    .filter((item) => item.kind === "TEXT" && extname(item.path).toLowerCase() === ".tex")
+    .sort((left, right) => {
+      const depth = left.path.split("/").length - right.path.split("/").length;
+      return depth !== 0 ? depth : left.path.localeCompare(right.path);
+    })[0];
+}
+
+/** Output base name latexmk derives from the root document path. */
+export function compilationJobName(rootPath: string): string {
+  const stem = basename(rootPath).replace(/\.tex$/i, "");
+  return /^[A-Za-z0-9._-]+$/.test(stem) && stem !== "." && stem !== ".." ? stem : "main";
+}
+
+/** Finds one compiler output by its expected name, then by extension. */
+async function findOutput(outDir: string, fileName: string): Promise<string | null> {
+  const expected = join(outDir, fileName);
+  try {
+    await readFile(expected);
+    return expected;
+  } catch {
+    // Missing under the expected name; try the extension below.
+  }
+  try {
+    const extension = extname(fileName).toLowerCase();
+    const entries = await readdir(outDir, { withFileTypes: true });
+    const match = entries
+      .filter((entry) => entry.isFile() && extname(entry.name).toLowerCase() === extension)
+      .map((entry) => entry.name)
+      .sort()[0];
+    return match ? join(outDir, match) : null;
+  } catch {
+    return null;
+  }
+}
 
 function sanitizeEnv(): Record<string, string> {
   const allowed = ["PATH", "HOME", "LANG", "LC_ALL", "TMPDIR", "TEMP", "TMP"];
@@ -147,17 +199,33 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
         }
       }
 
-      // Check for main.tex
-      const mainPath = join(inputDir, "main.tex");
+      // With -outdir, \include writes chapters/<name>.aux inside the output
+      // directory, so mirror the source subdirectories there; otherwise a project
+      // with \include{chapters/capitulo_1} stops with "I can't write on file".
+      for (const item of input.manifest.items) {
+        const itemDir = dirname(item.path);
+        if (!itemDir || itemDir === ".") continue;
+        const targetDir = resolve(outDir, itemDir);
+        const relDir = relative(outDir, targetDir);
+        if (relDir.startsWith("..") || isAbsolute(relDir)) continue;
+        await mkdir(targetDir, { recursive: true });
+      }
+
+      // Compile the revision's root document, not a fixed file name, so projects
+      // whose main document is tesis.tex compile like they do in Overleaf.
+      const rootPath = selectRootDocument(input.manifest)?.path ?? "main.tex";
+      const jobName = compilationJobName(rootPath);
+      const rootAbsolute = resolve(inputDir, rootPath);
       try {
-        await readFile(mainPath);
+        await readFile(rootAbsolute);
       } catch {
         if (this.sourceLoader) {
-          throw new Error("Main source main.tex not found in revision");
+          throw new Error(`Main document ${rootPath} not found in revision`);
         }
-        // If main.tex not present, write basic document to avoid empty compilation
+        // Fixture-only fallback when no source loader is configured.
+        await mkdir(resolve(rootAbsolute, ".."), { recursive: true });
         await writeFile(
-          mainPath,
+          rootAbsolute,
           "\\documentclass{article}\n\\begin{document}\nHello World\n\\end{document}",
           "utf8",
         );
@@ -182,7 +250,7 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
         "-synctex=1",
         "-no-shell-escape",
         `-outdir=${outDir}`,
-        mainPath,
+        rootPath,
       ];
 
       const timeoutMs = (input.limits?.timeoutSeconds ?? 60) * 1000;
@@ -199,8 +267,9 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
       const artifacts: ExecuteOutputArtifact[] = [];
 
       // Collect outputs from outDir
-      try {
-        const pdfBytes = await readFile(join(outDir, "main.pdf"));
+      const pdfPath = await findOutput(outDir, `${jobName}.pdf`);
+      if (pdfPath) {
+        const pdfBytes = await readFile(pdfPath);
         const sha256 = createHash("sha256").update(pdfBytes).digest("hex");
         artifacts.push({
           name: "output.pdf",
@@ -208,15 +277,17 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
           bytes: new Uint8Array(pdfBytes),
           sha256,
         });
-      } catch {
-        // PDF not generated
       }
 
-      let rawLog = `${runResult.stdout}\n${runResult.stderr}`;
-      try {
-        const rawLogBytes = await readFile(join(outDir, "main.log"));
+      // Diagnostics come from the final LaTeX pass only: latexmk's stdout also
+      // contains earlier passes, whose already-resolved warnings would otherwise
+      // be reported as current problems.
+      let diagnosticsSource = `${runResult.stdout}\n${runResult.stderr}`;
+      const logPath = await findOutput(outDir, `${jobName}.log`);
+      if (logPath) {
+        const rawLogBytes = await readFile(logPath);
         const decoded = new TextDecoder().decode(rawLogBytes);
-        rawLog = `${decoded}\n${rawLog}`;
+        diagnosticsSource = decoded;
         const sanitizedLog = redactHostPaths(redactSecrets(decoded), tempRoot);
         const logBytes = new TextEncoder().encode(sanitizedLog);
         const sha256 = createHash("sha256").update(logBytes).digest("hex");
@@ -226,11 +297,9 @@ export class TrustedWorkerExecutor implements CompilerExecutor {
           bytes: logBytes,
           sha256,
         });
-      } catch {
-        // Log not generated
       }
 
-      const { diagnostics } = parseLatexLog(rawLog, { workDir: tempRoot });
+      const { diagnostics } = parseLatexLog(diagnosticsSource, { workDir: tempRoot });
 
       const status =
         runResult.exitCode === 0 && artifacts.some((a) => a.name === "output.pdf")

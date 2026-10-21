@@ -1,10 +1,90 @@
 import { describe, expect, it } from "vitest";
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { TrustedWorkerExecutor } from "../../apps/jobs/src/compilation/trusted-worker-executor.js";
-import type { ExecuteInput } from "@latex-collab/contracts";
+import {
+  TrustedWorkerExecutor,
+  compilationJobName,
+  selectRootDocument,
+} from "../../apps/jobs/src/compilation/trusted-worker-executor.js";
+import type { ExecuteInput, RevisionManifest } from "@latex-collab/contracts";
 
 describe("Compiler fixtures execution and validation", () => {
+  const multiFileManifest: RevisionManifest = {
+    version: 1,
+    projectId: "00000000-0000-0000-0000-000000000002",
+    revisionId: "00000000-0000-0000-0000-000000000009",
+    revisionNo: 4,
+    mainFileId: "root-node",
+    compiler: "pdflatex",
+    texliveImageDigest: "texlive:latest",
+    items: [
+      {
+        nodeId: "root-node",
+        path: "tesis.tex",
+        kind: "TEXT",
+        object: { key: "root-key", sha256: "hash-root", sizeBytes: 10, mime: "application/x-tex" },
+      },
+      {
+        nodeId: "chapter-node",
+        path: "chapters/capitulo_1.tex",
+        kind: "TEXT",
+        object: {
+          key: "chapter-key",
+          sha256: "hash-chapter",
+          sizeBytes: 10,
+          mime: "application/x-tex",
+        },
+      },
+    ],
+  };
+
+  it("compiles the configured root document and keeps included files next to it", async () => {
+    let capturedArgs: string[] = [];
+    let chapterContents = "";
+    const executor = new TrustedWorkerExecutor({
+      runner: async (_cmd, args, options) => {
+        capturedArgs = args;
+        chapterContents = await readFile(join(options.cwd, "chapters", "capitulo_1.tex"), "utf8");
+        const outDir = args.find((a) => a.startsWith("-outdir="))?.slice(8) ?? "";
+        // latexmk names outputs after the root document, not "main".
+        await writeFile(join(outDir, "tesis.pdf"), "%PDF-1.5\n%%EOF");
+        await writeFile(join(outDir, "tesis.log"), "Output written on tesis.pdf (3 pages).");
+        return { exitCode: 0, stdout: "Latexmk: All targets are up to date", stderr: "" };
+      },
+    });
+
+    const input: ExecuteInput = {
+      jobId: "00000000-0000-0000-0000-000000000010",
+      manifest: multiFileManifest,
+      compiler: "pdflatex",
+      imageDigest: "texlive:latest",
+      policyVersion: "1.0.0",
+      limits: { timeoutSeconds: 60, memoryMiB: 512, cpuCores: 1, maxOutputBytes: 25 * 1024 * 1024 },
+    };
+
+    const output = await executor.execute(input, new AbortController().signal);
+
+    expect(capturedArgs.at(-1)).toBe("tesis.tex");
+    expect(capturedArgs).toContain("-no-shell-escape");
+    expect(chapterContents.length).toBeGreaterThan(0);
+    expect(output.status).toBe("succeeded");
+    expect(output.artifacts.some((a) => a.name === "output.pdf")).toBe(true);
+    expect(output.artifacts.some((a) => a.name === "compile.log")).toBe(true);
+  });
+
+  it("resolves the root document when no main.tex exists", () => {
+    expect(selectRootDocument(multiFileManifest)?.path).toBe("tesis.tex");
+    expect(
+      selectRootDocument({
+        ...multiFileManifest,
+        mainFileId: "",
+        items: multiFileManifest.items.map((item) => ({ ...item, nodeId: `${item.nodeId}-x` })),
+      })?.path,
+    ).toBe("tesis.tex");
+    expect(compilationJobName("tesis.tex")).toBe("tesis");
+    expect(compilationJobName("chapters/main.tex")).toBe("main");
+  });
+
   const genuinePdfHeader = "%PDF-1.5\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n%%EOF";
 
   it("compiles standard article document into genuine PDF", async () => {

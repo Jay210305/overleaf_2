@@ -22,10 +22,19 @@ const webEnv = Object.fromEntries(
     ([key]) => key.startsWith("VITE_") || publicKeys.has(key.toLowerCase()),
   ),
 );
+// The compilation worker is a separate process in production, so local development
+// starts it too; otherwise compile jobs stay queued with no one to run them.
+// It serves no HTTP, so the API's PORT is removed to keep config validation clean.
+const workerEnv = { ...process.env };
+delete workerEnv.PORT;
 const children = [
   spawn(process.execPath, ["--import", "tsx", "apps/api/src/main.ts"], {
     stdio: "inherit",
     env: process.env,
+  }),
+  spawn(process.execPath, ["--env-file=.env", "--import", "tsx", "apps/jobs/src/main.ts"], {
+    stdio: "inherit",
+    env: workerEnv,
   }),
   spawn(process.execPath, [vite, "--host", "127.0.0.1"], {
     cwd: "apps/web",
